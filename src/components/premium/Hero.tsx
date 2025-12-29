@@ -14,7 +14,7 @@ export const Hero = () => {
             isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
           }`}
         >
-          {t("hero.greeting")} <span className="text-foreground font-medium">Daniel García</span>
+          {t("hero.greeting")} <span className="text-foreground font-medium">Josep Cuatrecasas</span>
           <span className="hidden sm:inline"> — {t("hero.role")}</span>
         </p>
 
