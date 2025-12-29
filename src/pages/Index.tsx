@@ -1,3 +1,4 @@
+import { LanguageProvider } from "@/contexts/LanguageContext";
 import { Header } from "@/components/premium/Header";
 import { Hero } from "@/components/premium/Hero";
 import { Stats } from "@/components/premium/Stats";
@@ -11,20 +12,22 @@ import { FloatingButtons } from "@/components/premium/FloatingButtons";
 
 const Index = () => {
   return (
-    <div className="min-h-screen">
-      <Header />
-      <main>
-        <Hero />
-        <Stats />
-        <Portfolio />
-        <Services />
-        <Testimonials />
-        <About />
-        <Contact />
-      </main>
-      <Footer />
-      <FloatingButtons />
-    </div>
+    <LanguageProvider>
+      <div className="min-h-screen">
+        <Header />
+        <main>
+          <Hero />
+          <Stats />
+          <Portfolio />
+          <Services />
+          <Testimonials />
+          <About />
+          <Contact />
+        </main>
+        <Footer />
+        <FloatingButtons />
+      </div>
+    </LanguageProvider>
   );
 };
 

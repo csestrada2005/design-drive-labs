@@ -1,15 +1,17 @@
 import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
-
-const navLinks = [
-  { href: "#trabajo", label: "Trabajo" },
-  { href: "#servicios", label: "Servicios" },
-  { href: "#sobre-mi", label: "Sobre mí" },
-];
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export const Header = () => {
+  const { language, setLanguage, t } = useLanguage();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  const navLinks = [
+    { href: "#trabajo", label: t("nav.work") },
+    { href: "#servicios", label: t("nav.services") },
+    { href: "#sobre-mi", label: t("nav.about") },
+  ];
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 30);
@@ -31,32 +33,38 @@ export const Header = () => {
       >
         <div className="container flex items-center justify-between">
           <a href="#" className="font-display text-xl font-semibold tracking-tight">
-            nombre<span className="text-accent">.</span>
+            daniel<span className="text-accent">.</span>
           </a>
 
           <nav className="hidden md:flex items-center gap-10">
             {navLinks.map((link) => (
-              <a
-                key={link.href}
-                href={link.href}
-                className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-              >
+              <a key={link.href} href={link.href} className="text-sm text-muted-foreground hover:text-foreground transition-colors">
                 {link.label}
               </a>
             ))}
           </nav>
 
-          <a
-            href="#contacto"
-            className="hidden md:inline-flex px-5 py-2.5 bg-foreground text-background text-sm font-medium rounded-full hover:bg-foreground/90 transition-colors"
-          >
-            Hablemos
-          </a>
+          <div className="hidden md:flex items-center gap-4">
+            {/* Language toggle */}
+            <button
+              onClick={() => setLanguage(language === "es" ? "en" : "es")}
+              className="px-3 py-1.5 text-xs font-medium border border-border rounded-full hover:bg-muted transition-colors"
+            >
+              {language === "es" ? "EN" : "ES"}
+            </button>
+
+            <a
+              href="#contacto"
+              className="px-5 py-2.5 bg-foreground text-background text-sm font-medium rounded-full hover:bg-foreground/90 transition-colors"
+            >
+              {t("nav.cta")}
+            </a>
+          </div>
 
           <button
             onClick={() => setIsMobileMenuOpen(true)}
             className="md:hidden touch-target flex items-center justify-center"
-            aria-label="Abrir menú"
+            aria-label="Open menu"
           >
             <Menu className="w-6 h-6" />
           </button>
@@ -70,15 +78,18 @@ export const Header = () => {
         }`}
       >
         <div className="flex items-center justify-between px-5 py-5">
-          <span className="font-display text-xl font-semibold">
-            nombre<span className="text-accent">.</span>
-          </span>
-          <button
-            onClick={() => setIsMobileMenuOpen(false)}
-            className="touch-target flex items-center justify-center"
-          >
-            <X className="w-6 h-6" />
-          </button>
+          <span className="font-display text-xl font-semibold">daniel<span className="text-accent">.</span></span>
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => setLanguage(language === "es" ? "en" : "es")}
+              className="px-3 py-1.5 text-xs font-medium border border-border rounded-full"
+            >
+              {language === "es" ? "EN" : "ES"}
+            </button>
+            <button onClick={() => setIsMobileMenuOpen(false)} className="touch-target flex items-center justify-center">
+              <X className="w-6 h-6" />
+            </button>
+          </div>
         </div>
 
         <nav className="flex-1 flex flex-col justify-center px-8 gap-1">
@@ -103,7 +114,7 @@ export const Header = () => {
             onClick={() => setIsMobileMenuOpen(false)}
             className="block w-full py-4 bg-foreground text-background text-center font-medium text-lg rounded-full"
           >
-            Hablemos
+            {t("nav.cta")}
           </a>
         </div>
       </div>
