@@ -1,25 +1,29 @@
-import { MobileNav } from "@/components/mobile/MobileNav";
-import { MobileHero } from "@/components/mobile/MobileHero";
-import { MobileServices } from "@/components/mobile/MobileServices";
-import { MobileWork } from "@/components/mobile/MobileWork";
-import { MobileAbout } from "@/components/mobile/MobileAbout";
-import { MobileContact } from "@/components/mobile/MobileContact";
-import { MobileFooter } from "@/components/mobile/MobileFooter";
-import { FloatingActions } from "@/components/mobile/FloatingActions";
+import { Header } from "@/components/premium/Header";
+import { Hero } from "@/components/premium/Hero";
+import { Stats } from "@/components/premium/Stats";
+import { Services } from "@/components/premium/Services";
+import { Portfolio } from "@/components/premium/Portfolio";
+import { Testimonials } from "@/components/premium/Testimonials";
+import { About } from "@/components/premium/About";
+import { Contact } from "@/components/premium/Contact";
+import { Footer } from "@/components/premium/Footer";
+import { FloatingButtons } from "@/components/premium/FloatingButtons";
 
 const Index = () => {
   return (
-    <div className="min-h-screen grain">
-      <MobileNav />
+    <div className="min-h-screen">
+      <Header />
       <main>
-        <MobileHero />
-        <MobileServices />
-        <MobileWork />
-        <MobileAbout />
-        <MobileContact />
+        <Hero />
+        <Stats />
+        <Services />
+        <Portfolio />
+        <Testimonials />
+        <About />
+        <Contact />
       </main>
-      <MobileFooter />
-      <FloatingActions />
+      <Footer />
+      <FloatingButtons />
     </div>
   );
 };
