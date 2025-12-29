@@ -16,7 +16,7 @@ export const Footer = () => {
       <div className="container">
         <div className="flex flex-col md:flex-row justify-between items-center gap-6">
           <a href="#" className="font-display text-xl font-semibold">
-            daniel<span className="text-accent">.</span>
+            cuatre<span className="text-accent">.</span>
           </a>
 
           <nav className="flex flex-wrap justify-center gap-6">
