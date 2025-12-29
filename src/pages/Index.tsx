@@ -1,25 +1,25 @@
-import { Navigation } from "@/components/landing/Navigation";
-import { HeroSection } from "@/components/landing/HeroSection";
-import { ServicesSection } from "@/components/landing/ServicesSection";
-import { WorkSection } from "@/components/landing/WorkSection";
-import { ProcessSection } from "@/components/landing/ProcessSection";
-import { AboutSection } from "@/components/landing/AboutSection";
-import { ContactSection } from "@/components/landing/ContactSection";
-import { FooterSection } from "@/components/landing/FooterSection";
+import { MobileNav } from "@/components/mobile/MobileNav";
+import { MobileHero } from "@/components/mobile/MobileHero";
+import { MobileServices } from "@/components/mobile/MobileServices";
+import { MobileWork } from "@/components/mobile/MobileWork";
+import { MobileAbout } from "@/components/mobile/MobileAbout";
+import { MobileContact } from "@/components/mobile/MobileContact";
+import { MobileFooter } from "@/components/mobile/MobileFooter";
+import { FloatingActions } from "@/components/mobile/FloatingActions";
 
 const Index = () => {
   return (
-    <div className="min-h-screen">
-      <Navigation />
+    <div className="min-h-screen grain">
+      <MobileNav />
       <main>
-        <HeroSection />
-        <ServicesSection />
-        <WorkSection />
-        <ProcessSection />
-        <AboutSection />
-        <ContactSection />
+        <MobileHero />
+        <MobileServices />
+        <MobileWork />
+        <MobileAbout />
+        <MobileContact />
       </main>
-      <FooterSection />
+      <MobileFooter />
+      <FloatingActions />
     </div>
   );
 };
