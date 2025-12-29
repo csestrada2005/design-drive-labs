@@ -1,38 +1,33 @@
-import { ArrowUp, MessageCircle } from "lucide-react";
+import { MessageCircle, ArrowUp } from "lucide-react";
 import { useState, useEffect } from "react";
 
 export const FloatingButtons = () => {
-  const [showScrollTop, setShowScrollTop] = useState(false);
+  const [showTop, setShowTop] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => setShowScrollTop(window.scrollY > 500);
+    const handleScroll = () => setShowTop(window.scrollY > 400);
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
-
   return (
     <div className="fixed bottom-6 right-5 z-40 flex flex-col gap-3">
-      {/* Scroll to top */}
       <button
-        onClick={scrollToTop}
-        className={`touch-target w-14 h-14 rounded-full bg-card border border-border shadow-medium flex items-center justify-center transition-all duration-300 active:scale-95 hover:bg-muted ${
-          showScrollTop ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4 pointer-events-none"
+        onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+        className={`touch-target w-14 h-14 rounded-full bg-card border border-border shadow-lg flex items-center justify-center transition-all duration-300 ${
+          showTop ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4 pointer-events-none"
         }`}
-        aria-label="Volver arriba"
+        aria-label="Subir"
       >
         <ArrowUp className="w-5 h-5" />
       </button>
 
-      {/* Quick contact */}
       <a
-        href="#contacto"
-        className="touch-target w-14 h-14 rounded-full flex items-center justify-center shadow-glow active:scale-95 transition-transform text-accent-foreground"
-        style={{ background: "var(--gradient-primary)" }}
-        aria-label="Contactar"
+        href="https://wa.me/34600000000?text=Hola,%20me%20interesa%20un%20proyecto%20web"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="touch-target w-14 h-14 rounded-full bg-[#25D366] text-white shadow-lg flex items-center justify-center active:scale-95 transition-transform"
+        aria-label="WhatsApp"
       >
         <MessageCircle className="w-6 h-6" />
       </a>

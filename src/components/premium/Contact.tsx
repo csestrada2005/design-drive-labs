@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useReveal } from "@/hooks/useAnimations";
-import { Send, Check, ArrowUpRight, Mail, MapPin, Clock } from "lucide-react";
+import { Send, Check, MessageCircle, Mail, MapPin } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 export const Contact = () => {
@@ -12,13 +12,10 @@ export const Contact = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitting(true);
-    await new Promise((resolve) => setTimeout(resolve, 1500));
+    await new Promise((r) => setTimeout(r, 1500));
     setIsSubmitting(false);
     setIsSuccess(true);
-    toast({
-      title: "¡Mensaje enviado!",
-      description: "Te responderé en menos de 24 horas.",
-    });
+    toast({ title: "Mensaje enviado", description: "Te responderé pronto." });
     setTimeout(() => setIsSuccess(false), 3000);
     (e.target as HTMLFormElement).reset();
   };
@@ -30,74 +27,72 @@ export const Contact = () => {
       className="py-24 md:py-32"
     >
       <div className="container">
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-20">
-          {/* Left column */}
+        <div className="grid md:grid-cols-2 gap-12 md:gap-20">
+          {/* Left */}
           <div>
-            <span
-              className={`inline-block text-sm font-medium text-accent uppercase tracking-wider mb-4 transition-all duration-700 ${
-                isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
+            <p
+              className={`text-accent font-medium mb-4 transition-all duration-600 ${
+                isVisible ? "opacity-100" : "opacity-0"
               }`}
             >
               Contacto
-            </span>
+            </p>
             <h2
-              className={`text-3xl md:text-4xl lg:text-5xl font-serif mb-6 transition-all duration-700 delay-100 ${
-                isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
+              className={`font-display text-3xl md:text-4xl mb-6 transition-all duration-600 delay-100 ${
+                isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
               }`}
             >
-              ¿Listo para
-              <span className="text-gradient"> empezar</span>?
+              ¿Hablamos?
             </h2>
             <p
-              className={`text-muted-foreground text-lg mb-10 transition-all duration-700 delay-200 ${
-                isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
+              className={`text-muted-foreground mb-10 transition-all duration-600 delay-200 ${
+                isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
               }`}
             >
-              Cuéntame sobre tu proyecto y te enviaré una propuesta personalizada
-              en menos de 24 horas.
+              Cuéntame qué necesitas. Respondo en menos de 24 horas.
             </p>
 
-            {/* Contact info */}
+            {/* Direct contact options */}
             <div
-              className={`space-y-6 transition-all duration-700 delay-300 ${
-                isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
+              className={`space-y-4 transition-all duration-600 delay-300 ${
+                isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
               }`}
             >
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-xl bg-accent/10 flex items-center justify-center">
+              <a
+                href="https://wa.me/34600000000?text=Hola,%20me%20interesa%20un%20proyecto%20web"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-4 p-4 rounded-xl border border-border hover:bg-muted/50 transition-colors group"
+              >
+                <div className="w-12 h-12 rounded-full bg-[#25D366]/10 flex items-center justify-center">
+                  <MessageCircle className="w-5 h-5 text-[#25D366]" />
+                </div>
+                <div>
+                  <p className="font-medium group-hover:text-accent transition-colors">WhatsApp</p>
+                  <p className="text-sm text-muted-foreground">Respuesta rápida</p>
+                </div>
+              </a>
+
+              <a
+                href="mailto:hola@tudominio.com"
+                className="flex items-center gap-4 p-4 rounded-xl border border-border hover:bg-muted/50 transition-colors group"
+              >
+                <div className="w-12 h-12 rounded-full bg-accent/10 flex items-center justify-center">
                   <Mail className="w-5 h-5 text-accent" />
                 </div>
                 <div>
-                  <p className="text-sm text-muted-foreground">Email</p>
-                  <a href="mailto:hola@tudominio.com" className="font-medium hover:text-accent transition-colors">
-                    hola@tudominio.com
-                  </a>
+                  <p className="font-medium group-hover:text-accent transition-colors">Email</p>
+                  <p className="text-sm text-muted-foreground">hola@tudominio.com</p>
                 </div>
-              </div>
+              </a>
 
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-xl bg-accent/10 flex items-center justify-center">
-                  <MapPin className="w-5 h-5 text-accent" />
+              <div className="flex items-center gap-4 p-4">
+                <div className="w-12 h-12 rounded-full bg-muted flex items-center justify-center">
+                  <MapPin className="w-5 h-5 text-muted-foreground" />
                 </div>
                 <div>
-                  <p className="text-sm text-muted-foreground">Ubicación</p>
-                  <p className="font-medium">Madrid, España</p>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-xl bg-accent/10 flex items-center justify-center">
-                  <Clock className="w-5 h-5 text-accent" />
-                </div>
-                <div>
-                  <p className="text-sm text-muted-foreground">Disponibilidad</p>
-                  <div className="flex items-center gap-2">
-                    <span className="relative flex h-2 w-2">
-                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-75" />
-                      <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
-                    </span>
-                    <p className="font-medium">Disponible para proyectos</p>
-                  </div>
+                  <p className="font-medium">Ubicación</p>
+                  <p className="text-sm text-muted-foreground">Madrid, España</p>
                 </div>
               </div>
             </div>
@@ -105,73 +100,68 @@ export const Contact = () => {
 
           {/* Form */}
           <div
-            className={`transition-all duration-700 delay-300 ${
-              isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+            className={`transition-all duration-600 delay-300 ${
+              isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
             }`}
           >
-            <form
-              onSubmit={handleSubmit}
-              className="bg-card rounded-3xl border border-border shadow-soft p-8 md:p-10 space-y-6"
-            >
-              <div className="grid sm:grid-cols-2 gap-6">
-                <div>
-                  <label htmlFor="name" className="block text-sm font-medium mb-2">
-                    Nombre
-                  </label>
-                  <input
-                    type="text"
-                    id="name"
-                    name="name"
-                    required
-                    placeholder="Tu nombre"
-                    className="w-full h-14 px-5 bg-muted/50 border border-border rounded-xl focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-colors"
-                  />
-                </div>
-                <div>
-                  <label htmlFor="email" className="block text-sm font-medium mb-2">
-                    Email
-                  </label>
-                  <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    required
-                    placeholder="tu@email.com"
-                    className="w-full h-14 px-5 bg-muted/50 border border-border rounded-xl focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-colors"
-                  />
-                </div>
+            <form onSubmit={handleSubmit} className="card-elevated p-8 space-y-6">
+              <div>
+                <label htmlFor="name" className="block text-sm font-medium mb-2">
+                  Nombre
+                </label>
+                <input
+                  type="text"
+                  id="name"
+                  name="name"
+                  required
+                  placeholder="Tu nombre"
+                  className="w-full h-14 px-5 bg-muted/50 border border-border rounded-xl focus:outline-none focus:border-accent transition-colors"
+                />
+              </div>
+
+              <div>
+                <label htmlFor="email" className="block text-sm font-medium mb-2">
+                  Email
+                </label>
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  required
+                  placeholder="tu@email.com"
+                  className="w-full h-14 px-5 bg-muted/50 border border-border rounded-xl focus:outline-none focus:border-accent transition-colors"
+                />
               </div>
 
               <div>
                 <label htmlFor="message" className="block text-sm font-medium mb-2">
-                  Cuéntame sobre tu proyecto
+                  ¿En qué puedo ayudarte?
                 </label>
                 <textarea
                   id="message"
                   name="message"
                   required
-                  rows={5}
-                  placeholder="¿Qué tipo de web necesitas? ¿Cuáles son tus objetivos?"
-                  className="w-full px-5 py-4 bg-muted/50 border border-border rounded-xl focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-colors resize-none"
+                  rows={4}
+                  placeholder="Cuéntame sobre tu proyecto..."
+                  className="w-full px-5 py-4 bg-muted/50 border border-border rounded-xl focus:outline-none focus:border-accent transition-colors resize-none"
                 />
               </div>
 
               <button
                 type="submit"
                 disabled={isSubmitting || isSuccess}
-                className="touch-target w-full h-14 rounded-xl font-medium text-lg flex items-center justify-center gap-2 text-accent-foreground transition-all active:scale-[0.98] disabled:opacity-80"
-                style={{ background: "var(--gradient-primary)" }}
+                className="touch-target w-full h-14 bg-foreground text-background font-medium rounded-xl flex items-center justify-center gap-2 hover:bg-foreground/90 transition-colors disabled:opacity-80"
               >
                 {isSuccess ? (
                   <>
                     <Check className="w-5 h-5" />
-                    ¡Enviado!
+                    Enviado
                   </>
                 ) : isSubmitting ? (
-                  <span className="w-5 h-5 border-2 border-accent-foreground/30 border-t-accent-foreground rounded-full animate-spin" />
+                  <span className="w-5 h-5 border-2 border-background/30 border-t-background rounded-full animate-spin" />
                 ) : (
                   <>
-                    Enviar mensaje
+                    Enviar
                     <Send className="w-4 h-4" />
                   </>
                 )}

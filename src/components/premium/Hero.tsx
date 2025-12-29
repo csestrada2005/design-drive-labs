@@ -1,100 +1,85 @@
-import { useParallax, useMouseParallax, useReveal } from "@/hooks/useAnimations";
-import { ArrowDown, ArrowUpRight, Sparkles } from "lucide-react";
+import { useReveal } from "@/hooks/useAnimations";
+import { Mail, MessageCircle } from "lucide-react";
 
 export const Hero = () => {
   const { ref, isVisible } = useReveal(0.1);
-  const { ref: parallaxRef, offset } = useParallax(0.5);
-  const mouse = useMouseParallax();
 
   return (
     <section
       ref={ref as React.RefObject<HTMLElement>}
-      className="relative min-h-screen flex items-center pt-24 pb-16 overflow-hidden"
+      className="min-h-screen flex flex-col justify-center pt-20 pb-12"
     >
-      {/* Background elements with parallax */}
-      <div
-        className="absolute top-20 right-[10%] w-72 h-72 bg-accent/10 rounded-full blur-[100px] animate-pulse-soft"
-        style={{ transform: `translate(${mouse.x * 30}px, ${mouse.y * 30}px)` }}
-      />
-      <div
-        className="absolute bottom-20 left-[5%] w-96 h-96 bg-accent/5 rounded-full blur-[120px] animate-float"
-        style={{ transform: `translate(${mouse.x * -20}px, ${mouse.y * -20}px)` }}
-      />
+      <div className="container">
+        <div className="max-w-3xl">
+          {/* Intro line */}
+          <p
+            className={`text-muted-foreground mb-6 transition-all duration-700 ${
+              isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+            }`}
+          >
+            Hola, soy <span className="text-foreground font-medium">[Tu Nombre]</span> — diseñador web
+          </p>
 
-      {/* Decorative grid */}
-      <div className="absolute inset-0 bg-[linear-gradient(hsl(var(--border)/0.3)_1px,transparent_1px),linear-gradient(90deg,hsl(var(--border)/0.3)_1px,transparent_1px)] bg-[size:60px_60px] [mask-image:radial-gradient(ellipse_80%_80%_at_50%_50%,black_20%,transparent_100%)]" />
-
-      <div className="container relative">
-        <div
-          ref={parallaxRef as React.RefObject<HTMLDivElement>}
-          className="max-w-4xl mx-auto text-center"
-          style={{ transform: `translateY(${offset}px)` }}
-        >
-          {/* Badge */}
-          <div
-            className={`inline-flex items-center gap-2 px-4 py-2 bg-accent/10 border border-accent/20 rounded-full mb-8 transition-all duration-700 ${
+          {/* Main headline - distinctive typography */}
+          <h1
+            className={`font-display text-[clamp(2.25rem,7vw,4.5rem)] leading-[1.1] tracking-tight mb-8 transition-all duration-700 delay-100 ${
               isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
             }`}
           >
-            <Sparkles className="w-4 h-4 text-accent" />
-            <span className="text-sm font-medium text-accent">Disponible para proyectos</span>
-          </div>
-
-          {/* Headline */}
-          <h1
-            className={`text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-serif leading-[1.1] mb-6 transition-all duration-700 delay-100 ${
-              isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-            }`}
-          >
-            Diseño experiencias
-            <br />
-            <span className="text-gradient">digitales únicas</span>
+            Creo sitios web que{" "}
+            <span className="accent-underline">generan clientes</span>, no solo visitas.
           </h1>
 
           {/* Subtitle */}
           <p
-            className={`text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-10 transition-all duration-700 delay-200 ${
-              isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+            className={`text-lg md:text-xl text-muted-foreground max-w-xl mb-10 transition-all duration-700 delay-200 ${
+              isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
             }`}
           >
-            Landing pages, sitios web y e-commerce diseñados estratégicamente
-            para convertir visitantes en clientes fieles.
+            Landing pages, sitios corporativos y tiendas online. 
+            Diseño estratégico que convierte.
           </p>
 
-          {/* CTAs */}
+          {/* Contact options - WhatsApp & Email */}
           <div
-            className={`flex flex-col sm:flex-row gap-4 justify-center transition-all duration-700 delay-300 ${
-              isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+            className={`flex flex-col sm:flex-row gap-4 transition-all duration-700 delay-300 ${
+              isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
             }`}
           >
             <a
-              href="#contacto"
-              className="touch-target inline-flex items-center justify-center gap-2 px-8 py-4 text-background rounded-full font-medium text-lg group transition-all duration-300 hover:shadow-glow active:scale-[0.98]"
-              style={{ background: "var(--gradient-primary)" }}
+              href="https://wa.me/34600000000?text=Hola,%20me%20interesa%20un%20proyecto%20web"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="touch-target inline-flex items-center justify-center gap-3 px-7 py-4 bg-[#25D366] text-white font-medium rounded-full hover:bg-[#22c55e] transition-colors active:scale-[0.98]"
             >
-              Empezar proyecto
-              <ArrowUpRight className="w-5 h-5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+              <MessageCircle className="w-5 h-5" />
+              Escríbeme por WhatsApp
             </a>
             <a
-              href="#portafolio"
-              className="touch-target inline-flex items-center justify-center gap-2 px-8 py-4 border-2 border-border rounded-full font-medium text-lg hover:bg-muted/50 transition-all active:scale-[0.98]"
+              href="mailto:hola@tudominio.com?subject=Consulta%20proyecto%20web"
+              className="touch-target inline-flex items-center justify-center gap-3 px-7 py-4 border-2 border-border bg-card font-medium rounded-full hover:bg-muted transition-colors active:scale-[0.98]"
             >
-              Ver trabajos
+              <Mail className="w-5 h-5" />
+              Enviar email
             </a>
           </div>
-        </div>
 
-        {/* Scroll indicator */}
-        <div
-          className={`absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 transition-all duration-700 delay-500 ${
-            isVisible ? "opacity-100" : "opacity-0"
-          }`}
-        >
-          <span className="text-xs uppercase tracking-widest text-muted-foreground">
-            Descubre más
-          </span>
-          <div className="w-6 h-10 rounded-full border-2 border-border flex items-start justify-center p-1.5">
-            <div className="w-1.5 h-3 bg-accent rounded-full animate-bounce" />
+          {/* Quick stats */}
+          <div
+            className={`flex flex-wrap gap-8 mt-16 pt-8 border-t border-border transition-all duration-700 delay-400 ${
+              isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
+            }`}
+          >
+            {[
+              { value: "50+", label: "proyectos" },
+              { value: "3", label: "años" },
+              { value: "100%", label: "dedicación" },
+            ].map((stat) => (
+              <div key={stat.label}>
+                <p className="font-display text-2xl md:text-3xl font-semibold">{stat.value}</p>
+                <p className="text-sm text-muted-foreground">{stat.label}</p>
+              </div>
+            ))}
           </div>
         </div>
       </div>

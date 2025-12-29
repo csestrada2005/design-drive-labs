@@ -11,15 +11,15 @@ export default {
       screens: {
         sm: "100%",
         md: "100%",
-        lg: "1100px",
-        xl: "1200px",
-        "2xl": "1200px",
+        lg: "1000px",
+        xl: "1100px",
+        "2xl": "1100px",
       },
     },
     extend: {
       fontFamily: {
-        sans: ['Outfit', 'system-ui', 'sans-serif'],
-        serif: ['Playfair Display', 'Georgia', 'serif'],
+        sans: ['Manrope', 'system-ui', 'sans-serif'],
+        display: ['Fraunces', 'Georgia', 'serif'],
       },
       colors: {
         border: "hsl(var(--border))",
@@ -61,13 +61,8 @@ export default {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
-        "2xl": "1.25rem",
+        "2xl": "1rem",
         "3xl": "1.5rem",
-      },
-      boxShadow: {
-        soft: "var(--shadow-soft)",
-        medium: "var(--shadow-medium)",
-        glow: "var(--shadow-glow)",
       },
       keyframes: {
         "accordion-down": {

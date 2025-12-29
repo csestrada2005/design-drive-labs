@@ -1,19 +1,18 @@
 import { useReveal, useCounter } from "@/hooks/useAnimations";
 
 const stats = [
-  { value: 50, suffix: "+", label: "Proyectos entregados" },
-  { value: 3, suffix: "+", label: "Años de experiencia" },
-  { value: 98, suffix: "%", label: "Clientes satisfechos" },
-  { value: 200, suffix: "%", label: "Aumento promedio en conversiones" },
+  { value: 50, suffix: "+", label: "proyectos entregados" },
+  { value: 98, suffix: "%", label: "clientes satisfechos" },
+  { value: 200, suffix: "%", label: "aumento medio en conversiones" },
 ];
 
 export const Stats = () => {
-  const { ref, isVisible } = useReveal(0.2);
+  const { ref, isVisible } = useReveal(0.3);
 
   return (
-    <section ref={ref as React.RefObject<HTMLElement>} className="py-16 border-y border-border bg-muted/30">
+    <section ref={ref as React.RefObject<HTMLElement>} className="py-16 bg-foreground text-background">
       <div className="container">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
           {stats.map((stat, index) => (
             <StatItem key={stat.label} stat={stat} index={index} isVisible={isVisible} />
           ))}
@@ -34,16 +33,15 @@ const StatItem = ({ stat, index, isVisible }: StatItemProps) => {
 
   return (
     <div
-      className={`text-center transition-all duration-700 ${
-        isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
+      className={`transition-all duration-600 ${
+        isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
       }`}
       style={{ transitionDelay: `${index * 100}ms` }}
     >
-      <p className="text-3xl md:text-4xl lg:text-5xl font-serif font-semibold text-gradient mb-2">
-        {count}
-        {stat.suffix}
+      <p className="font-display text-4xl md:text-5xl font-semibold text-accent mb-2">
+        {count}{stat.suffix}
       </p>
-      <p className="text-sm text-muted-foreground">{stat.label}</p>
+      <p className="text-background/60 text-sm">{stat.label}</p>
     </div>
   );
 };
