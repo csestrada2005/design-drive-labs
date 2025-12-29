@@ -71,8 +71,8 @@ const translations: Translations = {
   "about.title": { es: "Sobre mí", en: "About me" },
   "about.headline": { es: "Diseño para que funcione", en: "I design to make it work" },
   "about.bio1": {
-    es: "Soy Daniel García, diseñador web especializado en crear sitios que generan resultados. Más de 3 años ayudando a negocios a destacar online.",
-    en: "I'm Daniel García, a web designer specialized in creating result-driven sites. 3+ years helping businesses stand out online.",
+    es: "Soy Josep Cuatrecasas, diseñador web especializado en crear sitios que generan resultados. Más de 3 años ayudando a negocios a destacar online.",
+    en: "I'm Josep Cuatrecasas, a web designer specialized in creating result-driven sites. 3+ years helping businesses stand out online.",
   },
   "about.bio2": {
     es: "Mi enfoque es simple: cada decisión de diseño debe tener un propósito. No busco solo que se vea bien, busco que funcione y convierta.",

@@ -44,7 +44,7 @@ export const Header = () => {
       >
         <div className="container flex items-center justify-between">
           <a href="#" className="font-display text-xl font-semibold tracking-tight">
-            daniel<span className="text-accent">.</span>
+            cuatre<span className="text-accent">.</span>
           </a>
 
           <nav className="hidden md:flex items-center gap-10">
@@ -98,7 +98,7 @@ export const Header = () => {
         }`}
       >
         <div className="flex items-center justify-between px-5 py-5">
-          <span className="font-display text-xl font-semibold">daniel<span className="text-accent">.</span></span>
+          <span className="font-display text-xl font-semibold">cuatre<span className="text-accent">.</span></span>
           <div className="flex items-center gap-2">
             {/* Theme toggle mobile */}
             <button
