@@ -134,7 +134,16 @@
 
   /* Touch target */
   .touch-target {
-    @apply min-h-[52px] min-w-[52px];
+    @apply min-h-[56px] min-w-[56px];
+  }
+
+  /* Safe area for mobile */
+  .safe-bottom {
+    padding-bottom: max(1.5rem, env(safe-area-inset-bottom));
+  }
+
+  .safe-top {
+    padding-top: max(1rem, env(safe-area-inset-top));
   }
 
   /* Card */

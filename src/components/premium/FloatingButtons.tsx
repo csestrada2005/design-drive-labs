@@ -11,10 +11,10 @@ export const FloatingButtons = () => {
   }, []);
 
   return (
-    <div className="fixed bottom-6 right-5 z-40 flex flex-col gap-3">
+    <div className="fixed bottom-5 right-4 sm:bottom-6 sm:right-5 z-40 flex flex-col gap-3 safe-bottom">
       <button
         onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-        className={`touch-target w-14 h-14 rounded-full bg-card border border-border shadow-lg flex items-center justify-center transition-all duration-300 ${
+        className={`touch-target w-14 h-14 rounded-full bg-card border border-border shadow-lg flex items-center justify-center transition-all duration-300 active:scale-95 ${
           showTop ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4 pointer-events-none"
         }`}
         aria-label="Subir"
