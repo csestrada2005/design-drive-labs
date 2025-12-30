@@ -184,91 +184,76 @@ export const Portfolio = () => {
           </p>
         </div>
 
-        {/* Projects */}
-        <div className="space-y-8 sm:space-y-12">
+        {/* Projects Grid - 2 per row */}
+        <div className="grid md:grid-cols-2 gap-6 sm:gap-8">
           {projects.map((project, index) => (
             <article
               key={project.id}
-              className={`bg-card rounded-2xl sm:rounded-3xl border border-border overflow-hidden shadow-sm hover:shadow-lg transition-all duration-500 ${
+              className={`bg-card rounded-2xl border border-border overflow-hidden shadow-sm hover:shadow-lg transition-all duration-500 ${
                 isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
               }`}
               style={{ transitionDelay: `${(index + 1) * 150}ms` }}
             >
-              <div className="grid lg:grid-cols-2 gap-0">
-                {/* Image / Carousel */}
-                <div className="p-4 sm:p-6 lg:p-8">
-                  <ProjectCarousel images={project.images} title={project.title} />
-                </div>
+              {/* Image / Carousel */}
+              <div className="p-3 sm:p-4">
+                <ProjectCarousel images={project.images} title={project.title} />
+              </div>
 
-                {/* Content */}
-                <div className="p-5 sm:p-6 lg:p-8 flex flex-col justify-center">
-                  {/* Badge + Title */}
-                  <div className="flex flex-wrap items-center gap-2 mb-3">
-                    <span className="text-xs font-medium text-accent uppercase tracking-wider px-3 py-1 bg-accent/10 rounded-full">
-                      {project.type}
+              {/* Content */}
+              <div className="p-4 sm:p-5">
+                {/* Badge + Title */}
+                <div className="flex flex-wrap items-center gap-2 mb-2">
+                  <span className="text-xs font-medium text-accent uppercase tracking-wider px-2 py-0.5 bg-accent/10 rounded-full">
+                    {project.type}
+                  </span>
+                  {project.isPlaceholder && (
+                    <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider px-2 py-0.5 bg-muted rounded-full">
+                      Demo
                     </span>
-                    {project.isPlaceholder && (
-                      <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider px-3 py-1 bg-muted rounded-full">
-                        Demo
-                      </span>
-                    )}
-                  </div>
-                  
-                  <h3 className="font-display text-2xl sm:text-3xl mb-3">
-                    {project.title}
-                  </h3>
-                  
-                  <p className="text-muted-foreground text-sm sm:text-base mb-5 leading-relaxed">
-                    {project.summary}
-                  </p>
-
-                  {/* Highlights chips */}
-                  <div className="flex flex-wrap gap-2 mb-5">
-                    {project.highlights.map((highlight, i) => (
-                      <span
-                        key={i}
-                        className="text-xs px-3 py-1.5 rounded-full bg-muted text-foreground/80 font-medium"
-                      >
-                        {highlight}
-                      </span>
-                    ))}
-                  </div>
-
-                  {/* Implementation block (only for BUMBA) */}
-                  {project.implementation && (
-                    <div className="mb-5 p-4 rounded-xl bg-muted/50 border border-border/50">
-                      <p className="text-xs font-medium text-accent uppercase tracking-wider mb-2">
-                        Lo que implementamos
-                      </p>
-                      <ul className="space-y-1">
-                        {project.implementation.map((item, i) => (
-                          <li key={i} className="text-sm text-muted-foreground flex items-start gap-2">
-                            <span className="text-accent mt-1">•</span>
-                            {item}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
                   )}
-
-                  {/* Results block (only for BUMBA) */}
-                  {project.results && (
-                    <p className="text-sm text-foreground/70 italic mb-5 border-l-2 border-accent/30 pl-4">
-                      {project.results}
-                    </p>
-                  )}
-
-                  {/* CTA */}
-                  <div className="mt-auto">
-                    <Button 
-                      variant="outline" 
-                      className="gap-2 group/btn hover:bg-accent hover:text-accent-foreground hover:border-accent transition-all"
-                    >
-                      Ver caso
-                      <ArrowUpRight className="w-4 h-4 transition-transform group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5" />
-                    </Button>
-                  </div>
                 </div>
+                
+                <h3 className="font-display text-xl sm:text-2xl mb-2">
+                  {project.title}
+                </h3>
+                
+                <p className="text-muted-foreground text-sm mb-4 leading-relaxed line-clamp-3">
+                  {project.summary}
+                </p>
+
+                {/* Highlights chips */}
+                <div className="flex flex-wrap gap-1.5 mb-4">
+                  {project.highlights.slice(0, 4).map((highlight, i) => (
+                    <span
+                      key={i}
+                      className="text-xs px-2 py-1 rounded-full bg-muted text-foreground/80 font-medium"
+                    >
+                      {highlight}
+                    </span>
+                  ))}
+                  {project.highlights.length > 4 && (
+                    <span className="text-xs px-2 py-1 rounded-full bg-muted text-muted-foreground">
+                      +{project.highlights.length - 4}
+                    </span>
+                  )}
+                </div>
+
+                {/* Results block (only for BUMBA) */}
+                {project.results && (
+                  <p className="text-xs text-foreground/70 italic mb-4 border-l-2 border-accent/30 pl-3 line-clamp-2">
+                    {project.results}
+                  </p>
+                )}
+
+                {/* CTA */}
+                <Button 
+                  variant="outline" 
+                  size="sm"
+                  className="gap-2 group/btn hover:bg-accent hover:text-accent-foreground hover:border-accent transition-all"
+                >
+                  Ver caso
+                  <ArrowUpRight className="w-3 h-3 transition-transform group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5" />
+                </Button>
               </div>
             </article>
           ))}
