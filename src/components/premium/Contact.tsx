@@ -64,13 +64,13 @@ export const Contact = () => {
                 </div>
               </a>
 
-              <a href="mailto:hola@cuatre.es" className="flex items-center gap-3 sm:gap-4 p-4 rounded-xl border border-border hover:bg-muted/50 transition-colors group active:scale-[0.99]">
+              <a href="mailto:cuatrecasasjosep79@gmail.com" className="flex items-center gap-3 sm:gap-4 p-4 rounded-xl border border-border hover:bg-muted/50 transition-colors group active:scale-[0.99]">
                 <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-accent/10 flex items-center justify-center flex-shrink-0">
                   <Mail className="w-5 h-5 text-accent" />
                 </div>
                 <div className="min-w-0">
                   <p className="font-medium group-hover:text-accent transition-colors text-sm sm:text-base">{t("contact.email")}</p>
-                  <p className="text-xs sm:text-sm text-muted-foreground truncate">hola@cuatre.es</p>
+                  <p className="text-xs sm:text-sm text-muted-foreground truncate">cuatrecasasjosep79@gmail.com</p>
                 </div>
               </a>
 
@@ -80,7 +80,7 @@ export const Contact = () => {
                 </div>
                 <div className="min-w-0">
                   <p className="font-medium text-sm sm:text-base">{t("contact.location")}</p>
-                  <p className="text-xs sm:text-sm text-muted-foreground">Barcelona, España</p>
+                  <p className="text-xs sm:text-sm text-muted-foreground">Dubai, UAE</p>
                 </div>
               </div>
             </div>
