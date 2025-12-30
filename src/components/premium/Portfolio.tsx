@@ -1,112 +1,276 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { useReveal } from "@/hooks/useAnimations";
-import { useLanguage } from "@/contexts/LanguageContext";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, ChevronLeft, ChevronRight } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import useEmblaCarousel from "embla-carousel-react";
+
+// BUMBA images
+import bumba1 from "@/assets/bumba-1.png";
+import bumba2 from "@/assets/bumba-2.png";
+import bumba3 from "@/assets/bumba-3.png";
+import bumba4 from "@/assets/bumba-4.png";
+
+// Placeholder images
 import portfolio1 from "@/assets/portfolio-1.jpg";
 import portfolio2 from "@/assets/portfolio-2.jpg";
-import portfolio3 from "@/assets/portfolio-3.jpg";
+
+interface Project {
+  id: number;
+  title: string;
+  type: string;
+  summary: string;
+  highlights: string[];
+  implementation?: string[];
+  results?: string;
+  images: string[];
+  isPlaceholder?: boolean;
+}
+
+const projects: Project[] = [
+  {
+    id: 1,
+    title: "BUMBA",
+    type: "E-commerce",
+    summary: "Tienda online de mentas energéticas y de enfoque para emprendedores. Construida en React e integrada con Shopify para una experiencia rápida, premium y orientada a conversión.",
+    highlights: [
+      "Shopify Checkout",
+      "Carrito persistente",
+      "Multi-moneda",
+      "Chatbot soporte",
+      "Animaciones premium",
+      "Mobile-first"
+    ],
+    implementation: [
+      "Packs 1/3/5 con indicador 'best value'",
+      "Sistema de reviews con estrellas",
+      "Páginas de beneficios, ingredientes, FAQ y políticas"
+    ],
+    results: "Optimizado para conversión: jerarquía clara, CTA directo y flujo de compra sin fricción.",
+    images: [bumba1, bumba2, bumba3, bumba4],
+  },
+  {
+    id: 2,
+    title: "Studio Landing",
+    type: "Landing page",
+    summary: "Concepto de diseño — disponible para personalización. Landing minimalista con enfoque en captación de leads y estética editorial.",
+    highlights: ["Diseño responsive", "Formulario integrado", "SEO optimizado"],
+    images: [portfolio1],
+    isPlaceholder: true,
+  },
+  {
+    id: 3,
+    title: "Luxe Store",
+    type: "E-commerce",
+    summary: "Concepto de diseño — disponible para personalización. Tienda online con experiencia de compra premium y checkout optimizado.",
+    highlights: ["Carrito dinámico", "Galería de producto", "Checkout rápido"],
+    images: [portfolio2],
+    isPlaceholder: true,
+  },
+];
+
+const ProjectCarousel = ({ images, title }: { images: string[]; title: string }) => {
+  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true });
+  const [selectedIndex, setSelectedIndex] = useState(0);
+
+  const scrollPrev = useCallback(() => {
+    if (emblaApi) emblaApi.scrollPrev();
+  }, [emblaApi]);
+
+  const scrollNext = useCallback(() => {
+    if (emblaApi) emblaApi.scrollNext();
+  }, [emblaApi]);
+
+  const onSelect = useCallback(() => {
+    if (!emblaApi) return;
+    setSelectedIndex(emblaApi.selectedScrollSnap());
+  }, [emblaApi]);
+
+  // Subscribe to select event
+  useState(() => {
+    if (!emblaApi) return;
+    emblaApi.on("select", onSelect);
+    onSelect();
+  });
+
+  if (images.length === 1) {
+    return (
+      <div className="relative aspect-[16/10] overflow-hidden rounded-xl bg-muted">
+        <img
+          src={images[0]}
+          alt={`${title} - Vista previa`}
+          className="w-full h-full object-cover object-top"
+          loading="lazy"
+        />
+      </div>
+    );
+  }
+
+  return (
+    <div className="relative group">
+      {/* Carousel container */}
+      <div className="overflow-hidden rounded-xl" ref={emblaRef}>
+        <div className="flex">
+          {images.map((image, index) => (
+            <div key={index} className="flex-[0_0_100%] min-w-0">
+              <div className="aspect-[16/10] overflow-hidden bg-muted">
+                <img
+                  src={image}
+                  alt={`${title} - Captura ${index + 1}`}
+                  className="w-full h-full object-cover object-top transition-transform duration-500"
+                  loading="lazy"
+                />
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Navigation arrows - visible on desktop hover */}
+      <button
+        onClick={scrollPrev}
+        className="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-background/90 backdrop-blur-sm border border-border shadow-lg flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 hover:bg-background"
+        aria-label="Imagen anterior"
+      >
+        <ChevronLeft className="w-5 h-5" />
+      </button>
+      <button
+        onClick={scrollNext}
+        className="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-background/90 backdrop-blur-sm border border-border shadow-lg flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 hover:bg-background"
+        aria-label="Imagen siguiente"
+      >
+        <ChevronRight className="w-5 h-5" />
+      </button>
+
+      {/* Dots indicator */}
+      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
+        {images.map((_, index) => (
+          <button
+            key={index}
+            onClick={() => emblaApi?.scrollTo(index)}
+            className={`w-2 h-2 rounded-full transition-all duration-300 ${
+              index === selectedIndex
+                ? "bg-accent w-6"
+                : "bg-background/60 hover:bg-background/80"
+            }`}
+            aria-label={`Ir a imagen ${index + 1}`}
+          />
+        ))}
+      </div>
+
+      {/* Mobile swipe hint - only shows briefly */}
+      <div className="absolute bottom-12 left-1/2 -translate-x-1/2 text-xs text-background/70 bg-foreground/50 px-3 py-1 rounded-full sm:hidden animate-fade-in">
+        Desliza para ver más
+      </div>
+    </div>
+  );
+};
 
 export const Portfolio = () => {
   const { ref, isVisible } = useReveal();
-  const { t, language } = useLanguage();
-  const [hoveredId, setHoveredId] = useState<number | null>(null);
-
-  const projects = [
-    {
-      id: 1,
-      title: "Moda Luxe",
-      type: language === "es" ? "Tienda online" : "Online store",
-      result: "+200%",
-      resultLabel: language === "es" ? "ventas" : "sales",
-      description: language === "es"
-        ? "Tienda online de moda premium con experiencia de compra inmersiva y automatizaciones de recuperación de carrito."
-        : "Premium fashion online store with immersive shopping experience and cart recovery automations.",
-      image: portfolio1,
-    },
-    {
-      id: 2,
-      title: "TechFlow",
-      type: "Landing page",
-      result: "+350%",
-      resultLabel: "leads",
-      description: language === "es"
-        ? "Página de captación para startup SaaS. Diseño persuasivo que multiplicó sus conversiones."
-        : "Lead capture page for SaaS startup. Persuasive design that multiplied their conversions.",
-      image: portfolio2,
-    },
-    {
-      id: 3,
-      title: "Wellness Spa",
-      type: language === "es" ? "Sitio web" : "Website",
-      result: "+150%",
-      resultLabel: language === "es" ? "reservas" : "bookings",
-      description: language === "es"
-        ? "Sitio web para centro de bienestar con sistema de citas integrado y diseño que transmite calma."
-        : "Wellness center website with integrated booking system and design that conveys calm.",
-      image: portfolio3,
-    },
-  ];
 
   return (
-    <section id="trabajo" ref={ref as React.RefObject<HTMLElement>} className="py-16 sm:py-24 md:py-32 bg-muted/40">
+    <section id="trabajo" ref={ref as React.RefObject<HTMLElement>} className="py-16 sm:py-24 md:py-32 bg-muted/30">
       <div className="container px-5 sm:px-6">
         {/* Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 sm:gap-6 mb-8 sm:mb-12">
-          <div>
-            <p className={`text-accent font-medium mb-3 sm:mb-4 text-sm sm:text-base transition-all duration-600 ${isVisible ? "opacity-100" : "opacity-0"}`}>
-              {t("portfolio.title")}
-            </p>
-            <h2 className={`font-display text-2xl sm:text-3xl md:text-4xl transition-all duration-600 delay-100 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}>
-              {t("portfolio.headline")}
-            </h2>
-          </div>
+        <div className="max-w-2xl mb-10 sm:mb-16">
+          <p className={`text-accent font-medium mb-3 text-sm tracking-wide uppercase transition-all duration-600 ${isVisible ? "opacity-100" : "opacity-0"}`}>
+            Trabajo
+          </p>
+          <h2 className={`font-display text-3xl sm:text-4xl md:text-5xl mb-4 transition-all duration-600 delay-100 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}>
+            Proyectos seleccionados
+          </h2>
+          <p className={`text-muted-foreground text-base sm:text-lg transition-all duration-600 delay-200 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}>
+            Una muestra de cómo diseñamos para que convierta.
+          </p>
         </div>
 
-        {/* Projects grid */}
-        <div className="grid gap-4 sm:gap-6 md:grid-cols-2 lg:grid-cols-3">
+        {/* Projects */}
+        <div className="space-y-8 sm:space-y-12">
           {projects.map((project, index) => (
-            <div
+            <article
               key={project.id}
-              onMouseEnter={() => setHoveredId(project.id)}
-              onMouseLeave={() => setHoveredId(null)}
-              className={`group cursor-pointer bg-card rounded-2xl overflow-hidden border border-border hover:border-accent/30 hover:shadow-lg transition-all duration-500 active:scale-[0.99] ${
-                isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
+              className={`bg-card rounded-2xl sm:rounded-3xl border border-border overflow-hidden shadow-sm hover:shadow-lg transition-all duration-500 ${
+                isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
               }`}
-              style={{ transitionDelay: `${(index + 1) * 80}ms` }}
+              style={{ transitionDelay: `${(index + 1) * 150}ms` }}
             >
-              {/* Image */}
-              <div className="relative aspect-[4/3] overflow-hidden">
-                <img
-                  src={project.image}
-                  alt={project.title}
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                  loading="lazy"
-                />
-                {/* Overlay - hidden on mobile, visible on hover for desktop */}
-                <div
-                  className={`absolute inset-0 bg-foreground/90 flex items-center justify-center transition-opacity duration-300 hidden sm:flex ${
-                    hoveredId === project.id ? "opacity-100" : "opacity-0"
-                  }`}
-                >
-                  <span className="inline-flex items-center gap-2 px-5 py-2.5 bg-background text-foreground rounded-full font-medium text-sm">
-                    {t("portfolio.cta")}
-                    <ArrowUpRight className="w-4 h-4" />
-                  </span>
+              <div className="grid lg:grid-cols-2 gap-0">
+                {/* Image / Carousel */}
+                <div className="p-4 sm:p-6 lg:p-8">
+                  <ProjectCarousel images={project.images} title={project.title} />
                 </div>
-              </div>
 
-              {/* Content */}
-              <div className="p-5 sm:p-6">
-                <div className="flex flex-wrap items-center gap-2 mb-3">
-                  <span className="text-xs font-medium text-accent uppercase tracking-wider">{project.type}</span>
-                  <span className="text-xs px-2 py-1 rounded-full bg-accent/10 text-accent font-medium">
-                    {project.result} {project.resultLabel}
-                  </span>
+                {/* Content */}
+                <div className="p-5 sm:p-6 lg:p-8 flex flex-col justify-center">
+                  {/* Badge + Title */}
+                  <div className="flex flex-wrap items-center gap-2 mb-3">
+                    <span className="text-xs font-medium text-accent uppercase tracking-wider px-3 py-1 bg-accent/10 rounded-full">
+                      {project.type}
+                    </span>
+                    {project.isPlaceholder && (
+                      <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider px-3 py-1 bg-muted rounded-full">
+                        Demo
+                      </span>
+                    )}
+                  </div>
+                  
+                  <h3 className="font-display text-2xl sm:text-3xl mb-3">
+                    {project.title}
+                  </h3>
+                  
+                  <p className="text-muted-foreground text-sm sm:text-base mb-5 leading-relaxed">
+                    {project.summary}
+                  </p>
+
+                  {/* Highlights chips */}
+                  <div className="flex flex-wrap gap-2 mb-5">
+                    {project.highlights.map((highlight, i) => (
+                      <span
+                        key={i}
+                        className="text-xs px-3 py-1.5 rounded-full bg-muted text-foreground/80 font-medium"
+                      >
+                        {highlight}
+                      </span>
+                    ))}
+                  </div>
+
+                  {/* Implementation block (only for BUMBA) */}
+                  {project.implementation && (
+                    <div className="mb-5 p-4 rounded-xl bg-muted/50 border border-border/50">
+                      <p className="text-xs font-medium text-accent uppercase tracking-wider mb-2">
+                        Lo que implementamos
+                      </p>
+                      <ul className="space-y-1">
+                        {project.implementation.map((item, i) => (
+                          <li key={i} className="text-sm text-muted-foreground flex items-start gap-2">
+                            <span className="text-accent mt-1">•</span>
+                            {item}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+
+                  {/* Results block (only for BUMBA) */}
+                  {project.results && (
+                    <p className="text-sm text-foreground/70 italic mb-5 border-l-2 border-accent/30 pl-4">
+                      {project.results}
+                    </p>
+                  )}
+
+                  {/* CTA */}
+                  <div className="mt-auto">
+                    <Button 
+                      variant="outline" 
+                      className="gap-2 group/btn hover:bg-accent hover:text-accent-foreground hover:border-accent transition-all"
+                    >
+                      Ver caso
+                      <ArrowUpRight className="w-4 h-4 transition-transform group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5" />
+                    </Button>
+                  </div>
                 </div>
-                <h3 className="font-display text-lg sm:text-xl mb-2 group-hover:text-accent transition-colors">{project.title}</h3>
-                <p className="text-sm text-muted-foreground line-clamp-2">{project.description}</p>
               </div>
-            </div>
+            </article>
           ))}
         </div>
       </div>
