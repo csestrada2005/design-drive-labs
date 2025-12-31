@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useReveal } from "@/hooks/useAnimations";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { Send, Check, MessageCircle, Mail, MapPin, Clock } from "lucide-react";
+import { Send, Check, MessageCircle, Mail, MapPin, Clock, Copy } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 export const Contact = () => {
@@ -9,7 +9,14 @@ export const Contact = () => {
   const { t } = useLanguage();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [emailCopied, setEmailCopied] = useState(false);
   const { toast } = useToast();
+
+  const handleCopyEmail = async () => {
+    await navigator.clipboard.writeText("cuatrecasasjosep79@gmail.com");
+    setEmailCopied(true);
+    setTimeout(() => setEmailCopied(false), 2000);
+  };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -64,15 +71,35 @@ export const Contact = () => {
                 </div>
               </a>
 
-              <a href="mailto:cuatrecasasjosep79@gmail.com" className="flex items-center gap-3 sm:gap-4 p-4 rounded-xl border border-border hover:bg-muted/50 transition-colors group active:scale-[0.99]">
+              <button 
+                onClick={handleCopyEmail}
+                className="flex items-center gap-3 sm:gap-4 p-4 rounded-xl border border-border hover:bg-muted/50 transition-colors group active:scale-[0.99] w-full text-left"
+              >
                 <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-accent/10 flex items-center justify-center flex-shrink-0">
-                  <Mail className="w-5 h-5 text-accent" />
+                  {emailCopied ? (
+                    <Check className="w-5 h-5 text-accent" />
+                  ) : (
+                    <Mail className="w-5 h-5 text-accent" />
+                  )}
                 </div>
-                <div className="min-w-0">
+                <div className="min-w-0 flex-1">
                   <p className="font-medium group-hover:text-accent transition-colors text-sm sm:text-base">{t("contact.email")}</p>
                   <p className="text-xs sm:text-sm text-muted-foreground truncate">cuatrecasasjosep79@gmail.com</p>
                 </div>
-              </a>
+                <div className={`flex items-center gap-1 text-xs font-medium transition-all duration-300 ${emailCopied ? 'text-accent opacity-100' : 'text-muted-foreground opacity-0 group-hover:opacity-100'}`}>
+                  {emailCopied ? (
+                    <>
+                      <Check className="w-3 h-3" />
+                      Copiado
+                    </>
+                  ) : (
+                    <>
+                      <Copy className="w-3 h-3" />
+                      Copiar
+                    </>
+                  )}
+                </div>
+              </button>
 
               <div className="flex items-center gap-3 sm:gap-4 p-4">
                 <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-muted flex items-center justify-center flex-shrink-0">
