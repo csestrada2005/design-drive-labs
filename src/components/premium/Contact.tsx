@@ -57,7 +57,7 @@ export const Contact = () => {
             {/* Contact options */}
             <div className={`space-y-3 sm:space-y-4 transition-all duration-600 delay-300 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}>
               <a
-                href="https://wa.me/34600000000"
+                href="https://wa.me/522213497090?text=Hi!%20I'm%20interested%20in%20your%20service%20%F0%9F%99%82%0A%C2%A1Hola!%20Me%20interesa%20tu%20servicio%0A%0APlease%20reply%20in%20%2F%20Responde%20en%3A%0A%F0%9F%87%AC%F0%9F%87%A7%20English%20%7C%20%F0%9F%87%AA%F0%9F%87%B8%20Espa%C3%B1ol"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center gap-3 sm:gap-4 p-4 rounded-xl border border-border hover:bg-muted/50 transition-colors group active:scale-[0.99]"

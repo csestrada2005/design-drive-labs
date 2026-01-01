@@ -7,7 +7,7 @@ export const Services = () => {
   const { ref, isVisible } = useReveal();
   const { t } = useLanguage();
 
-  const whatsappUrl = "https://wa.me/34600000000?text=Hola,%20me%20gustaría%20agendar%20una%20consultoría%20gratis";
+  const whatsappUrl = "https://wa.me/522213497090?text=Hi!%20I'm%20interested%20in%20your%20service%20%F0%9F%99%82%0A%C2%A1Hola!%20Me%20interesa%20tu%20servicio%0A%0APlease%20reply%20in%20%2F%20Responde%20en%3A%0A%F0%9F%87%AC%F0%9F%87%A7%20English%20%7C%20%F0%9F%87%AA%F0%9F%87%B8%20Espa%C3%B1ol";
   const emailUrl = "mailto:hola@cuatre.es?subject=Consultoría%20Gratis";
 
   const services = [
