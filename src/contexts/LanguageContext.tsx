@@ -122,6 +122,32 @@ const translations: Translations = {
 
   // Footer
   "footer.rights": { es: "Todos los derechos reservados.", en: "All rights reserved." },
+
+  // Portfolio
+  "portfolio.subtitle": { es: "Una muestra de cómo diseñamos para que convierta.", en: "A showcase of how we design for conversion." },
+  "portfolio.swipe": { es: "Desliza para ver más", en: "Swipe to see more" },
+  "portfolio.demo": { es: "Demo", en: "Demo" },
+  "portfolio.prev": { es: "Imagen anterior", en: "Previous image" },
+  "portfolio.next": { es: "Imagen siguiente", en: "Next image" },
+  "portfolio.goto": { es: "Ir a imagen", en: "Go to image" },
+  
+  // Portfolio Projects
+  "portfolio.bumba.summary": { 
+    es: "Tienda online de mentas energéticas y de enfoque para emprendedores. Construida en React e integrada con Shopify para una experiencia rápida, premium y orientada a conversión.",
+    en: "Online store for energy and focus mints for entrepreneurs. Built in React and integrated with Shopify for a fast, premium, conversion-oriented experience."
+  },
+  "portfolio.bumba.results": { 
+    es: "Optimizado para conversión: jerarquía clara, CTA directo y flujo de compra sin fricción.",
+    en: "Optimized for conversion: clear hierarchy, direct CTA and frictionless purchase flow."
+  },
+  "portfolio.studio.summary": { 
+    es: "Concepto de diseño — disponible para personalización. Landing minimalista con enfoque en captación de leads y estética editorial.",
+    en: "Design concept — available for customization. Minimalist landing focused on lead capture and editorial aesthetics."
+  },
+  "portfolio.luxe.summary": { 
+    es: "Concepto de diseño — disponible para personalización. Tienda online con experiencia de compra premium y checkout optimizado.",
+    en: "Design concept — available for customization. Online store with premium shopping experience and optimized checkout."
+  },
 };
 
 interface LanguageContextType {
