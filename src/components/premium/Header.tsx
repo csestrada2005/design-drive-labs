@@ -38,18 +38,31 @@ export const Header = () => {
   return (
     <>
       <header
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-          isScrolled ? "py-3 bg-background/90 backdrop-blur-xl border-b border-border" : "py-5"
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+          isScrolled 
+            ? "py-3 bg-background/70 backdrop-blur-2xl backdrop-saturate-150 border-b border-border/50 shadow-sm" 
+            : "py-5 bg-transparent"
         }`}
+        style={{
+          WebkitBackdropFilter: isScrolled ? 'blur(20px) saturate(180%)' : 'none',
+          backdropFilter: isScrolled ? 'blur(20px) saturate(180%)' : 'none',
+        }}
       >
         <div className="container flex items-center justify-between">
-          <a href="#" className="font-display text-xl font-semibold tracking-tight">
+          <a 
+            href="#" 
+            className="font-display text-xl font-semibold tracking-tight transition-transform duration-300 hover:scale-105"
+          >
             cuatre<span className="text-accent">.</span>
           </a>
 
           <nav className="hidden md:flex items-center gap-10">
             {navLinks.map((link) => (
-              <a key={link.href} href={link.href} className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+              <a 
+                key={link.href} 
+                href={link.href} 
+                className="text-sm text-muted-foreground hover:text-foreground transition-all duration-300 hover:scale-105"
+              >
                 {link.label}
               </a>
             ))}
@@ -59,7 +72,7 @@ export const Header = () => {
             {/* Theme toggle */}
             <button
               onClick={toggleTheme}
-              className="w-9 h-9 flex items-center justify-center border border-border rounded-full hover:bg-muted transition-colors"
+              className="w-9 h-9 flex items-center justify-center rounded-full bg-secondary/50 hover:bg-secondary transition-all duration-300 hover:scale-105 active:scale-95"
               aria-label="Toggle theme"
             >
               {mounted && (theme === "dark" ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />)}
@@ -68,14 +81,14 @@ export const Header = () => {
             {/* Language toggle */}
             <button
               onClick={() => setLanguage(language === "es" ? "en" : "es")}
-              className="px-3 py-1.5 text-xs font-medium border border-border rounded-full hover:bg-muted transition-colors"
+              className="px-3 py-1.5 text-xs font-medium rounded-full bg-secondary/50 hover:bg-secondary transition-all duration-300 hover:scale-105 active:scale-95"
             >
               {language === "es" ? "EN" : "ES"}
             </button>
 
             <a
               href="#contacto"
-              className="btn-primary py-2.5 px-5 text-sm rounded-full"
+              className="btn-primary py-2.5 px-5 text-sm"
             >
               {t("nav.cta")}
             </a>
@@ -83,10 +96,10 @@ export const Header = () => {
 
           <button
             onClick={() => setIsMobileMenuOpen(true)}
-            className="md:hidden touch-target flex items-center justify-center"
+            className="md:hidden w-10 h-10 flex items-center justify-center rounded-full bg-secondary/50 hover:bg-secondary transition-all duration-300 active:scale-95"
             aria-label="Open menu"
           >
-            <Menu className="w-6 h-6" />
+            <Menu className="w-5 h-5" />
           </button>
         </div>
       </header>
