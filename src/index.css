@@ -6,69 +6,69 @@
 
 @layer base {
   :root {
-    /* CUATRE Design System - Desert Light Aesthetic */
-    --background: 35 25% 95%;
-    --foreground: 25 15% 20%;
+    /* Apple-inspired Design System - Light */
+    --background: 0 0% 98%;
+    --foreground: 0 0% 11%;
 
-    --card: 35 20% 92%;
-    --card-foreground: 25 15% 20%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 11%;
 
-    --popover: 35 25% 95%;
-    --popover-foreground: 25 15% 20%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 11%;
 
-    --primary: 25 70% 45%;
-    --primary-foreground: 35 25% 97%;
+    --primary: 211 100% 50%;
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 35 15% 88%;
-    --secondary-foreground: 25 15% 25%;
+    --secondary: 0 0% 96%;
+    --secondary-foreground: 0 0% 11%;
 
-    --muted: 35 12% 90%;
-    --muted-foreground: 25 10% 45%;
+    --muted: 0 0% 96%;
+    --muted-foreground: 0 0% 45%;
 
-    --accent: 160 35% 35%;
-    --accent-foreground: 35 25% 97%;
-    --accent-light: 160 25% 88%;
+    --accent: 211 100% 50%;
+    --accent-foreground: 0 0% 100%;
+    --accent-light: 211 100% 96%;
 
-    --destructive: 0 55% 50%;
-    --destructive-foreground: 35 25% 97%;
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
 
-    --border: 35 15% 82%;
-    --input: 35 15% 82%;
-    --ring: 25 70% 45%;
+    --border: 0 0% 90%;
+    --input: 0 0% 90%;
+    --ring: 211 100% 50%;
 
-    --radius: 1rem;
+    --radius: 0.875rem;
   }
 
   .dark {
-    /* CUATRE Design System - Desert Dark Aesthetic */
-    --background: 25 20% 12%;
-    --foreground: 35 15% 88%;
+    /* Apple-inspired Design System - Dark */
+    --background: 0 0% 0%;
+    --foreground: 0 0% 98%;
 
-    --card: 25 18% 16%;
-    --card-foreground: 35 15% 88%;
+    --card: 0 0% 7%;
+    --card-foreground: 0 0% 98%;
 
-    --popover: 25 18% 16%;
-    --popover-foreground: 35 15% 88%;
+    --popover: 0 0% 7%;
+    --popover-foreground: 0 0% 98%;
 
-    --primary: 25 65% 55%;
-    --primary-foreground: 25 20% 10%;
+    --primary: 211 100% 55%;
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 25 15% 22%;
-    --secondary-foreground: 35 15% 85%;
+    --secondary: 0 0% 15%;
+    --secondary-foreground: 0 0% 98%;
 
-    --muted: 25 12% 20%;
-    --muted-foreground: 35 10% 55%;
+    --muted: 0 0% 15%;
+    --muted-foreground: 0 0% 55%;
 
-    --accent: 160 40% 40%;
-    --accent-foreground: 25 20% 10%;
-    --accent-light: 160 25% 20%;
+    --accent: 211 100% 55%;
+    --accent-foreground: 0 0% 100%;
+    --accent-light: 211 100% 15%;
 
-    --destructive: 0 50% 45%;
-    --destructive-foreground: 35 15% 90%;
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
 
-    --border: 25 12% 25%;
-    --input: 25 12% 25%;
-    --ring: 25 65% 55%;
+    --border: 0 0% 20%;
+    --input: 0 0% 20%;
+    --ring: 211 100% 55%;
   }
 }
 
