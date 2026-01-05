@@ -1,7 +1,6 @@
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import { Header } from "@/components/premium/Header";
 import { Hero } from "@/components/premium/Hero";
-import { Services } from "@/components/premium/Services";
 import { Process } from "@/components/premium/Process";
 import { Portfolio } from "@/components/premium/Portfolio";
 import { Testimonials } from "@/components/premium/Testimonials";
@@ -18,7 +17,6 @@ const Index = () => {
         <main>
           <Hero />
           <Portfolio />
-          <Services />
           <Process />
           <Testimonials />
           <About />
