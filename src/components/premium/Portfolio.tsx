@@ -45,21 +45,19 @@ const projects: Project[] = [
   },
   {
     id: 2,
-    title: "Studio Landing",
-    type: "Landing page",
-    summaryKey: "portfolio.studio.summary",
-    highlightsKeys: ["Diseño responsive", "Formulario integrado", "SEO optimizado"],
+    title: "Boutique Elegance",
+    type: "E-commerce",
+    summaryKey: "portfolio.boutique.summary",
+    highlightsKeys: ["Pasarela de pagos", "Inventario en tiempo real", "Wishlist integrada", "Analytics avanzado"],
     images: [portfolio1],
-    isPlaceholder: true,
   },
   {
     id: 3,
-    title: "Luxe Store",
-    type: "E-commerce",
-    summaryKey: "portfolio.luxe.summary",
-    highlightsKeys: ["Carrito dinámico", "Galería de producto", "Checkout rápido"],
+    title: "TechFlow SaaS",
+    type: "Plataforma web",
+    summaryKey: "portfolio.techflow.summary",
+    highlightsKeys: ["Dashboard interactivo", "API REST", "Autenticación segura", "Reportes automatizados"],
     images: [portfolio2],
-    isPlaceholder: true,
   },
 ];
 
@@ -180,8 +178,8 @@ export const Portfolio = () => {
           </p>
         </div>
 
-        {/* Projects Grid - 2 per row */}
-        <div className="grid md:grid-cols-2 gap-6 sm:gap-8">
+        {/* Projects Grid - 3 per row */}
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
           {projects.map((project, index) => (
             <article
               key={project.id}
@@ -202,11 +200,6 @@ export const Portfolio = () => {
                   <span className="text-xs font-medium text-accent uppercase tracking-wider px-2 py-0.5 bg-accent/10 rounded-full">
                     {project.type}
                   </span>
-                  {project.isPlaceholder && (
-                    <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider px-2 py-0.5 bg-muted rounded-full">
-                      {t("portfolio.demo")}
-                    </span>
-                  )}
                 </div>
                 
                 <h3 className="font-display text-xl sm:text-2xl mb-2">
@@ -244,6 +237,13 @@ export const Portfolio = () => {
               </div>
             </article>
           ))}
+        </div>
+
+        {/* Privacy notice */}
+        <div className={`mt-10 sm:mt-14 text-center transition-all duration-600 delay-500 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}>
+          <p className="text-sm text-muted-foreground/70 italic max-w-2xl mx-auto">
+            🔒 Por motivos de confidencialidad y acuerdos de privacidad con las marcas, el acceso directo a los proyectos no está disponible públicamente.
+          </p>
         </div>
       </div>
     </section>

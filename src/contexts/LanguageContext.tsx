@@ -140,13 +140,13 @@ const translations: Translations = {
     es: "Optimizado para conversión: jerarquía clara, CTA directo y flujo de compra sin fricción.",
     en: "Optimized for conversion: clear hierarchy, direct CTA and frictionless purchase flow."
   },
-  "portfolio.studio.summary": { 
-    es: "Concepto de diseño — disponible para personalización. Landing minimalista con enfoque en captación de leads y estética editorial.",
-    en: "Design concept — available for customization. Minimalist landing focused on lead capture and editorial aesthetics."
+  "portfolio.boutique.summary": { 
+    es: "Tienda de moda premium con catálogo de más de 500 productos. Sistema de inventario en tiempo real, wishlist integrada y pasarela de pagos multi-método con analytics avanzado.",
+    en: "Premium fashion store with 500+ product catalog. Real-time inventory system, integrated wishlist and multi-method payment gateway with advanced analytics."
   },
-  "portfolio.luxe.summary": { 
-    es: "Concepto de diseño — disponible para personalización. Tienda online con experiencia de compra premium y checkout optimizado.",
-    en: "Design concept — available for customization. Online store with premium shopping experience and optimized checkout."
+  "portfolio.techflow.summary": { 
+    es: "Plataforma SaaS de gestión empresarial con dashboard interactivo, reportes automatizados y API REST para integraciones. Sistema de autenticación seguro con roles y permisos granulares.",
+    en: "Enterprise management SaaS platform with interactive dashboard, automated reports and REST API for integrations. Secure authentication system with granular roles and permissions."
   },
 };
 
