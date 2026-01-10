@@ -10,7 +10,6 @@ export const StickyCTA = () => {
 
   useEffect(() => {
     const handleScroll = () => {
-      // Show after scrolling past hero (approx 600px)
       setIsVisible(window.scrollY > 600);
     };
 
@@ -20,15 +19,11 @@ export const StickyCTA = () => {
 
   return (
     <div
-      className={`fixed bottom-0 left-0 right-0 z-30 bg-background/80 backdrop-blur-xl border-t border-border/50 safe-bottom md:hidden transition-all ${
+      className={`fixed bottom-0 left-0 right-0 z-30 glass-nav safe-bottom md:hidden transition-all ${
         prefersReducedMotion ? "" : "duration-400"
       } ${
         isVisible ? "translate-y-0 opacity-100" : "translate-y-full opacity-0"
       }`}
-      style={{
-        WebkitBackdropFilter: "blur(20px)",
-        backdropFilter: "blur(20px)",
-      }}
     >
       <div className="container px-5 py-4">
         <a

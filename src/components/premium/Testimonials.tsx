@@ -57,14 +57,14 @@ export const Testimonials = () => {
   };
 
   return (
-    <section id="testimonios" ref={ref as React.RefObject<HTMLElement>} className="py-16 sm:py-24 md:py-32">
+    <section id="testimonios" ref={ref as React.RefObject<HTMLElement>} className="py-20 sm:py-28 md:py-36">
       <div className="container px-5 sm:px-6">
         <div className="max-w-3xl mx-auto">
           {/* Header */}
           <p className={`text-accent font-medium mb-3 sm:mb-4 text-center text-sm sm:text-base transition-all duration-600 ${isVisible ? "opacity-100" : "opacity-0"}`}>
             {t("testimonials.title")}
           </p>
-          <h2 className={`font-display text-2xl sm:text-3xl md:text-4xl text-center mb-8 sm:mb-12 transition-all duration-600 delay-100 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}>
+          <h2 className={`font-display text-2xl sm:text-3xl md:text-4xl text-center mb-10 sm:mb-14 transition-all duration-600 delay-100 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}>
             {t("testimonials.headline")}
           </h2>
 
@@ -82,27 +82,27 @@ export const Testimonials = () => {
               >
                 {testimonials.map((testimonial) => (
                   <div key={testimonial.id} className="w-full flex-shrink-0 px-2">
-                    <div className="bg-card rounded-2xl border border-border p-6 sm:p-8 md:p-10 transition-all duration-300 hover:border-accent/30 hover:shadow-xl hover:shadow-accent/5">
+                    <div className="glass-card p-7 sm:p-9 md:p-11">
                       {/* WhatsApp style indicator */}
-                      <div className="flex items-center gap-2 mb-5 sm:mb-6 text-[#25D366]">
+                      <div className="flex items-center gap-2 mb-6 sm:mb-7 text-[#25D366]">
                         <MessageCircle className="w-4 h-4 sm:w-5 sm:h-5" />
                         <span className="text-xs sm:text-sm font-medium">WhatsApp</span>
                       </div>
 
                       {/* Intro line if exists */}
                       {testimonial.intro && (
-                        <p className="text-sm text-muted-foreground mb-4 italic">
+                        <p className="text-sm text-muted-foreground mb-5 italic">
                           {testimonial.intro}
                         </p>
                       )}
 
-                      <blockquote className="font-display text-lg sm:text-xl md:text-2xl leading-relaxed mb-6 sm:mb-8">
+                      <blockquote className="font-display text-lg sm:text-xl md:text-2xl leading-relaxed mb-7 sm:mb-9">
                         "{testimonial.text}"
                       </blockquote>
 
                       {/* Author */}
                       <div className="flex items-center gap-3 sm:gap-4">
-                        <div className={`w-11 h-11 sm:w-12 sm:h-12 rounded-full ${testimonial.color} flex items-center justify-center text-white font-semibold text-sm sm:text-base`}>
+                        <div className={`w-12 h-12 sm:w-13 sm:h-13 rounded-full ${testimonial.color} flex items-center justify-center text-white font-semibold text-sm sm:text-base`}>
                           {testimonial.initials}
                         </div>
                         <div>
@@ -116,21 +116,29 @@ export const Testimonials = () => {
               </div>
             </div>
 
-            {/* Controls */}
-            <div className="flex items-center justify-center gap-3 sm:gap-4 mt-6 sm:mt-8">
-              <button onClick={prev} className="touch-target w-12 h-12 sm:w-12 sm:h-12 rounded-full border border-border flex items-center justify-center hover:bg-muted transition-colors active:scale-95">
+            {/* Controls - Glass buttons */}
+            <div className="flex items-center justify-center gap-4 sm:gap-5 mt-8 sm:mt-10">
+              <button 
+                onClick={prev} 
+                className="touch-target w-12 h-12 rounded-full glass-card flex items-center justify-center hover:scale-105 active:scale-95 transition-transform"
+              >
                 <ChevronLeft className="w-5 h-5" />
               </button>
-              <div className="flex gap-2">
+              <div className="flex gap-2.5">
                 {testimonials.map((_, i) => (
                   <button
                     key={i}
                     onClick={() => setCurrent(i)}
-                    className={`h-2 rounded-full transition-all ${i === current ? "w-8 bg-accent" : "w-2 bg-border"}`}
+                    className={`h-2.5 rounded-full transition-all duration-300 ${
+                      i === current ? "w-9 bg-accent" : "w-2.5 bg-foreground/15 hover:bg-foreground/25"
+                    }`}
                   />
                 ))}
               </div>
-              <button onClick={next} className="touch-target w-12 h-12 sm:w-12 sm:h-12 rounded-full border border-border flex items-center justify-center hover:bg-muted transition-colors active:scale-95">
+              <button 
+                onClick={next} 
+                className="touch-target w-12 h-12 rounded-full glass-card flex items-center justify-center hover:scale-105 active:scale-95 transition-transform"
+              >
                 <ChevronRight className="w-5 h-5" />
               </button>
             </div>

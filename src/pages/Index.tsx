@@ -14,20 +14,29 @@ import { StickyCTA } from "@/components/premium/StickyCTA";
 const Index = () => {
   return (
     <LanguageProvider>
-      <div className="min-h-screen">
-        <ScrollProgress />
-        <Header />
-        <main>
-          <Hero />
-          <Process />
-          <Methodology />
-          <Testimonials />
-          <About />
-          <Contact />
-        </main>
-        <Footer />
-        <FloatingButtons />
-        <StickyCTA />
+      <div className="premium-background min-h-screen relative">
+        {/* Background layers */}
+        <div className="premium-glow premium-glow-primary" aria-hidden="true" />
+        <div className="premium-glow premium-glow-secondary" aria-hidden="true" />
+        <div className="animated-gradient" aria-hidden="true" />
+        <div className="noise-overlay" aria-hidden="true" />
+        
+        {/* Content */}
+        <div className="relative z-10">
+          <ScrollProgress />
+          <Header />
+          <main>
+            <Hero />
+            <Process />
+            <Methodology />
+            <Testimonials />
+            <About />
+            <Contact />
+          </main>
+          <Footer />
+          <FloatingButtons />
+          <StickyCTA />
+        </div>
       </div>
     </LanguageProvider>
   );

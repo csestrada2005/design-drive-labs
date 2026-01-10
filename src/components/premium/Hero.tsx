@@ -13,10 +13,10 @@ export const Hero = () => {
   ];
 
   return (
-    <section ref={ref as React.RefObject<HTMLElement>} className="min-h-[100dvh] flex items-center pt-24 pb-16 px-1">
+    <section ref={ref as React.RefObject<HTMLElement>} className="min-h-[100dvh] flex items-center pt-28 pb-20 px-1">
       <div className="container max-w-4xl text-center">
         <p
-          className={`text-accent font-medium text-sm sm:text-base mb-4 sm:mb-6 transition-all duration-700 ${
+          className={`text-accent font-medium text-sm sm:text-base mb-5 sm:mb-6 transition-all duration-700 ${
             isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
           }`}
         >
@@ -24,7 +24,7 @@ export const Hero = () => {
         </p>
 
         <h1
-          className={`font-display text-[clamp(2rem,8vw,4.5rem)] leading-[1.1] tracking-tight mb-6 sm:mb-8 transition-all duration-700 delay-100 ${
+          className={`font-display text-[clamp(2.25rem,9vw,5rem)] leading-[1.05] tracking-tight mb-7 sm:mb-8 transition-all duration-700 delay-100 ${
             isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
           }`}
         >
@@ -34,7 +34,7 @@ export const Hero = () => {
         </h1>
 
         <p
-          className={`text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto mb-8 sm:mb-10 px-2 transition-all duration-700 delay-200 ${
+          className={`text-base sm:text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-10 sm:mb-12 px-2 transition-all duration-700 delay-200 ${
             isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
           }`}
         >
@@ -42,7 +42,7 @@ export const Hero = () => {
         </p>
 
         <div
-          className={`flex justify-center mb-4 px-4 sm:px-0 transition-all duration-700 delay-300 ${
+          className={`flex justify-center mb-5 px-4 sm:px-0 transition-all duration-700 delay-300 ${
             isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
           }`}
         >
@@ -58,29 +58,31 @@ export const Hero = () => {
         </div>
 
         <p
-          className={`text-sm text-muted-foreground mb-10 sm:mb-12 transition-all duration-700 delay-350 ${
+          className={`text-sm text-muted-foreground mb-12 sm:mb-14 transition-all duration-700 delay-350 ${
             isVisible ? "opacity-100" : "opacity-0"
           }`}
         >
           {t("hero.microcopy")}
         </p>
 
-        {/* Trust Points */}
+        {/* Trust Points - Glass card style */}
         <div
-          className={`flex flex-col sm:flex-row sm:flex-wrap justify-center gap-3 sm:gap-6 pt-6 sm:pt-8 border-t border-border mx-4 sm:mx-0 transition-all duration-700 delay-400 ${
+          className={`inline-flex flex-col sm:flex-row sm:flex-wrap justify-center items-center gap-4 sm:gap-6 glass-card px-6 sm:px-10 py-5 sm:py-6 mx-4 sm:mx-0 transition-all duration-700 delay-400 ${
             isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
           }`}
         >
           {trustPoints.map((point, index) => (
-            <div key={index} className="flex items-center gap-2 text-sm sm:text-base text-muted-foreground">
-              <Check className="w-4 h-4 text-accent flex-shrink-0" />
+            <div key={index} className="flex items-center gap-2.5 text-sm sm:text-base text-foreground/80">
+              <div className="w-5 h-5 rounded-full bg-accent/15 flex items-center justify-center flex-shrink-0">
+                <Check className="w-3 h-3 text-accent" />
+              </div>
               <span>{point}</span>
             </div>
           ))}
         </div>
 
         <p
-          className={`text-xs text-muted-foreground/60 mt-4 transition-all duration-700 delay-500 ${
+          className={`text-xs text-muted-foreground/60 mt-5 transition-all duration-700 delay-500 ${
             isVisible ? "opacity-100" : "opacity-0"
           }`}
         >

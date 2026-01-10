@@ -38,7 +38,7 @@ export const Methodology = () => {
   const { language } = useLanguage();
 
   return (
-    <section id="metodologia" ref={ref as React.RefObject<HTMLElement>} className="py-16 sm:py-24 md:py-32">
+    <section id="metodologia" ref={ref as React.RefObject<HTMLElement>} className="py-20 sm:py-28 md:py-36">
       <div className="container px-5 sm:px-6">
         <div className="max-w-3xl mx-auto">
           {/* Header */}
@@ -50,7 +50,7 @@ export const Methodology = () => {
             {language === "es" ? "Nuestra metodología" : "Our methodology"}
           </p>
           <h2
-            className={`font-display text-2xl sm:text-3xl md:text-4xl text-center mb-10 sm:mb-14 transition-all duration-600 delay-100 ${
+            className={`font-display text-2xl sm:text-3xl md:text-4xl text-center mb-12 sm:mb-16 transition-all duration-600 delay-100 ${
               isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
             }`}
           >
@@ -59,18 +59,18 @@ export const Methodology = () => {
               : "CRO-first: we design the site as a funnel, not a poster."}
           </h2>
 
-          {/* Principles */}
-          <div className="space-y-3 sm:space-y-4 mb-10 sm:mb-14">
+          {/* Principles - Glass cards */}
+          <div className="space-y-4 sm:space-y-5 mb-12 sm:mb-16">
             {principles.map((principle, index) => (
               <div
                 key={index}
-                className={`group flex items-start gap-3 sm:gap-4 p-4 sm:p-5 bg-card rounded-xl border border-border transition-all duration-400 hover:border-accent/40 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-accent/5 ${
+                className={`group flex items-start gap-4 sm:gap-5 glass-card p-5 sm:p-6 ${
                   isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
                 }`}
-                style={{ transitionDelay: isVisible ? `${(index + 2) * 60}ms` : "0ms" }}
+                style={{ transitionDelay: isVisible ? `${(index + 2) * 70}ms` : "0ms" }}
               >
-                <div className="w-6 h-6 rounded-full bg-accent/10 flex items-center justify-center flex-shrink-0 mt-0.5 group-hover:bg-accent group-hover:scale-110 transition-all duration-300">
-                  <Check className="w-3.5 h-3.5 text-accent group-hover:text-accent-foreground transition-colors" />
+                <div className="w-7 h-7 rounded-full bg-accent/10 flex items-center justify-center flex-shrink-0 mt-0.5 group-hover:bg-accent group-hover:scale-110 transition-all duration-300">
+                  <Check className="w-4 h-4 text-accent group-hover:text-accent-foreground transition-colors" />
                 </div>
                 <p className="text-sm sm:text-base text-foreground/90 leading-relaxed">
                   {principle[language]}
@@ -79,16 +79,18 @@ export const Methodology = () => {
             ))}
           </div>
 
-          {/* Closing line */}
-          <p
-            className={`text-center text-base sm:text-lg font-medium text-muted-foreground transition-all duration-600 delay-400 ${
+          {/* Closing line - Glass pill */}
+          <div
+            className={`flex justify-center transition-all duration-600 delay-400 ${
               isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
             }`}
           >
-            {language === "es"
-              ? "Primero convertimos. Luego escalamos el tráfico."
-              : "First we convert. Then we scale traffic."}
-          </p>
+            <p className="text-center text-base sm:text-lg font-medium text-foreground/80 glass-card px-8 py-4">
+              {language === "es"
+                ? "Primero convertimos. Luego escalamos el tráfico."
+                : "First we convert. Then we scale traffic."}
+            </p>
+          </div>
         </div>
       </div>
     </section>

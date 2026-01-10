@@ -41,13 +41,9 @@ export const Header = () => {
       <header
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
           isScrolled 
-            ? "py-3 bg-background/70 backdrop-blur-2xl backdrop-saturate-150 border-b border-border/50 shadow-sm" 
+            ? "py-3 glass-nav shadow-sm" 
             : "py-5 bg-transparent"
         }`}
-        style={{
-          WebkitBackdropFilter: isScrolled ? 'blur(20px) saturate(180%)' : 'none',
-          backdropFilter: isScrolled ? 'blur(20px) saturate(180%)' : 'none',
-        }}
       >
         <div className="container flex items-center justify-between">
           <a 
@@ -80,26 +76,26 @@ export const Header = () => {
           </nav>
 
           <div className="hidden md:flex items-center gap-3">
-            {/* Theme toggle */}
+            {/* Theme toggle - glass style */}
             <button
               onClick={toggleTheme}
-              className="w-9 h-9 flex items-center justify-center rounded-full bg-secondary/50 hover:bg-secondary transition-all duration-300 hover:scale-105 active:scale-95"
+              className="w-10 h-10 flex items-center justify-center rounded-full glass-card border-0 hover:scale-105 active:scale-95"
               aria-label="Toggle theme"
             >
               {mounted && (theme === "dark" ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />)}
             </button>
 
-            {/* Language toggle */}
+            {/* Language toggle - glass style */}
             <button
               onClick={() => setLanguage(language === "es" ? "en" : "es")}
-              className="px-3 py-1.5 text-xs font-medium rounded-full bg-secondary/50 hover:bg-secondary transition-all duration-300 hover:scale-105 active:scale-95"
+              className="px-4 py-2 text-xs font-medium rounded-full glass-card border-0 hover:scale-105 active:scale-95"
             >
               {language === "es" ? "EN" : "ES"}
             </button>
 
             <a
               href="#contacto"
-              className="btn-primary py-2.5 px-5 text-sm"
+              className="btn-primary py-2.5 px-6 text-sm"
             >
               {t("nav.cta")}
             </a>
@@ -107,7 +103,7 @@ export const Header = () => {
 
           <button
             onClick={() => setIsMobileMenuOpen(true)}
-            className="md:hidden w-10 h-10 flex items-center justify-center rounded-full bg-secondary/50 hover:bg-secondary transition-all duration-300 active:scale-95"
+            className="md:hidden w-11 h-11 flex items-center justify-center rounded-full glass-card border-0 active:scale-95"
             aria-label="Open menu"
           >
             <Menu className="w-5 h-5" />
@@ -115,11 +111,16 @@ export const Header = () => {
         </div>
       </header>
 
-      {/* Mobile Menu */}
+      {/* Mobile Menu - Glass overlay */}
       <div
-        className={`fixed inset-0 z-[100] bg-background flex flex-col transition-all duration-400 ${
+        className={`fixed inset-0 z-[100] flex flex-col transition-all duration-400 ${
           isMobileMenuOpen ? "opacity-100 visible" : "opacity-0 invisible"
         }`}
+        style={{
+          background: 'hsl(var(--background) / 0.95)',
+          backdropFilter: 'blur(32px) saturate(180%)',
+          WebkitBackdropFilter: 'blur(32px) saturate(180%)',
+        }}
       >
         <div className="flex items-center justify-between px-5 py-5">
           <span className="font-display text-xl font-semibold">cuatre<span className="text-accent">.</span></span>
@@ -127,14 +128,14 @@ export const Header = () => {
             {/* Theme toggle mobile */}
             <button
               onClick={toggleTheme}
-              className="w-10 h-10 flex items-center justify-center border border-border rounded-full"
+              className="w-11 h-11 flex items-center justify-center glass-card rounded-full border-0"
               aria-label="Toggle theme"
             >
               {mounted && (theme === "dark" ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />)}
             </button>
             <button
               onClick={() => setLanguage(language === "es" ? "en" : "es")}
-              className="px-3 py-1.5 text-xs font-medium border border-border rounded-full"
+              className="px-4 py-2 text-xs font-medium glass-card rounded-full border-0"
             >
               {language === "es" ? "EN" : "ES"}
             </button>
@@ -150,7 +151,7 @@ export const Header = () => {
               key={link.href}
               href={link.href}
               onClick={() => setIsMobileMenuOpen(false)}
-              className={`font-display text-4xl py-4 border-b border-border transition-all duration-400 ${
+              className={`font-display text-4xl py-4 border-b border-border/30 transition-all duration-400 ${
                 isMobileMenuOpen ? "opacity-100 translate-x-0" : "opacity-0 translate-x-6"
               }`}
               style={{ transitionDelay: isMobileMenuOpen ? `${i * 60 + 100}ms` : "0ms" }}

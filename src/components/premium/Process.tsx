@@ -14,10 +14,10 @@ export const Process = () => {
   const { t } = useLanguage();
 
   return (
-    <section id="proceso" ref={ref as React.RefObject<HTMLElement>} className="py-16 sm:py-24 md:py-32 bg-muted/30">
+    <section id="proceso" ref={ref as React.RefObject<HTMLElement>} className="py-20 sm:py-28 md:py-36">
       <div className="container px-5 sm:px-6">
         {/* Header */}
-        <div className="max-w-2xl mb-10 sm:mb-14">
+        <div className="max-w-2xl mb-12 sm:mb-16">
           <p
             className={`text-accent font-medium mb-3 sm:mb-4 text-sm sm:text-base transition-all duration-600 ${
               isVisible ? "opacity-100" : "opacity-0"
@@ -34,23 +34,23 @@ export const Process = () => {
           </h2>
         </div>
 
-        {/* Steps */}
-        <div className="grid gap-4 sm:gap-6 md:grid-cols-2 lg:grid-cols-4">
+        {/* Steps - Glass cards */}
+        <div className="grid gap-5 sm:gap-6 md:grid-cols-2 lg:grid-cols-4">
           {steps.map((step, index) => (
             <div
               key={step.titleKey}
-              className={`group relative p-6 sm:p-8 bg-card rounded-2xl border border-border transition-all duration-500 hover:border-accent/40 hover:-translate-y-1 hover:shadow-xl hover:shadow-accent/5 ${
+              className={`group relative glass-card p-7 sm:p-8 ${
                 isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
               }`}
               style={{ transitionDelay: `${(index + 1) * 100}ms` }}
             >
               {/* Step number */}
-              <span className="absolute top-6 right-6 text-4xl sm:text-5xl font-display font-bold text-muted-foreground/10 group-hover:text-accent/20 transition-colors duration-300">
+              <span className="absolute top-6 right-6 text-5xl sm:text-6xl font-display font-bold text-foreground/[0.03] group-hover:text-accent/10 transition-colors duration-300">
                 {String(index + 1).padStart(2, "0")}
               </span>
 
               {/* Icon */}
-              <div className="w-12 h-12 rounded-xl bg-accent/10 flex items-center justify-center mb-5 group-hover:bg-accent group-hover:text-accent-foreground transition-all duration-300 group-hover:scale-110">
+              <div className="w-13 h-13 rounded-xl bg-accent/10 flex items-center justify-center mb-6 group-hover:bg-accent group-hover:text-accent-foreground transition-all duration-300 group-hover:scale-110">
                 <step.icon className="w-6 h-6" />
               </div>
 
