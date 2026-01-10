@@ -1,6 +1,6 @@
 import { useReveal } from "@/hooks/useAnimations";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { MessageCircle, ArrowRight } from "lucide-react";
+import { MessageCircle } from "lucide-react";
 
 export const Hero = () => {
   const { ref, isVisible } = useReveal(0.1);
@@ -36,7 +36,7 @@ export const Hero = () => {
         </p>
 
         <div
-          className={`flex flex-col gap-3 sm:flex-row sm:justify-center sm:gap-4 mb-4 px-4 sm:px-0 transition-all duration-700 delay-300 ${
+          className={`flex justify-center mb-4 px-4 sm:px-0 transition-all duration-700 delay-300 ${
             isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
           }`}
         >
@@ -48,13 +48,6 @@ export const Hero = () => {
           >
             <MessageCircle className="w-5 h-5" />
             {t("hero.cta.primary")}
-          </a>
-          <a
-            href="#trabajo"
-            className="btn-secondary touch-target text-base group"
-          >
-            {t("hero.cta.secondary")}
-            <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
           </a>
         </div>
 
