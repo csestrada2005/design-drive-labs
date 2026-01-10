@@ -19,6 +19,8 @@ export const Testimonials = () => {
       text: "Bro, quedó increíble. Se siente premium y ahora la gente entiende rápido qué hacemos. Gracias 🙏",
       name: "Sophie Al-Rashid",
       role: language === "es" ? "Cafetería • Creek Harbour, Dubai" : "Coffee Shop • Creek Harbour, Dubai",
+      initials: "SA",
+      color: "bg-emerald-500",
     },
     {
       id: 2,
@@ -28,6 +30,8 @@ export const Testimonials = () => {
         : "Super professional. The website looks serious and we get more WhatsApp messages now. Exactly what I needed 👌",
       name: "Khalid Mansour",
       role: language === "es" ? "Barbería • Business Bay, Dubai" : "Barbershop • Business Bay, Dubai",
+      initials: "KM",
+      color: "bg-amber-500",
     },
     {
       id: 3,
@@ -37,6 +41,8 @@ export const Testimonials = () => {
         : "Before, nobody understood what we did. Now the site explains itself and it's easier to quote. Very detail-oriented.",
       name: "Andrea Velázquez",
       role: language === "es" ? "Agencia de eventos • CDMX, México" : "Event Agency • CDMX, Mexico",
+      initials: "AV",
+      color: "bg-violet-500",
     },
   ];
 
@@ -92,9 +98,14 @@ export const Testimonials = () => {
                       </blockquote>
 
                       {/* Author */}
-                      <div>
-                        <p className="font-medium text-sm sm:text-base">{testimonial.name}</p>
-                        <p className="text-xs sm:text-sm text-muted-foreground">{testimonial.role}</p>
+                      <div className="flex items-center gap-3 sm:gap-4">
+                        <div className={`w-11 h-11 sm:w-12 sm:h-12 rounded-full ${testimonial.color} flex items-center justify-center text-white font-semibold text-sm sm:text-base`}>
+                          {testimonial.initials}
+                        </div>
+                        <div>
+                          <p className="font-medium text-sm sm:text-base">{testimonial.name}</p>
+                          <p className="text-xs sm:text-sm text-muted-foreground">{testimonial.role}</p>
+                        </div>
                       </div>
                     </div>
                   </div>
