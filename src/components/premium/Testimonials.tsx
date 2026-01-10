@@ -64,7 +64,7 @@ export const Testimonials = () => {
           <p className={`text-accent font-medium mb-3 sm:mb-4 text-center text-sm sm:text-base transition-all duration-600 ${isVisible ? "opacity-100" : "opacity-0"}`}>
             {t("testimonials.title")}
           </p>
-          <h2 className={`font-display text-xl sm:text-2xl md:text-3xl text-center mb-8 sm:mb-12 text-muted-foreground transition-all duration-600 delay-100 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}>
+          <h2 className={`font-display text-2xl sm:text-3xl md:text-4xl text-center mb-8 sm:mb-12 transition-all duration-600 delay-100 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}>
             {t("testimonials.headline")}
           </h2>
 
