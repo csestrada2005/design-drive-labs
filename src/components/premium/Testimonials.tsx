@@ -2,9 +2,6 @@ import { useState } from "react";
 import { useReveal } from "@/hooks/useAnimations";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { ChevronLeft, ChevronRight, MessageCircle } from "lucide-react";
-import testimonial1 from "@/assets/testimonial-1.jpg";
-import testimonial2 from "@/assets/testimonial-2.jpg";
-import testimonial3 from "@/assets/testimonial-3.jpg";
 
 export const Testimonials = () => {
   const { ref, isVisible } = useReveal();
@@ -22,7 +19,6 @@ export const Testimonials = () => {
       text: "Bro, quedó increíble. Se siente premium y ahora la gente entiende rápido qué hacemos. Gracias 🙏",
       name: "Sophie Al-Rashid",
       role: language === "es" ? "Cafetería • Creek Harbour, Dubai" : "Coffee Shop • Creek Harbour, Dubai",
-      image: testimonial1,
     },
     {
       id: 2,
@@ -32,7 +28,6 @@ export const Testimonials = () => {
         : "Super professional. The website looks serious and we get more WhatsApp messages now. Exactly what I needed 👌",
       name: "Khalid Mansour",
       role: language === "es" ? "Barbería • Business Bay, Dubai" : "Barbershop • Business Bay, Dubai",
-      image: testimonial2,
     },
     {
       id: 3,
@@ -42,7 +37,6 @@ export const Testimonials = () => {
         : "Before, nobody understood what we did. Now the site explains itself and it's easier to quote. Very detail-oriented.",
       name: "Andrea Velázquez",
       role: language === "es" ? "Agencia de eventos • CDMX, México" : "Event Agency • CDMX, Mexico",
-      image: testimonial3,
     },
   ];
 
@@ -98,12 +92,9 @@ export const Testimonials = () => {
                       </blockquote>
 
                       {/* Author */}
-                      <div className="flex items-center gap-3 sm:gap-4">
-                        <img src={testimonial.image} alt={testimonial.name} className="w-12 h-12 sm:w-14 sm:h-14 rounded-full object-cover" />
-                        <div>
-                          <p className="font-medium text-sm sm:text-base">{testimonial.name}</p>
-                          <p className="text-xs sm:text-sm text-muted-foreground">{testimonial.role}</p>
-                        </div>
+                      <div>
+                        <p className="font-medium text-sm sm:text-base">{testimonial.name}</p>
+                        <p className="text-xs sm:text-sm text-muted-foreground">{testimonial.role}</p>
                       </div>
                     </div>
                   </div>
