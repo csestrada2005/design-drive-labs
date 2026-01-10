@@ -8,11 +8,14 @@ import { About } from "@/components/premium/About";
 import { Contact } from "@/components/premium/Contact";
 import { Footer } from "@/components/premium/Footer";
 import { FloatingButtons } from "@/components/premium/FloatingButtons";
+import { ScrollProgress } from "@/components/premium/ScrollProgress";
+import { StickyCTA } from "@/components/premium/StickyCTA";
 
 const Index = () => {
   return (
     <LanguageProvider>
       <div className="min-h-screen">
+        <ScrollProgress />
         <Header />
         <main>
           <Hero />
@@ -24,6 +27,7 @@ const Index = () => {
         </main>
         <Footer />
         <FloatingButtons />
+        <StickyCTA />
       </div>
     </LanguageProvider>
   );

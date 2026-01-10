@@ -1,17 +1,70 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { useReveal } from "@/hooks/useAnimations";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { Send, Check, MessageCircle, Mail, MapPin, Clock, Copy } from "lucide-react";
+import { Send, Check, MessageCircle, Mail, MapPin, Clock, Copy, AlertCircle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 
+// Simple validation helpers
+const isValidEmail = (email: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+const isValidName = (name: string) => name.trim().length >= 2 && name.trim().length <= 100;
+const isValidMessage = (message: string) => message.trim().length >= 10 && message.trim().length <= 1000;
+
+interface FieldState {
+  value: string;
+  touched: boolean;
+  error: string;
+}
+
 export const Contact = () => {
   const { ref, isVisible } = useReveal();
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [emailCopied, setEmailCopied] = useState(false);
   const { toast } = useToast();
+
+  const [fields, setFields] = useState<Record<string, FieldState>>({
+    name: { value: "", touched: false, error: "" },
+    email: { value: "", touched: false, error: "" },
+    message: { value: "", touched: false, error: "" },
+  });
+
+  const validateField = useCallback((name: string, value: string): string => {
+    const trimmed = value.trim();
+    switch (name) {
+      case "name":
+        if (!trimmed) return language === "es" ? "Nombre requerido" : "Name required";
+        if (!isValidName(trimmed)) return language === "es" ? "Nombre debe tener 2-100 caracteres" : "Name must be 2-100 characters";
+        return "";
+      case "email":
+        if (!trimmed) return language === "es" ? "Email requerido" : "Email required";
+        if (!isValidEmail(trimmed)) return language === "es" ? "Email inválido" : "Invalid email";
+        return "";
+      case "message":
+        if (!trimmed) return language === "es" ? "Mensaje requerido" : "Message required";
+        if (!isValidMessage(trimmed)) return language === "es" ? "Mensaje debe tener 10-1000 caracteres" : "Message must be 10-1000 characters";
+        return "";
+      default:
+        return "";
+    }
+  }, [language]);
+
+  const handleFieldChange = (name: string, value: string) => {
+    const error = fields[name].touched ? validateField(name, value) : "";
+    setFields((prev) => ({
+      ...prev,
+      [name]: { value, touched: prev[name].touched, error },
+    }));
+  };
+
+  const handleFieldBlur = (name: string) => {
+    const error = validateField(name, fields[name].value);
+    setFields((prev) => ({
+      ...prev,
+      [name]: { ...prev[name], touched: true, error },
+    }));
+  };
 
   const handleCopyEmail = async () => {
     await navigator.clipboard.writeText("cuatrecasasjosep79@gmail.com");
@@ -21,27 +74,35 @@ export const Contact = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setIsSubmitting(true);
-    
-    const formData = new FormData(e.currentTarget);
-    const name = (formData.get("name") as string)?.trim();
-    const email = (formData.get("email") as string)?.trim();
-    const message = (formData.get("message") as string)?.trim();
 
-    // Basic validation
-    if (!name || !email || !message) {
-      toast({ 
-        title: "Error", 
-        description: "Por favor completa todos los campos",
-        variant: "destructive"
+    // Validate all fields
+    const newFields = { ...fields };
+    let hasError = false;
+    Object.keys(newFields).forEach((key) => {
+      const error = validateField(key, newFields[key].value);
+      newFields[key] = { ...newFields[key], touched: true, error };
+      if (error) hasError = true;
+    });
+    setFields(newFields);
+
+    if (hasError) {
+      toast({
+        title: language === "es" ? "Error" : "Error",
+        description: language === "es" ? "Por favor corrige los errores" : "Please fix the errors",
+        variant: "destructive",
       });
-      setIsSubmitting(false);
       return;
     }
 
+    setIsSubmitting(true);
+
     try {
-      const { data, error } = await supabase.functions.invoke("send-contact-email", {
-        body: { name, email, message }
+      const { error } = await supabase.functions.invoke("send-contact-email", {
+        body: {
+          name: fields.name.value.trim(),
+          email: fields.email.value.trim(),
+          message: fields.message.value.trim(),
+        },
       });
 
       if (error) throw error;
@@ -49,13 +110,17 @@ export const Contact = () => {
       setIsSuccess(true);
       toast({ title: t("contact.form.success"), description: t("contact.form.response") });
       setTimeout(() => setIsSuccess(false), 3000);
-      (e.target as HTMLFormElement).reset();
+      setFields({
+        name: { value: "", touched: false, error: "" },
+        email: { value: "", touched: false, error: "" },
+        message: { value: "", touched: false, error: "" },
+      });
     } catch (error: any) {
       console.error("Error sending email:", error);
-      toast({ 
-        title: "Error", 
-        description: "No se pudo enviar el mensaje. Intenta de nuevo.",
-        variant: "destructive"
+      toast({
+        title: "Error",
+        description: language === "es" ? "No se pudo enviar el mensaje. Intenta de nuevo." : "Could not send message. Please try again.",
+        variant: "destructive",
       });
     } finally {
       setIsSubmitting(false);
@@ -160,9 +225,23 @@ export const Contact = () => {
                   type="text"
                   id="name"
                   name="name"
-                  required
-                  className="w-full h-12 sm:h-14 px-4 sm:px-5 bg-muted/50 border border-border rounded-xl focus:outline-none focus:border-accent transition-colors text-base"
+                  value={fields.name.value}
+                  onChange={(e) => handleFieldChange("name", e.target.value)}
+                  onBlur={() => handleFieldBlur("name")}
+                  className={`w-full h-12 sm:h-14 px-4 sm:px-5 bg-muted/50 border rounded-xl focus:outline-none transition-all text-base ${
+                    fields.name.touched && fields.name.error
+                      ? "border-destructive focus:border-destructive focus:ring-2 focus:ring-destructive/20"
+                      : fields.name.touched && !fields.name.error && fields.name.value
+                      ? "border-green-500/50 focus:border-green-500"
+                      : "border-border focus:border-accent"
+                  }`}
                 />
+                {fields.name.touched && fields.name.error && (
+                  <p className="mt-1.5 text-xs text-destructive flex items-center gap-1 animate-fade-in">
+                    <AlertCircle className="w-3 h-3" />
+                    {fields.name.error}
+                  </p>
+                )}
               </div>
 
               <div>
@@ -171,9 +250,23 @@ export const Contact = () => {
                   type="email"
                   id="email"
                   name="email"
-                  required
-                  className="w-full h-12 sm:h-14 px-4 sm:px-5 bg-muted/50 border border-border rounded-xl focus:outline-none focus:border-accent transition-colors text-base"
+                  value={fields.email.value}
+                  onChange={(e) => handleFieldChange("email", e.target.value)}
+                  onBlur={() => handleFieldBlur("email")}
+                  className={`w-full h-12 sm:h-14 px-4 sm:px-5 bg-muted/50 border rounded-xl focus:outline-none transition-all text-base ${
+                    fields.email.touched && fields.email.error
+                      ? "border-destructive focus:border-destructive focus:ring-2 focus:ring-destructive/20"
+                      : fields.email.touched && !fields.email.error && fields.email.value
+                      ? "border-green-500/50 focus:border-green-500"
+                      : "border-border focus:border-accent"
+                  }`}
                 />
+                {fields.email.touched && fields.email.error && (
+                  <p className="mt-1.5 text-xs text-destructive flex items-center gap-1 animate-fade-in">
+                    <AlertCircle className="w-3 h-3" />
+                    {fields.email.error}
+                  </p>
+                )}
               </div>
 
               <div>
@@ -181,11 +274,25 @@ export const Contact = () => {
                 <textarea
                   id="message"
                   name="message"
-                  required
+                  value={fields.message.value}
+                  onChange={(e) => handleFieldChange("message", e.target.value)}
+                  onBlur={() => handleFieldBlur("message")}
                   rows={4}
                   placeholder={t("contact.form.placeholder")}
-                  className="w-full px-4 sm:px-5 py-3 sm:py-4 bg-muted/50 border border-border rounded-xl focus:outline-none focus:border-accent transition-colors resize-none text-base"
+                  className={`w-full px-4 sm:px-5 py-3 sm:py-4 bg-muted/50 border rounded-xl focus:outline-none transition-all resize-none text-base ${
+                    fields.message.touched && fields.message.error
+                      ? "border-destructive focus:border-destructive focus:ring-2 focus:ring-destructive/20"
+                      : fields.message.touched && !fields.message.error && fields.message.value
+                      ? "border-green-500/50 focus:border-green-500"
+                      : "border-border focus:border-accent"
+                  }`}
                 />
+                {fields.message.touched && fields.message.error && (
+                  <p className="mt-1.5 text-xs text-destructive flex items-center gap-1 animate-fade-in">
+                    <AlertCircle className="w-3 h-3" />
+                    {fields.message.error}
+                  </p>
+                )}
               </div>
 
               <button

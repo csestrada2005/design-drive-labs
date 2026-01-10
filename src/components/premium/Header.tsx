@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Menu, X, Sun, Moon } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useTheme } from "next-themes";
+import { useScrollspy } from "@/hooks/useScrollspy";
 
 export const Header = () => {
   const { language, setLanguage, t } = useLanguage();
@@ -9,10 +10,11 @@ export const Header = () => {
   const [mounted, setMounted] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const activeSection = useScrollspy();
 
   const navLinks = [
-    { href: "#sobre-mi", label: t("nav.about") },
-    { href: "#contacto", label: t("nav.contact") },
+    { href: "#sobre-mi", label: t("nav.about"), section: "sobre-mi" },
+    { href: "#contacto", label: t("nav.contact"), section: "contacto" },
   ];
 
   useEffect(() => {
@@ -60,9 +62,19 @@ export const Header = () => {
               <a 
                 key={link.href} 
                 href={link.href} 
-                className="text-sm text-muted-foreground hover:text-foreground transition-all duration-300 hover:scale-105"
+                className={`relative text-sm transition-all duration-300 hover:scale-105 ${
+                  activeSection === link.section 
+                    ? "text-foreground" 
+                    : "text-muted-foreground hover:text-foreground"
+                }`}
               >
                 {link.label}
+                {/* Active indicator */}
+                <span 
+                  className={`absolute -bottom-1 left-0 right-0 h-0.5 bg-primary rounded-full transition-all duration-300 ${
+                    activeSection === link.section ? "opacity-100 scale-x-100" : "opacity-0 scale-x-0"
+                  }`}
+                />
               </a>
             ))}
           </nav>

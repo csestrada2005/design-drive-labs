@@ -76,10 +76,13 @@ export const Testimonials = () => {
             onTouchEnd={handleTouchEnd}
           >
             <div className="overflow-hidden -mx-2">
-              <div className="flex transition-transform duration-500 ease-out" style={{ transform: `translateX(-${current * 100}%)` }}>
+              <div 
+                className="flex transition-transform duration-500 ease-out" 
+                style={{ transform: `translateX(-${current * 100}%)` }}
+              >
                 {testimonials.map((testimonial) => (
                   <div key={testimonial.id} className="w-full flex-shrink-0 px-2">
-                    <div className="bg-card rounded-2xl border border-border p-6 sm:p-8 md:p-10">
+                    <div className="bg-card rounded-2xl border border-border p-6 sm:p-8 md:p-10 transition-all duration-300 hover:border-accent/30 hover:shadow-xl hover:shadow-accent/5">
                       {/* WhatsApp style indicator */}
                       <div className="flex items-center gap-2 mb-5 sm:mb-6 text-[#25D366]">
                         <MessageCircle className="w-4 h-4 sm:w-5 sm:h-5" />

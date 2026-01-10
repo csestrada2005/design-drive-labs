@@ -39,22 +39,22 @@ export const Process = () => {
           {steps.map((step, index) => (
             <div
               key={step.titleKey}
-              className={`group relative p-6 sm:p-8 bg-card rounded-2xl border border-border hover:border-accent/30 transition-all duration-500 ${
+              className={`group relative p-6 sm:p-8 bg-card rounded-2xl border border-border transition-all duration-500 hover:border-accent/40 hover:-translate-y-1 hover:shadow-xl hover:shadow-accent/5 ${
                 isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
               }`}
               style={{ transitionDelay: `${(index + 1) * 100}ms` }}
             >
               {/* Step number */}
-              <span className="absolute top-6 right-6 text-4xl sm:text-5xl font-display font-bold text-muted-foreground/10 group-hover:text-accent/20 transition-colors">
+              <span className="absolute top-6 right-6 text-4xl sm:text-5xl font-display font-bold text-muted-foreground/10 group-hover:text-accent/20 transition-colors duration-300">
                 {String(index + 1).padStart(2, "0")}
               </span>
 
               {/* Icon */}
-              <div className="w-12 h-12 rounded-xl bg-accent/10 flex items-center justify-center mb-5 group-hover:bg-accent group-hover:text-accent-foreground transition-all duration-300">
+              <div className="w-12 h-12 rounded-xl bg-accent/10 flex items-center justify-center mb-5 group-hover:bg-accent group-hover:text-accent-foreground transition-all duration-300 group-hover:scale-110">
                 <step.icon className="w-6 h-6" />
               </div>
 
-              <h3 className="font-display text-lg sm:text-xl mb-3 group-hover:text-accent transition-colors">
+              <h3 className="font-display text-lg sm:text-xl mb-3 group-hover:text-accent transition-colors duration-300">
                 {t(step.titleKey)}
               </h3>
               <p className="text-muted-foreground text-sm leading-relaxed">

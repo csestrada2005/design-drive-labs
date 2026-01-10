@@ -47,10 +47,16 @@ export const About = () => {
           {/* Values */}
           <div className={`mb-10 transition-all duration-600 delay-300 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}>
             <div className="flex flex-wrap justify-center gap-4">
-              {values.map((item) => (
-                <div key={item.key} className="flex-1 min-w-[140px] max-w-[180px] p-4 bg-card rounded-xl border border-border hover:border-primary/30 transition-colors">
-                  <item.icon className="w-5 h-5 text-primary mx-auto mb-2" />
-                  <p className="text-primary font-display text-lg font-semibold">
+              {values.map((item, index) => (
+                <div 
+                  key={item.key} 
+                  className="group flex-1 min-w-[140px] max-w-[180px] p-4 bg-card rounded-xl border border-border transition-all duration-300 hover:border-primary/40 hover:-translate-y-1 hover:shadow-lg hover:shadow-primary/5"
+                  style={{ transitionDelay: isVisible ? `${(index + 3) * 60}ms` : "0ms" }}
+                >
+                  <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center mx-auto mb-3 group-hover:bg-primary group-hover:scale-110 transition-all duration-300">
+                    <item.icon className="w-5 h-5 text-primary group-hover:text-primary-foreground transition-colors" />
+                  </div>
+                  <p className="text-primary font-display text-lg font-semibold group-hover:scale-105 transition-transform duration-300">
                     {valueLabels[item.key as keyof typeof valueLabels][language].title}
                   </p>
                   <p className="text-sm text-muted-foreground">
