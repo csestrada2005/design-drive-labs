@@ -11,8 +11,8 @@ export const Header = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const navLinks = [
-    { href: "#servicios", label: t("nav.services") },
     { href: "#sobre-mi", label: t("nav.about") },
+    { href: "#contacto", label: t("nav.contact") },
   ];
 
   useEffect(() => {
