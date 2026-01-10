@@ -62,7 +62,7 @@ const translations: Translations = {
 
   // Testimonials
   "testimonials.title": { es: "Mensajes de nuestros clientes", en: "Messages from our clients" },
-  "testimonials.headline": { es: "Mensajes reales que nos han mandado después de entregar.", en: "Real messages they sent us after delivery." },
+  "testimonials.headline": { es: "Mensajes que nos han mandado después de entregar.", en: "Messages they sent us after delivery." },
 
   // About
   "about.title": { es: "Sobre nosotros", en: "About us" },
