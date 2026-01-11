@@ -16,7 +16,7 @@ export const Testimonials = () => {
       intro: language === "es" 
         ? "Sophie tiene una cafetería en Creek Harbour, Dubai — este fue su mensaje:"
         : "Sophie has a coffee shop in Creek Harbour, Dubai — this was her message:",
-      text: "Bro, quedó increíble. Se siente premium y ahora la gente entiende rápido qué hacemos. Gracias 🙏",
+      text: "Quedó increíble. Se siente premium y ahora la gente entiende rápido qué hacemos. Gracias 🙏",
       name: "Sophie Al-Rashid",
       role: language === "es" ? "Cafetería • Creek Harbour, Dubai" : "Coffee Shop • Creek Harbour, Dubai",
       initials: "SA",
