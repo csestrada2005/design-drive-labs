@@ -14,6 +14,8 @@ const translations: Translations = {
   "nav.about": { es: "Sobre nosotros", en: "About us" },
   "nav.contact": { es: "Contacto", en: "Contact" },
   "nav.cta": { es: "Agendar consultoría", en: "Book consultation" },
+  "nav.work": { es: "Trabajo", en: "Work" },
+  "nav.services": { es: "Servicios", en: "Services" },
 
   // Hero
   "hero.eyebrow": { es: "Somos Cuatre.", en: "We are Cuatre." },
@@ -27,7 +29,7 @@ const translations: Translations = {
   "hero.cta.primary": { es: "Agendar consultoría gratis", en: "Book free consultation" },
   "hero.microcopy": { es: "Respondemos en menos de 24 horas.", en: "We respond within 24 hours." },
 
-  // Trust Points (replacing fake metrics)
+  // Trust Points
   "trust.point1": { es: "Proyectos seleccionados para mantener calidad", en: "Selected projects to maintain quality" },
   "trust.point2": { es: "Diseño con intención: claridad, confianza y acción", en: "Intentional design: clarity, trust and action" },
   "trust.point3": { es: "Mobile-first + velocidad + SEO base", en: "Mobile-first + speed + basic SEO" },
@@ -59,6 +61,11 @@ const translations: Translations = {
     es: "Refinamos copy y CTAs, eliminamos fricción y entregamos listo para lanzar.", 
     en: "We refine copy and CTAs, remove friction and deliver ready to launch." 
   },
+
+  // Stats
+  "stats.projects": { es: "Proyectos completados", en: "Projects completed" },
+  "stats.clients": { es: "Clientes satisfechos", en: "Satisfied clients" },
+  "stats.conversion": { es: "Aumento promedio en conversión", en: "Average conversion increase" },
 
   // Testimonials
   "testimonials.title": { es: "Mensajes de nuestros clientes", en: "Messages from our clients" },
@@ -95,6 +102,8 @@ const translations: Translations = {
   "contact.form.submit": { es: "Enviar", en: "Send" },
   "contact.form.success": { es: "¡Enviado!", en: "Sent!" },
   "contact.form.response": { es: "Consultoría gratis, sin compromiso.", en: "Free consultation, no strings attached." },
+  "contact.copy": { es: "Copiar", en: "Copy" },
+  "contact.copied": { es: "Copiado", en: "Copied" },
 
   // Scarcity
   "scarcity.text": { es: "Tomamos pocos proyectos al mes para mantener calidad.", en: "We take few projects per month to maintain quality." },
