@@ -1,31 +1,39 @@
 import { useLanguage } from "@/contexts/LanguageContext";
+import { Link } from "react-router-dom";
 
 export const Footer = () => {
-  const { t } = useLanguage();
+  const { language } = useLanguage();
   const year = new Date().getFullYear();
 
   const links = [
-    { label: t("nav.about"), href: "#sobre-mi" },
-    { label: t("nav.contact"), href: "#contacto" },
+    { label: language === "es" ? "Proceso" : "Process", href: "/process" },
+    { label: language === "es" ? "Nosotros" : "About", href: "/about" },
+    { label: language === "es" ? "Contacto" : "Contact", href: "/contact" },
   ];
 
   return (
-    <footer className="py-14 border-t border-border/30">
+    <footer className="py-10 border-t border-border/30">
       <div className="container">
-        <div className="flex flex-col md:flex-row justify-between items-center gap-8">
-          <a href="#" className="font-display text-xl font-semibold">
+        <div className="flex flex-col sm:flex-row justify-between items-center gap-6">
+          <Link to="/" className="font-display text-lg font-semibold">
             cuatre<span className="text-accent">.</span>
-          </a>
+          </Link>
 
-          <nav className="flex flex-wrap justify-center gap-8">
+          <nav className="flex gap-6">
             {links.map((link) => (
-              <a key={link.href} href={link.href} className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+              <Link 
+                key={link.href} 
+                to={link.href} 
+                className="text-xs text-muted-foreground hover:text-foreground transition-colors"
+              >
                 {link.label}
-              </a>
+              </Link>
             ))}
           </nav>
 
-          <p className="text-sm text-muted-foreground">© {year}. {t("footer.rights")}</p>
+          <p className="text-xs text-muted-foreground">
+            © {year} cuatre
+          </p>
         </div>
       </div>
     </footer>

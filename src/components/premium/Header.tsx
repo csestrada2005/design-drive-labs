@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Menu, X, Sun, Moon } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useTheme } from "next-themes";
-import { useScrollspy } from "@/hooks/useScrollspy";
+import { Link, useLocation } from "react-router-dom";
 
 export const Header = () => {
   const { language, setLanguage, t } = useLanguage();
@@ -10,11 +10,13 @@ export const Header = () => {
   const [mounted, setMounted] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const activeSection = useScrollspy();
+  const location = useLocation();
 
   const navLinks = [
-    { href: "#sobre-mi", label: t("nav.about"), section: "sobre-mi" },
-    { href: "#contacto", label: t("nav.contact"), section: "contacto" },
+    { href: "/process", labelEs: "Proceso", labelEn: "Process" },
+    { href: "/about", labelEs: "Nosotros", labelEn: "About" },
+    { href: "/testimonials", labelEs: "Clientes", labelEn: "Clients" },
+    { href: "/contact", labelEs: "Contacto", labelEn: "Contact" },
   ];
 
   useEffect(() => {
@@ -39,71 +41,58 @@ export const Header = () => {
   return (
     <>
       <header
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
           isScrolled 
             ? "py-3 glass-nav shadow-sm" 
-            : "py-5 bg-transparent"
+            : "py-4 bg-transparent"
         }`}
       >
         <div className="container flex items-center justify-between">
-          <a 
-            href="#" 
-            className="font-display text-xl font-semibold tracking-tight transition-transform duration-300 hover:scale-105"
+          <Link 
+            to="/" 
+            className="font-display text-xl font-semibold tracking-tight"
           >
             cuatre<span className="text-accent">.</span>
-          </a>
+          </Link>
 
-          <nav className="hidden md:flex items-center gap-10">
+          {/* Desktop Nav */}
+          <nav className="hidden md:flex items-center gap-8">
             {navLinks.map((link) => (
-              <a 
+              <Link 
                 key={link.href} 
-                href={link.href} 
-                className={`relative text-sm transition-all duration-300 hover:scale-105 ${
-                  activeSection === link.section 
-                    ? "text-foreground" 
+                to={link.href} 
+                className={`text-sm transition-colors ${
+                  location.pathname === link.href 
+                    ? "text-foreground font-medium" 
                     : "text-muted-foreground hover:text-foreground"
                 }`}
               >
-                {link.label}
-                {/* Active indicator */}
-                <span 
-                  className={`absolute -bottom-1 left-0 right-0 h-0.5 bg-primary rounded-full transition-all duration-300 ${
-                    activeSection === link.section ? "opacity-100 scale-x-100" : "opacity-0 scale-x-0"
-                  }`}
-                />
-              </a>
+                {language === "es" ? link.labelEs : link.labelEn}
+              </Link>
             ))}
           </nav>
 
-          <div className="hidden md:flex items-center gap-3">
-            {/* Theme toggle - glass style */}
+          <div className="hidden md:flex items-center gap-2">
             <button
               onClick={toggleTheme}
-              className="w-10 h-10 flex items-center justify-center rounded-full glass-card border-0 hover:scale-105 active:scale-95"
+              className="w-9 h-9 flex items-center justify-center rounded-full glass-card border-0"
               aria-label="Toggle theme"
             >
               {mounted && (theme === "dark" ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />)}
             </button>
 
-            {/* Language toggle - glass style */}
             <button
               onClick={() => setLanguage(language === "es" ? "en" : "es")}
-              className="px-4 py-2 text-xs font-medium rounded-full glass-card border-0 hover:scale-105 active:scale-95"
+              className="px-3 py-1.5 text-xs font-medium rounded-full glass-card border-0"
             >
               {language === "es" ? "EN" : "ES"}
             </button>
-
-            <a
-              href="#contacto"
-              className="btn-primary py-2.5 px-6 text-sm"
-            >
-              {t("nav.cta")}
-            </a>
           </div>
 
+          {/* Mobile Menu Button */}
           <button
             onClick={() => setIsMobileMenuOpen(true)}
-            className="md:hidden w-11 h-11 flex items-center justify-center rounded-full glass-card border-0 active:scale-95"
+            className="md:hidden w-10 h-10 flex items-center justify-center rounded-full glass-card border-0"
             aria-label="Open menu"
           >
             <Menu className="w-5 h-5" />
@@ -111,64 +100,65 @@ export const Header = () => {
         </div>
       </header>
 
-      {/* Mobile Menu - Glass overlay */}
+      {/* Mobile Menu */}
       <div
-        className={`fixed inset-0 z-[100] flex flex-col transition-all duration-400 ${
-          isMobileMenuOpen ? "opacity-100 visible" : "opacity-0 invisible"
+        className={`fixed inset-0 z-[100] flex flex-col transition-opacity duration-300 ${
+          isMobileMenuOpen ? "opacity-100 visible" : "opacity-0 invisible pointer-events-none"
         }`}
         style={{
-          background: 'hsl(var(--background) / 0.95)',
-          backdropFilter: 'blur(32px) saturate(180%)',
-          WebkitBackdropFilter: 'blur(32px) saturate(180%)',
+          background: 'hsl(var(--background))',
         }}
       >
-        <div className="flex items-center justify-between px-5 py-5">
-          <span className="font-display text-xl font-semibold">cuatre<span className="text-accent">.</span></span>
+        <div className="flex items-center justify-between px-5 py-4">
+          <Link to="/" className="font-display text-xl font-semibold" onClick={() => setIsMobileMenuOpen(false)}>
+            cuatre<span className="text-accent">.</span>
+          </Link>
           <div className="flex items-center gap-2">
-            {/* Theme toggle mobile */}
             <button
               onClick={toggleTheme}
-              className="w-11 h-11 flex items-center justify-center glass-card rounded-full border-0"
+              className="w-10 h-10 flex items-center justify-center glass-card rounded-full border-0"
               aria-label="Toggle theme"
             >
               {mounted && (theme === "dark" ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />)}
             </button>
             <button
               onClick={() => setLanguage(language === "es" ? "en" : "es")}
-              className="px-4 py-2 text-xs font-medium glass-card rounded-full border-0"
+              className="px-3 py-1.5 text-xs font-medium glass-card rounded-full border-0"
             >
               {language === "es" ? "EN" : "ES"}
             </button>
-            <button onClick={() => setIsMobileMenuOpen(false)} className="touch-target flex items-center justify-center">
+            <button 
+              onClick={() => setIsMobileMenuOpen(false)} 
+              className="w-10 h-10 flex items-center justify-center"
+            >
               <X className="w-6 h-6" />
             </button>
           </div>
         </div>
 
-        <nav className="flex-1 flex flex-col justify-center px-8 gap-1">
-          {navLinks.map((link, i) => (
-            <a
+        <nav className="flex-1 flex flex-col justify-center px-8 gap-2">
+          {navLinks.map((link) => (
+            <Link
               key={link.href}
-              href={link.href}
+              to={link.href}
               onClick={() => setIsMobileMenuOpen(false)}
-              className={`font-display text-4xl py-4 border-b border-border/30 transition-all duration-400 ${
-                isMobileMenuOpen ? "opacity-100 translate-x-0" : "opacity-0 translate-x-6"
+              className={`font-display text-3xl py-3 border-b border-border/20 ${
+                location.pathname === link.href ? "text-accent" : "text-foreground"
               }`}
-              style={{ transitionDelay: isMobileMenuOpen ? `${i * 60 + 100}ms` : "0ms" }}
             >
-              {link.label}
-            </a>
+              {language === "es" ? link.labelEs : link.labelEn}
+            </Link>
           ))}
         </nav>
 
         <div className="px-5 pb-8 safe-bottom">
-          <a
-            href="#contacto"
+          <Link
+            to="/contact"
             onClick={() => setIsMobileMenuOpen(false)}
-            className="btn-primary block w-full py-4 text-center text-lg rounded-full"
+            className="btn-primary block w-full py-3.5 text-center rounded-full"
           >
-            {t("nav.cta")}
-          </a>
+            {language === "es" ? "Empezar proyecto" : "Start project"}
+          </Link>
         </div>
       </div>
     </>
