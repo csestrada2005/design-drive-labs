@@ -1,7 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useReveal } from "@/hooks/useAnimations";
 import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext, type CarouselApi } from "@/components/ui/carousel";
+import Autoplay from "embla-carousel-autoplay";
 
 // Project images
 import projectLaMesa from "@/assets/project-lamesa.png";
@@ -56,6 +57,10 @@ export const Projects = () => {
   const [current, setCurrent] = useState(0);
   const [count, setCount] = useState(0);
 
+  const autoplayPlugin = useRef(
+    Autoplay({ delay: 4000, stopOnInteraction: false, stopOnMouseEnter: true })
+  );
+
   useEffect(() => {
     if (!api) return;
 
@@ -93,11 +98,14 @@ export const Projects = () => {
         <div className="relative">
           <Carousel
             setApi={setApi}
+            plugins={[autoplayPlugin.current]}
             opts={{
               align: "start",
               loop: true,
             }}
             className="w-full"
+            onMouseEnter={() => autoplayPlugin.current.stop()}
+            onMouseLeave={() => autoplayPlugin.current.play()}
           >
             <CarouselContent className="-ml-4 md:-ml-6">
               {projects.map((project, index) => (
