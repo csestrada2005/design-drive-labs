@@ -5,8 +5,6 @@ export const Footer = () => {
   const year = new Date().getFullYear();
 
   const links = [
-    { label: t("nav.work"), href: "#trabajo" },
-    { label: t("nav.services"), href: "#servicios" },
     { label: t("nav.about"), href: "#sobre-mi" },
     { label: t("nav.contact"), href: "#contacto" },
   ];

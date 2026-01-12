@@ -193,12 +193,12 @@ export const Contact = () => {
                   {emailCopied ? (
                     <>
                       <Check className="w-3 h-3" />
-                      Copiado
+                      {t("contact.copied")}
                     </>
                   ) : (
                     <>
                       <Copy className="w-3 h-3" />
-                      Copiar
+                      {t("contact.copy")}
                     </>
                   )}
                 </div>
