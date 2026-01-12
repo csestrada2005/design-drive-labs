@@ -5,7 +5,7 @@ import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext
 
 // Project images
 import projectLaMesa from "@/assets/project-lamesa.png";
-import portfolio2 from "@/assets/portfolio-2.jpg";
+import projectRawPaw from "@/assets/project-rawpaw.png";
 import projectBumba from "@/assets/project-bumba-1.png";
 
 interface Project {
@@ -35,7 +35,7 @@ const projects: Project[] = [
       en: "Local BARF e-commerce in Puebla: coverage by ZIP, AI recommender, subscription and direct WhatsApp orders."
     },
     tags: ["E-commerce", "AI Recommender", "Subscription", "WhatsApp"],
-    image: portfolio2
+    image: projectRawPaw
   },
   {
     id: "bumba",
