@@ -398,6 +398,16 @@
     @apply min-h-[44px] min-w-[44px];
   }
 
+  /* Hide scrollbar utility */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
   /* Safe area for mobile */
   .safe-bottom {
     padding-bottom: max(1.5rem, env(safe-area-inset-bottom));

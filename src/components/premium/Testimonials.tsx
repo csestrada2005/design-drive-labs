@@ -13,36 +13,31 @@ export const Testimonials = () => {
   const testimonials = [
     {
       id: 1,
-      intro: language === "es" 
-        ? "Sophie tiene una cafetería en Creek Harbour, Dubai — este fue su mensaje:"
-        : "Sophie has a coffee shop in Creek Harbour, Dubai — this was her message:",
       text: language === "es"
-        ? "Quedó increíble. Se siente premium y ahora la gente entiende rápido qué hacemos. Gracias 🙏"
-        : "It looks amazing. It feels premium and now people quickly understand what we do. Thanks 🙏",
-      name: "Sophie Al-Rashid",
-      role: language === "es" ? "Cafetería • Creek Harbour, Dubai" : "Coffee Shop • Creek Harbour, Dubai",
+        ? "Se siente premium. La gente entiende rápido qué hacemos. 🙏"
+        : "It feels premium. People quickly understand what we do. 🙏",
+      name: "Sophie A.",
+      role: language === "es" ? "Cafetería • Dubai" : "Coffee Shop • Dubai",
       initials: "SA",
       color: "bg-emerald-500",
     },
     {
       id: 2,
-      intro: null,
       text: language === "es"
-        ? "Super profesionales. La web se ve seria y ya nos escriben más por WhatsApp. Exactly what I needed 👌"
-        : "Super professional. The website looks serious and we get more WhatsApp messages now. Exactly what I needed 👌",
-      name: "Khalid Mansour",
-      role: language === "es" ? "Barbería • Business Bay, Dubai" : "Barbershop • Business Bay, Dubai",
+        ? "La web se ve seria. Ya nos escriben más por WhatsApp. 👌"
+        : "The website looks serious. We get more WhatsApp messages now. 👌",
+      name: "Khalid M.",
+      role: language === "es" ? "Barbería • Dubai" : "Barbershop • Dubai",
       initials: "KM",
       color: "bg-amber-500",
     },
     {
       id: 3,
-      intro: null,
       text: language === "es"
-        ? "Antes nadie entendía qué hacíamos. Ahora el sitio lo explica solo y es más fácil cotizar. Muy atentos a los detalles."
-        : "Before, nobody understood what we did. Now the site explains itself and it's easier to quote. Very detail-oriented.",
-      name: "Andrea Velázquez",
-      role: language === "es" ? "Agencia de eventos • CDMX, México" : "Event Agency • CDMX, Mexico",
+        ? "Ahora el sitio explica solo qué hacemos. Más fácil cotizar."
+        : "Now the site explains itself. Easier to quote.",
+      name: "Andrea V.",
+      role: language === "es" ? "Eventos • CDMX" : "Events • CDMX",
       initials: "AV",
       color: "bg-violet-500",
     },
@@ -59,14 +54,14 @@ export const Testimonials = () => {
   };
 
   return (
-    <section id="testimonios" ref={ref as React.RefObject<HTMLElement>} className="py-12 sm:py-20 md:py-28">
+    <section id="testimonios" ref={ref as React.RefObject<HTMLElement>} className="py-10 sm:py-16 md:py-24">
       <div className="container px-4 sm:px-6">
-        <div className="max-w-2xl mx-auto">
-          {/* Header */}
-          <p className={`text-accent font-medium mb-2 text-center text-xs sm:text-sm transition-all duration-600 ${isVisible ? "opacity-100" : "opacity-0"}`}>
+        <div className="max-w-xl mx-auto">
+          {/* Header - Minimal */}
+          <p className={`text-accent font-medium mb-1.5 text-center text-xs transition-all duration-500 ${isVisible ? "opacity-100" : "opacity-0"}`}>
             {t("testimonials.title")}
           </p>
-          <h2 className={`font-display text-lg sm:text-xl md:text-2xl text-center mb-6 sm:mb-10 transition-all duration-600 delay-100 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}>
+          <h2 className={`font-display text-base sm:text-lg text-center mb-5 transition-all duration-500 delay-100 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}>
             {t("testimonials.headline")}
           </h2>
 
@@ -84,32 +79,25 @@ export const Testimonials = () => {
               >
                 {testimonials.map((testimonial) => (
                   <div key={testimonial.id} className="w-full flex-shrink-0 px-1">
-                    <div className="glass-card p-4 sm:p-6">
+                    <div className="glass-card p-3 sm:p-5">
                       {/* WhatsApp indicator */}
-                      <div className="flex items-center gap-1.5 mb-3 sm:mb-4 text-[#25D366]">
-                        <MessageCircle className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-                        <span className="text-[10px] sm:text-xs font-medium">WhatsApp</span>
+                      <div className="flex items-center gap-1 mb-2 text-[#25D366]">
+                        <MessageCircle className="w-3 h-3" />
+                        <span className="text-[9px] font-medium">WhatsApp</span>
                       </div>
 
-                      {/* Intro line if exists */}
-                      {testimonial.intro && (
-                        <p className="text-[10px] sm:text-xs text-muted-foreground mb-3 italic">
-                          {testimonial.intro}
-                        </p>
-                      )}
-
-                      <blockquote className="font-display text-sm sm:text-base md:text-lg leading-relaxed mb-4 sm:mb-6">
+                      <blockquote className="font-display text-sm leading-relaxed mb-3">
                         "{testimonial.text}"
                       </blockquote>
 
-                      {/* Author */}
-                      <div className="flex items-center gap-2.5 sm:gap-3">
-                        <div className={`w-9 h-9 sm:w-10 sm:h-10 rounded-full ${testimonial.color} flex items-center justify-center text-white font-semibold text-xs sm:text-sm`}>
+                      {/* Author - Compact */}
+                      <div className="flex items-center gap-2">
+                        <div className={`w-7 h-7 rounded-full ${testimonial.color} flex items-center justify-center text-white font-semibold text-[10px]`}>
                           {testimonial.initials}
                         </div>
                         <div>
-                          <p className="font-medium text-xs sm:text-sm">{testimonial.name}</p>
-                          <p className="text-[10px] sm:text-xs text-muted-foreground">{testimonial.role}</p>
+                          <p className="font-medium text-xs">{testimonial.name}</p>
+                          <p className="text-[10px] text-muted-foreground">{testimonial.role}</p>
                         </div>
                       </div>
                     </div>
@@ -118,30 +106,30 @@ export const Testimonials = () => {
               </div>
             </div>
 
-            {/* Controls */}
-            <div className="flex items-center justify-center gap-3 sm:gap-4 mt-5 sm:mt-6">
+            {/* Controls - Compact */}
+            <div className="flex items-center justify-center gap-2 mt-4">
               <button 
                 onClick={prev} 
-                className="touch-target w-9 h-9 sm:w-10 sm:h-10 rounded-full glass-card flex items-center justify-center hover:scale-105 active:scale-95 transition-transform"
+                className="touch-target w-8 h-8 rounded-full glass-card flex items-center justify-center hover:scale-105 active:scale-95 transition-transform"
               >
-                <ChevronLeft className="w-4 h-4" />
+                <ChevronLeft className="w-3.5 h-3.5" />
               </button>
-              <div className="flex gap-1.5">
+              <div className="flex gap-1">
                 {testimonials.map((_, i) => (
                   <button
                     key={i}
                     onClick={() => setCurrent(i)}
-                    className={`h-1.5 rounded-full transition-all duration-300 ${
-                      i === current ? "w-6 bg-accent" : "w-1.5 bg-foreground/15"
+                    className={`h-1 rounded-full transition-all duration-300 ${
+                      i === current ? "w-4 bg-accent" : "w-1 bg-foreground/15"
                     }`}
                   />
                 ))}
               </div>
               <button 
                 onClick={next} 
-                className="touch-target w-9 h-9 sm:w-10 sm:h-10 rounded-full glass-card flex items-center justify-center hover:scale-105 active:scale-95 transition-transform"
+                className="touch-target w-8 h-8 rounded-full glass-card flex items-center justify-center hover:scale-105 active:scale-95 transition-transform"
               >
-                <ChevronRight className="w-4 h-4" />
+                <ChevronRight className="w-3.5 h-3.5" />
               </button>
             </div>
           </div>
