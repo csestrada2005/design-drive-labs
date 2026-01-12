@@ -14,19 +14,19 @@ export const Process = () => {
   const { t } = useLanguage();
 
   return (
-    <section id="proceso" ref={ref as React.RefObject<HTMLElement>} className="py-20 sm:py-28 md:py-36">
-      <div className="container px-5 sm:px-6">
+    <section id="proceso" ref={ref as React.RefObject<HTMLElement>} className="py-12 sm:py-20 md:py-28">
+      <div className="container px-4 sm:px-6">
         {/* Header */}
-        <div className="max-w-2xl mb-12 sm:mb-16">
+        <div className="max-w-2xl mb-8 sm:mb-12">
           <p
-            className={`text-accent font-medium mb-3 sm:mb-4 text-sm sm:text-base transition-all duration-600 ${
+            className={`text-accent font-medium mb-2 text-xs sm:text-sm transition-all duration-600 ${
               isVisible ? "opacity-100" : "opacity-0"
             }`}
           >
             {t("process.title")}
           </p>
           <h2
-            className={`font-display text-2xl sm:text-3xl md:text-4xl transition-all duration-600 delay-100 ${
+            className={`font-display text-xl sm:text-2xl md:text-3xl transition-all duration-600 delay-100 ${
               isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
             }`}
           >
@@ -34,30 +34,30 @@ export const Process = () => {
           </h2>
         </div>
 
-        {/* Steps - Glass cards */}
-        <div className="grid gap-5 sm:gap-6 md:grid-cols-2 lg:grid-cols-4">
+        {/* Steps - Compact grid on mobile */}
+        <div className="grid gap-3 sm:gap-4 grid-cols-2 lg:grid-cols-4">
           {steps.map((step, index) => (
             <div
               key={step.titleKey}
-              className={`group relative glass-card p-7 sm:p-8 ${
+              className={`group relative glass-card p-4 sm:p-6 ${
                 isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
               }`}
-              style={{ transitionDelay: `${(index + 1) * 100}ms` }}
+              style={{ transitionDelay: `${(index + 1) * 80}ms` }}
             >
               {/* Step number */}
-              <span className="absolute top-6 right-6 text-5xl sm:text-6xl font-display font-bold text-foreground/[0.03] group-hover:text-accent/10 transition-colors duration-300">
+              <span className="absolute top-3 right-3 sm:top-4 sm:right-4 text-3xl sm:text-4xl font-display font-bold text-foreground/[0.03] group-hover:text-accent/10 transition-colors duration-300">
                 {String(index + 1).padStart(2, "0")}
               </span>
 
               {/* Icon */}
-              <div className="w-13 h-13 rounded-xl bg-accent/10 flex items-center justify-center mb-6 group-hover:bg-accent group-hover:text-accent-foreground transition-all duration-300 group-hover:scale-110">
-                <step.icon className="w-6 h-6" />
+              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl bg-accent/10 flex items-center justify-center mb-3 sm:mb-4 group-hover:bg-accent group-hover:text-accent-foreground transition-all duration-300 group-hover:scale-105">
+                <step.icon className="w-4 h-4 sm:w-5 sm:h-5" />
               </div>
 
-              <h3 className="font-display text-lg sm:text-xl mb-3 group-hover:text-accent transition-colors duration-300">
+              <h3 className="font-display text-sm sm:text-base md:text-lg mb-1.5 sm:mb-2 group-hover:text-accent transition-colors duration-300">
                 {t(step.titleKey)}
               </h3>
-              <p className="text-muted-foreground text-sm leading-relaxed">
+              <p className="text-muted-foreground text-xs sm:text-sm leading-relaxed line-clamp-3">
                 {t(step.descKey)}
               </p>
             </div>

@@ -76,18 +76,18 @@ export const Projects = () => {
     <section
       id="proyectos"
       ref={ref}
-      className={`py-24 md:py-32 px-6 reveal ${isVisible ? "visible" : ""}`}
+      className={`py-12 sm:py-20 md:py-28 px-4 sm:px-6 reveal ${isVisible ? "visible" : ""}`}
     >
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="text-center mb-16">
-          <span className="inline-block px-4 py-1.5 mb-6 text-sm font-medium text-primary bg-primary/10 rounded-full">
+        <div className="text-center mb-8 sm:mb-12">
+          <span className="inline-block px-3 py-1 mb-3 text-xs font-medium text-primary bg-primary/10 rounded-full">
             {language === "es" ? "Portfolio" : "Portfolio"}
           </span>
-          <h2 className="font-display text-3xl md:text-4xl lg:text-5xl mb-4">
+          <h2 className="font-display text-xl sm:text-2xl md:text-3xl mb-2 sm:mb-3">
             {language === "es" ? "Proyectos seleccionados" : "Selected Projects"}
           </h2>
-          <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
+          <p className="text-muted-foreground text-sm sm:text-base max-w-xl mx-auto">
             {language === "es" 
               ? "Algunos productos que hemos diseñado y construido end-to-end."
               : "Some products we've designed and built end-to-end."}
@@ -107,11 +107,11 @@ export const Projects = () => {
             onMouseEnter={() => autoplayPlugin.current.stop()}
             onMouseLeave={() => autoplayPlugin.current.play()}
           >
-            <CarouselContent className="-ml-4 md:-ml-6">
+            <CarouselContent className="-ml-3 sm:-ml-4">
               {projects.map((project, index) => (
                 <CarouselItem 
                   key={project.id} 
-                  className="pl-4 md:pl-6 basis-full md:basis-1/2 lg:basis-1/3"
+                  className="pl-3 sm:pl-4 basis-[85%] sm:basis-1/2 lg:basis-1/3"
                 >
                   <ProjectCard 
                     project={project} 
@@ -123,36 +123,31 @@ export const Projects = () => {
             </CarouselContent>
 
             {/* Desktop arrows */}
-            <div className="hidden md:block">
+            <div className="hidden lg:block">
               <CarouselPrevious 
-                className="absolute -left-4 lg:-left-12 top-1/2 -translate-y-1/2 h-12 w-12 glass border-border/50 hover:bg-primary/10 hover:border-primary/30 transition-all"
+                className="absolute -left-4 lg:-left-10 top-1/2 -translate-y-1/2 h-10 w-10 glass border-border/50 hover:bg-primary/10 hover:border-primary/30 transition-all"
               />
               <CarouselNext 
-                className="absolute -right-4 lg:-right-12 top-1/2 -translate-y-1/2 h-12 w-12 glass border-border/50 hover:bg-primary/10 hover:border-primary/30 transition-all"
+                className="absolute -right-4 lg:-right-10 top-1/2 -translate-y-1/2 h-10 w-10 glass border-border/50 hover:bg-primary/10 hover:border-primary/30 transition-all"
               />
             </div>
           </Carousel>
 
           {/* Mobile dots */}
-          <div className="flex justify-center gap-2 mt-8 md:hidden">
+          <div className="flex justify-center gap-1.5 mt-5 lg:hidden">
             {Array.from({ length: count }).map((_, index) => (
               <button
                 key={index}
                 onClick={() => api?.scrollTo(index)}
-                className={`h-2 rounded-full transition-all duration-300 ${
+                className={`h-1.5 rounded-full transition-all duration-300 ${
                   index === current 
-                    ? "w-8 bg-primary" 
-                    : "w-2 bg-muted-foreground/30 hover:bg-muted-foreground/50"
+                    ? "w-6 bg-primary" 
+                    : "w-1.5 bg-muted-foreground/30"
                 }`}
                 aria-label={`Go to slide ${index + 1}`}
               />
             ))}
           </div>
-
-          {/* Mobile swipe hint */}
-          <p className="text-center text-sm text-muted-foreground mt-4 md:hidden">
-            {language === "es" ? "Desliza para ver más →" : "Swipe to see more →"}
-          </p>
         </div>
       </div>
     </section>
@@ -178,9 +173,8 @@ const ProjectCard = ({ project, language, index }: ProjectCardProps) => {
         transitionDelay: `${index * 50}ms`
       }}
     >
-      {/* Image container with parallax */}
+      {/* Image container */}
       <div className="relative aspect-[4/3] overflow-hidden bg-muted">
-        {/* Skeleton loader */}
         {!imageLoaded && (
           <div className="absolute inset-0 bg-gradient-to-br from-muted to-muted-foreground/10 animate-pulse" />
         )}
@@ -190,52 +184,43 @@ const ProjectCard = ({ project, language, index }: ProjectCardProps) => {
           alt={project.name}
           loading="lazy"
           onLoad={() => setImageLoaded(true)}
-          className={`w-full h-full object-cover transition-transform duration-700 ease-out ${
-            isHovered ? "scale-110" : "scale-100"
+          className={`w-full h-full object-cover transition-transform duration-500 ease-out ${
+            isHovered ? "scale-105" : "scale-100"
           } ${imageLoaded ? "opacity-100" : "opacity-0"}`}
-          style={{
-            transform: isHovered ? "scale(1.1) translateY(-8px)" : "scale(1)"
-          }}
         />
 
-        {/* Gradient overlay */}
         <div 
-          className={`absolute inset-0 bg-gradient-to-t from-background/90 via-background/20 to-transparent transition-opacity duration-300 ${
-            isHovered ? "opacity-100" : "opacity-60"
+          className={`absolute inset-0 bg-gradient-to-t from-background/80 via-background/10 to-transparent transition-opacity duration-300 ${
+            isHovered ? "opacity-100" : "opacity-50"
           }`} 
-        />
-
-        {/* Glow effect on hover */}
-        <div 
-          className={`absolute inset-0 transition-opacity duration-500 ${
-            isHovered ? "opacity-100" : "opacity-0"
-          }`}
-          style={{
-            background: "radial-gradient(circle at 50% 100%, hsl(var(--primary) / 0.15), transparent 70%)"
-          }}
         />
       </div>
 
       {/* Content */}
-      <div className="p-5 md:p-6 flex-1 flex flex-col">
-        <h3 className="font-display text-xl md:text-2xl mb-2 group-hover:text-primary transition-colors duration-300">
+      <div className="p-3 sm:p-4 flex-1 flex flex-col">
+        <h3 className="font-display text-base sm:text-lg mb-1 group-hover:text-primary transition-colors duration-300">
           {project.name}
         </h3>
         
-        <p className="text-muted-foreground text-sm leading-relaxed mb-4 flex-1">
+        <p className="text-muted-foreground text-xs sm:text-sm leading-relaxed mb-3 flex-1 line-clamp-2">
           {project.description[language]}
         </p>
 
         {/* Tags */}
-        <div className="flex flex-wrap gap-1.5">
-          {project.tags.map((tag) => (
+        <div className="flex flex-wrap gap-1">
+          {project.tags.slice(0, 2).map((tag) => (
             <span
               key={tag}
-              className="px-2.5 py-1 text-xs font-medium bg-secondary text-secondary-foreground rounded-full"
+              className="px-2 py-0.5 text-[10px] sm:text-xs font-medium bg-secondary text-secondary-foreground rounded-full"
             >
               {tag}
             </span>
           ))}
+          {project.tags.length > 2 && (
+            <span className="px-2 py-0.5 text-[10px] sm:text-xs font-medium bg-secondary text-secondary-foreground rounded-full">
+              +{project.tags.length - 2}
+            </span>
+          )}
         </div>
       </div>
     </div>

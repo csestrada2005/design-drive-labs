@@ -128,89 +128,76 @@ export const Contact = () => {
   };
 
   return (
-    <section id="contacto" ref={ref as React.RefObject<HTMLElement>} className="py-20 sm:py-28 md:py-36">
-      <div className="container px-5 sm:px-6">
-        {/* Scarcity line - Glass pill */}
+    <section id="contacto" ref={ref as React.RefObject<HTMLElement>} className="py-12 sm:py-20 md:py-28">
+      <div className="container px-4 sm:px-6">
+        {/* Scarcity line */}
         <div
-          className={`flex justify-center mb-12 sm:mb-16 transition-all duration-600 ${
+          className={`flex justify-center mb-8 sm:mb-12 transition-all duration-600 ${
             isVisible ? "opacity-100 scale-100" : "opacity-0 scale-95"
           }`}
         >
-          <div className="inline-flex items-center gap-3 px-7 py-3.5 rounded-full glass-card">
-            <span className="w-2 h-2 rounded-full bg-accent animate-pulse" />
-            <p className="text-sm sm:text-base font-medium text-accent">
+          <div className="inline-flex items-center gap-2 px-4 py-2 sm:px-5 sm:py-2.5 rounded-full glass-card">
+            <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
+            <p className="text-xs sm:text-sm font-medium text-accent">
               {t("scarcity.text")}
             </p>
           </div>
         </div>
 
-        <div className="grid gap-10 sm:gap-14 md:grid-cols-2 md:gap-20 max-w-5xl mx-auto">
+        <div className="grid gap-8 sm:gap-10 md:grid-cols-2 md:gap-12 max-w-4xl mx-auto">
           {/* Left */}
           <div>
-            <p className={`text-accent font-medium mb-3 sm:mb-4 text-sm sm:text-base transition-all duration-600 ${isVisible ? "opacity-100" : "opacity-0"}`}>
+            <p className={`text-accent font-medium mb-2 text-xs sm:text-sm transition-all duration-600 ${isVisible ? "opacity-100" : "opacity-0"}`}>
               {t("contact.title")}
             </p>
-            <h2 className={`font-display text-2xl sm:text-3xl md:text-4xl mb-5 sm:mb-7 transition-all duration-600 delay-100 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}>
+            <h2 className={`font-display text-xl sm:text-2xl md:text-3xl mb-3 sm:mb-4 transition-all duration-600 delay-100 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}>
               {t("contact.headline")}
             </h2>
-            <p className={`text-muted-foreground text-sm sm:text-base mb-10 sm:mb-12 transition-all duration-600 delay-200 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}>
+            <p className={`text-muted-foreground text-xs sm:text-sm mb-6 sm:mb-8 transition-all duration-600 delay-200 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}>
               {t("contact.subtitle")}
             </p>
 
-            {/* Contact options - Glass cards */}
-            <div className={`space-y-4 sm:space-y-5 transition-all duration-600 delay-300 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}>
+            {/* Contact options */}
+            <div className={`space-y-3 transition-all duration-600 delay-300 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}>
               <a
                 href="https://wa.me/522213497090?text=Hi!%20I'm%20interested%20in%20your%20service%20%F0%9F%99%82%0A%C2%A1Hola!%20Me%20interesa%20tu%20servicio%0A%0APlease%20reply%20in%20%2F%20Responde%20en%3A%0A%F0%9F%87%AC%F0%9F%87%A7%20English%20%7C%20%F0%9F%87%AA%F0%9F%87%B8%20Espa%C3%B1ol"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-4 sm:gap-5 p-5 glass-card group active:scale-[0.99]"
+                className="flex items-center gap-3 p-3 sm:p-4 glass-card group active:scale-[0.99]"
               >
-                <div className="w-12 h-12 sm:w-13 sm:h-13 rounded-full bg-[#25D366]/10 flex items-center justify-center flex-shrink-0 group-hover:bg-[#25D366] group-hover:scale-110 transition-all duration-300">
-                  <MessageCircle className="w-5 h-5 text-[#25D366] group-hover:text-white transition-colors" />
+                <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-[#25D366]/10 flex items-center justify-center flex-shrink-0 group-hover:bg-[#25D366] group-hover:scale-105 transition-all duration-300">
+                  <MessageCircle className="w-4 h-4 text-[#25D366] group-hover:text-white transition-colors" />
                 </div>
                 <div className="min-w-0">
-                  <p className="font-medium group-hover:text-accent transition-colors text-sm sm:text-base">{t("contact.whatsapp")}</p>
-                  <p className="text-xs sm:text-sm text-muted-foreground truncate">{t("contact.whatsapp.desc")}</p>
+                  <p className="font-medium group-hover:text-accent transition-colors text-xs sm:text-sm">{t("contact.whatsapp")}</p>
+                  <p className="text-[10px] sm:text-xs text-muted-foreground">{t("contact.whatsapp.desc")}</p>
                 </div>
               </a>
 
               <button 
                 onClick={handleCopyEmail}
-                className="flex items-center gap-4 sm:gap-5 p-5 glass-card group active:scale-[0.99] w-full text-left"
+                className="flex items-center gap-3 p-3 sm:p-4 glass-card group active:scale-[0.99] w-full text-left"
               >
-                <div className="w-12 h-12 sm:w-13 sm:h-13 rounded-full bg-accent/10 flex items-center justify-center flex-shrink-0 group-hover:bg-accent group-hover:scale-110 transition-all duration-300">
+                <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-accent/10 flex items-center justify-center flex-shrink-0 group-hover:bg-accent group-hover:scale-105 transition-all duration-300">
                   {emailCopied ? (
-                    <Check className="w-5 h-5 text-accent group-hover:text-accent-foreground transition-colors" />
+                    <Check className="w-4 h-4 text-accent group-hover:text-accent-foreground transition-colors" />
                   ) : (
-                    <Mail className="w-5 h-5 text-accent group-hover:text-accent-foreground transition-colors" />
+                    <Mail className="w-4 h-4 text-accent group-hover:text-accent-foreground transition-colors" />
                   )}
                 </div>
                 <div className="min-w-0 flex-1">
-                  <p className="font-medium group-hover:text-accent transition-colors text-sm sm:text-base">{t("contact.email")}</p>
-                  <p className="text-xs sm:text-sm text-muted-foreground truncate">cuatrecasasjosep79@gmail.com</p>
-                </div>
-                <div className={`flex items-center gap-1 text-xs font-medium transition-all duration-300 ${emailCopied ? 'text-accent opacity-100' : 'text-muted-foreground opacity-0 group-hover:opacity-100'}`}>
-                  {emailCopied ? (
-                    <>
-                      <Check className="w-3 h-3" />
-                      {t("contact.copied")}
-                    </>
-                  ) : (
-                    <>
-                      <Copy className="w-3 h-3" />
-                      {t("contact.copy")}
-                    </>
-                  )}
+                  <p className="font-medium group-hover:text-accent transition-colors text-xs sm:text-sm">{t("contact.email")}</p>
+                  <p className="text-[10px] sm:text-xs text-muted-foreground truncate">cuatrecasasjosep79@gmail.com</p>
                 </div>
               </button>
 
-              <div className="flex items-center gap-4 sm:gap-5 p-5">
-                <div className="w-12 h-12 sm:w-13 sm:h-13 rounded-full bg-foreground/5 flex items-center justify-center flex-shrink-0">
-                  <MapPin className="w-5 h-5 text-muted-foreground" />
+              <div className="flex items-center gap-3 p-3 sm:p-4">
+                <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-foreground/5 flex items-center justify-center flex-shrink-0">
+                  <MapPin className="w-4 h-4 text-muted-foreground" />
                 </div>
                 <div className="min-w-0">
-                  <p className="font-medium text-sm sm:text-base">{t("contact.location")}</p>
-                  <p className="text-xs sm:text-sm text-muted-foreground">Dubai, UAE</p>
+                  <p className="font-medium text-xs sm:text-sm">{t("contact.location")}</p>
+                  <p className="text-[10px] sm:text-xs text-muted-foreground">Dubai, UAE</p>
                 </div>
               </div>
             </div>
