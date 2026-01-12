@@ -7,7 +7,7 @@ export const Hero = () => {
   const { t } = useLanguage();
 
   return (
-    <section ref={ref as React.RefObject<HTMLElement>} className="min-h-[85dvh] flex items-center pt-16 pb-10 px-4">
+    <section ref={ref as React.RefObject<HTMLElement>} className="min-h-[60dvh] flex items-center pt-20 pb-8 px-4">
       <div className="container max-w-3xl text-center">
         <p
           className={`text-accent font-medium text-xs mb-3 transition-all duration-600 ${
