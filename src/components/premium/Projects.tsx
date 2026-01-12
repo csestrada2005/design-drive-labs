@@ -4,7 +4,7 @@ import { useReveal } from "@/hooks/useAnimations";
 import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext, type CarouselApi } from "@/components/ui/carousel";
 
 // Project images
-import portfolio1 from "@/assets/portfolio-1.jpg";
+import projectLaMesa from "@/assets/project-lamesa.png";
 import portfolio2 from "@/assets/portfolio-2.jpg";
 import projectBumba from "@/assets/project-bumba-1.png";
 
@@ -25,7 +25,7 @@ const projects: Project[] = [
       en: "QR menu from the table: browse, customize, cart, split bill and simulated payment without downloading an app."
     },
     tags: ["QR Menu", "Mobile UX", "Checkout", "Split Bill"],
-    image: portfolio1
+    image: projectLaMesa
   },
   {
     id: "raw-paw",
