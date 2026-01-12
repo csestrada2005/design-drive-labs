@@ -2,7 +2,8 @@ import { LanguageProvider } from "@/contexts/LanguageContext";
 import { Header } from "@/components/premium/Header";
 import { Footer } from "@/components/premium/Footer";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { MessageCircle } from "lucide-react";
+import { MessageCircle, Quote, ArrowRight } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const testimonials = [
   {
@@ -41,35 +42,42 @@ const TestimonialsContent = () => {
   const { language } = useLanguage();
 
   return (
-    <main className="pt-28 pb-20 px-4">
+    <main className="pt-24 pb-16 px-4">
       <div className="container max-w-2xl">
-        {/* Page Header */}
-        <div className="mb-16 text-center">
-          <p className="text-accent text-xs font-medium mb-2">
-            {language === "es" ? "Testimonios" : "Testimonials"}
-          </p>
-          <h1 className="font-display text-3xl sm:text-4xl mb-4">
-            {language === "es" ? "Lo que dicen nuestros clientes" : "What our clients say"}
+        {/* Header - Quote style */}
+        <div className="mb-12 flex flex-col items-center text-center">
+          <Quote className="w-10 h-10 text-accent/30 mb-4" />
+          <h1 className="font-display text-2xl sm:text-3xl mb-2">
+            {language === "es" ? "Mensajes reales" : "Real messages"}
           </h1>
+          <p className="text-muted-foreground text-sm">
+            {language === "es" 
+              ? "De clientes después de entregar su proyecto."
+              : "From clients after delivering their project."}
+          </p>
         </div>
 
-        {/* Testimonials List */}
-        <div className="space-y-4">
-          {testimonials.map((testimonial) => (
-            <div key={testimonial.id} className="glass-card p-6">
+        {/* Testimonials - Stacked cards with offset */}
+        <div className="space-y-5 mb-12">
+          {testimonials.map((testimonial, index) => (
+            <div 
+              key={testimonial.id} 
+              className="glass-card p-6"
+              style={{ marginLeft: index % 2 === 1 ? '1rem' : '0' }}
+            >
               {/* WhatsApp badge */}
-              <div className="flex items-center gap-1.5 mb-4 text-[#25D366]">
-                <MessageCircle className="w-4 h-4" />
-                <span className="text-xs font-medium">WhatsApp</span>
+              <div className="flex items-center gap-1.5 mb-4">
+                <MessageCircle className="w-4 h-4 text-[#25D366]" />
+                <span className="text-[10px] font-medium text-[#25D366]">WhatsApp</span>
               </div>
 
-              <blockquote className="font-display text-lg leading-relaxed mb-5">
+              <blockquote className="font-display text-base sm:text-lg leading-relaxed mb-5">
                 "{language === "es" ? testimonial.textEs : testimonial.textEn}"
               </blockquote>
 
               {/* Author */}
               <div className="flex items-center gap-3">
-                <div className={`w-10 h-10 rounded-full ${testimonial.color} flex items-center justify-center text-white font-semibold text-sm`}>
+                <div className={`w-9 h-9 rounded-full ${testimonial.color} flex items-center justify-center text-white font-semibold text-xs`}>
                   {testimonial.initials}
                 </div>
                 <div>
@@ -84,10 +92,14 @@ const TestimonialsContent = () => {
         </div>
 
         {/* CTA */}
-        <div className="mt-16 text-center">
-          <a href="/contact" className="btn-primary">
-            {language === "es" ? "Ser el próximo caso de éxito" : "Be the next success story"}
-          </a>
+        <div className="text-center pt-6 border-t border-border">
+          <p className="text-sm text-muted-foreground mb-4">
+            {language === "es" ? "¿Quieres ser el próximo?" : "Want to be next?"}
+          </p>
+          <Link to="/contact" className="btn-primary">
+            {language === "es" ? "Empezar proyecto" : "Start project"}
+            <ArrowRight className="w-4 h-4" />
+          </Link>
         </div>
       </div>
     </main>

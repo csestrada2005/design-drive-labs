@@ -2,95 +2,90 @@ import { LanguageProvider } from "@/contexts/LanguageContext";
 import { Header } from "@/components/premium/Header";
 import { Footer } from "@/components/premium/Footer";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { Target, Eye, Zap, MessageCircle } from "lucide-react";
-
-const values = [
-  { 
-    icon: Target, 
-    titleEs: "Enfocados", 
-    titleEn: "Focused",
-    descEs: "Cada decisión tiene un propósito claro.",
-    descEn: "Every decision has a clear purpose."
-  },
-  { 
-    icon: Eye, 
-    titleEs: "Obsesivos", 
-    titleEn: "Obsessive",
-    descEs: "Los detalles hacen la diferencia.",
-    descEn: "Details make the difference."
-  },
-  { 
-    icon: Zap, 
-    titleEs: "Directos", 
-    titleEn: "Direct",
-    descEs: "Comunicación clara, entregas rápidas.",
-    descEn: "Clear communication, fast delivery."
-  },
-];
+import { MessageCircle, ArrowRight } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const AboutContent = () => {
   const { language } = useLanguage();
 
   return (
-    <main className="pt-28 pb-20 px-4">
+    <main className="pt-24 pb-16 px-4">
       <div className="container max-w-2xl">
-        {/* Page Header */}
-        <div className="mb-16 text-center">
-          <p className="text-accent text-xs font-medium mb-2">
-            {language === "es" ? "Sobre nosotros" : "About us"}
-          </p>
-          <h1 className="font-display text-3xl sm:text-4xl mb-4">
-            {language === "es" ? "Diseño que convierte" : "Design that converts"}
+        {/* Hero style header */}
+        <div className="text-center mb-14">
+          <h1 className="font-display text-4xl sm:text-5xl md:text-6xl mb-5">
+            {language === "es" ? (
+              <>Obsesionados con<br /><span className="text-primary">los detalles</span></>
+            ) : (
+              <>Obsessed with<br /><span className="text-primary">the details</span></>
+            )}
           </h1>
-          <p className="text-muted-foreground text-sm max-w-md mx-auto">
+          <p className="text-muted-foreground max-w-md mx-auto">
             {language === "es" 
-              ? "Creamos sitios web que generan resultados reales para negocios reales."
-              : "We create websites that generate real results for real businesses."}
+              ? "Somos un estudio pequeño a propósito. Pocos proyectos, atención total."
+              : "We're a small studio on purpose. Few projects, total attention."}
           </p>
         </div>
 
-        {/* Bio */}
-        <div className="glass-card p-8 mb-10 text-center">
-          <p className="text-foreground/90 leading-relaxed">
-            {language === "es" 
-              ? "Nos especializamos en landing pages, sitios corporativos y tiendas online. Diseño estratégico enfocado en conversión."
-              : "We specialize in landing pages, corporate sites and online stores. Strategic design focused on conversion."}
-          </p>
+        {/* Stats - Different visual */}
+        <div className="grid grid-cols-3 gap-3 mb-14">
+          <div className="glass-card p-5 text-center">
+            <p className="font-display text-2xl sm:text-3xl text-accent mb-1">15+</p>
+            <p className="text-[10px] sm:text-xs text-muted-foreground uppercase tracking-wide">
+              {language === "es" ? "Proyectos" : "Projects"}
+            </p>
+          </div>
+          <div className="glass-card p-5 text-center">
+            <p className="font-display text-2xl sm:text-3xl text-accent mb-1">100%</p>
+            <p className="text-[10px] sm:text-xs text-muted-foreground uppercase tracking-wide">
+              {language === "es" ? "Satisfacción" : "Satisfaction"}
+            </p>
+          </div>
+          <div className="glass-card p-5 text-center">
+            <p className="font-display text-2xl sm:text-3xl text-accent mb-1">2</p>
+            <p className="text-[10px] sm:text-xs text-muted-foreground uppercase tracking-wide">
+              {language === "es" ? "Países" : "Countries"}
+            </p>
+          </div>
         </div>
 
-        {/* Values */}
-        <div className="grid gap-4">
-          {values.map((value) => (
-            <div 
-              key={value.titleEn}
-              className="glass-card p-5 flex items-center gap-4"
-            >
-              <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0">
-                <value.icon className="w-5 h-5 text-primary" />
-              </div>
-              <div>
-                <h3 className="font-display text-base mb-0.5">
-                  {language === "es" ? value.titleEs : value.titleEn}
-                </h3>
-                <p className="text-muted-foreground text-sm">
-                  {language === "es" ? value.descEs : value.descEn}
-                </p>
-              </div>
-            </div>
-          ))}
+        {/* Philosophy - Card */}
+        <div className="glass-card p-8 mb-10">
+          <h2 className="font-display text-lg mb-4">
+            {language === "es" ? "Nuestra filosofía" : "Our philosophy"}
+          </h2>
+          <div className="space-y-4 text-sm text-muted-foreground leading-relaxed">
+            <p>
+              {language === "es" 
+                ? "Cada sección de tu web tiene un propósito. No diseñamos para que se vea bien — diseñamos para que funcione y convierta."
+                : "Every section of your website has a purpose. We don't design to look good — we design to work and convert."}
+            </p>
+            <p>
+              {language === "es" 
+                ? "Trabajamos con negocios en crecimiento en Dubái y México."
+                : "We work with growing businesses in Dubai and Mexico."}
+            </p>
+          </div>
         </div>
 
         {/* CTA */}
-        <div className="mt-16 text-center">
+        <div className="flex flex-col sm:flex-row gap-3 justify-center">
           <a 
             href="https://wa.me/522213497090"
             target="_blank"
             rel="noopener noreferrer"
-            className="btn-primary inline-flex items-center gap-2"
+            className="btn-primary"
           >
             <MessageCircle className="w-4 h-4" />
             {language === "es" ? "Hablemos" : "Let's talk"}
           </a>
+          <Link
+            to="/testimonials"
+            className="inline-flex items-center justify-center gap-2 px-6 py-3 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+          >
+            {language === "es" ? "Ver testimonios" : "See testimonials"}
+            <ArrowRight className="w-4 h-4" />
+          </Link>
         </div>
       </div>
     </main>

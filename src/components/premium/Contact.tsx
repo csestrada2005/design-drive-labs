@@ -109,19 +109,10 @@ export const Contact = () => {
   };
 
   return (
-    <section className="py-16 px-4">
-      <div className="container max-w-lg">
-        {/* Section divider */}
-        <div className="flex items-center gap-4 mb-10">
-          <div className="h-px flex-1 bg-border" />
-          <h1 className="font-display text-2xl sm:text-3xl">
-            {language === "es" ? "Contacto" : "Contact"}
-          </h1>
-          <div className="h-px flex-1 bg-border" />
-        </div>
-
+    <section className="pb-16 px-4">
+      <div className="container max-w-md">
         {/* Quick options */}
-        <div className="flex gap-3 mb-8">
+        <div className="flex gap-3 mb-6">
           <a
             href="https://wa.me/522213497090"
             target="_blank"
