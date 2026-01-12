@@ -31,7 +31,7 @@ const projects: Project[] = [
   {
     id: "bumba",
     name: "BUM'BA",
-    tags: ["Shopify", "Premium"],
+    tags: ["E-commerce", "Premium"],
     image: projectBumba
   }
 ];
