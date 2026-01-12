@@ -2,7 +2,8 @@ import { LanguageProvider } from "@/contexts/LanguageContext";
 import { Header } from "@/components/premium/Header";
 import { Footer } from "@/components/premium/Footer";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { Search, Palette, Code, Rocket } from "lucide-react";
+import { Search, Palette, Code, Rocket, ArrowRight } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const steps = [
   { 
@@ -43,55 +44,65 @@ const ProcessContent = () => {
   const { language } = useLanguage();
 
   return (
-    <main className="pt-28 pb-20 px-4">
-      <div className="container max-w-2xl">
-        {/* Page Header */}
-        <div className="mb-16 text-center">
-          <p className="text-accent text-xs font-medium mb-2">
-            {language === "es" ? "Proceso" : "Process"}
-          </p>
-          <h1 className="font-display text-3xl sm:text-4xl mb-4">
+    <main className="pt-24 pb-16 px-4">
+      <div className="container max-w-3xl">
+        {/* Page Header - Left aligned, distinctive */}
+        <div className="mb-12">
+          <span className="inline-block px-3 py-1 text-[10px] font-medium bg-accent/10 text-accent rounded-full mb-4">
+            {language === "es" ? "PROCESO" : "PROCESS"}
+          </span>
+          <h1 className="font-display text-3xl sm:text-4xl md:text-5xl mb-3">
             {language === "es" ? "Cómo trabajamos" : "How we work"}
           </h1>
-          <p className="text-muted-foreground text-sm max-w-md mx-auto">
+          <p className="text-muted-foreground text-sm max-w-md">
             {language === "es" 
               ? "Cuatro pasos simples hacia tu nuevo sitio web."
               : "Four simple steps to your new website."}
           </p>
         </div>
 
-        {/* Steps */}
-        <div className="space-y-6">
-          {steps.map((step, index) => (
-            <div 
-              key={step.number}
-              className="glass-card p-6 flex items-start gap-5"
-            >
-              <div className="flex-shrink-0">
-                <span className="font-display text-4xl text-accent/20">{step.number}</span>
-              </div>
-              <div>
-                <div className="flex items-center gap-3 mb-2">
-                  <div className="w-10 h-10 rounded-xl bg-accent/10 flex items-center justify-center">
-                    <step.icon className="w-5 h-5 text-accent" />
-                  </div>
-                  <h2 className="font-display text-lg">
-                    {language === "es" ? step.titleEs : step.titleEn}
-                  </h2>
+        {/* Timeline Steps */}
+        <div className="relative">
+          {/* Vertical line */}
+          <div className="absolute left-6 top-0 bottom-0 w-px bg-gradient-to-b from-accent via-accent/50 to-transparent hidden sm:block" />
+          
+          <div className="space-y-8">
+            {steps.map((step, index) => (
+              <div 
+                key={step.number}
+                className="relative flex gap-5 sm:gap-8"
+              >
+                {/* Number circle */}
+                <div className="relative z-10 flex-shrink-0 w-12 h-12 rounded-full bg-accent/10 border-2 border-accent/30 flex items-center justify-center">
+                  <step.icon className="w-5 h-5 text-accent" />
                 </div>
-                <p className="text-muted-foreground text-sm">
-                  {language === "es" ? step.descEs : step.descEn}
-                </p>
+                
+                {/* Content */}
+                <div className="flex-1 pt-2">
+                  <div className="flex items-baseline gap-3 mb-1">
+                    <span className="text-accent/40 font-display text-sm">{step.number}</span>
+                    <h2 className="font-display text-lg sm:text-xl">
+                      {language === "es" ? step.titleEs : step.titleEn}
+                    </h2>
+                  </div>
+                  <p className="text-muted-foreground text-sm">
+                    {language === "es" ? step.descEs : step.descEn}
+                  </p>
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
 
         {/* CTA */}
-        <div className="mt-16 text-center">
-          <a href="/contact" className="btn-primary">
-            {language === "es" ? "Empezar proyecto" : "Start project"}
-          </a>
+        <div className="mt-14 pt-8 border-t border-border">
+          <Link 
+            to="/contact" 
+            className="inline-flex items-center gap-2 text-accent font-medium hover:gap-3 transition-all"
+          >
+            {language === "es" ? "Empezar mi proyecto" : "Start my project"}
+            <ArrowRight className="w-4 h-4" />
+          </Link>
         </div>
       </div>
     </main>

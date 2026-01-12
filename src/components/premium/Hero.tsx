@@ -1,45 +1,59 @@
 import { useLanguage } from "@/contexts/LanguageContext";
-import { MessageCircle, ArrowRight } from "lucide-react";
-import { Link } from "react-router-dom";
+import { MessageCircle, ArrowDown } from "lucide-react";
 
 export const Hero = () => {
-  const { t } = useLanguage();
+  const { language } = useLanguage();
 
   return (
-    <section className="min-h-[70dvh] flex items-center pt-20 pb-10 px-4">
+    <section className="min-h-[80dvh] flex flex-col items-center justify-center pt-16 pb-8 px-4">
       <div className="container max-w-2xl text-center">
-        <p className="text-accent font-medium text-xs mb-3">
-          {t("hero.eyebrow")}
+        {/* Eyebrow */}
+        <p className="text-accent font-medium text-xs tracking-widest uppercase mb-4">
+          {language === "es" ? "Estudio de diseño web" : "Web design studio"}
         </p>
 
-        <h1 className="font-display text-[clamp(1.75rem,7vw,3.5rem)] leading-[1.1] tracking-tight mb-4">
-          {t("hero.headline1")}{" "}
-          <span className="accent-underline">{t("hero.headline2")}</span>
+        {/* Main headline */}
+        <h1 className="font-display text-[clamp(2rem,8vw,4rem)] leading-[1.05] tracking-tight mb-5">
+          {language === "es" ? (
+            <>
+              Sitios web que<br />
+              <span className="text-accent">convierten</span>
+            </>
+          ) : (
+            <>
+              Websites that<br />
+              <span className="text-accent">convert</span>
+            </>
+          )}
         </h1>
 
-        <p className="text-muted-foreground text-sm max-w-sm mx-auto mb-8">
-          {t("hero.subtitle")}
+        {/* Subtitle */}
+        <p className="text-muted-foreground text-sm sm:text-base max-w-md mx-auto mb-8">
+          {language === "es" 
+            ? "Landing pages, sitios corporativos y tiendas online. Diseño estratégico enfocado en resultados."
+            : "Landing pages, corporate sites and online stores. Strategic design focused on results."}
         </p>
 
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-          <a
-            href="https://wa.me/522213497090?text=Hi!%20I'm%20interested%20in%20your%20service"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="btn-primary text-sm px-6 py-3"
-          >
-            <MessageCircle className="w-4 h-4" />
-            {t("hero.cta.primary")}
-          </a>
-          
-          <Link
-            to="/process"
-            className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors py-3 px-4"
-          >
-            {t("hero.cta.secondary") || "Ver proceso"}
-            <ArrowRight className="w-4 h-4" />
-          </Link>
-        </div>
+        {/* CTA */}
+        <a
+          href="https://wa.me/522213497090"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="btn-primary text-sm px-7 py-3.5 mb-4"
+        >
+          <MessageCircle className="w-4 h-4" />
+          {language === "es" ? "Empezar proyecto" : "Start project"}
+        </a>
+
+        {/* Microcopy */}
+        <p className="text-[11px] text-muted-foreground/60">
+          {language === "es" ? "Respuesta en menos de 24h" : "Response within 24h"}
+        </p>
+      </div>
+
+      {/* Scroll indicator */}
+      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce opacity-40">
+        <ArrowDown className="w-5 h-5" />
       </div>
     </section>
   );
