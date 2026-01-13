@@ -69,8 +69,14 @@ export const Projects = () => {
         <Carousel
           setApi={setApi}
           plugins={[autoplayPlugin.current]}
-          opts={{ align: "start", loop: true }}
-          className="w-full"
+          opts={{ 
+            align: "start", 
+            loop: true,
+            dragFree: true,
+            duration: 15,
+            skipSnaps: false
+          }}
+          className="w-full cursor-grab active:cursor-grabbing"
           onMouseEnter={() => autoplayPlugin.current.stop()}
           onMouseLeave={() => autoplayPlugin.current.play()}
         >
