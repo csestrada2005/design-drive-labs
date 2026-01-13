@@ -1,5 +1,5 @@
 import { useLanguage } from "@/contexts/LanguageContext";
-import { MessageCircle, ArrowDown } from "lucide-react";
+import { MessageCircle } from "lucide-react";
 
 export const Hero = () => {
   const { language } = useLanguage();
@@ -51,10 +51,6 @@ export const Hero = () => {
         </p>
       </div>
 
-      {/* Scroll indicator */}
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce opacity-40">
-        <ArrowDown className="w-5 h-5" />
-      </div>
     </section>
   );
 };
