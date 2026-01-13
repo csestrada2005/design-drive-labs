@@ -28,24 +28,25 @@ const AboutContent = () => {
         </div>
 
         {/* Stats - Different visual */}
-        <div className="grid grid-cols-3 gap-2 sm:gap-3 mb-14">
-          <div className="glass-card p-3 sm:p-5 text-center overflow-hidden">
-            <p className="font-display text-xl sm:text-3xl text-accent mb-1">15+</p>
-            <p className="text-[9px] sm:text-xs text-muted-foreground uppercase tracking-wide truncate">
+        {/* Mobile: horizontal strips, Desktop: grid */}
+        <div className="flex flex-col gap-2 sm:grid sm:grid-cols-3 sm:gap-3 mb-14">
+          <div className="glass-card px-4 py-3 sm:p-5 flex items-center justify-between sm:flex-col sm:text-center">
+            <p className="text-xs sm:text-xs text-muted-foreground uppercase tracking-wide">
               {language === "es" ? "Proyectos" : "Projects"}
             </p>
+            <p className="font-display text-xl sm:text-3xl text-accent">15+</p>
           </div>
-          <div className="glass-card p-3 sm:p-5 text-center overflow-hidden">
-            <p className="font-display text-xl sm:text-3xl text-accent mb-1">100%</p>
-            <p className="text-[9px] sm:text-xs text-muted-foreground uppercase tracking-wide truncate">
+          <div className="glass-card px-4 py-3 sm:p-5 flex items-center justify-between sm:flex-col sm:text-center">
+            <p className="text-xs sm:text-xs text-muted-foreground uppercase tracking-wide">
               {language === "es" ? "Satisfacción" : "Satisfaction"}
             </p>
+            <p className="font-display text-xl sm:text-3xl text-accent">100%</p>
           </div>
-          <div className="glass-card p-3 sm:p-5 text-center overflow-hidden">
-            <p className="font-display text-xl sm:text-3xl text-accent mb-1">2</p>
-            <p className="text-[9px] sm:text-xs text-muted-foreground uppercase tracking-wide truncate">
+          <div className="glass-card px-4 py-3 sm:p-5 flex items-center justify-between sm:flex-col sm:text-center">
+            <p className="text-xs sm:text-xs text-muted-foreground uppercase tracking-wide">
               {language === "es" ? "Países" : "Countries"}
             </p>
+            <p className="font-display text-xl sm:text-3xl text-accent">2</p>
           </div>
         </div>
 
