@@ -1,6 +1,8 @@
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import { Header } from "@/components/premium/Header";
 import { Hero } from "@/components/premium/Hero";
+import { Services } from "@/components/premium/Services";
+import { QuickStats } from "@/components/premium/QuickStats";
 import { Projects } from "@/components/premium/Projects";
 import { Footer } from "@/components/premium/Footer";
 import { FloatingButtons } from "@/components/premium/FloatingButtons";
@@ -18,6 +20,8 @@ const Index = () => {
           <Header />
           <main>
             <Hero />
+            <QuickStats />
+            <Services />
             <Projects />
           </main>
           <Footer />
