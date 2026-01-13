@@ -67,21 +67,20 @@ const ProcessContent = () => {
           <div className="absolute left-6 top-0 bottom-0 w-px bg-gradient-to-b from-accent via-accent/50 to-transparent hidden sm:block" />
           
           <div className="space-y-8">
-            {steps.map((step, index) => (
+            {steps.map((step) => (
               <div 
                 key={step.number}
-                className="relative flex gap-5 sm:gap-8"
+                className="group relative flex gap-5 sm:gap-8"
               >
-                {/* Number circle */}
-                <div className="relative z-10 flex-shrink-0 w-12 h-12 rounded-full bg-accent/10 border-2 border-accent/30 flex items-center justify-center">
+                {/* Number circle with glow */}
+                <div className="relative z-10 flex-shrink-0 w-12 h-12 rounded-full bg-accent/10 border-2 border-accent/30 flex items-center justify-center shadow-[0_0_20px_-5px] shadow-accent/40 group-hover:shadow-accent/60 transition-shadow duration-300">
                   <step.icon className="w-5 h-5 text-accent" />
                 </div>
                 
-                {/* Content */}
                 <div className="flex-1 pt-2">
                   <div className="flex items-baseline gap-3 mb-1">
-                    <span className="text-accent/40 font-display text-sm">{step.number}</span>
-                    <h2 className="font-display text-lg sm:text-xl">
+                    <span className="text-transparent bg-clip-text bg-gradient-to-b from-accent to-accent/40 font-display text-sm font-bold">{step.number}</span>
+                    <h2 className="font-display text-lg sm:text-xl group-hover:text-accent transition-colors">
                       {language === "es" ? step.titleEs : step.titleEn}
                     </h2>
                   </div>

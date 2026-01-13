@@ -120,16 +120,21 @@ export const Hero = () => {
               : "We create strategic websites for businesses that want to stand out. Landing pages, e-commerce and more."}
           </p>
 
-          {/* CTA Button - with subtle glow effect */}
+          {/* CTA Button - with shimmer effect */}
           <Link
             to="/contact"
-            className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full bg-foreground text-background font-medium text-sm hover:bg-foreground/90 transition-all duration-300 group shadow-lg hover:shadow-xl"
+            className="group relative inline-flex items-center gap-2 px-7 py-3.5 rounded-full bg-foreground text-background font-medium text-sm hover:bg-foreground/90 transition-all duration-300 overflow-hidden"
             style={{
               boxShadow: '0 4px 20px hsl(220 80% 50% / 0.15)',
             }}
           >
-            {language === "es" ? "Empezar proyecto" : "Start project"}
-            <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
+            {/* Shimmer effect */}
+            <span 
+              className="absolute inset-0 -translate-x-full animate-[shimmer_3s_infinite] bg-gradient-to-r from-transparent via-white/20 to-transparent"
+              style={{ animationDelay: '1s' }}
+            />
+            <span className="relative">{language === "es" ? "Empezar proyecto" : "Start project"}</span>
+            <ArrowRight className="relative w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
           </Link>
         </div>
       </div>

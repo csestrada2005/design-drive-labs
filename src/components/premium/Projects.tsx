@@ -56,13 +56,16 @@ export const Projects = () => {
   return (
     <section className="py-16 px-4">
       <div className="max-w-5xl mx-auto">
-        {/* Section divider */}
+        {/* Section divider with gradient */}
         <div className="flex items-center gap-4 mb-10">
-          <div className="h-px flex-1 bg-border" />
-          <h2 className="font-display text-xl sm:text-2xl">
-            {language === "es" ? "Proyectos" : "Projects"}
-          </h2>
-          <div className="h-px flex-1 bg-border" />
+          <div className="h-px flex-1 bg-gradient-to-r from-transparent via-border to-border" />
+          <div className="relative">
+            <span className="absolute inset-0 blur-lg bg-accent/20 rounded-full" />
+            <h2 className="relative font-display text-xl sm:text-2xl px-2">
+              {language === "es" ? "Proyectos" : "Projects"}
+            </h2>
+          </div>
+          <div className="h-px flex-1 bg-gradient-to-l from-transparent via-border to-border" />
         </div>
 
         {/* Carousel */}
@@ -98,7 +101,7 @@ export const Projects = () => {
                       {project.tags.map((tag) => (
                         <span
                           key={tag}
-                          className="px-2 py-0.5 text-[10px] font-medium bg-secondary text-secondary-foreground rounded-full"
+                          className="px-2 py-0.5 text-[10px] font-medium bg-accent/10 text-accent border border-accent/20 rounded-full shadow-[0_0_8px_-2px] shadow-accent/30"
                         >
                           {tag}
                         </span>

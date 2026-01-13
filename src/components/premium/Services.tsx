@@ -53,16 +53,27 @@ export const Services = () => {
           </div>
         </div>
 
-        {/* Services grid - clean cards */}
+        {/* Services grid - clean cards with glowing border on hover */}
         <div className="grid sm:grid-cols-3 gap-6 sm:gap-8">
           {services.map((service) => (
-            <div key={service.titleEn} className="group">
-              <h3 className="font-display text-base sm:text-lg mb-3 group-hover:text-accent transition-colors">
-                {language === "es" ? service.titleEs : service.titleEn}
-              </h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">
-                {language === "es" ? service.descEs : service.descEn}
-              </p>
+            <div 
+              key={service.titleEn} 
+              className="group relative p-6 -m-6 rounded-xl transition-all duration-500 hover:bg-accent/[0.03]"
+            >
+              {/* Glowing border effect on hover */}
+              <div className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
+                <div className="absolute inset-0 rounded-xl border border-accent/20" />
+                <div className="absolute -inset-px rounded-xl bg-gradient-to-b from-accent/10 via-transparent to-transparent opacity-50" />
+              </div>
+              
+              <div className="relative">
+                <h3 className="font-display text-base sm:text-lg mb-3 group-hover:text-accent transition-colors">
+                  {language === "es" ? service.titleEs : service.titleEn}
+                </h3>
+                <p className="text-sm text-muted-foreground leading-relaxed">
+                  {language === "es" ? service.descEs : service.descEn}
+                </p>
+              </div>
             </div>
           ))}
         </div>
