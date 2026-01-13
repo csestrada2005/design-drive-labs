@@ -28,22 +28,22 @@ const AboutContent = () => {
         </div>
 
         {/* Stats - Different visual */}
-        <div className="grid grid-cols-3 gap-3 mb-14">
-          <div className="glass-card p-5 text-center">
-            <p className="font-display text-2xl sm:text-3xl text-accent mb-1">15+</p>
-            <p className="text-[10px] sm:text-xs text-muted-foreground uppercase tracking-wide">
+        <div className="grid grid-cols-3 gap-2 sm:gap-3 mb-14">
+          <div className="glass-card p-3 sm:p-5 text-center overflow-hidden">
+            <p className="font-display text-xl sm:text-3xl text-accent mb-1">15+</p>
+            <p className="text-[9px] sm:text-xs text-muted-foreground uppercase tracking-wide truncate">
               {language === "es" ? "Proyectos" : "Projects"}
             </p>
           </div>
-          <div className="glass-card p-5 text-center">
-            <p className="font-display text-2xl sm:text-3xl text-accent mb-1">100%</p>
-            <p className="text-[10px] sm:text-xs text-muted-foreground uppercase tracking-wide">
+          <div className="glass-card p-3 sm:p-5 text-center overflow-hidden">
+            <p className="font-display text-xl sm:text-3xl text-accent mb-1">100%</p>
+            <p className="text-[9px] sm:text-xs text-muted-foreground uppercase tracking-wide truncate">
               {language === "es" ? "Satisfacción" : "Satisfaction"}
             </p>
           </div>
-          <div className="glass-card p-5 text-center">
-            <p className="font-display text-2xl sm:text-3xl text-accent mb-1">2</p>
-            <p className="text-[10px] sm:text-xs text-muted-foreground uppercase tracking-wide">
+          <div className="glass-card p-3 sm:p-5 text-center overflow-hidden">
+            <p className="font-display text-xl sm:text-3xl text-accent mb-1">2</p>
+            <p className="text-[9px] sm:text-xs text-muted-foreground uppercase tracking-wide truncate">
               {language === "es" ? "Países" : "Countries"}
             </p>
           </div>
