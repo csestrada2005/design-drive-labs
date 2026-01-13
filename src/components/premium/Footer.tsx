@@ -12,14 +12,14 @@ export const Footer = () => {
   ];
 
   return (
-    <footer className="py-10 border-t border-border/30">
-      <div className="container">
-        <div className="flex flex-col sm:flex-row justify-between items-center gap-6">
+    <footer className="py-8 sm:py-10 border-t border-border/30">
+      <div className="container px-4">
+        <div className="flex flex-col sm:flex-row justify-between items-center gap-4 sm:gap-6">
           <Link to="/" className="font-display text-lg font-semibold">
             cuatre<span className="text-accent">.</span>
           </Link>
 
-          <nav className="flex gap-6">
+          <nav className="flex flex-wrap justify-center gap-4 sm:gap-6">
             {links.map((link) => (
               <Link 
                 key={link.href} 

@@ -58,31 +58,31 @@ const TestimonialsContent = () => {
         </div>
 
         {/* Testimonials - Stacked cards with offset */}
-        <div className="space-y-5 mb-12">
+        <div className="space-y-4 mb-12">
           {testimonials.map((testimonial, index) => (
             <div 
               key={testimonial.id} 
-              className="glass-card p-6"
-              style={{ marginLeft: index % 2 === 1 ? '1rem' : '0' }}
+              className="glass-card p-5 sm:p-6"
+              style={{ marginLeft: index % 2 === 1 ? 'clamp(0px, 2vw, 1rem)' : '0' }}
             >
               {/* WhatsApp badge */}
-              <div className="flex items-center gap-1.5 mb-4">
-                <MessageCircle className="w-4 h-4 text-[#25D366]" />
+              <div className="flex items-center gap-1.5 mb-3">
+                <MessageCircle className="w-4 h-4 text-[#25D366] flex-shrink-0" />
                 <span className="text-[10px] font-medium text-[#25D366]">WhatsApp</span>
               </div>
 
-              <blockquote className="font-display text-base sm:text-lg leading-relaxed mb-5">
+              <blockquote className="font-display text-sm sm:text-lg leading-relaxed mb-4">
                 "{language === "es" ? testimonial.textEs : testimonial.textEn}"
               </blockquote>
 
               {/* Author */}
               <div className="flex items-center gap-3">
-                <div className={`w-9 h-9 rounded-full ${testimonial.color} flex items-center justify-center text-white font-semibold text-xs`}>
+                <div className={`w-8 h-8 sm:w-9 sm:h-9 rounded-full ${testimonial.color} flex items-center justify-center text-white font-semibold text-[10px] sm:text-xs flex-shrink-0`}>
                   {testimonial.initials}
                 </div>
-                <div>
-                  <p className="font-medium text-sm">{testimonial.name}</p>
-                  <p className="text-xs text-muted-foreground">
+                <div className="min-w-0">
+                  <p className="font-medium text-sm truncate">{testimonial.name}</p>
+                  <p className="text-xs text-muted-foreground truncate">
                     {language === "es" ? testimonial.roleEs : testimonial.roleEn}
                   </p>
                 </div>
