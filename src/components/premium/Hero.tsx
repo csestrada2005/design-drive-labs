@@ -12,90 +12,73 @@ export const Hero = () => {
 
   return (
     <section className="relative min-h-[100dvh] flex flex-col overflow-hidden bg-background">
-      {/* Tech-style blurred background with brand colors */}
+      {/* Tech-style ambient background */}
       <div 
         className="absolute inset-0 overflow-hidden pointer-events-none"
         aria-hidden="true"
       >
-        {/* Base dark gradient */}
+        {/* Ambient gradient - top edge glow */}
+        <div 
+          className="absolute top-0 left-0 right-0 h-[60%]"
+          style={{
+            background: `linear-gradient(180deg, 
+              hsl(220 70% 45% / 0.08) 0%, 
+              hsl(230 60% 40% / 0.04) 30%,
+              transparent 100%
+            )`,
+          }}
+        />
+
+        {/* Left edge ambient light */}
+        <div 
+          className="absolute top-0 left-0 w-[40%] h-full"
+          style={{
+            background: `linear-gradient(90deg, 
+              hsl(210 80% 50% / 0.06) 0%, 
+              transparent 100%
+            )`,
+          }}
+        />
+
+        {/* Right edge ambient light */}
+        <div 
+          className="absolute top-0 right-0 w-[40%] h-full"
+          style={{
+            background: `linear-gradient(270deg, 
+              hsl(250 70% 55% / 0.05) 0%, 
+              transparent 100%
+            )`,
+          }}
+        />
+
+        {/* Subtle diagonal gradient overlay */}
         <div 
           className="absolute inset-0"
           style={{
-            background: `
-              radial-gradient(ellipse 80% 60% at 50% -10%, 
-                hsl(222 60% 25% / 0.6) 0%, 
-                hsl(222 47% 11% / 0.8) 40%, 
-                transparent 70%
-              )
-            `,
-          }}
-        />
-        
-        {/* Primary blue glow - top left */}
-        <div 
-          className="absolute -top-[20%] -left-[10%] w-[60%] h-[70%] blur-[120px]"
-          style={{
-            background: `radial-gradient(circle, hsl(220 80% 50% / 0.35) 0%, transparent 60%)`,
-          }}
-        />
-        
-        {/* Secondary accent glow - top right */}
-        <div 
-          className="absolute -top-[10%] -right-[15%] w-[50%] h-[60%] blur-[100px]"
-          style={{
-            background: `radial-gradient(circle, hsl(250 70% 55% / 0.25) 0%, transparent 60%)`,
-          }}
-        />
-        
-        {/* Subtle cyan accent - center */}
-        <div 
-          className="absolute top-[10%] left-1/2 -translate-x-1/2 w-[40%] h-[40%] blur-[80px]"
-          style={{
-            background: `radial-gradient(circle, hsl(200 80% 60% / 0.15) 0%, transparent 60%)`,
+            background: `linear-gradient(135deg, 
+              hsl(200 80% 50% / 0.03) 0%, 
+              transparent 40%,
+              transparent 60%,
+              hsl(260 70% 50% / 0.03) 100%
+            )`,
           }}
         />
 
-        {/* Floating orbs for depth */}
+        {/* Very subtle grid */}
         <div 
-          className="absolute top-[15%] left-[10%] w-32 h-32 rounded-full blur-[60px] animate-pulse"
-          style={{
-            background: `radial-gradient(circle, hsl(220 90% 60% / 0.3) 0%, transparent 70%)`,
-            animationDuration: '4s',
-          }}
-        />
-        <div 
-          className="absolute top-[25%] right-[15%] w-24 h-24 rounded-full blur-[50px] animate-pulse"
-          style={{
-            background: `radial-gradient(circle, hsl(260 80% 65% / 0.25) 0%, transparent 70%)`,
-            animationDuration: '5s',
-            animationDelay: '1s',
-          }}
-        />
-        <div 
-          className="absolute bottom-[30%] left-[20%] w-20 h-20 rounded-full blur-[40px] animate-pulse"
-          style={{
-            background: `radial-gradient(circle, hsl(190 80% 55% / 0.2) 0%, transparent 70%)`,
-            animationDuration: '6s',
-            animationDelay: '2s',
-          }}
-        />
-
-        {/* Subtle grid overlay */}
-        <div 
-          className="absolute inset-0 opacity-[0.03]"
+          className="absolute inset-0 opacity-[0.02]"
           style={{
             backgroundImage: `
-              linear-gradient(hsl(220 50% 50% / 0.5) 1px, transparent 1px),
-              linear-gradient(90deg, hsl(220 50% 50% / 0.5) 1px, transparent 1px)
+              linear-gradient(hsl(220 40% 60%) 1px, transparent 1px),
+              linear-gradient(90deg, hsl(220 40% 60%) 1px, transparent 1px)
             `,
-            backgroundSize: '60px 60px',
-            maskImage: 'radial-gradient(ellipse 60% 60% at 50% 30%, black 0%, transparent 70%)',
+            backgroundSize: '80px 80px',
           }}
         />
 
-        {/* Noise texture overlay */}
+        {/* Noise texture */}
         <div 
-          className="absolute inset-0 opacity-[0.015]"
+          className="absolute inset-0 opacity-[0.012]"
           style={{
             backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")`,
           }}
