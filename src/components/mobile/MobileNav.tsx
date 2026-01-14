@@ -1,17 +1,10 @@
 import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
-import { useScrollProgress } from "@/hooks/useMobileAnimations";
+import { useScrollState } from "@/hooks/useScrollState";
 
 export const MobileNav = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [isScrolled, setIsScrolled] = useState(false);
-  const progress = useScrollProgress();
-
-  useEffect(() => {
-    const handleScroll = () => setIsScrolled(window.scrollY > 20);
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  const { isScrolled, progress } = useScrollState(20);
 
   useEffect(() => {
     document.body.style.overflow = isOpen ? "hidden" : "";
@@ -26,11 +19,14 @@ export const MobileNav = () => {
 
   return (
     <>
-      {/* Progress bar */}
+      {/* Progress bar - using transform for GPU acceleration */}
       <div className="fixed top-0 left-0 right-0 h-0.5 bg-muted z-[60]">
         <div
-          className="h-full bg-accent transition-all duration-150"
-          style={{ width: `${progress * 100}%` }}
+          className="h-full bg-accent origin-left"
+          style={{ 
+            transform: `scaleX(${progress})`,
+            willChange: 'transform',
+          }}
         />
       </div>
 
