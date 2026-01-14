@@ -76,19 +76,18 @@ export const Hero = () => {
           }}
         />
 
-        {/* Floating particles */}
-        <div className="absolute inset-0 overflow-hidden">
-          {[...Array(12)].map((_, i) => (
+        {/* Floating particles - hidden on mobile for performance */}
+        <div className="absolute inset-0 overflow-hidden hidden md:block">
+          {[...Array(6)].map((_, i) => (
             <div
               key={i}
-              className="absolute rounded-full bg-accent/30"
+              className="absolute rounded-full bg-accent/30 particle-float"
               style={{
                 width: `${2 + (i % 3)}px`,
                 height: `${2 + (i % 3)}px`,
-                left: `${8 + (i * 7.5)}%`,
-                top: `${10 + ((i * 13) % 70)}%`,
-                animation: `float-particle ${15 + (i % 5) * 3}s ease-in-out infinite`,
-                animationDelay: `${i * 0.8}s`,
+                left: `${8 + (i * 15)}%`,
+                top: `${10 + ((i * 20) % 70)}%`,
+                animationDelay: `${i * 1.2}s`,
                 opacity: 0.3 + (i % 3) * 0.15,
               }}
             />
@@ -103,33 +102,6 @@ export const Hero = () => {
           }}
         />
       </div>
-      
-      {/* Particle animation styles */}
-      <style>{`
-        @keyframes float-particle {
-          0%, 100% {
-            transform: translateY(0) translateX(0);
-            opacity: 0.2;
-          }
-          25% {
-            transform: translateY(-20px) translateX(10px);
-            opacity: 0.5;
-          }
-          50% {
-            transform: translateY(-10px) translateX(-5px);
-            opacity: 0.3;
-          }
-          75% {
-            transform: translateY(-25px) translateX(15px);
-            opacity: 0.4;
-          }
-        }
-        @media (prefers-reduced-motion: reduce) {
-          [style*="float-particle"] {
-            animation: none !important;
-          }
-        }
-      `}</style>
       
       {/* Content */}
       <div className="relative z-10 flex-1 flex flex-col items-center justify-center pt-20 pb-8 px-4">
@@ -166,7 +138,7 @@ export const Hero = () => {
               : "We create strategic websites for businesses that want to stand out. Landing pages, e-commerce and more."}
           </p>
 
-          {/* CTA Button - with shimmer effect */}
+          {/* CTA Button - shimmer disabled on mobile for performance */}
           <Link
             to="/contact"
             className="group relative inline-flex items-center gap-2 px-7 py-3.5 rounded-full bg-foreground text-background font-medium text-sm hover:bg-foreground/90 transition-all duration-300 overflow-hidden"
@@ -174,10 +146,9 @@ export const Hero = () => {
               boxShadow: '0 4px 20px hsl(220 80% 50% / 0.15)',
             }}
           >
-            {/* Shimmer effect */}
+            {/* Shimmer effect - desktop only */}
             <span 
-              className="absolute inset-0 -translate-x-full animate-[shimmer_3s_infinite] bg-gradient-to-r from-transparent via-white/20 to-transparent"
-              style={{ animationDelay: '1s' }}
+              className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent hidden md:block shimmer-effect"
             />
             <span className="relative">{language === "es" ? "Empezar proyecto" : "Start project"}</span>
             <ArrowRight className="relative w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
