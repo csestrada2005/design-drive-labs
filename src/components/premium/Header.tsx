@@ -1,13 +1,10 @@
 import { useState, useEffect } from "react";
-import { Menu, X, Sun, Moon } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { useTheme } from "next-themes";
 import { Link, useLocation } from "react-router-dom";
 
 export const Header = () => {
   const { language, setLanguage, t } = useLanguage();
-  const { theme, setTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const location = useLocation();
@@ -20,10 +17,6 @@ export const Header = () => {
   ];
 
   useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 30);
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
@@ -33,10 +26,6 @@ export const Header = () => {
     document.body.style.overflow = isMobileMenuOpen ? "hidden" : "";
     return () => { document.body.style.overflow = ""; };
   }, [isMobileMenuOpen]);
-
-  const toggleTheme = () => {
-    setTheme(theme === "dark" ? "light" : "dark");
-  };
 
   return (
     <>
@@ -74,14 +63,6 @@ export const Header = () => {
 
           <div className="hidden md:flex items-center gap-2">
             <button
-              onClick={toggleTheme}
-              className="w-9 h-9 flex items-center justify-center rounded-full glass-card border-0"
-              aria-label="Toggle theme"
-            >
-              {mounted && (theme === "dark" ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />)}
-            </button>
-
-            <button
               onClick={() => setLanguage(language === "es" ? "en" : "es")}
               className="px-3 py-1.5 text-xs font-medium rounded-full glass-card border-0"
             >
@@ -114,13 +95,6 @@ export const Header = () => {
             cuatre<span className="text-accent">.</span>
           </Link>
           <div className="flex items-center gap-2">
-            <button
-              onClick={toggleTheme}
-              className="w-10 h-10 flex items-center justify-center glass-card rounded-full border-0"
-              aria-label="Toggle theme"
-            >
-              {mounted && (theme === "dark" ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />)}
-            </button>
             <button
               onClick={() => setLanguage(language === "es" ? "en" : "es")}
               className="px-3 py-1.5 text-xs font-medium glass-card rounded-full border-0"
