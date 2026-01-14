@@ -1,6 +1,6 @@
 import { useState, useCallback } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { Send, Check, MessageCircle, Mail, AlertCircle } from "lucide-react";
+import { Send, Check, MessageCircle, Mail, AlertCircle, Copy } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -16,7 +16,36 @@ export const Contact = () => {
   const { language } = useLanguage();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [emailCopied, setEmailCopied] = useState(false);
   const { toast } = useToast();
+
+  const EMAIL = "cuatrecasasjosep79@gmail.com";
+
+  const handleCopyEmail = async () => {
+    try {
+      await navigator.clipboard.writeText(EMAIL);
+      setEmailCopied(true);
+      toast({
+        title: language === "es" ? "📋 Email copiado" : "📋 Email copied",
+        description: EMAIL,
+      });
+      setTimeout(() => setEmailCopied(false), 2000);
+    } catch (err) {
+      // Fallback for older browsers
+      const textArea = document.createElement("textarea");
+      textArea.value = EMAIL;
+      document.body.appendChild(textArea);
+      textArea.select();
+      document.execCommand("copy");
+      document.body.removeChild(textArea);
+      setEmailCopied(true);
+      toast({
+        title: language === "es" ? "📋 Email copiado" : "📋 Email copied",
+        description: EMAIL,
+      });
+      setTimeout(() => setEmailCopied(false), 2000);
+    }
+  };
 
   const [fields, setFields] = useState<Record<string, FieldState>>({
     name: { value: "", touched: false, error: "" },
@@ -122,13 +151,17 @@ export const Contact = () => {
             <MessageCircle className="w-4 h-4 text-[#25D366]" />
             WhatsApp
           </a>
-          <a
-            href="mailto:cuatrecasasjosep79@gmail.com"
-            className="flex-1 glass-card p-4 flex items-center justify-center gap-2 text-sm font-medium hover:border-accent/50 transition-colors"
+          <button
+            onClick={handleCopyEmail}
+            className="flex-1 glass-card p-4 flex items-center justify-center gap-2 text-sm font-medium hover:border-accent/50 transition-colors cursor-pointer"
           >
-            <Mail className="w-4 h-4 text-accent" />
-            Email
-          </a>
+            {emailCopied ? (
+              <Check className="w-4 h-4 text-accent" />
+            ) : (
+              <Mail className="w-4 h-4 text-accent" />
+            )}
+            {emailCopied ? (language === "es" ? "Copiado" : "Copied") : "Email"}
+          </button>
         </div>
 
         {/* Form */}

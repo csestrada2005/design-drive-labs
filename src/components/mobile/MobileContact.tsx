@@ -1,13 +1,41 @@
 import { useState } from "react";
 import { useReveal } from "@/hooks/useMobileAnimations";
-import { Send, Check, AlertCircle } from "lucide-react";
+import { Send, Check, MessageCircle, Mail } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 export const MobileContact = () => {
   const { ref, isVisible } = useReveal();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [emailCopied, setEmailCopied] = useState(false);
   const { toast } = useToast();
+
+  const EMAIL = "cuatrecasasjosep79@gmail.com";
+
+  const handleCopyEmail = async () => {
+    try {
+      await navigator.clipboard.writeText(EMAIL);
+      setEmailCopied(true);
+      toast({
+        title: "📋 Email copiado",
+        description: EMAIL,
+      });
+      setTimeout(() => setEmailCopied(false), 2000);
+    } catch (err) {
+      const textArea = document.createElement("textarea");
+      textArea.value = EMAIL;
+      document.body.appendChild(textArea);
+      textArea.select();
+      document.execCommand("copy");
+      document.body.removeChild(textArea);
+      setEmailCopied(true);
+      toast({
+        title: "📋 Email copiado",
+        description: EMAIL,
+      });
+      setTimeout(() => setEmailCopied(false), 2000);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -41,9 +69,34 @@ export const MobileContact = () => {
         <h2 className="font-display text-3xl font-bold mt-2 mb-3">
           ¿Hablamos?
         </h2>
-        <p className="text-background/60 mb-8">
+        <p className="text-background/60 mb-6">
           Cuéntame sobre tu proyecto. Respondo en menos de 24 horas.
         </p>
+
+        {/* Quick contact options */}
+        <div className="flex gap-3 mb-6">
+          <a
+            href="https://wa.me/522213497090"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex-1 bg-background/10 border border-background/20 rounded-xl p-4 flex items-center justify-center gap-2 text-sm font-medium active:scale-[0.98] transition-all"
+          >
+            <MessageCircle className="w-4 h-4 text-[#25D366]" />
+            WhatsApp
+          </a>
+          <button
+            type="button"
+            onClick={handleCopyEmail}
+            className="flex-1 bg-background/10 border border-background/20 rounded-xl p-4 flex items-center justify-center gap-2 text-sm font-medium active:scale-[0.98] transition-all"
+          >
+            {emailCopied ? (
+              <Check className="w-4 h-4 text-accent" />
+            ) : (
+              <Mail className="w-4 h-4 text-accent" />
+            )}
+            {emailCopied ? "Copiado" : "Email"}
+          </button>
+        </div>
 
         {/* Minimal form - only essential fields */}
         <form onSubmit={handleSubmit} className="space-y-4">
