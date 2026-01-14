@@ -45,20 +45,18 @@ export const MobileWork = () => {
           {projects.map((project, index) => (
             <div
               key={project.title}
-              className={`group relative overflow-hidden rounded-2xl bg-background border border-border p-6 transition-all duration-700 active:scale-[0.98] ${
-                isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
+            className={`group relative overflow-hidden rounded-2xl bg-background border border-border p-6 transition-opacity duration-500 ${
+                isVisible ? "opacity-100" : "opacity-0"
               }`}
-              style={{ transitionDelay: `${index * 100 + 200}ms` }}
+              style={{ transitionDelay: `${index * 100}ms` }}
             >
-              {/* Image placeholder */}
+              {/* Image placeholder - static, no shimmer */}
               <div className="aspect-[16/10] rounded-xl bg-muted mb-5 relative overflow-hidden">
                 <div className="absolute inset-0 flex items-center justify-center">
                   <div className="w-12 h-12 rounded-full bg-accent/10 flex items-center justify-center">
                     <span className="text-xl">✦</span>
                   </div>
                 </div>
-                {/* Shimmer effect */}
-                <div className="absolute inset-0 animate-shimmer" />
               </div>
 
               {/* Content */}

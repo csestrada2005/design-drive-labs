@@ -90,6 +90,14 @@
   html {
     scroll-behavior: smooth;
     -webkit-tap-highlight-color: transparent;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  /* Reduce motion for accessibility and performance */
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
   }
 
   body {
@@ -97,6 +105,16 @@
     font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* GPU acceleration for smooth scrolling */
+  img {
+    content-visibility: auto;
+  }
+  
+  /* Contain layout for sections on all devices */
+  section {
+    contain: layout style;
   }
 
   ::selection {
@@ -651,14 +669,16 @@
     box-shadow: 0 0 0 4px hsl(var(--primary) / 0.1);
   }
 
-  /* Smooth image loading */
-  img {
-    transition: opacity 0.4s var(--apple-ease), transform 0.4s var(--apple-ease);
-  }
-
-  /* Apple-style hover lift for images */
-  .img-hover:hover img {
-    transform: scale(1.03);
+  /* Smooth image loading - desktop only */
+  @media (min-width: 769px) {
+    img {
+      transition: opacity 0.3s var(--apple-ease), transform 0.3s var(--apple-ease);
+    }
+    
+    /* Apple-style hover lift for images */
+    .img-hover:hover img {
+      transform: scale(1.02);
+    }
   }
 }
 
@@ -780,8 +800,35 @@ html {
     animation: none !important;
   }
   
-  /* Add CSS containment for better repaint isolation */
-  section {
-    contain: layout style;
+  /* Disable particle animations on mobile */
+  .particle-float {
+    animation: none !important;
+    opacity: 0 !important;
+  }
+  
+  /* Disable shimmer on mobile */
+  .shimmer-effect {
+    animation: none !important;
+  }
+  
+  /* Simplify transitions */
+  .glass,
+  .glass-card,
+  .glass-nav,
+  .btn-primary,
+  .btn-secondary {
+    transition: opacity 0.2s ease !important;
+  }
+  
+  /* Disable transform transitions */
+  .reveal,
+  .reveal-scale {
+    transition: opacity 0.4s ease !important;
+    transform: none !important;
+  }
+  
+  .reveal.visible,
+  .reveal-scale.visible {
+    opacity: 1;
   }
 }
