@@ -38,13 +38,12 @@ export const MobileAbout = () => {
             { value: "+50", label: "Proyectos" },
             { value: "3+", label: "Años" },
             { value: "100%", label: "Satisfacción" },
-          ].map((stat, index) => (
+          ].map((stat) => (
             <div
               key={stat.label}
-              className={`text-center p-4 rounded-xl bg-muted/50 transition-all duration-700 ${
-                isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+              className={`text-center p-4 rounded-xl bg-muted/50 transition-opacity duration-500 ${
+                isVisible ? "opacity-100" : "opacity-0"
               }`}
-              style={{ transitionDelay: `${index * 100 + 300}ms` }}
             >
               <p className="font-display text-2xl font-bold text-accent">
                 {stat.value}
@@ -58,13 +57,12 @@ export const MobileAbout = () => {
 
         {/* Features */}
         <div className="space-y-3">
-          {features.map((feature, index) => (
+          {features.map((feature) => (
             <div
               key={feature}
-              className={`flex items-center gap-3 transition-all duration-700 ${
-                isVisible ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-4"
+              className={`flex items-center gap-3 transition-opacity duration-500 ${
+                isVisible ? "opacity-100" : "opacity-0"
               }`}
-              style={{ transitionDelay: `${index * 80 + 500}ms` }}
             >
               <div className="w-6 h-6 rounded-full bg-accent/10 flex items-center justify-center flex-shrink-0">
                 <Check className="w-3.5 h-3.5 text-accent" />
