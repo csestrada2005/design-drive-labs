@@ -25,8 +25,7 @@ const TRANSITION_SECTIONS = [
   { id: "process", variant: "data" as const },
   { id: "growth", variant: "shutter" as const },
   { id: "work", variant: "circuit" as const },
-  { id: "cta", variant: "data" as const },
-  { id: "contact", variant: "shutter" as const },
+  { id: "cta-contact", variant: "data" as const },
 ];
 
 const Index = () => {
@@ -80,8 +79,6 @@ const Index = () => {
             </TransitionSection>
             <TransitionSection registerRef={registerRef(5)}>
               <BigCTA />
-            </TransitionSection>
-            <TransitionSection registerRef={registerRef(6)}>
               <ContactSection />
             </TransitionSection>
           </main>
