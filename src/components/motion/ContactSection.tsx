@@ -71,112 +71,137 @@ export const ContactSection = () => {
       errors[field] ? "border-destructive" : "border-border/40"
     } focus:outline-none focus:border-primary/50 focus:ring-2 focus:ring-primary/10 text-foreground placeholder:text-muted-foreground/50`;
 
+  const fieldVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: (i: number) => ({
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.5, delay: 0.25 + i * 0.08, ease: [0.25, 1, 0.5, 1] as [number, number, number, number] },
+    }),
+  };
+
   return (
-    <section ref={ref} className="py-24 sm:py-32" id="contact">
-      <div className="container max-w-lg">
+    <section ref={ref} className="py-24 sm:py-32 relative overflow-hidden" id="contact">
+      {/* Ambient glow */}
+      <div
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full pointer-events-none"
+        style={{ background: "radial-gradient(circle, hsl(222 100% 65% / 0.06), transparent 70%)" }}
+        aria-hidden="true"
+      />
+
+      <div className="container max-w-lg relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
+          transition={{ duration: 0.7 }}
           className="mb-10"
         >
-          <h2 className="font-display text-3xl sm:text-4xl mb-3">
-            LET'S <span className="text-primary">TALK.</span>
+          <h2 className="font-display text-4xl sm:text-5xl md:text-6xl mb-3 leading-[0.95]">
+            <motion.span
+              className="inline-block"
+              initial={{ opacity: 0, x: -30 }}
+              animate={isInView ? { opacity: 1, x: 0 } : {}}
+              transition={{ duration: 0.6, delay: 0.1, ease: [0.25, 1, 0.5, 1] }}
+            >
+              LET'S{" "}
+            </motion.span>
+            <motion.span
+              className="inline-block text-primary"
+              initial={{ opacity: 0, x: -30, scale: 0.9 }}
+              animate={isInView ? { opacity: 1, x: 0, scale: 1 } : {}}
+              transition={{ duration: 0.7, delay: 0.25, ease: [0.25, 1, 0.5, 1] }}
+              style={{ textShadow: "0 0 40px hsl(222 100% 65% / 0.4)" }}
+            >
+              TALK.
+            </motion.span>
           </h2>
-          <p className="text-muted-foreground text-sm">
+          <motion.p
+            className="text-muted-foreground text-sm"
+            initial={{ opacity: 0 }}
+            animate={isInView ? { opacity: 1 } : {}}
+            transition={{ duration: 0.5, delay: 0.4 }}
+          >
             Tell us about your project. We respond within 24 hours.
-          </p>
+          </motion.p>
         </motion.div>
 
-        <motion.form
-          initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6, delay: 0.15 }}
-          onSubmit={handleSubmit}
-          className="space-y-4"
-        >
-          <div>
-            <input
-              type="text"
-              placeholder="Name *"
-              value={form.name}
-              onChange={(e) => setForm({ ...form, name: e.target.value })}
-              className={inputClass("name")}
-            />
-            {errors.name && (
-              <p className="mt-1 text-xs text-destructive flex items-center gap-1">
-                <AlertCircle className="w-3 h-3" /> {errors.name}
-              </p>
-            )}
-          </div>
+        <form onSubmit={handleSubmit} className="space-y-5">
+          {[
+            { i: 0, el: (
+              <div key="name">
+                <motion.input
+                  custom={0} variants={fieldVariants} initial="hidden" animate={isInView ? "visible" : "hidden"}
+                  type="text" placeholder="Name *" value={form.name}
+                  onChange={(e) => setForm({ ...form, name: e.target.value })}
+                  className={inputClass("name")}
+                  whileFocus={{ borderColor: "hsl(222 100% 65% / 0.6)", boxShadow: "0 0 20px hsl(222 100% 65% / 0.1)" }}
+                />
+                {errors.name && <p className="mt-1 text-xs text-destructive flex items-center gap-1"><AlertCircle className="w-3 h-3" /> {errors.name}</p>}
+              </div>
+            )},
+            { i: 1, el: (
+              <div key="email">
+                <motion.input
+                  custom={1} variants={fieldVariants} initial="hidden" animate={isInView ? "visible" : "hidden"}
+                  type="email" placeholder="Email *" value={form.email}
+                  onChange={(e) => setForm({ ...form, email: e.target.value })}
+                  className={inputClass("email")}
+                  whileFocus={{ borderColor: "hsl(222 100% 65% / 0.6)", boxShadow: "0 0 20px hsl(222 100% 65% / 0.1)" }}
+                />
+                {errors.email && <p className="mt-1 text-xs text-destructive flex items-center gap-1"><AlertCircle className="w-3 h-3" /> {errors.email}</p>}
+              </div>
+            )},
+            { i: 2, el: (
+              <motion.input
+                key="phone" custom={2} variants={fieldVariants} initial="hidden" animate={isInView ? "visible" : "hidden"}
+                type="tel" placeholder="WhatsApp / Phone" value={form.phone}
+                onChange={(e) => setForm({ ...form, phone: e.target.value })}
+                className={inputClass("")}
+                whileFocus={{ borderColor: "hsl(222 100% 65% / 0.6)", boxShadow: "0 0 20px hsl(222 100% 65% / 0.1)" }}
+              />
+            )},
+            { i: 3, el: (
+              <motion.select
+                key="budget" custom={3} variants={fieldVariants} initial="hidden" animate={isInView ? "visible" : "hidden"}
+                value={form.budget}
+                onChange={(e) => setForm({ ...form, budget: e.target.value })}
+                className={`${inputClass("")} appearance-none`}
+              >
+                <option value="">Budget (optional)</option>
+                {budgetOptions.map((b) => <option key={b} value={b}>{b}</option>)}
+              </motion.select>
+            )},
+            { i: 4, el: (
+              <div key="message">
+                <motion.textarea
+                  custom={4} variants={fieldVariants} initial="hidden" animate={isInView ? "visible" : "hidden"}
+                  placeholder="Project description *" rows={4} value={form.message}
+                  onChange={(e) => setForm({ ...form, message: e.target.value })}
+                  className={`${inputClass("message")} h-auto py-3 resize-none`}
+                  whileFocus={{ borderColor: "hsl(222 100% 65% / 0.6)", boxShadow: "0 0 20px hsl(222 100% 65% / 0.1)" }}
+                />
+                {errors.message && <p className="mt-1 text-xs text-destructive flex items-center gap-1"><AlertCircle className="w-3 h-3" /> {errors.message}</p>}
+              </div>
+            )},
+          ].map(({ el }) => el)}
 
-          <div>
-            <input
-              type="email"
-              placeholder="Email *"
-              value={form.email}
-              onChange={(e) => setForm({ ...form, email: e.target.value })}
-              className={inputClass("email")}
-            />
-            {errors.email && (
-              <p className="mt-1 text-xs text-destructive flex items-center gap-1">
-                <AlertCircle className="w-3 h-3" /> {errors.email}
-              </p>
-            )}
-          </div>
-
-          <input
-            type="tel"
-            placeholder="WhatsApp / Phone"
-            value={form.phone}
-            onChange={(e) => setForm({ ...form, phone: e.target.value })}
-            className={inputClass("")}
-          />
-
-          <select
-            value={form.budget}
-            onChange={(e) => setForm({ ...form, budget: e.target.value })}
-            className={`${inputClass("")} appearance-none`}
-          >
-            <option value="">Budget (optional)</option>
-            {budgetOptions.map((b) => (
-              <option key={b} value={b}>{b}</option>
-            ))}
-          </select>
-
-          <div>
-            <textarea
-              placeholder="Project description *"
-              rows={4}
-              value={form.message}
-              onChange={(e) => setForm({ ...form, message: e.target.value })}
-              className={`${inputClass("message")} h-auto py-3 resize-none`}
-            />
-            {errors.message && (
-              <p className="mt-1 text-xs text-destructive flex items-center gap-1">
-                <AlertCircle className="w-3 h-3" /> {errors.message}
-              </p>
-            )}
-          </div>
-
-          <button
+          <motion.button
+            custom={5} variants={fieldVariants} initial="hidden" animate={isInView ? "visible" : "hidden"}
             type="submit"
             disabled={isSubmitting || isSuccess}
             className="btn-primary w-full h-12 text-sm disabled:opacity-70"
+            whileHover={{ scale: 1.02, boxShadow: "0 0 30px hsl(222 100% 65% / 0.25)" }}
+            whileTap={{ scale: 0.98 }}
           >
             {isSuccess ? (
-              <>
-                <Check className="w-4 h-4" /> Sent
-              </>
+              <><Check className="w-4 h-4" /> Sent</>
             ) : isSubmitting ? (
               <span className="w-4 h-4 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full animate-spin" />
             ) : (
-              <>
-                Send <Send className="w-4 h-4" />
-              </>
+              <>Send <Send className="w-4 h-4" /></>
             )}
-          </button>
-        </motion.form>
+          </motion.button>
+        </form>
       </div>
     </section>
   );
