@@ -1,6 +1,7 @@
 import { useRef, useEffect } from "react";
 import { motion, useInView } from "framer-motion";
 import { ArrowRight } from "lucide-react";
+import { EasterEgg } from "@/components/motion/EasterEgg";
 import { useMagnetic } from "@/hooks/useMagnetic";
 import { MarqueeButton } from "@/components/motion/MarqueeButton";
 
@@ -109,6 +110,16 @@ export const BigCTA = () => {
           >
             <MarqueeButton text="Make it Real" href="#contact" variant="primary" />
             <MarqueeButton text="WhatsApp" href="https://wa.me/522213497090" variant="ghost" />
+          </motion.div>
+
+          {/* Easter egg */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={isInView ? { opacity: 1 } : {}}
+            transition={{ delay: 1 }}
+            className="mt-12"
+          >
+            <EasterEgg />
           </motion.div>
         </motion.div>
       </div>
