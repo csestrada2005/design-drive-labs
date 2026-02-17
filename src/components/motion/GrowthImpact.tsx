@@ -56,8 +56,8 @@ const LineChart = ({ isInView }: { isInView: boolean }) => {
           const y = height - padY - (v / 100) * (height - padY * 2);
           return (
             <g key={v}>
-              <line x1={padX} y1={y} x2={width - padX} y2={y} stroke="hsl(222 30% 18%)" strokeWidth="0.5" />
-              <text x={padX - 5} y={y + 3} fill="hsl(220 10% 59%)" fontSize="8" textAnchor="end">{v}%</text>
+              <line x1={padX} y1={y} x2={width - padX} y2={y} stroke="hsl(0 10% 15%)" strokeWidth="0.5" />
+              <text x={padX - 5} y={y + 3} fill="hsl(0 8% 55%)" fontSize="8" textAnchor="end">{v}%</text>
             </g>
           );
         })}
@@ -66,7 +66,7 @@ const LineChart = ({ isInView }: { isInView: boolean }) => {
         <motion.path
           d={pathData}
           fill="none"
-          stroke="hsl(222 100% 65%)"
+          stroke="hsl(0 100% 50%)"
           strokeWidth="2"
           strokeLinecap="round"
           strokeLinejoin="round"
@@ -79,7 +79,7 @@ const LineChart = ({ isInView }: { isInView: boolean }) => {
         <motion.path
           d={pathData}
           fill="none"
-          stroke="hsl(222 100% 65% / 0.3)"
+          stroke="hsl(0 100% 50% / 0.3)"
           strokeWidth="6"
           strokeLinecap="round"
           strokeLinejoin="round"
@@ -99,7 +99,7 @@ const LineChart = ({ isInView }: { isInView: boolean }) => {
                 cx={x}
                 cy={y}
                 r={hoveredIdx === i ? 5 : 3}
-                fill="hsl(222 100% 65%)"
+                fill="hsl(0 100% 50%)"
                 initial={{ opacity: 0 }}
                 animate={isInView ? { opacity: 1 } : { opacity: 0 }}
                 transition={{ delay: 0.3 + i * 0.08 }}
@@ -111,11 +111,11 @@ const LineChart = ({ isInView }: { isInView: boolean }) => {
                 <g>
                   <rect
                     x={x - 22} y={y - 28} width="44" height="20" rx="6"
-                    fill="hsl(222 40% 12% / 0.9)"
-                    stroke="hsl(222 100% 65% / 0.3)"
+                    fill="hsl(0 12% 8% / 0.9)"
+                    stroke="hsl(0 100% 50% / 0.3)"
                     strokeWidth="0.5"
                   />
-                  <text x={x} y={y - 15} fill="hsl(222 100% 65%)" fontSize="9" textAnchor="middle" fontWeight="600">
+                  <text x={x} y={y - 15} fill="hsl(0 100% 50%)" fontSize="9" textAnchor="middle" fontWeight="600">
                     {p}%
                   </text>
                 </g>
@@ -164,7 +164,7 @@ const BarChart = ({ isInView }: { isInView: boolean }) => {
                 width={barWidth}
                 height={barH}
                 rx={4}
-                fill={hoveredIdx === i ? "hsl(222 100% 65%)" : "hsl(222 100% 65% / 0.6)"}
+                fill={hoveredIdx === i ? "hsl(0 100% 50%)" : "hsl(0 100% 50% / 0.6)"}
                 initial={{ height: 0, y: height - padY }}
                 animate={isInView ? { height: barH, y } : { height: 0, y: height - padY }}
                 transition={{ duration: 0.6, delay: 0.4 + i * 0.1, ease: [0.33, 1, 0.68, 1] }}
@@ -174,12 +174,12 @@ const BarChart = ({ isInView }: { isInView: boolean }) => {
               />
               {/* Glow */}
               {hoveredIdx === i && (
-                <rect x={x - 2} y={y - 2} width={barWidth + 4} height={barH + 4} rx={6} fill="none" stroke="hsl(222 100% 65% / 0.3)" strokeWidth="1" />
+                <rect x={x - 2} y={y - 2} width={barWidth + 4} height={barH + 4} rx={6} fill="none" stroke="hsl(0 100% 50% / 0.3)" strokeWidth="1" />
               )}
               <text
                 x={x + barWidth / 2}
                 y={height - 8}
-                fill="hsl(220 10% 59%)"
+                fill="hsl(0 8% 55%)"
                 fontSize="8"
                 textAnchor="middle"
               >
@@ -188,8 +188,8 @@ const BarChart = ({ isInView }: { isInView: boolean }) => {
               {hoveredIdx === i && (
                 <g>
                   <rect x={x + barWidth / 2 - 18} y={y - 22} width="36" height="18" rx="5"
-                    fill="hsl(222 40% 12% / 0.9)" stroke="hsl(222 100% 65% / 0.3)" strokeWidth="0.5" />
-                  <text x={x + barWidth / 2} y={y - 10} fill="hsl(222 100% 65%)" fontSize="9" textAnchor="middle" fontWeight="600">
+                    fill="hsl(0 12% 8% / 0.9)" stroke="hsl(0 100% 50% / 0.3)" strokeWidth="0.5" />
+                  <text x={x + barWidth / 2} y={y - 10} fill="hsl(0 100% 50%)" fontSize="9" textAnchor="middle" fontWeight="600">
                     ${d.value}
                   </text>
                 </g>
@@ -219,7 +219,7 @@ export const GrowthImpact = () => {
       {/* Background ambient */}
       <div
         className="absolute top-0 right-0 w-1/2 h-full pointer-events-none"
-        style={{ background: "radial-gradient(ellipse at 80% 40%, hsl(222 100% 65% / 0.04), transparent 60%)" }}
+        style={{ background: "radial-gradient(ellipse at 80% 40%, hsl(0 100% 50% / 0.04), transparent 60%)" }}
         aria-hidden="true"
       />
 
@@ -265,7 +265,7 @@ export const GrowthImpact = () => {
               {/* Decorative line */}
               <motion.div
                 className="absolute -bottom-4 left-0 h-px"
-                style={{ background: "linear-gradient(90deg, hsl(222 100% 65% / 0.3), transparent)" }}
+                style={{ background: "linear-gradient(90deg, hsl(0 100% 50% / 0.3), transparent)" }}
                 initial={{ width: 0 }}
                 animate={isInView ? { width: "80%" } : { width: 0 }}
                 transition={{ duration: 0.8, delay: 0.5 + i * 0.1 }}

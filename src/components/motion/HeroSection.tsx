@@ -28,7 +28,7 @@ export const HeroSection = () => {
       <div
         className="absolute top-0 left-0 right-0 h-[70%] pointer-events-none"
         style={{
-          background: "radial-gradient(ellipse 80% 60% at 50% 0%, hsl(222 100% 65% / 0.1), transparent)",
+          background: "radial-gradient(ellipse 80% 60% at 50% 0%, hsl(0 100% 50% / 0.1), transparent)",
         }}
         aria-hidden="true"
       />
@@ -39,7 +39,7 @@ export const HeroSection = () => {
         style={{
           top: "10%",
           right: "5%",
-          background: "radial-gradient(circle, hsl(222 100% 65% / 0.06), transparent 70%)",
+          background: "radial-gradient(circle, hsl(0 100% 50% / 0.06), transparent 70%)",
         }}
         animate={{
           x: [0, 20, -10, 0],
@@ -53,7 +53,7 @@ export const HeroSection = () => {
         style={{
           bottom: "20%",
           left: "10%",
-          background: "radial-gradient(circle, hsl(163 56% 28% / 0.04), transparent 70%)",
+          background: "radial-gradient(circle, hsl(20 100% 50% / 0.04), transparent 70%)",
         }}
         animate={{
           x: [0, -15, 10, 0],
@@ -72,7 +72,7 @@ export const HeroSection = () => {
               <motion.div
                 className="w-full h-full"
                 style={{
-                  background: "linear-gradient(to bottom, transparent, hsl(222 100% 65% / 0.3), transparent)",
+                  background: "linear-gradient(to bottom, transparent, hsl(0 100% 50% / 0.3), transparent)",
                 }}
                 initial={{ y: "-100%" }}
                 animate={{ y: "0%" }}
@@ -183,7 +183,7 @@ export const HeroSection = () => {
             <div
               className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-72 h-72 rounded-full pointer-events-none"
               style={{
-                background: "radial-gradient(circle, hsl(222 100% 65% / 0.12), transparent 70%)",
+                background: "radial-gradient(circle, hsl(0 100% 50% / 0.12), transparent 70%)",
               }}
             />
 

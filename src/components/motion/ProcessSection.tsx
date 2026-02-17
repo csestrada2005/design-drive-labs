@@ -59,7 +59,7 @@ export const ProcessSection = () => {
         <div
           className="absolute top-0 right-0 w-1/3 h-full"
           style={{
-            background: "radial-gradient(ellipse at 100% 50%, hsl(222 100% 65% / 0.03), transparent 60%)",
+            background: "radial-gradient(ellipse at 100% 50%, hsl(0 100% 50% / 0.03), transparent 60%)",
           }}
         />
       </div>
@@ -98,8 +98,8 @@ export const ProcessSection = () => {
               className="absolute top-0 left-0 w-full"
               style={{
                 height: lineHeight,
-                background: "linear-gradient(to bottom, hsl(222 100% 65%), hsl(222 100% 65% / 0.2))",
-                boxShadow: "0 0 12px hsl(222 100% 65% / 0.3)",
+                background: "linear-gradient(to bottom, hsl(0 100% 50%), hsl(0 100% 50% / 0.2))",
+                boxShadow: "0 0 12px hsl(0 100% 50% / 0.3)",
               }}
             />
           </div>
@@ -124,14 +124,14 @@ export const ProcessSection = () => {
                   }`}
                     style={{
                       background: isExpanded
-                        ? "radial-gradient(circle, hsl(222 100% 65% / 0.3), hsl(222 100% 65% / 0.05))"
-                        : "radial-gradient(circle, hsl(222 100% 65% / 0.1), transparent)",
+                        ? "radial-gradient(circle, hsl(0 100% 50% / 0.3), hsl(0 100% 50% / 0.05))"
+                        : "radial-gradient(circle, hsl(0 100% 50% / 0.1), transparent)",
                       boxShadow: isExpanded
-                        ? "0 0 20px hsl(222 100% 65% / 0.3), 0 0 40px hsl(222 100% 65% / 0.1)"
+                        ? "0 0 20px hsl(0 100% 50% / 0.3), 0 0 40px hsl(0 100% 50% / 0.1)"
                         : "none",
                       border: isExpanded
-                        ? "1px solid hsl(222 100% 65% / 0.5)"
-                        : "1px solid hsl(222 30% 18% / 0.5)",
+                        ? "1px solid hsl(0 100% 50% / 0.5)"
+                        : "1px solid hsl(0 10% 15% / 0.5)",
                     }}
                   >
                     <span className={`font-display text-[10px] transition-colors ${
@@ -163,7 +163,7 @@ export const ProcessSection = () => {
                     </div>
 
                     {/* Separator */}
-                    <div className="h-px mt-3 mb-3" style={{ background: "linear-gradient(90deg, hsl(222 100% 65% / 0.1), transparent 60%)" }} />
+                    <div className="h-px mt-3 mb-3" style={{ background: "linear-gradient(90deg, hsl(0 100% 50% / 0.1), transparent 60%)" }} />
 
                     <AnimatePresence>
                       {isExpanded && (

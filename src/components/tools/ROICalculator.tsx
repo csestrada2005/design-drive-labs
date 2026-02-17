@@ -45,11 +45,9 @@ export const ROICalculator = () => {
     if (started.current) return;
     started.current = true;
 
-    // Start counting up after a short delay
     const t1 = setTimeout(() => setCurrentRevenue(144000), 300);
     const t2 = setTimeout(() => setProjectedRevenue(248400), 600);
 
-    // Continuously increment to simulate growth
     const interval = setInterval(() => {
       setCurrentRevenue((prev) => prev + Math.floor(Math.random() * 800 + 200));
       setProjectedRevenue((prev) => prev + Math.floor(Math.random() * 1400 + 600));
@@ -67,21 +65,19 @@ export const ROICalculator = () => {
       className="relative p-8 rounded-2xl overflow-hidden"
       style={{
         background:
-          "linear-gradient(135deg, hsl(222 40% 10% / 0.6), hsl(222 35% 7% / 0.4))",
-        border: "1px solid hsl(222 100% 65% / 0.08)",
+          "linear-gradient(135deg, hsl(0 10% 7% / 0.6), hsl(0 10% 4% / 0.4))",
+        border: "1px solid hsl(0 100% 50% / 0.08)",
       }}
     >
-      {/* Grid bg */}
       <div
         className="absolute inset-0 opacity-[0.02]"
         style={{
-          backgroundImage: `linear-gradient(hsl(222 100% 65% / 0.4) 1px, transparent 1px), linear-gradient(90deg, hsl(222 100% 65% / 0.4) 1px, transparent 1px)`,
+          backgroundImage: `linear-gradient(hsl(0 100% 50% / 0.4) 1px, transparent 1px), linear-gradient(90deg, hsl(0 100% 50% / 0.4) 1px, transparent 1px)`,
           backgroundSize: "20px 20px",
         }}
       />
 
       <div className="relative grid sm:grid-cols-2 gap-8">
-        {/* Current Revenue */}
         <div>
           <p className="text-[10px] font-mono tracking-[0.15em] uppercase text-muted-foreground/50 mb-2">
             Current Revenue
@@ -94,15 +90,13 @@ export const ROICalculator = () => {
             className="mt-3 h-1 rounded-full"
             style={{
               background:
-                "linear-gradient(90deg, hsl(222 100% 65% / 0.3), hsl(222 100% 65% / 0.08))",
+                "linear-gradient(90deg, hsl(0 100% 50% / 0.3), hsl(0 100% 50% / 0.08))",
             }}
             animate={{ scaleX: [0.6, 1, 0.6] }}
             transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-            style-origin="left"
           />
         </div>
 
-        {/* Projected Revenue */}
         <div>
           <p className="text-[10px] font-mono tracking-[0.15em] uppercase text-muted-foreground/50 mb-2">
             Projected Value With Us
@@ -115,7 +109,7 @@ export const ROICalculator = () => {
             className="mt-3 h-1 rounded-full"
             style={{
               background:
-                "linear-gradient(90deg, hsl(163 56% 50% / 0.4), hsl(163 56% 50% / 0.08))",
+                "linear-gradient(90deg, hsl(20 100% 55% / 0.4), hsl(20 100% 55% / 0.08))",
             }}
             animate={{ scaleX: [0.6, 1, 0.6] }}
             transition={{
@@ -128,7 +122,6 @@ export const ROICalculator = () => {
         </div>
       </div>
 
-      {/* Difference indicator */}
       <motion.div
         className="relative mt-6 pt-4"
         initial={{ opacity: 0 }}
@@ -139,23 +132,23 @@ export const ROICalculator = () => {
           className="h-px mb-4"
           style={{
             background:
-              "linear-gradient(90deg, hsl(163 56% 50% / 0.3), transparent)",
+              "linear-gradient(90deg, hsl(20 100% 55% / 0.3), transparent)",
           }}
         />
         <div className="flex items-center gap-3">
           <motion.div
             className="w-2 h-2 rounded-full"
-            style={{ background: "hsl(163 56% 50%)" }}
+            style={{ background: "hsl(20 100% 55%)" }}
             animate={{
               boxShadow: [
-                "0 0 0 hsl(163 56% 50% / 0)",
-                "0 0 14px hsl(163 56% 50% / 0.5)",
-                "0 0 0 hsl(163 56% 50% / 0)",
+                "0 0 0 hsl(20 100% 55% / 0)",
+                "0 0 14px hsl(20 100% 55% / 0.5)",
+                "0 0 0 hsl(20 100% 55% / 0)",
               ],
             }}
             transition={{ duration: 2, repeat: Infinity }}
           />
-          <p className="text-[10px] font-mono tracking-[0.15em] uppercase text-[hsl(163_56%_50%)]/70">
+          <p className="text-[10px] font-mono tracking-[0.15em] uppercase text-[hsl(20_100%_55%)]/70">
             Revenue grows faster with strategic design & technology
           </p>
         </div>

@@ -27,7 +27,6 @@ export const CustomCursor = ({ containerRef }: CustomCursorProps) => {
       ringX.set(e.clientX);
       ringY.set(e.clientY);
 
-      // Check if hovering over interactive element
       const target = e.target as HTMLElement;
       const interactive = target.closest("a, button, [role='button'], input, textarea, [data-cursor='expand']");
       if (interactive) {
@@ -61,7 +60,6 @@ export const CustomCursor = ({ containerRef }: CustomCursorProps) => {
 
   return (
     <div className="pointer-events-none fixed inset-0 z-[9999] hidden md:block">
-      {/* Inner dot - changes to accent color on hover */}
       <motion.div
         className="fixed top-0 left-0 w-2 h-2 rounded-full"
         style={{
@@ -69,11 +67,10 @@ export const CustomCursor = ({ containerRef }: CustomCursorProps) => {
           y: dotY,
           translateX: "-50%",
           translateY: "-50%",
-          backgroundColor: isHovering ? "hsl(222 100% 65%)" : "hsl(var(--foreground))",
+          backgroundColor: isHovering ? "hsl(0 100% 50%)" : "hsl(var(--foreground))",
           scale: isHovering ? 0 : 1,
         }}
       />
-      {/* Outer ring - expands on interactive elements */}
       <motion.div
         className="fixed top-0 left-0 w-8 h-8 rounded-full"
         style={{
@@ -83,9 +80,9 @@ export const CustomCursor = ({ containerRef }: CustomCursorProps) => {
           translateY: "-50%",
           scale: ringScale,
           border: isHovering
-            ? "1.5px solid hsl(222 100% 65% / 0.6)"
+            ? "1.5px solid hsl(0 100% 50% / 0.6)"
             : "1px solid hsl(var(--foreground) / 0.3)",
-          backgroundColor: isHovering ? "hsl(222 100% 65% / 0.08)" : "transparent",
+          backgroundColor: isHovering ? "hsl(0 100% 50% / 0.08)" : "transparent",
           mixBlendMode: isHovering ? "normal" : "difference",
         }}
       />

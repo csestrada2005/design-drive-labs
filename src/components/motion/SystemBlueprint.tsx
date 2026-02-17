@@ -12,10 +12,10 @@ interface Node {
 }
 
 const nodes: Node[] = [
-  { id: "storefront", label: "Online Store", sublabel: "", x: 50, y: 8, color: "hsl(190 90% 55%)", glow: "hsl(190 90% 55% / 0.3)" },
-  { id: "ai", label: "AI Engine", sublabel: "", x: 88, y: 50, color: "hsl(270 80% 65%)", glow: "hsl(270 80% 65% / 0.3)" },
-  { id: "db", label: "Database", sublabel: "", x: 50, y: 92, color: "hsl(163 56% 50%)", glow: "hsl(163 56% 50% / 0.3)" },
-  { id: "auto", label: "Messaging", sublabel: "", x: 12, y: 50, color: "hsl(222 100% 65%)", glow: "hsl(222 100% 65% / 0.3)" },
+  { id: "storefront", label: "Online Store", sublabel: "", x: 50, y: 8, color: "hsl(350 100% 60%)", glow: "hsl(350 100% 60% / 0.3)" },
+  { id: "ai", label: "AI Engine", sublabel: "", x: 88, y: 50, color: "hsl(15 100% 55%)", glow: "hsl(15 100% 55% / 0.3)" },
+  { id: "db", label: "Database", sublabel: "", x: 50, y: 92, color: "hsl(20 100% 55%)", glow: "hsl(20 100% 55% / 0.3)" },
+  { id: "auto", label: "Messaging", sublabel: "", x: 12, y: 50, color: "hsl(0 100% 50%)", glow: "hsl(0 100% 50% / 0.3)" },
 ];
 
 const connections = [
@@ -70,7 +70,6 @@ export const SystemBlueprint = ({ compact = false }: Props) => {
       const w = rect.width;
       const h = rect.height;
 
-      // Draw connections
       connections.forEach(([from, to]) => {
         const fx = (nodes[from].x / 100) * w;
         const fy = (nodes[from].y / 100) * h;
@@ -80,14 +79,13 @@ export const SystemBlueprint = ({ compact = false }: Props) => {
         ctx.beginPath();
         ctx.moveTo(fx, fy);
         ctx.lineTo(tx, ty);
-        ctx.strokeStyle = "hsla(222, 60%, 50%, 0.08)";
+        ctx.strokeStyle = "hsla(0, 60%, 40%, 0.08)";
         ctx.lineWidth = 1;
         ctx.setLineDash([3, 6]);
         ctx.stroke();
         ctx.setLineDash([]);
       });
 
-      // Update & draw particles
       particlesRef.current.forEach((p) => {
         p.progress += p.speed;
         if (p.progress > 1) p.progress = 0;
@@ -126,7 +124,6 @@ export const SystemBlueprint = ({ compact = false }: Props) => {
     <div className={`relative ${sz}`}>
       <canvas ref={canvasRef} className="absolute inset-0 w-full h-full" />
 
-      {/* Nodes */}
       {nodes.map((node, i) => (
         <motion.div
           key={node.id}
@@ -140,7 +137,6 @@ export const SystemBlueprint = ({ compact = false }: Props) => {
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.15 * i, type: "spring", stiffness: 200, damping: 20 }}
         >
-          {/* Pulse ring */}
           <motion.div
             className="absolute rounded-full pointer-events-none"
             style={{
@@ -153,7 +149,6 @@ export const SystemBlueprint = ({ compact = false }: Props) => {
             transition={{ duration: 3, repeat: Infinity, delay: i * 0.7 }}
           />
 
-          {/* Core dot */}
           <div
             className="rounded-full relative z-10"
             style={{
@@ -164,7 +159,6 @@ export const SystemBlueprint = ({ compact = false }: Props) => {
             }}
           />
 
-          {/* Labels */}
           {!compact && (
             <div className="mt-2 text-center whitespace-nowrap">
               <p className="text-[10px] font-mono tracking-wider text-foreground/60">{node.label}</p>
@@ -174,12 +168,11 @@ export const SystemBlueprint = ({ compact = false }: Props) => {
         </motion.div>
       ))}
 
-      {/* Center status */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center pointer-events-none">
         <motion.div
           className="w-2 h-2 rounded-full mx-auto mb-1"
-          style={{ background: "hsl(163 56% 50%)" }}
-          animate={{ boxShadow: ["0 0 0px hsl(163 56% 50% / 0)", "0 0 14px hsl(163 56% 50% / 0.5)", "0 0 0px hsl(163 56% 50% / 0)"] }}
+          style={{ background: "hsl(20 100% 55%)" }}
+          animate={{ boxShadow: ["0 0 0px hsl(20 100% 55% / 0)", "0 0 14px hsl(20 100% 55% / 0.5)", "0 0 0px hsl(20 100% 55% / 0)"] }}
           transition={{ duration: 2.5, repeat: Infinity }}
         />
         {!compact && (

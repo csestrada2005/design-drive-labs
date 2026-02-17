@@ -47,8 +47,8 @@ const BinaryRain = () => {
           const y = col.y + ri * 12;
           const opacity = Math.max(0, 1 - ri / col.chars.length) * (hovered ? 0.7 : 0.3);
           ctx.fillStyle = ri === 0
-            ? `hsla(270, 80%, 70%, ${opacity})`
-            : `hsla(270, 60%, 55%, ${opacity * 0.6})`;
+            ? `hsla(15, 100%, 55%, ${opacity})`
+            : `hsla(15, 80%, 45%, ${opacity * 0.6})`;
           ctx.fillText(ch, x, y);
         });
       });
@@ -67,14 +67,13 @@ const BinaryRain = () => {
       onMouseLeave={() => setHovered(false)}
     >
       <canvas ref={canvasRef} className="absolute inset-0 w-full h-full" />
-      {/* Document icon fading into binary */}
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
         <motion.div
           className="flex items-center gap-3"
           animate={{ opacity: hovered ? 0.15 : 0.4 }}
           transition={{ duration: 0.4 }}
         >
-          <svg viewBox="0 0 40 48" className="w-8 h-10" style={{ color: "hsl(270 80% 65%)" }}>
+          <svg viewBox="0 0 40 48" className="w-8 h-10" style={{ color: "hsl(15 100% 55%)" }}>
             <path d="M6 2h20l8 10v34H6V2z" fill="none" stroke="currentColor" strokeWidth="1" />
             <path d="M26 2v10h8" fill="none" stroke="currentColor" strokeWidth="0.8" />
             {[16, 22, 28, 34].map(y => (
@@ -112,8 +111,8 @@ const systemCards = [
     title: "Autonomous Logistics CRM",
     subtitle: "",
     stat: "Automated 90% of driver dispatching.",
-    accentColor: "hsl(190 90% 55%)",
-    accentGlow: "hsl(190 90% 55% / 0.15)",
+    accentColor: "hsl(350 100% 60%)",
+    accentGlow: "hsl(350 100% 60% / 0.15)",
     heroType: "blueprint" as const,
   },
   {
@@ -122,8 +121,8 @@ const systemCards = [
     title: "SaaS Powered with AI",
     subtitle: "",
     stat: "Smart automation that scales with your business growth.",
-    accentColor: "hsl(270 80% 65%)",
-    accentGlow: "hsl(270 80% 65% / 0.15)",
+    accentColor: "hsl(15 100% 55%)",
+    accentGlow: "hsl(15 100% 55% / 0.15)",
     heroType: "binary" as const,
   },
   {
@@ -132,8 +131,8 @@ const systemCards = [
     title: "Headless Commerce Core",
     subtitle: "",
     stat: "+15% average order value through smart product recommendations.",
-    accentColor: "hsl(163 56% 50%)",
-    accentGlow: "hsl(163 56% 50% / 0.15)",
+    accentColor: "hsl(20 100% 55%)",
+    accentGlow: "hsl(20 100% 55% / 0.15)",
     heroType: "stats" as const,
   },
 ];
@@ -148,7 +147,7 @@ export const FeaturedWork = () => {
       {/* Background radial */}
       <div
         className="absolute inset-0 pointer-events-none"
-        style={{ background: "radial-gradient(ellipse 70% 50% at 50% 30%, hsl(222 100% 65% / 0.03), transparent)" }}
+        style={{ background: "radial-gradient(ellipse 70% 50% at 50% 30%, hsl(0 100% 50% / 0.03), transparent)" }}
         aria-hidden="true"
       />
 
@@ -194,14 +193,14 @@ export const FeaturedWork = () => {
                   className="relative aspect-[4/3] overflow-hidden mb-5"
                   style={{
                     borderRadius: "1.25rem",
-                    background: "linear-gradient(135deg, hsl(222 40% 10%), hsl(222 35% 7%))",
+                    background: "linear-gradient(135deg, hsl(0 10% 7%), hsl(0 10% 4%))",
                   }}
                 >
                   {/* Subtle grid */}
                   <div
                     className="absolute inset-0 opacity-[0.03]"
                     style={{
-                      backgroundImage: `linear-gradient(hsl(222 100% 65% / 0.4) 1px, transparent 1px), linear-gradient(90deg, hsl(222 100% 65% / 0.4) 1px, transparent 1px)`,
+                      backgroundImage: `linear-gradient(hsl(0 100% 50% / 0.4) 1px, transparent 1px), linear-gradient(90deg, hsl(0 100% 50% / 0.4) 1px, transparent 1px)`,
                       backgroundSize: "16px 16px",
                     }}
                   />

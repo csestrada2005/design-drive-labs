@@ -7,7 +7,7 @@ export const EasterEgg = () => {
   const intervalRef = useRef<number | null>(null);
   const startTimeRef = useRef(0);
 
-  const holdDuration = 2000; // 2s hold
+  const holdDuration = 2000;
 
   const startHold = useCallback(() => {
     if (revealed) return;
@@ -30,7 +30,6 @@ export const EasterEgg = () => {
 
   return (
     <div className="relative flex flex-col items-center gap-4">
-      {/* Hold button */}
       <motion.button
         onMouseDown={startHold}
         onMouseUp={endHold}
@@ -39,31 +38,29 @@ export const EasterEgg = () => {
         onTouchEnd={endHold}
         className="relative w-16 h-16 rounded-full cursor-pointer select-none touch-none"
         style={{
-          background: "radial-gradient(circle, hsl(222 100% 65% / 0.12), transparent)",
-          border: "1px solid hsl(222 100% 65% / 0.2)",
+          background: "radial-gradient(circle, hsl(0 100% 50% / 0.12), transparent)",
+          border: "1px solid hsl(0 100% 50% / 0.2)",
         }}
         whileTap={{ scale: 0.95 }}
         animate={{
           boxShadow: revealed
-            ? "0 0 40px hsl(222 100% 65% / 0.4)"
+            ? "0 0 40px hsl(0 100% 50% / 0.4)"
             : progress > 0
-              ? `0 0 ${progress * 30}px hsl(222 100% 65% / ${progress * 0.3})`
+              ? `0 0 ${progress * 30}px hsl(0 100% 50% / ${progress * 0.3})`
               : "none",
         }}
       >
-        {/* Progress ring */}
         <svg className="absolute inset-0 w-full h-full -rotate-90" viewBox="0 0 64 64">
-          <circle cx="32" cy="32" r="29" fill="none" stroke="hsl(222 30% 18% / 0.5)" strokeWidth="2" />
+          <circle cx="32" cy="32" r="29" fill="none" stroke="hsl(0 10% 15% / 0.5)" strokeWidth="2" />
           <motion.circle
             cx="32" cy="32" r="29" fill="none"
-            stroke="hsl(222 100% 65%)"
+            stroke="hsl(0 100% 50%)"
             strokeWidth="2"
             strokeLinecap="round"
             strokeDasharray={`${29 * 2 * Math.PI}`}
             strokeDashoffset={29 * 2 * Math.PI * (1 - progress)}
           />
         </svg>
-        {/* Inner icon */}
         <span className="absolute inset-0 flex items-center justify-center text-primary/60 text-lg font-display">
           {revealed ? "!" : "+"}
         </span>
@@ -73,7 +70,6 @@ export const EasterEgg = () => {
         {revealed ? "" : "Press & Hold"}
       </span>
 
-      {/* Revealed content */}
       <AnimatePresence>
         {revealed && (
           <motion.div

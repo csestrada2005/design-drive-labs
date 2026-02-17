@@ -39,7 +39,6 @@ export const GeometryCanvas = ({ className = "", mouseX = 0, mouseY = 0 }: Geome
     const shapes: Shape[] = [];
     const types: Shape["type"][] = ["hex", "square", "circle", "triangle", "diamond", "cross"];
 
-    // Main cluster shapes
     for (let i = 0; i < 18; i++) {
       const layer = i < 6 ? 0.3 : i < 12 ? 0.6 : 0.9;
       shapes.push({
@@ -59,7 +58,6 @@ export const GeometryCanvas = ({ className = "", mouseX = 0, mouseY = 0 }: Geome
     }
     shapesRef.current = shapes;
 
-    // Grid dots
     const dots: GridDot[] = [];
     for (let x = 40; x < w; x += 40) {
       for (let y = 40; y < h; y += 40) {
@@ -69,6 +67,7 @@ export const GeometryCanvas = ({ className = "", mouseX = 0, mouseY = 0 }: Geome
     dotsRef.current = dots;
   }, []);
 
+  /* ── Scroll handler ── */
   useEffect(() => {
     const handleScroll = () => { scrollRef.current = window.scrollY; };
     window.addEventListener("scroll", handleScroll, { passive: true });
@@ -99,14 +98,12 @@ export const GeometryCanvas = ({ className = "", mouseX = 0, mouseY = 0 }: Geome
       const parallaxX = mx * shape.z * 0.03;
       const parallaxY = (my * shape.z * 0.03) + (scroll * shape.z * 0.04);
 
-      // Orbital motion
       const orbitX = Math.cos(shape.orbitAngle) * shape.orbitRadius;
       const orbitY = Math.sin(shape.orbitAngle) * shape.orbitRadius;
 
       const x = shape.x + parallaxX + orbitX;
       const y = shape.y - parallaxY + orbitY;
 
-      // Pulsing opacity
       const pulse = Math.sin(time * 0.002 + shape.pulsePhase) * 0.03;
       const opacity = Math.max(0.02, shape.opacity + pulse);
 
@@ -117,13 +114,12 @@ export const GeometryCanvas = ({ className = "", mouseX = 0, mouseY = 0 }: Geome
 
       const s = shape.size;
 
-      // Glow effect for larger shapes
       if (s > 35) {
-        ctx.shadowColor = "rgba(79, 124, 255, 0.15)";
+        ctx.shadowColor = "rgba(255, 50, 30, 0.15)";
         ctx.shadowBlur = 20;
       }
 
-      ctx.strokeStyle = "rgba(79, 124, 255, 0.8)";
+      ctx.strokeStyle = "rgba(255, 50, 30, 0.8)";
       ctx.lineWidth = 0.8;
 
       switch (shape.type) {
@@ -137,7 +133,6 @@ export const GeometryCanvas = ({ className = "", mouseX = 0, mouseY = 0 }: Geome
           }
           ctx.closePath();
           ctx.stroke();
-          // Inner hex
           ctx.globalAlpha = opacity * 0.4;
           ctx.beginPath();
           for (let i = 0; i < 6; i++) {
@@ -154,7 +149,6 @@ export const GeometryCanvas = ({ className = "", mouseX = 0, mouseY = 0 }: Geome
 
         case "square":
           ctx.strokeRect(-s / 2, -s / 2, s, s);
-          // Cross inside
           ctx.globalAlpha = opacity * 0.3;
           ctx.beginPath();
           ctx.moveTo(-s / 4, 0); ctx.lineTo(s / 4, 0);
@@ -166,17 +160,15 @@ export const GeometryCanvas = ({ className = "", mouseX = 0, mouseY = 0 }: Geome
           ctx.beginPath();
           ctx.arc(0, 0, s / 2, 0, Math.PI * 2);
           ctx.stroke();
-          // Dotted inner ring
           ctx.setLineDash([2, 4]);
           ctx.globalAlpha = opacity * 0.5;
           ctx.beginPath();
           ctx.arc(0, 0, s / 3, 0, Math.PI * 2);
           ctx.stroke();
-          // Center dot
           ctx.setLineDash([]);
           ctx.beginPath();
           ctx.arc(0, 0, 2, 0, Math.PI * 2);
-          ctx.fillStyle = "rgba(79, 124, 255, 0.4)";
+          ctx.fillStyle = "rgba(255, 50, 30, 0.4)";
           ctx.fill();
           break;
 
@@ -223,20 +215,18 @@ export const GeometryCanvas = ({ className = "", mouseX = 0, mouseY = 0 }: Geome
       const rect = canvas.getBoundingClientRect();
       ctx.clearRect(0, 0, rect.width, rect.height);
 
-      // Draw grid dots (react to mouse)
       dotsRef.current.forEach((dot) => {
         const dx = (mouseX * 0.5) - (dot.x - rect.width / 2);
         const dy = (mouseY * 0.5) - (dot.y - rect.height / 2);
         const dist = Math.sqrt(dx * dx + dy * dy);
         const proximity = Math.max(0, 1 - dist / 200);
 
-        ctx.fillStyle = `rgba(79, 124, 255, ${dot.baseOpacity + proximity * 0.15})`;
+        ctx.fillStyle = `rgba(255, 50, 30, ${dot.baseOpacity + proximity * 0.15})`;
         ctx.beginPath();
         ctx.arc(dot.x, dot.y, 1 + proximity * 1.5, 0, Math.PI * 2);
         ctx.fill();
       });
 
-      // Draw fine grid lines
       ctx.strokeStyle = "rgba(139, 147, 161, 0.03)";
       ctx.lineWidth = 0.5;
       for (let x = 0; x < rect.width; x += 80) {
@@ -252,9 +242,8 @@ export const GeometryCanvas = ({ className = "", mouseX = 0, mouseY = 0 }: Geome
         ctx.stroke();
       }
 
-      // Draw connecting lines between nearby shapes
       const shapes = shapesRef.current;
-      ctx.strokeStyle = "rgba(79, 124, 255, 0.04)";
+      ctx.strokeStyle = "rgba(255, 50, 30, 0.04)";
       ctx.lineWidth = 0.5;
       for (let i = 0; i < shapes.length; i++) {
         for (let j = i + 1; j < shapes.length; j++) {
@@ -272,7 +261,6 @@ export const GeometryCanvas = ({ className = "", mouseX = 0, mouseY = 0 }: Geome
       }
       ctx.globalAlpha = 1;
 
-      // Draw shapes
       shapes.forEach((shape) => {
         shape.rotation += shape.rotationSpeed;
         shape.orbitAngle += shape.orbitSpeed;

@@ -6,7 +6,6 @@ export const LoadingScreen = ({ onComplete }: { onComplete: () => void }) => {
   const [isExiting, setIsExiting] = useState(false);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
-  // Noise grain canvas
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -56,7 +55,7 @@ export const LoadingScreen = ({ onComplete }: { onComplete: () => void }) => {
         <motion.div
           className="fixed inset-0 z-[200] flex items-center justify-center overflow-hidden"
           style={{
-            background: "linear-gradient(135deg, hsl(222 100% 65%) 0%, hsl(222 80% 50%) 40%, hsl(222 47% 9%) 100%)",
+            background: "linear-gradient(135deg, hsl(0 100% 50%) 0%, hsl(0 80% 35%) 40%, hsl(0 10% 5%) 100%)",
           }}
           exit={{
             clipPath: "polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%)",
@@ -157,8 +156,8 @@ export const LoadingScreen = ({ onComplete }: { onComplete: () => void }) => {
               transition={{ duration: 0.5 }}
               className="font-display text-[clamp(7rem,22vw,16rem)] leading-none tabular-nums"
               style={{
-                color: "hsl(222 47% 9%)",
-                textShadow: "0 0 80px rgba(79, 124, 255, 0.3)",
+                color: "hsl(0 10% 5%)",
+                textShadow: "0 0 80px rgba(255, 50, 30, 0.3)",
               }}
             >
               {String(count).padStart(2, "0")}

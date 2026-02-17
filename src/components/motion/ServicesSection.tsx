@@ -13,8 +13,8 @@ const tiers = [
     tierKey: "storefront",
     features: ["Premium Online Store", "Eye-Catching Animations", "Built to Rank on Google"],
     bestFor: "D2C Brands needing a premium face.",
-    accentColor: "hsl(190 90% 55%)",
-    accentGlow: "hsl(190 90% 55% / 0.12)",
+    accentColor: "hsl(350 100% 60%)",
+    accentGlow: "hsl(350 100% 60% / 0.12)",
     popular: false,
   },
   {
@@ -30,8 +30,8 @@ const tiers = [
       "Internal Dashboards & Portals",
     ],
     bestFor: "Operation-heavy businesses needing efficiency.",
-    accentColor: "hsl(222 100% 65%)",
-    accentGlow: "hsl(222 100% 65% / 0.12)",
+    accentColor: "hsl(0 100% 50%)",
+    accentGlow: "hsl(0 100% 50% / 0.12)",
     popular: true,
   },
   {
@@ -47,8 +47,8 @@ const tiers = [
       "Full Product Development",
     ],
     bestFor: "Founders building the next big platform.",
-    accentColor: "hsl(270 80% 65%)",
-    accentGlow: "hsl(270 80% 65% / 0.12)",
+    accentColor: "hsl(15 100% 55%)",
+    accentGlow: "hsl(15 100% 55% / 0.12)",
     popular: false,
   },
 ];
@@ -69,13 +69,11 @@ export const ServicesSection = () => {
 
   return (
     <section ref={ref} className="py-24 sm:py-32 relative overflow-hidden" id="services">
-      {/* Scanning bar */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
         <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent scan-bar" />
       </div>
 
       <div className="container">
-        {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
@@ -99,7 +97,6 @@ export const ServicesSection = () => {
           </p>
         </motion.div>
 
-        {/* Tier Cards */}
         <div className="grid md:grid-cols-3 gap-6 lg:gap-8">
           {tiers.map((tier, i) => {
             const Icon = tier.icon;
@@ -115,13 +112,12 @@ export const ServicesSection = () => {
                 onMouseLeave={() => setHoveredIdx(null)}
                 className="relative group"
               >
-                {/* Most Popular badge */}
                 {tier.popular && (
                   <motion.div
                     className="absolute -top-3 left-1/2 -translate-x-1/2 z-20 px-4 py-1 rounded-full text-[10px] font-mono tracking-[0.15em] uppercase font-medium"
                     style={{
-                      background: `linear-gradient(90deg, ${tier.accentColor}, hsl(163 56% 50%))`,
-                      color: "hsl(222 40% 6%)",
+                      background: `linear-gradient(90deg, ${tier.accentColor}, hsl(20 100% 55%))`,
+                      color: "hsl(0 10% 4%)",
                       boxShadow: `0 0 20px ${tier.accentGlow}`,
                     }}
                     animate={{ boxShadow: [`0 0 20px ${tier.accentGlow}`, `0 0 30px ${tier.accentColor}40`, `0 0 20px ${tier.accentGlow}`] }}
@@ -135,15 +131,14 @@ export const ServicesSection = () => {
                   className="relative overflow-hidden border-0 h-full transition-all duration-500"
                   style={{
                     background: isHovered
-                      ? `linear-gradient(135deg, hsl(222 40% 11%), hsl(222 35% 8%))`
-                      : `linear-gradient(135deg, hsl(222 40% 9%), hsl(222 35% 6%))`,
+                      ? `linear-gradient(135deg, hsl(0 10% 8%), hsl(0 10% 5%))`
+                      : `linear-gradient(135deg, hsl(0 10% 6%), hsl(0 10% 4%))`,
                     borderRadius: "1.25rem",
                     boxShadow: isHovered
                       ? `0 0 40px ${tier.accentGlow}, inset 0 1px 0 hsl(0 0% 100% / 0.03)`
                       : "inset 0 1px 0 hsl(0 0% 100% / 0.02)",
                   }}
                 >
-                  {/* Top accent line */}
                   <motion.div
                     className="absolute top-0 left-0 right-0 h-px"
                     style={{
@@ -151,7 +146,6 @@ export const ServicesSection = () => {
                     }}
                   />
 
-                  {/* Grid pattern */}
                   <div
                     className="absolute inset-0 opacity-[0.015]"
                     style={{
@@ -160,7 +154,6 @@ export const ServicesSection = () => {
                     }}
                   />
 
-                  {/* Hover glow */}
                   <motion.div
                     className="absolute inset-0 pointer-events-none"
                     animate={{ opacity: isHovered ? 1 : 0 }}
@@ -171,7 +164,6 @@ export const ServicesSection = () => {
                   />
 
                   <CardContent className="relative p-6 sm:p-8 flex flex-col h-full">
-                    {/* Tier number + icon */}
                     <div className="flex items-center justify-between mb-6">
                       <span
                         className="text-[10px] font-mono tracking-[0.25em] uppercase"
@@ -190,7 +182,6 @@ export const ServicesSection = () => {
                       </div>
                     </div>
 
-                    {/* Name */}
                     <h3 className="font-display text-lg sm:text-xl mb-1 group-hover:text-primary transition-colors duration-300">
                       {tier.name}
                     </h3>
@@ -201,7 +192,6 @@ export const ServicesSection = () => {
                       {tier.category}
                     </p>
 
-                    {/* Separator */}
                     <motion.div
                       className="h-px mb-5"
                       style={{
@@ -212,7 +202,6 @@ export const ServicesSection = () => {
                       transition={{ duration: 0.5 }}
                     />
 
-                    {/* Features */}
                     <ul className="space-y-3 mb-6 flex-1">
                       {tier.features.map((feature, fi) => (
                         <motion.li
@@ -231,7 +220,6 @@ export const ServicesSection = () => {
                       ))}
                     </ul>
 
-                    {/* Best for */}
                     <div
                       className="pt-4 mt-auto"
                       style={{ borderTop: `1px solid ${tier.accentColor}10` }}
@@ -244,7 +232,6 @@ export const ServicesSection = () => {
                       </p>
                     </div>
 
-                    {/* CTA — Prompt a demo */}
                     <button
                       onClick={openPanel}
                       className="inline-flex items-center gap-2 text-[10px] tracking-[0.2em] uppercase mt-5 transition-colors duration-300 group/link cursor-pointer bg-transparent border-0 p-0"
@@ -262,7 +249,6 @@ export const ServicesSection = () => {
           })}
         </div>
 
-        {/* CUATRE AI Panel — appears below the cards */}
         <AnimatePresence>
           {showPanel && (
             <motion.div
@@ -273,8 +259,8 @@ export const ServicesSection = () => {
               ref={panelRef}
               className="mt-8 rounded-2xl overflow-hidden border border-primary/10"
               style={{
-                background: "linear-gradient(135deg, hsl(222 40% 9%), hsl(222 35% 6%))",
-                boxShadow: "0 0 60px hsl(190 90% 55% / 0.08), inset 0 1px 0 hsl(0 0% 100% / 0.03)",
+                background: "linear-gradient(135deg, hsl(0 10% 6%), hsl(0 10% 4%))",
+                boxShadow: "0 0 60px hsl(350 100% 60% / 0.08), inset 0 1px 0 hsl(0 0% 100% / 0.03)",
               }}
             >
               <TierDemoChat onClose={() => setShowPanel(false)} />

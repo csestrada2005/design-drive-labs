@@ -42,12 +42,11 @@ const FluidGradientCanvas = () => {
 
       ctx.clearRect(0, 0, w, h);
 
-      // Draw 4 morphing blobs
       const blobs = [
-        { cx: w * 0.3, cy: h * 0.4, r: 80, color: "rgba(79, 124, 255, 0.25)", phase: 0 },
-        { cx: w * 0.6, cy: h * 0.5, r: 60, color: "rgba(31, 111, 91, 0.2)", phase: 1.5 },
-        { cx: w * 0.5, cy: h * 0.6, r: 70, color: "rgba(79, 124, 255, 0.15)", phase: 3 },
-        { cx: w * 0.7, cy: h * 0.3, r: 50, color: "rgba(11, 18, 32, 0.4)", phase: 4.5 },
+        { cx: w * 0.3, cy: h * 0.4, r: 80, color: "rgba(255, 50, 30, 0.25)", phase: 0 },
+        { cx: w * 0.6, cy: h * 0.5, r: 60, color: "rgba(255, 120, 30, 0.2)", phase: 1.5 },
+        { cx: w * 0.5, cy: h * 0.6, r: 70, color: "rgba(255, 50, 30, 0.15)", phase: 3 },
+        { cx: w * 0.7, cy: h * 0.3, r: 50, color: "rgba(13, 13, 13, 0.4)", phase: 4.5 },
       ];
 
       blobs.forEach((blob) => {
@@ -65,7 +64,6 @@ const FluidGradientCanvas = () => {
         ctx.fill();
       });
 
-      // Apply a blur effect via compositing
       ctx.filter = "blur(40px)";
       ctx.drawImage(canvas, 0, 0);
       ctx.filter = "none";
@@ -98,7 +96,7 @@ export const DramaticFooter = () => {
     <footer
       ref={ref}
       className="relative overflow-hidden pt-20 pb-10"
-      style={{ background: "hsl(225 50% 3%)" }}
+      style={{ background: "hsl(0 10% 3%)" }}
     >
       {/* Noise */}
       <div

@@ -86,7 +86,7 @@ export const ContactSection = () => {
       {/* Ambient glow */}
       <div
         className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full pointer-events-none"
-        style={{ background: "radial-gradient(circle, hsl(222 100% 65% / 0.06), transparent 70%)" }}
+        style={{ background: "radial-gradient(circle, hsl(0 100% 50% / 0.06), transparent 70%)" }}
         aria-hidden="true"
       />
 
@@ -126,7 +126,7 @@ export const ContactSection = () => {
                   type="text" placeholder="Name *" value={form.name}
                   onChange={(e) => setForm({ ...form, name: e.target.value })}
                   className={inputClass("name")}
-                  whileFocus={{ borderColor: "hsl(222 100% 65% / 0.6)", boxShadow: "0 0 20px hsl(222 100% 65% / 0.1)" }}
+                  whileFocus={{ borderColor: "hsl(0 100% 50% / 0.6)", boxShadow: "0 0 20px hsl(0 100% 50% / 0.1)" }}
                 />
                 {errors.name && <p className="mt-1 text-xs text-destructive flex items-center gap-1"><AlertCircle className="w-3 h-3" /> {errors.name}</p>}
               </div>
@@ -138,7 +138,7 @@ export const ContactSection = () => {
                   type="email" placeholder="Email *" value={form.email}
                   onChange={(e) => setForm({ ...form, email: e.target.value })}
                   className={inputClass("email")}
-                  whileFocus={{ borderColor: "hsl(222 100% 65% / 0.6)", boxShadow: "0 0 20px hsl(222 100% 65% / 0.1)" }}
+                  whileFocus={{ borderColor: "hsl(0 100% 50% / 0.6)", boxShadow: "0 0 20px hsl(0 100% 50% / 0.1)" }}
                 />
                 {errors.email && <p className="mt-1 text-xs text-destructive flex items-center gap-1"><AlertCircle className="w-3 h-3" /> {errors.email}</p>}
               </div>
@@ -149,7 +149,7 @@ export const ContactSection = () => {
                 type="tel" placeholder="WhatsApp / Phone" value={form.phone}
                 onChange={(e) => setForm({ ...form, phone: e.target.value })}
                 className={inputClass("")}
-                whileFocus={{ borderColor: "hsl(222 100% 65% / 0.6)", boxShadow: "0 0 20px hsl(222 100% 65% / 0.1)" }}
+                whileFocus={{ borderColor: "hsl(0 100% 50% / 0.6)", boxShadow: "0 0 20px hsl(0 100% 50% / 0.1)" }}
               />
             )},
             { i: 3, el: (
@@ -170,7 +170,7 @@ export const ContactSection = () => {
                   placeholder="Project description *" rows={4} value={form.message}
                   onChange={(e) => setForm({ ...form, message: e.target.value })}
                   className={`${inputClass("message")} h-auto py-3 resize-none`}
-                  whileFocus={{ borderColor: "hsl(222 100% 65% / 0.6)", boxShadow: "0 0 20px hsl(222 100% 65% / 0.1)" }}
+                  whileFocus={{ borderColor: "hsl(0 100% 50% / 0.6)", boxShadow: "0 0 20px hsl(0 100% 50% / 0.1)" }}
                 />
                 {errors.message && <p className="mt-1 text-xs text-destructive flex items-center gap-1"><AlertCircle className="w-3 h-3" /> {errors.message}</p>}
               </div>
@@ -182,7 +182,7 @@ export const ContactSection = () => {
             type="submit"
             disabled={isSubmitting || isSuccess}
             className="btn-primary w-full h-12 text-sm disabled:opacity-70"
-            whileHover={{ scale: 1.02, boxShadow: "0 0 30px hsl(222 100% 65% / 0.25)" }}
+            whileHover={{ scale: 1.02, boxShadow: "0 0 30px hsl(0 100% 50% / 0.25)" }}
             whileTap={{ scale: 0.98 }}
           >
             {isSuccess ? (

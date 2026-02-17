@@ -21,7 +21,6 @@ export const ChatWidget = () => {
         aria-label="Open contact widget"
       >
         <MessageCircle className="w-6 h-6 text-primary-foreground" />
-        {/* Notification badge */}
         <span className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-amber-400 text-[10px] font-bold text-black flex items-center justify-center">
           1
         </span>
@@ -31,7 +30,6 @@ export const ChatWidget = () => {
       <AnimatePresence>
         {isOpen && (
           <>
-            {/* Backdrop */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -40,7 +38,6 @@ export const ChatWidget = () => {
               onClick={() => setIsOpen(false)}
             />
 
-            {/* Panel */}
             <motion.div
               initial={{ opacity: 0, y: 20, scale: 0.95 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -49,10 +46,9 @@ export const ChatWidget = () => {
               className="fixed bottom-20 sm:bottom-6 right-4 z-[80] w-[340px] max-w-[calc(100vw-2rem)] rounded-2xl overflow-hidden border border-border/50"
               style={{
                 background: "hsl(var(--card))",
-                boxShadow: "0 25px 60px -12px hsl(222 100% 10% / 0.6), 0 0 40px hsl(222 100% 65% / 0.1)",
+                boxShadow: "0 25px 60px -12px hsl(0 10% 5% / 0.6), 0 0 40px hsl(0 100% 50% / 0.1)",
               }}
             >
-              {/* Header */}
               <div className="flex items-center justify-between px-5 pt-5 pb-3">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center">
@@ -74,7 +70,6 @@ export const ChatWidget = () => {
                 </button>
               </div>
 
-              {/* Message */}
               <div className="px-5 py-3">
                 <div className="glass-card px-4 py-3 rounded-xl">
                   <p className="text-sm text-muted-foreground leading-relaxed">
@@ -83,7 +78,6 @@ export const ChatWidget = () => {
                 </div>
               </div>
 
-              {/* CTA Buttons */}
               <div className="px-5 pb-5 flex flex-col gap-2">
                 <a
                   href="#contact"
@@ -92,7 +86,7 @@ export const ChatWidget = () => {
                   style={{
                     background: "hsl(var(--primary))",
                     color: "hsl(var(--primary-foreground))",
-                    boxShadow: "0 4px 20px hsl(222 100% 65% / 0.3)",
+                    boxShadow: "0 4px 20px hsl(0 100% 50% / 0.3)",
                   }}
                 >
                   <Mail className="w-5 h-5" />

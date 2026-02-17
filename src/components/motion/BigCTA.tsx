@@ -27,11 +27,10 @@ const GradientMeshCanvas = () => {
 
       ctx.clearRect(0, 0, w, h);
 
-      // Gradient orbs
       const orbs = [
-        { x: w * 0.3 + Math.sin(time) * 50, y: h * 0.4 + Math.cos(time * 0.8) * 30, r: 120, color: "rgba(79, 124, 255, 0.12)" },
-        { x: w * 0.7 + Math.cos(time * 0.6) * 40, y: h * 0.6 + Math.sin(time * 0.9) * 25, r: 100, color: "rgba(31, 111, 91, 0.08)" },
-        { x: w * 0.5 + Math.sin(time * 1.2) * 60, y: h * 0.3 + Math.cos(time * 0.5) * 40, r: 90, color: "rgba(79, 124, 255, 0.06)" },
+        { x: w * 0.3 + Math.sin(time) * 50, y: h * 0.4 + Math.cos(time * 0.8) * 30, r: 120, color: "rgba(255, 50, 30, 0.12)" },
+        { x: w * 0.7 + Math.cos(time * 0.6) * 40, y: h * 0.6 + Math.sin(time * 0.9) * 25, r: 100, color: "rgba(255, 120, 30, 0.08)" },
+        { x: w * 0.5 + Math.sin(time * 1.2) * 60, y: h * 0.3 + Math.cos(time * 0.5) * 40, r: 90, color: "rgba(255, 50, 30, 0.06)" },
       ];
 
       orbs.forEach((orb) => {
@@ -70,7 +69,6 @@ export const BigCTA = () => {
     <section ref={ref} className="py-24 sm:py-32 relative overflow-hidden" id="cta">
       <GradientMeshCanvas />
 
-      {/* Noise */}
       <div
         className="absolute inset-0 opacity-[0.04] pointer-events-none"
         style={{
@@ -112,7 +110,6 @@ export const BigCTA = () => {
             <MarqueeButton text="WhatsApp" href="https://wa.me/522213497090" variant="ghost" />
           </motion.div>
 
-          {/* Easter egg */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={isInView ? { opacity: 1 } : {}}
