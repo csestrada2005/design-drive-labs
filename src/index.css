@@ -322,6 +322,46 @@
     0% { transform: translateX(-100%); }
     100% { transform: translateX(200%); }
   }
+
+  /* ── Section Transition Effects ── */
+
+  /* Glitch RGB overlay */
+  @keyframes glitch-rgb {
+    0% { opacity: 0.8; transform: translate(0); }
+    20% { opacity: 0.6; transform: translate(-2px, 1px); }
+    40% { opacity: 0.7; transform: translate(2px, -1px); }
+    60% { opacity: 0.5; transform: translate(-1px, -1px); }
+    80% { opacity: 0.3; transform: translate(1px, 1px); }
+    100% { opacity: 0; transform: translate(0); }
+  }
+
+  .section-glitch-rgb {
+    background: linear-gradient(
+      90deg,
+      hsl(var(--primary) / 0.15) 33%,
+      hsl(var(--destructive) / 0.1) 33% 66%,
+      hsl(var(--accent-green) / 0.1) 66%
+    );
+    mix-blend-mode: screen;
+    animation: glitch-rgb 0.35s steps(4) forwards;
+  }
+
+  /* Matrix rain overlay */
+  @keyframes matrix-fade {
+    0% { opacity: 0.5; background-position: 0 0; }
+    100% { opacity: 0; background-position: 0 40px; }
+  }
+
+  .section-matrix-rain {
+    background-image: repeating-linear-gradient(
+      0deg,
+      hsl(var(--primary) / 0.08) 0px,
+      transparent 2px,
+      transparent 8px
+    );
+    background-size: 10px 10px;
+    animation: matrix-fade 0.6s linear forwards;
+  }
 }
 
 /* Scrollbar */

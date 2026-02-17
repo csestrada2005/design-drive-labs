@@ -17,6 +17,7 @@ import { CustomCursor } from "@/components/motion/CustomCursor";
 import { CornerCrosses } from "@/components/motion/CornerCrosses";
 import { ChatWidget } from "@/components/motion/ChatWidget";
 import { ScrollRevealText } from "@/components/motion/ScrollRevealText";
+import { SectionTransition } from "@/components/motion/SectionTransition";
 
 const Index = () => {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -51,13 +52,27 @@ const Index = () => {
               </div>
             </section>
 
-            <ServicesSection />
-            <DesignLab />
-            <ProcessSection />
-            <GrowthImpact />
-            <FeaturedWork />
-            <BigCTA />
-            <ContactSection />
+            <SectionTransition variant="glitch">
+              <ServicesSection />
+            </SectionTransition>
+            <SectionTransition variant="circuit">
+              <DesignLab />
+            </SectionTransition>
+            <SectionTransition variant="data">
+              <ProcessSection />
+            </SectionTransition>
+            <SectionTransition variant="glitch">
+              <GrowthImpact />
+            </SectionTransition>
+            <SectionTransition variant="circuit">
+              <FeaturedWork />
+            </SectionTransition>
+            <SectionTransition variant="data">
+              <BigCTA />
+            </SectionTransition>
+            <SectionTransition variant="glitch">
+              <ContactSection />
+            </SectionTransition>
           </main>
           <DramaticFooter />
           <BottomNav />
