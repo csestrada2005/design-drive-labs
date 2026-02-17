@@ -26,7 +26,7 @@ export const LoadingScreen = ({ onComplete }: { onComplete: () => void }) => {
   }, []);
 
   useEffect(() => {
-    const duration = 1200;
+    const duration = 1400;
     const startTime = Date.now();
     let raf: number;
 
@@ -41,7 +41,7 @@ export const LoadingScreen = ({ onComplete }: { onComplete: () => void }) => {
       } else {
         setTimeout(() => {
           setIsExiting(true);
-          setTimeout(onComplete, 600);
+          setTimeout(onComplete, 700);
         }, 200);
       }
     };
@@ -58,8 +58,13 @@ export const LoadingScreen = ({ onComplete }: { onComplete: () => void }) => {
           style={{
             background: "linear-gradient(135deg, hsl(222 100% 65%) 0%, hsl(222 80% 50%) 40%, hsl(222 47% 9%) 100%)",
           }}
-          exit={{ y: "-100%", opacity: 0.8 }}
-          transition={{ duration: 0.8, ease: [0.76, 0, 0.24, 1] }}
+          exit={{
+            clipPath: "polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%)",
+          }}
+          initial={{
+            clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)",
+          }}
+          transition={{ duration: 0.7, ease: [0.76, 0, 0.24, 1] }}
         >
           {/* Grain overlay via canvas */}
           <canvas

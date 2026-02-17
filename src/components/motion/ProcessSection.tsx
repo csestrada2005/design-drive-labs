@@ -4,46 +4,45 @@ import { motion, useInView, useScroll, useTransform, AnimatePresence } from "fra
 const phases = [
   {
     id: "discovery",
-    title: "DISCOVERY",
-    bullets: ["Stakeholder interviews", "Competitive analysis", "Goal definition"],
-    description: "We dig deep into your business, audience, and goals to build on a foundation that makes sense.",
+    title: "DESCUBRIMIENTO",
+    bullets: ["Entrevistas", "Analisis competitivo", "Definicion de objetivos"],
+    description: "Investigamos tu negocio, audiencia y metas para construir sobre una base solida.",
   },
   {
     id: "strategy",
-    title: "STRATEGY",
-    bullets: ["User journey mapping", "Content architecture", "Conversion planning"],
-    description: "Architecture your site around how real users think, browse, and convert.",
+    title: "ESTRATEGIA",
+    bullets: ["User journey", "Arquitectura de contenido", "Plan de conversion"],
+    description: "Arquitectamos tu sitio alrededor de como los usuarios reales piensan y convierten.",
   },
   {
     id: "design",
-    title: "DESIGN",
-    bullets: ["Visual direction", "High-fidelity mockups", "Prototype review"],
-    description: "Premium visuals built with purpose — every pixel serves the strategy.",
+    title: "DISENO",
+    bullets: ["Direccion visual", "Mockups high-fidelity", "Prototipo"],
+    description: "Visuales premium con proposito. Cada pixel sirve a la estrategia.",
   },
   {
     id: "build",
     title: "BUILD",
-    bullets: ["Development", "Animations", "Integrations"],
-    description: "Clean code, smooth motion, rock-solid performance. Shipped fast.",
+    bullets: ["Desarrollo", "Animaciones", "Integraciones"],
+    description: "Codigo limpio, motion fluido, rendimiento solido. Entregado rapido.",
   },
   {
     id: "polish",
     title: "POLISH",
-    bullets: ["QA testing", "Performance tuning", "Copy refinement"],
-    description: "We obsess over the details so your users don't have to think twice.",
+    bullets: ["QA testing", "Performance tuning", "Refinamiento"],
+    description: "Obsesion por el detalle para que tus usuarios no tengan que pensar.",
   },
   {
     id: "launch",
     title: "LAUNCH",
-    bullets: ["Deployment", "Analytics setup", "Handoff documentation"],
-    description: "Go live with confidence. Full handoff, zero loose ends.",
+    bullets: ["Deployment", "Analytics", "Documentacion"],
+    description: "Lanzamiento con confianza. Handoff completo, cero cabos sueltos.",
   },
 ];
 
 export const ProcessSection = () => {
   const sectionRef = useRef<HTMLElement>(null);
   const isInView = useInView(sectionRef, { once: true, margin: "-100px" });
-  const [viewMode, setViewMode] = useState<"timeline" | "grid">("timeline");
   const [expandedId, setExpandedId] = useState<string | null>(null);
 
   const { scrollYProgress } = useScroll({
@@ -86,190 +85,116 @@ export const ProcessSection = () => {
             A PROCESS THAT <span className="text-primary">SHIPS.</span>
           </h2>
           <p className="text-muted-foreground text-sm max-w-lg mb-6">
-            You don't need everything figured out. We structure, design, build, and launch with speed and clarity.
+            No necesitas tenerlo todo resuelto. Nosotros estructuramos, disenamos, construimos y lanzamos con velocidad y claridad.
           </p>
-          <div className="flex gap-3 items-center">
-            <a href="#contact" className="btn-primary text-sm">Schedule Call</a>
-            <button
-              onClick={() => setViewMode(viewMode === "timeline" ? "grid" : "timeline")}
-              className="btn-ghost text-xs px-5 py-2.5 group"
-            >
-              <span className="flex items-center gap-2">
-                <svg className="w-3.5 h-3.5" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5">
-                  {viewMode === "timeline" ? (
-                    <>
-                      <rect x="1" y="1" width="6" height="6" rx="1" />
-                      <rect x="9" y="1" width="6" height="6" rx="1" />
-                      <rect x="1" y="9" width="6" height="6" rx="1" />
-                      <rect x="9" y="9" width="6" height="6" rx="1" />
-                    </>
-                  ) : (
-                    <>
-                      <line x1="1" y1="3" x2="15" y2="3" />
-                      <line x1="1" y1="8" x2="15" y2="8" />
-                      <line x1="1" y1="13" x2="15" y2="13" />
-                    </>
-                  )}
-                </svg>
-                {viewMode === "timeline" ? "Re-Arrange" : "Timeline"}
-              </span>
-            </button>
-          </div>
+          <a href="#contact" className="btn-primary text-sm">Schedule Call</a>
         </motion.div>
 
-        <AnimatePresence mode="wait">
-          {viewMode === "timeline" ? (
+        {/* Timeline — no cards */}
+        <div className="relative mt-16">
+          {/* Animated progress line */}
+          <div className="absolute left-5 sm:left-6 top-0 bottom-0 w-px bg-border/10">
             <motion.div
-              key="timeline"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="relative mt-16"
-            >
-              {/* Animated progress line */}
-              <div className="absolute left-5 sm:left-6 top-0 bottom-0 w-px bg-border/20">
-                <motion.div
-                  className="absolute top-0 left-0 w-full"
-                  style={{
-                    height: lineHeight,
-                    background: "linear-gradient(to bottom, hsl(222 100% 65%), hsl(222 100% 65% / 0.3))",
-                  }}
-                />
-              </div>
+              className="absolute top-0 left-0 w-full"
+              style={{
+                height: lineHeight,
+                background: "linear-gradient(to bottom, hsl(222 100% 65%), hsl(222 100% 65% / 0.2))",
+                boxShadow: "0 0 12px hsl(222 100% 65% / 0.3)",
+              }}
+            />
+          </div>
 
-              <div className="space-y-4">
-                {phases.map((phase, i) => {
-                  const isExpanded = expandedId === phase.id;
-                  return (
-                    <motion.div
-                      key={phase.id}
-                      initial={{ opacity: 0, x: -30 }}
-                      animate={isInView ? { opacity: 1, x: 0 } : {}}
-                      transition={{ duration: 0.5, delay: i * 0.1 }}
-                      className="relative flex gap-6 sm:gap-8 group cursor-pointer"
-                      onClick={() => setExpandedId(isExpanded ? null : phase.id)}
-                    >
-                      {/* Circle indicator */}
-                      <div className={`relative z-10 flex-shrink-0 w-10 h-10 sm:w-12 sm:h-12 rounded-full border-2 flex items-center justify-center transition-all duration-500 ${
-                        isExpanded
-                          ? "border-primary bg-primary/20 scale-110"
-                          : "border-border/50 bg-background group-hover:border-primary/60"
-                      }`}>
-                        <span className={`font-display text-[10px] transition-colors ${
-                          isExpanded ? "text-primary" : "text-muted-foreground group-hover:text-primary"
-                        }`}>
-                          {String(i + 1).padStart(2, "0")}
-                        </span>
-                      </div>
-
-                      {/* Card */}
-                      <div
-                        className={`flex-1 p-5 sm:p-6 rounded-lg border transition-all duration-500 ${
-                          isExpanded
-                            ? "bg-primary/10 border-primary/30 -translate-y-0.5 shadow-lg shadow-primary/5"
-                            : i === 3
-                              ? "bg-primary/[0.06] border-primary/20 group-hover:border-primary/30"
-                              : "bg-card/40 border-border/30 group-hover:border-primary/20 group-hover:-translate-y-0.5"
-                        }`}
-                      >
-                        <div className="flex items-center justify-between">
-                          <h3 className={`font-display text-base sm:text-lg transition-colors ${
-                            isExpanded ? "text-primary" : "group-hover:text-primary"
-                          }`}>
-                            {phase.title}
-                          </h3>
-                          <motion.svg
-                            className="w-4 h-4 text-muted-foreground"
-                            viewBox="0 0 16 16"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="1.5"
-                            animate={{ rotate: isExpanded ? 180 : 0 }}
-                            transition={{ duration: 0.3 }}
-                          >
-                            <path d="M4 6l4 4 4-4" />
-                          </motion.svg>
-                        </div>
-
-                        <AnimatePresence>
-                          {isExpanded && (
-                            <motion.div
-                              initial={{ height: 0, opacity: 0 }}
-                              animate={{ height: "auto", opacity: 1 }}
-                              exit={{ height: 0, opacity: 0 }}
-                              transition={{ duration: 0.4, ease: [0.33, 1, 0.68, 1] }}
-                              className="overflow-hidden"
-                            >
-                              <p className="text-muted-foreground text-sm mt-3 mb-4 leading-relaxed">
-                                {phase.description}
-                              </p>
-                              <div className="flex flex-wrap gap-x-4 gap-y-2">
-                                {phase.bullets.map((bullet) => (
-                                  <span key={bullet} className="text-foreground/70 text-xs flex items-center gap-1.5">
-                                    <span className="w-1 h-1 rounded-full bg-primary" />
-                                    {bullet}
-                                  </span>
-                                ))}
-                              </div>
-                            </motion.div>
-                          )}
-                        </AnimatePresence>
-
-                        {!isExpanded && (
-                          <div className="flex flex-wrap gap-x-4 gap-y-1 mt-2">
-                            {phase.bullets.map((bullet) => (
-                              <span key={bullet} className="text-muted-foreground text-xs">
-                                {bullet}
-                              </span>
-                            ))}
-                          </div>
-                        )}
-                      </div>
-                    </motion.div>
-                  );
-                })}
-              </div>
-            </motion.div>
-          ) : (
-            <motion.div
-              key="grid"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 mt-16"
-            >
-              {phases.map((phase, i) => (
+          <div className="space-y-8">
+            {phases.map((phase, i) => {
+              const isExpanded = expandedId === phase.id;
+              return (
                 <motion.div
                   key={phase.id}
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.4, delay: i * 0.06 }}
-                  className={`p-5 rounded-lg border transition-all hover:border-primary/30 hover:-translate-y-1 duration-300 ${
-                    i === 3 ? "bg-primary/10 border-primary/30" : "bg-card/40 border-border/30"
-                  }`}
+                  initial={{ opacity: 0, x: -30 }}
+                  animate={isInView ? { opacity: 1, x: 0 } : {}}
+                  transition={{ duration: 0.5, delay: i * 0.1 }}
+                  className="relative flex gap-6 sm:gap-8 group cursor-pointer"
+                  onClick={() => setExpandedId(isExpanded ? null : phase.id)}
                 >
-                  <div className="flex items-center gap-3 mb-3">
-                    <span className="w-8 h-8 rounded-full border border-border/50 flex items-center justify-center">
-                      <span className="font-display text-[10px] text-muted-foreground">
-                        {String(i + 1).padStart(2, "0")}
-                      </span>
+                  {/* Circle indicator — luminous node */}
+                  <div className={`relative z-10 flex-shrink-0 w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center transition-all duration-500 ${
+                    isExpanded
+                      ? "scale-110"
+                      : "group-hover:scale-105"
+                  }`}
+                    style={{
+                      background: isExpanded
+                        ? "radial-gradient(circle, hsl(222 100% 65% / 0.3), hsl(222 100% 65% / 0.05))"
+                        : "radial-gradient(circle, hsl(222 100% 65% / 0.1), transparent)",
+                      boxShadow: isExpanded
+                        ? "0 0 20px hsl(222 100% 65% / 0.3), 0 0 40px hsl(222 100% 65% / 0.1)"
+                        : "none",
+                      border: isExpanded
+                        ? "1px solid hsl(222 100% 65% / 0.5)"
+                        : "1px solid hsl(222 30% 18% / 0.5)",
+                    }}
+                  >
+                    <span className={`font-display text-[10px] transition-colors ${
+                      isExpanded ? "text-primary" : "text-muted-foreground group-hover:text-primary"
+                    }`}>
+                      {String(i + 1).padStart(2, "0")}
                     </span>
-                    <h3 className="font-display text-sm">{phase.title}</h3>
                   </div>
-                  <p className="text-muted-foreground text-xs leading-relaxed mb-3">{phase.description}</p>
-                  <div className="space-y-1">
-                    {phase.bullets.map((b) => (
-                      <p key={b} className="text-muted-foreground/70 text-xs flex items-center gap-1.5">
-                        <span className="w-1 h-1 rounded-full bg-primary/40" />
-                        {b}
-                      </p>
-                    ))}
+
+                  {/* Content — no card, just text */}
+                  <div className="flex-1 pb-4">
+                    <div className="flex items-center justify-between">
+                      <h3 className={`font-display text-base sm:text-lg transition-colors ${
+                        isExpanded ? "text-primary" : "group-hover:text-primary"
+                      }`}>
+                        {phase.title}
+                      </h3>
+                      <motion.svg
+                        className="w-4 h-4 text-muted-foreground/50"
+                        viewBox="0 0 16 16"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="1.5"
+                        animate={{ rotate: isExpanded ? 180 : 0 }}
+                        transition={{ duration: 0.3 }}
+                      >
+                        <path d="M4 6l4 4 4-4" />
+                      </motion.svg>
+                    </div>
+
+                    {/* Separator */}
+                    <div className="h-px mt-3 mb-3" style={{ background: "linear-gradient(90deg, hsl(222 100% 65% / 0.1), transparent 60%)" }} />
+
+                    <AnimatePresence>
+                      {isExpanded && (
+                        <motion.div
+                          initial={{ height: 0, opacity: 0 }}
+                          animate={{ height: "auto", opacity: 1 }}
+                          exit={{ height: 0, opacity: 0 }}
+                          transition={{ duration: 0.4, ease: [0.33, 1, 0.68, 1] }}
+                          className="overflow-hidden"
+                        >
+                          <p className="text-muted-foreground text-sm mb-4 leading-relaxed">
+                            {phase.description}
+                          </p>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+
+                    <div className="flex flex-wrap gap-x-4 gap-y-1">
+                      {phase.bullets.map((bullet) => (
+                        <span key={bullet} className="text-muted-foreground/60 text-xs flex items-center gap-1.5">
+                          <span className="w-1 h-1 rounded-full bg-primary/40" />
+                          {bullet}
+                        </span>
+                      ))}
+                    </div>
                   </div>
                 </motion.div>
-              ))}
-            </motion.div>
-          )}
-        </AnimatePresence>
+              );
+            })}
+          </div>
+        </div>
       </div>
     </section>
   );

@@ -4,7 +4,9 @@ import { HeroSection } from "@/components/motion/HeroSection";
 import { MarqueeTicker } from "@/components/motion/MarqueeTicker";
 import { StatsStrip } from "@/components/motion/StatsStrip";
 import { ServicesSection } from "@/components/motion/ServicesSection";
+import { DesignLab } from "@/components/motion/DesignLab";
 import { ProcessSection } from "@/components/motion/ProcessSection";
+import { GrowthImpact } from "@/components/motion/GrowthImpact";
 import { FeaturedWork } from "@/components/motion/FeaturedWork";
 import { BigCTA } from "@/components/motion/BigCTA";
 import { ContactSection } from "@/components/motion/ContactSection";
@@ -43,14 +45,16 @@ const Index = () => {
             <section className="py-20 sm:py-28 relative overflow-hidden">
               <div className="container max-w-4xl">
                 <ScrollRevealText
-                  text="WE BUILD LIVING INTERACTIVE EXPERIENCES YOU WANT TO TOUCH AGAIN AND AGAIN."
-                  highlightWords={["LIVING", "INTERACTIVE", "AGAIN"]}
+                  text="CONSTRUIMOS EXPERIENCIAS INTERACTIVAS QUE QUIERES TOCAR UNA Y OTRA VEZ."
+                  highlightWords={["INTERACTIVAS", "TOCAR", "VEZ"]}
                 />
               </div>
             </section>
 
             <ServicesSection />
+            <DesignLab />
             <ProcessSection />
+            <GrowthImpact />
             <FeaturedWork />
             <BigCTA />
             <ContactSection />

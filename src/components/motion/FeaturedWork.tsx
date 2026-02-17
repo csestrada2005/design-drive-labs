@@ -10,7 +10,6 @@ const projects = [
 
 const FloatingShapes = ({ index }: { index: number }) => {
   const configs = [
-    // Different geometry arrangements per card
     [
       { type: "hex", x: "75%", y: "15%", size: 50, rotation: 15, delay: 0 },
       { type: "circle-dotted", x: "85%", y: "60%", size: 30, rotation: 0, delay: 1 },
@@ -41,35 +40,18 @@ const FloatingShapes = ({ index }: { index: number }) => {
         <motion.svg
           key={i}
           className="absolute text-primary/[0.12] pointer-events-none"
-          style={{
-            left: shape.x,
-            top: shape.y,
-            width: shape.size,
-            height: shape.size,
-          }}
+          style={{ left: shape.x, top: shape.y, width: shape.size, height: shape.size }}
           viewBox="0 0 40 40"
           aria-hidden="true"
           animate={{ rotate: [shape.rotation, shape.rotation + 360] }}
           transition={{ duration: 30 + i * 10, repeat: Infinity, ease: "linear", delay: shape.delay }}
         >
-          {shape.type === "hex" && (
-            <polygon points="20,4 36,12 36,28 20,36 4,28 4,12" fill="none" stroke="currentColor" strokeWidth="0.6" />
-          )}
-          {shape.type === "square" && (
-            <rect x="6" y="6" width="28" height="28" fill="none" stroke="currentColor" strokeWidth="0.6" />
-          )}
-          {shape.type === "circle-dotted" && (
-            <circle cx="20" cy="20" r="16" fill="none" stroke="currentColor" strokeWidth="0.6" strokeDasharray="3 4" />
-          )}
-          {shape.type === "triangle" && (
-            <polygon points="20,4 36,36 4,36" fill="none" stroke="currentColor" strokeWidth="0.6" />
-          )}
-          {shape.type === "diamond" && (
-            <polygon points="20,4 36,20 20,36 4,20" fill="none" stroke="currentColor" strokeWidth="0.6" />
-          )}
-          {shape.type === "line" && (
-            <line x1="0" y1="20" x2="40" y2="20" stroke="currentColor" strokeWidth="0.4" strokeDasharray="2 3" />
-          )}
+          {shape.type === "hex" && <polygon points="20,4 36,12 36,28 20,36 4,28 4,12" fill="none" stroke="currentColor" strokeWidth="0.6" />}
+          {shape.type === "square" && <rect x="6" y="6" width="28" height="28" fill="none" stroke="currentColor" strokeWidth="0.6" />}
+          {shape.type === "circle-dotted" && <circle cx="20" cy="20" r="16" fill="none" stroke="currentColor" strokeWidth="0.6" strokeDasharray="3 4" />}
+          {shape.type === "triangle" && <polygon points="20,4 36,36 4,36" fill="none" stroke="currentColor" strokeWidth="0.6" />}
+          {shape.type === "diamond" && <polygon points="20,4 36,20 20,36 4,20" fill="none" stroke="currentColor" strokeWidth="0.6" />}
+          {shape.type === "line" && <line x1="0" y1="20" x2="40" y2="20" stroke="currentColor" strokeWidth="0.4" strokeDasharray="2 3" />}
         </motion.svg>
       ))}
     </>
@@ -87,35 +69,22 @@ export const FeaturedWork = () => {
   const y1 = useTransform(scrollYProgress, [0, 1], [60, -60]);
   const y2 = useTransform(scrollYProgress, [0, 1], [30, -30]);
   const y3 = useTransform(scrollYProgress, [0, 1], [45, -45]);
-
   const yValues = [y1, y2, y3, y1];
 
   return (
-    <section
-      ref={ref}
-      className="py-24 sm:py-32 relative overflow-hidden"
-      id="work"
-      style={{
-        background: "linear-gradient(180deg, hsl(222 47% 9%), hsl(222 45% 11%), hsl(222 47% 9%))",
-      }}
-    >
+    <section ref={ref} className="py-24 sm:py-32 relative overflow-hidden" id="work">
       {/* Background decorative elements */}
       <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
-        {/* Radial lines from center */}
         <svg className="absolute inset-0 w-full h-full opacity-[0.03]" viewBox="0 0 1000 800">
           {[...Array(12)].map((_, i) => {
             const angle = (i / 12) * Math.PI * 2;
             return (
               <line
                 key={i}
-                x1="500"
-                y1="400"
+                x1="500" y1="400"
                 x2={500 + Math.cos(angle) * 600}
                 y2={400 + Math.sin(angle) * 600}
-                stroke="currentColor"
-                strokeWidth="0.5"
-                className="text-primary"
-                strokeDasharray="4 8"
+                stroke="currentColor" strokeWidth="0.5" className="text-primary" strokeDasharray="4 8"
               />
             );
           })}
@@ -143,7 +112,8 @@ export const FeaturedWork = () => {
           </h2>
         </motion.div>
 
-        <div className="grid sm:grid-cols-2 gap-6">
+        {/* No cards — organic clip-path reveals */}
+        <div className="grid sm:grid-cols-2 gap-8 lg:gap-10">
           {projects.map((project, i) => (
             <motion.div
               key={project.name}
@@ -151,13 +121,23 @@ export const FeaturedWork = () => {
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.6, delay: i * 0.12 }}
               style={{ y: yValues[i] }}
-              className="group relative overflow-hidden rounded-lg border border-border/30 hover:border-primary/30 transition-all duration-500"
+              className="group relative"
             >
-              {/* Image placeholder with sophisticated shimmer */}
-              <div className="relative aspect-[16/10] bg-card/60 overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-br from-secondary/50 to-card/30" />
+              {/* Image placeholder — organic shape, no rectangular border */}
+              <div
+                className="relative aspect-[16/10] overflow-hidden"
+                style={{
+                  borderRadius: "1.5rem 0.5rem 1.5rem 0.5rem",
+                }}
+              >
+                <div
+                  className="absolute inset-0 transition-all duration-500"
+                  style={{
+                    background: `linear-gradient(${135 + i * 20}deg, hsl(222 40% 14%), hsl(222 35% 10%))`,
+                  }}
+                />
 
-                {/* Grid pattern inside card */}
+                {/* Grid pattern inside */}
                 <div
                   className="absolute inset-0 opacity-[0.04]"
                   style={{
@@ -167,21 +147,19 @@ export const FeaturedWork = () => {
                   }}
                 />
 
-                {/* Shimmer */}
-                <div className="absolute inset-0 overflow-hidden">
-                  <div
-                    className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-primary/5 to-transparent"
-                    style={{ animation: "shimmer 4s infinite" }}
-                  />
-                </div>
-
-                {/* Floating geometry overlays */}
+                {/* Floating geometry */}
                 <FloatingShapes index={i} />
 
-                {/* Hover overlay */}
-                <div className="absolute inset-0 bg-background/80 opacity-0 group-hover:opacity-100 transition-all duration-500 flex items-center justify-center backdrop-blur-sm">
+                {/* Hover overlay — glow halo */}
+                <div
+                  className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-all duration-500 flex items-center justify-center"
+                  style={{
+                    background: "radial-gradient(circle at 50% 50%, hsl(222 100% 65% / 0.15), hsl(222 47% 9% / 0.8) 70%)",
+                    backdropFilter: "blur(4px)",
+                  }}
+                >
                   <span className="text-xs font-medium tracking-wider uppercase text-foreground/80 flex items-center gap-2">
-                    View Case Study
+                    View
                     <svg className="w-4 h-4" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5">
                       <path d="M6 3l5 5-5 5" />
                     </svg>
@@ -189,14 +167,14 @@ export const FeaturedWork = () => {
                 </div>
               </div>
 
-              <div className="p-5 flex items-start justify-between">
+              <div className="mt-4 flex items-start justify-between">
                 <div>
                   <h3 className="font-display text-base mb-2 group-hover:text-primary transition-colors">{project.name}</h3>
                   <div className="flex gap-2 flex-wrap">
                     {project.tags.map((tag) => (
                       <span
                         key={tag}
-                        className="text-[10px] tracking-wider uppercase text-muted-foreground border border-border/40 rounded px-2 py-0.5 group-hover:border-primary/30 transition-colors"
+                        className="text-[10px] tracking-wider uppercase text-muted-foreground/50"
                       >
                         {tag}
                       </span>
@@ -205,12 +183,8 @@ export const FeaturedWork = () => {
                 </div>
                 {project.status === "online" && (
                   <span
-                    className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full shrink-0"
-                    style={{
-                      background: "hsl(330 80% 55% / 0.15)",
-                      color: "hsl(330 80% 65%)",
-                      border: "1px solid hsl(330 80% 55% / 0.2)",
-                    }}
+                    className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider shrink-0"
+                    style={{ color: "hsl(330 80% 65%)" }}
                   >
                     <span className="w-1.5 h-1.5 rounded-full bg-current animate-pulse" />
                     ONLINE
