@@ -162,8 +162,8 @@ export const TierDemoChat = ({ onClose }: TierDemoChatProps) => {
               className="absolute inset-0 p-3"
             >
               <iframe
-                srcDoc={`<!DOCTYPE html><html><head><meta charset="utf-8"><style>*{margin:0;padding:0;box-sizing:border-box;font-family:system-ui,-apple-system,sans-serif}body{width:100%;min-height:100vh;display:flex;align-items:center;justify-content:center;background:#0a0a14;color:#e0e0e0}body>div{width:100%;max-width:100%;padding:20px}</style></head><body>${htmlPreview}</body></html>`}
-                className="w-full h-full rounded-lg border border-primary/10"
+                srcDoc={`<!DOCTYPE html><html><head><meta charset="utf-8"><style>*{margin:0;padding:0;box-sizing:border-box;font-family:system-ui,-apple-system,sans-serif}html,body{width:100%;height:100%;overflow:hidden;background:#0a0a14;color:#e0e0e0;cursor:none}body{display:flex;align-items:center;justify-content:center}body>div{width:100%;max-width:100%;padding:20px;overflow:hidden}::-webkit-scrollbar{display:none}</style></head><body>${htmlPreview}</body></html>`}
+                className="w-full h-full rounded-lg border border-primary/10 pointer-events-none"
                 style={{ background: "#0a0a14" }}
                 sandbox="allow-scripts"
                 title="Demo Preview"
