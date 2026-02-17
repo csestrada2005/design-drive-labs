@@ -411,7 +411,7 @@ const RevealWipe = () => {
 
 /* ── Demo config ── */
 const demos = [
-  { id: "architecture", label: "SAAS DEMO", desc: "Click to reveal the code", component: ArchitectureDemo, caption: "We transform ideas into production-ready software. Click the laptop to see the code behind the experience." },
+  { id: "architecture", label: "SAAS DEMO", desc: "Click to reveal the code", component: ArchitectureDemo },
   { id: "electro", label: "ELECTRO TEXT", desc: "Lightning + glow on hover", component: ElectroText },
   { id: "glass", label: "GLASS POP-UP", desc: "Spring + blur physics", component: GlassPopup },
   { id: "tilt", label: "3D TILT", desc: "Dynamic specular lighting", component: TiltObject },
@@ -503,7 +503,7 @@ export const DesignLab = () => {
                 {/* Caption if present */}
                 {"caption" in demo && demo.caption && (
                   <p className="text-xs text-muted-foreground/50 leading-relaxed mt-4 max-w-sm italic">
-                    {demo.caption}
+                    {demo.caption as string}
                   </p>
                 )}
 
