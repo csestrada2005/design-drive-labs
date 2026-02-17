@@ -2,9 +2,12 @@ import { useState, useCallback } from "react";
 import { ArrowRight } from "lucide-react";
 import { GeometryCanvas } from "@/components/motion/GeometryCanvas";
 import { motion } from "framer-motion";
+import { useMagnetic } from "@/hooks/useMagnetic";
 
 export const HeroSection = () => {
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const magneticPrimary = useMagnetic(0.35);
+  const magneticGhost = useMagnetic(0.25);
 
   const handleMouseMove = useCallback((e: React.MouseEvent) => {
     const rect = e.currentTarget.getBoundingClientRect();
@@ -134,11 +137,23 @@ export const HeroSection = () => {
               transition={{ duration: 0.6, delay: 0.65 }}
               className="flex flex-wrap gap-3 mb-6"
             >
-              <a href="#contact" className="btn-primary text-sm group">
+              <a
+                href="#contact"
+                className="btn-primary text-sm group inline-block"
+                ref={magneticPrimary.ref as React.RefObject<HTMLAnchorElement>}
+                onMouseMove={magneticPrimary.onMouseMove}
+                onMouseLeave={magneticPrimary.onMouseLeave}
+              >
                 Get a Proposal
-                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                <ArrowRight className="w-4 h-4 inline ml-1 group-hover:translate-x-1 transition-transform" />
               </a>
-              <a href="#work" className="btn-ghost text-sm">
+              <a
+                href="#work"
+                className="btn-ghost text-sm inline-block"
+                ref={magneticGhost.ref as React.RefObject<HTMLAnchorElement>}
+                onMouseMove={magneticGhost.onMouseMove}
+                onMouseLeave={magneticGhost.onMouseLeave}
+              >
                 View Work
               </a>
             </motion.div>

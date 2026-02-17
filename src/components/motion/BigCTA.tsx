@@ -1,6 +1,7 @@
 import { useRef, useEffect } from "react";
 import { motion, useInView } from "framer-motion";
 import { ArrowRight } from "lucide-react";
+import { useMagnetic } from "@/hooks/useMagnetic";
 
 const GradientMeshCanvas = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -60,6 +61,8 @@ const GradientMeshCanvas = () => {
 export const BigCTA = () => {
   const ref = useRef<HTMLElement>(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
+  const magneticPrimary = useMagnetic(0.35);
+  const magneticGhost = useMagnetic(0.25);
 
   return (
     <section ref={ref} className="py-24 sm:py-32 relative overflow-hidden" id="cta">
@@ -103,15 +106,24 @@ export const BigCTA = () => {
             transition={{ duration: 0.6, delay: 0.45 }}
             className="flex flex-wrap justify-center gap-3"
           >
-            <a href="#contact" className="btn-primary text-sm group">
+            <a
+              href="#contact"
+              className="btn-primary text-sm group inline-block"
+              ref={magneticPrimary.ref as React.RefObject<HTMLAnchorElement>}
+              onMouseMove={magneticPrimary.onMouseMove}
+              onMouseLeave={magneticPrimary.onMouseLeave}
+            >
               Make it Real
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              <ArrowRight className="w-4 h-4 inline ml-1 group-hover:translate-x-1 transition-transform" />
             </a>
             <a
               href="https://wa.me/522213497090"
               target="_blank"
               rel="noopener noreferrer"
-              className="btn-ghost text-sm"
+              className="btn-ghost text-sm inline-block"
+              ref={magneticGhost.ref as React.RefObject<HTMLAnchorElement>}
+              onMouseMove={magneticGhost.onMouseMove}
+              onMouseLeave={magneticGhost.onMouseLeave}
             >
               WhatsApp
             </a>
