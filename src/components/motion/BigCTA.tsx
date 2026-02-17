@@ -2,6 +2,7 @@ import { useRef, useEffect } from "react";
 import { motion, useInView } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { useMagnetic } from "@/hooks/useMagnetic";
+import { MarqueeButton } from "@/components/motion/MarqueeButton";
 
 const GradientMeshCanvas = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -106,27 +107,8 @@ export const BigCTA = () => {
             transition={{ duration: 0.6, delay: 0.45 }}
             className="flex flex-wrap justify-center gap-3"
           >
-            <a
-              href="#contact"
-              className="btn-primary text-sm group inline-block"
-              ref={magneticPrimary.ref as React.RefObject<HTMLAnchorElement>}
-              onMouseMove={magneticPrimary.onMouseMove}
-              onMouseLeave={magneticPrimary.onMouseLeave}
-            >
-              Make it Real
-              <ArrowRight className="w-4 h-4 inline ml-1 group-hover:translate-x-1 transition-transform" />
-            </a>
-            <a
-              href="https://wa.me/522213497090"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn-ghost text-sm inline-block"
-              ref={magneticGhost.ref as React.RefObject<HTMLAnchorElement>}
-              onMouseMove={magneticGhost.onMouseMove}
-              onMouseLeave={magneticGhost.onMouseLeave}
-            >
-              WhatsApp
-            </a>
+            <MarqueeButton text="Make it Real" href="#contact" variant="primary" />
+            <MarqueeButton text="WhatsApp" href="https://wa.me/522213497090" variant="ghost" />
           </motion.div>
         </motion.div>
       </div>

@@ -12,6 +12,9 @@ import { DramaticFooter } from "@/components/motion/DramaticFooter";
 import { BottomNav } from "@/components/motion/BottomNav";
 import { SoundToggle } from "@/components/motion/SoundToggle";
 import { CustomCursor } from "@/components/motion/CustomCursor";
+import { CornerCrosses } from "@/components/motion/CornerCrosses";
+import { ChatWidget } from "@/components/motion/ChatWidget";
+import { ScrollRevealText } from "@/components/motion/ScrollRevealText";
 
 const Index = () => {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -29,15 +32,26 @@ const Index = () => {
         <>
           <SoundToggle />
           <CustomCursor containerRef={cursorZoneRef} />
-          <main>
+          <CornerCrosses />
+          <ChatWidget />
+          <main ref={cursorZoneRef}>
             <HeroSection />
             <MarqueeTicker />
             <StatsStrip />
-            <div ref={cursorZoneRef}>
-              <ServicesSection />
-              <ProcessSection />
-              <FeaturedWork />
-            </div>
+
+            {/* Word-by-word scroll reveal statement */}
+            <section className="py-20 sm:py-28 relative overflow-hidden">
+              <div className="container max-w-4xl">
+                <ScrollRevealText
+                  text="WE BUILD LIVING INTERACTIVE EXPERIENCES YOU WANT TO TOUCH AGAIN AND AGAIN."
+                  highlightWords={["LIVING", "INTERACTIVE", "AGAIN"]}
+                />
+              </div>
+            </section>
+
+            <ServicesSection />
+            <ProcessSection />
+            <FeaturedWork />
             <BigCTA />
             <ContactSection />
           </main>

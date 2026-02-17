@@ -2,10 +2,10 @@ import { useRef } from "react";
 import { motion, useInView, useScroll, useTransform } from "framer-motion";
 
 const projects = [
-  { name: "Project Alpha", tags: ["WEB", "UI/UX", "CRO"] },
-  { name: "Project Beta", tags: ["ECOMMERCE", "SHOPIFY"] },
-  { name: "Project Gamma", tags: ["LANDING PAGE", "CAMPAIGNS"] },
-  { name: "Project Delta", tags: ["SYSTEM", "CRM", "PORTAL"] },
+  { name: "Project Alpha", tags: ["WEB", "UI/UX", "CRO"], status: "online" as const },
+  { name: "Project Beta", tags: ["ECOMMERCE", "SHOPIFY"], status: "online" as const },
+  { name: "Project Gamma", tags: ["LANDING PAGE", "CAMPAIGNS"], status: "concept" as const },
+  { name: "Project Delta", tags: ["SYSTEM", "CRM", "PORTAL"], status: "online" as const },
 ];
 
 const FloatingShapes = ({ index }: { index: number }) => {
@@ -189,18 +189,33 @@ export const FeaturedWork = () => {
                 </div>
               </div>
 
-              <div className="p-5">
-                <h3 className="font-display text-base mb-2 group-hover:text-primary transition-colors">{project.name}</h3>
-                <div className="flex gap-2 flex-wrap">
-                  {project.tags.map((tag) => (
-                    <span
-                      key={tag}
-                      className="text-[10px] tracking-wider uppercase text-muted-foreground border border-border/40 rounded px-2 py-0.5 group-hover:border-primary/30 transition-colors"
-                    >
-                      {tag}
-                    </span>
-                  ))}
+              <div className="p-5 flex items-start justify-between">
+                <div>
+                  <h3 className="font-display text-base mb-2 group-hover:text-primary transition-colors">{project.name}</h3>
+                  <div className="flex gap-2 flex-wrap">
+                    {project.tags.map((tag) => (
+                      <span
+                        key={tag}
+                        className="text-[10px] tracking-wider uppercase text-muted-foreground border border-border/40 rounded px-2 py-0.5 group-hover:border-primary/30 transition-colors"
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
                 </div>
+                {project.status === "online" && (
+                  <span
+                    className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full shrink-0"
+                    style={{
+                      background: "hsl(330 80% 55% / 0.15)",
+                      color: "hsl(330 80% 65%)",
+                      border: "1px solid hsl(330 80% 55% / 0.2)",
+                    }}
+                  >
+                    <span className="w-1.5 h-1.5 rounded-full bg-current animate-pulse" />
+                    ONLINE
+                  </span>
+                )}
               </div>
             </motion.div>
           ))}

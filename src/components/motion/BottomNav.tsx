@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Menu, X, ArrowRight } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { RotatingPhrases } from "@/components/motion/RotatingPhrases";
 
 const navLinks = [
   { label: "Home", href: "#hero" },
@@ -50,10 +51,16 @@ export const BottomNav = () => {
             <span className="hidden sm:inline text-xs">Menu</span>
           </button>
 
-          {/* Logo */}
-          <a href="#hero" className="font-display text-sm px-3 hover:text-primary transition-colors">
-            CUATRE
-          </a>
+          {/* Logo + rotating phrases */}
+          <div className="flex items-center gap-3 px-3">
+            <a href="#hero" className="font-display text-sm hover:text-primary transition-colors">
+              CUATRE
+            </a>
+            <span className="w-px h-3 bg-border/50 hidden sm:block" />
+            <div className="hidden sm:block">
+              <RotatingPhrases />
+            </div>
+          </div>
 
           {/* Contact CTA */}
           <a
