@@ -1,97 +1,159 @@
-import { useRef } from "react";
-import { motion, useInView, useScroll, useTransform } from "framer-motion";
+import { useRef, useState, useEffect, useCallback } from "react";
+import { motion, useInView } from "framer-motion";
+import { Route, Cpu, Zap, Shield } from "lucide-react";
+import { SystemBlueprint } from "./SystemBlueprint";
 
-const projects = [
-  { name: "Project Alpha", tags: ["WEB", "UI/UX", "CRO"], status: "online" as const },
-  { name: "Project Beta", tags: ["ECOMMERCE", "SHOPIFY"], status: "online" as const },
-  { name: "Project Gamma", tags: ["LANDING PAGE", "CAMPAIGNS"], status: "concept" as const },
-  { name: "Project Delta", tags: ["SYSTEM", "CRM", "PORTAL"], status: "online" as const },
-];
+/* ── Binary Rain Animation ── */
+const BinaryRain = () => {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const frameRef = useRef(0);
+  const columnsRef = useRef<{ chars: string[]; y: number; speed: number }[]>([]);
+  const [hovered, setHovered] = useState(false);
 
-const FloatingShapes = ({ index }: { index: number }) => {
-  const configs = [
-    [
-      { type: "hex", x: "75%", y: "15%", size: 50, rotation: 15, delay: 0 },
-      { type: "circle-dotted", x: "85%", y: "60%", size: 30, rotation: 0, delay: 1 },
-      { type: "line", x: "10%", y: "80%", size: 40, rotation: -30, delay: 0.5 },
-    ],
-    [
-      { type: "square", x: "80%", y: "20%", size: 35, rotation: 45, delay: 0.3 },
-      { type: "triangle", x: "15%", y: "70%", size: 28, rotation: 0, delay: 0.8 },
-      { type: "circle-dotted", x: "70%", y: "75%", size: 45, rotation: 0, delay: 0 },
-    ],
-    [
-      { type: "diamond", x: "82%", y: "30%", size: 32, rotation: 0, delay: 0.2 },
-      { type: "hex", x: "8%", y: "25%", size: 40, rotation: 30, delay: 0.7 },
-      { type: "line", x: "90%", y: "70%", size: 50, rotation: 60, delay: 0 },
-    ],
-    [
-      { type: "circle-dotted", x: "78%", y: "25%", size: 55, rotation: 0, delay: 0 },
-      { type: "square", x: "12%", y: "65%", size: 25, rotation: 20, delay: 0.6 },
-      { type: "triangle", x: "85%", y: "70%", size: 30, rotation: 180, delay: 0.4 },
-    ],
-  ];
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
 
-  const shapes = configs[index % configs.length];
+    const rect = canvas.getBoundingClientRect();
+    const dpr = window.devicePixelRatio || 1;
+    canvas.width = rect.width * dpr;
+    canvas.height = rect.height * dpr;
+    ctx.scale(dpr, dpr);
+
+    const colCount = Math.floor(rect.width / 14);
+    if (columnsRef.current.length === 0) {
+      columnsRef.current = Array.from({ length: colCount }, () => ({
+        chars: Array.from({ length: 8 }, () => Math.random() > 0.5 ? "1" : "0"),
+        y: Math.random() * -rect.height,
+        speed: 0.3 + Math.random() * 0.8,
+      }));
+    }
+
+    const animate = () => {
+      ctx.clearRect(0, 0, rect.width, rect.height);
+      ctx.font = "10px monospace";
+
+      columnsRef.current.forEach((col, ci) => {
+        col.y += col.speed * (hovered ? 2.5 : 1);
+        if (col.y > rect.height + 100) {
+          col.y = -80;
+          col.chars = col.chars.map(() => Math.random() > 0.5 ? "1" : "0");
+        }
+
+        col.chars.forEach((ch, ri) => {
+          const x = ci * 14;
+          const y = col.y + ri * 12;
+          const opacity = Math.max(0, 1 - ri / col.chars.length) * (hovered ? 0.7 : 0.3);
+          ctx.fillStyle = ri === 0
+            ? `hsla(270, 80%, 70%, ${opacity})`
+            : `hsla(270, 60%, 55%, ${opacity * 0.6})`;
+          ctx.fillText(ch, x, y);
+        });
+      });
+
+      frameRef.current = requestAnimationFrame(animate);
+    };
+
+    animate();
+    return () => cancelAnimationFrame(frameRef.current);
+  }, [hovered]);
 
   return (
-    <>
-      {shapes.map((shape, i) => (
-        <motion.svg
-          key={i}
-          className="absolute text-primary/[0.12] pointer-events-none"
-          style={{ left: shape.x, top: shape.y, width: shape.size, height: shape.size }}
-          viewBox="0 0 40 40"
-          aria-hidden="true"
-          animate={{ rotate: [shape.rotation, shape.rotation + 360] }}
-          transition={{ duration: 30 + i * 10, repeat: Infinity, ease: "linear", delay: shape.delay }}
+    <div
+      className="relative w-full h-full overflow-hidden"
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+    >
+      <canvas ref={canvasRef} className="absolute inset-0 w-full h-full" />
+      {/* Document icon fading into binary */}
+      <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+        <motion.div
+          className="flex items-center gap-3"
+          animate={{ opacity: hovered ? 0.15 : 0.4 }}
+          transition={{ duration: 0.4 }}
         >
-          {shape.type === "hex" && <polygon points="20,4 36,12 36,28 20,36 4,28 4,12" fill="none" stroke="currentColor" strokeWidth="0.6" />}
-          {shape.type === "square" && <rect x="6" y="6" width="28" height="28" fill="none" stroke="currentColor" strokeWidth="0.6" />}
-          {shape.type === "circle-dotted" && <circle cx="20" cy="20" r="16" fill="none" stroke="currentColor" strokeWidth="0.6" strokeDasharray="3 4" />}
-          {shape.type === "triangle" && <polygon points="20,4 36,36 4,36" fill="none" stroke="currentColor" strokeWidth="0.6" />}
-          {shape.type === "diamond" && <polygon points="20,4 36,20 20,36 4,20" fill="none" stroke="currentColor" strokeWidth="0.6" />}
-          {shape.type === "line" && <line x1="0" y1="20" x2="40" y2="20" stroke="currentColor" strokeWidth="0.4" strokeDasharray="2 3" />}
-        </motion.svg>
-      ))}
-    </>
+          <svg viewBox="0 0 40 48" className="w-8 h-10" style={{ color: "hsl(270 80% 65%)" }}>
+            <path d="M6 2h20l8 10v34H6V2z" fill="none" stroke="currentColor" strokeWidth="1" />
+            <path d="M26 2v10h8" fill="none" stroke="currentColor" strokeWidth="0.8" />
+            {[16, 22, 28, 34].map(y => (
+              <line key={y} x1="12" y1={y} x2={28 - (y % 8)} y2={y} stroke="currentColor" strokeWidth="0.5" opacity="0.4" />
+            ))}
+          </svg>
+          <motion.span
+            className="text-[10px] font-mono text-muted-foreground/30"
+            animate={{ opacity: [0.3, 0.6, 0.3] }}
+            transition={{ duration: 2, repeat: Infinity }}
+          >
+            → 0x7F...
+          </motion.span>
+        </motion.div>
+      </div>
+    </div>
   );
 };
 
+/* ── Privacy Badge ── */
+const PrivacyBadge = () => (
+  <div className="flex items-center gap-1.5 mt-4">
+    <Shield className="w-3 h-3 text-muted-foreground/30" />
+    <span className="text-[8px] font-mono tracking-[0.15em] uppercase text-muted-foreground/25">
+      Proprietary Architecture / Confidential Client
+    </span>
+  </div>
+);
+
+/* ── System Cards Config ── */
+const systemCards = [
+  {
+    id: "logistics",
+    icon: Route,
+    title: "Autonomous Logistics CRM",
+    subtitle: "Pet Industry Vertical",
+    stat: "Automated 90% of driver dispatching.",
+    accentColor: "hsl(190 90% 55%)",
+    accentGlow: "hsl(190 90% 55% / 0.15)",
+    heroType: "blueprint" as const,
+  },
+  {
+    id: "rag",
+    icon: Cpu,
+    title: "RAG Knowledge Engine",
+    subtitle: "SaaS Architecture",
+    stat: "Vector-based retrieval for instant context.",
+    accentColor: "hsl(270 80% 65%)",
+    accentGlow: "hsl(270 80% 65% / 0.15)",
+    heroType: "binary" as const,
+  },
+  {
+    id: "ecom",
+    icon: Zap,
+    title: "Headless Commerce Core",
+    subtitle: "Fashion Retail",
+    stat: "+15% AOV via algorithmic upsells.",
+    accentColor: "hsl(163 56% 50%)",
+    accentGlow: "hsl(163 56% 50% / 0.15)",
+    heroType: "stats" as const,
+  },
+];
+
+/* ── Main Section ── */
 export const FeaturedWork = () => {
   const ref = useRef<HTMLElement>(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start end", "end start"],
-  });
-
-  const y1 = useTransform(scrollYProgress, [0, 1], [60, -60]);
-  const y2 = useTransform(scrollYProgress, [0, 1], [30, -30]);
-  const y3 = useTransform(scrollYProgress, [0, 1], [45, -45]);
-  const yValues = [y1, y2, y3, y1];
 
   return (
     <section ref={ref} className="py-24 sm:py-32 relative overflow-hidden" id="work">
-      {/* Background decorative elements */}
-      <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
-        <svg className="absolute inset-0 w-full h-full opacity-[0.03]" viewBox="0 0 1000 800">
-          {[...Array(12)].map((_, i) => {
-            const angle = (i / 12) * Math.PI * 2;
-            return (
-              <line
-                key={i}
-                x1="500" y1="400"
-                x2={500 + Math.cos(angle) * 600}
-                y2={400 + Math.sin(angle) * 600}
-                stroke="currentColor" strokeWidth="0.5" className="text-primary" strokeDasharray="4 8"
-              />
-            );
-          })}
-        </svg>
-      </div>
+      {/* Background radial */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{ background: "radial-gradient(ellipse 70% 50% at 50% 30%, hsl(222 100% 65% / 0.03), transparent)" }}
+        aria-hidden="true"
+      />
 
       <div className="container relative">
+        {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
@@ -105,94 +167,127 @@ export const FeaturedWork = () => {
             className="text-muted-foreground text-xs tracking-[0.25em] uppercase mb-4 flex items-center gap-3"
           >
             <span className="w-8 h-px bg-primary/50" />
-            Portfolio
+            Systems Portfolio
           </motion.p>
           <h2 className="font-display text-3xl sm:text-5xl md:text-6xl lg:text-7xl">
             FEATURED <span className="text-primary">WORK</span>
           </h2>
+          <p className="text-muted-foreground text-sm max-w-lg mt-4 leading-relaxed">
+            Production-grade systems engineered for scale. No templates. No screenshots — just architecture.
+          </p>
         </motion.div>
 
-        {/* No cards — organic clip-path reveals */}
-        <div className="grid sm:grid-cols-2 gap-8 lg:gap-10">
-          {projects.map((project, i) => (
-            <motion.div
-              key={project.name}
-              initial={{ opacity: 0, y: 50 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.6, delay: i * 0.12 }}
-              style={{ y: yValues[i] }}
-              className="group relative"
-            >
-              {/* Image placeholder — organic shape, no rectangular border */}
-              <div
-                className="relative aspect-[16/10] overflow-hidden"
-                style={{
-                  borderRadius: "1.5rem 0.5rem 1.5rem 0.5rem",
-                }}
+        {/* System Cards Grid */}
+        <div className="grid md:grid-cols-3 gap-8 lg:gap-10">
+          {systemCards.map((card, i) => {
+            const Icon = card.icon;
+            return (
+              <motion.div
+                key={card.id}
+                initial={{ opacity: 0, y: 50 }}
+                animate={isInView ? { opacity: 1, y: 0 } : {}}
+                transition={{ duration: 0.6, delay: i * 0.15 }}
+                className="group relative"
               >
+                {/* Hero content area */}
                 <div
-                  className="absolute inset-0 transition-all duration-500"
+                  className="relative aspect-[4/3] overflow-hidden mb-5"
                   style={{
-                    background: `linear-gradient(${135 + i * 20}deg, hsl(222 40% 14%), hsl(222 35% 10%))`,
-                  }}
-                />
-
-                {/* Grid pattern inside */}
-                <div
-                  className="absolute inset-0 opacity-[0.04]"
-                  style={{
-                    backgroundImage:
-                      "linear-gradient(rgba(79,124,255,0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(79,124,255,0.3) 1px, transparent 1px)",
-                    backgroundSize: "20px 20px",
-                  }}
-                />
-
-                {/* Floating geometry */}
-                <FloatingShapes index={i} />
-
-                {/* Hover overlay — glow halo */}
-                <div
-                  className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-all duration-500 flex items-center justify-center"
-                  style={{
-                    background: "radial-gradient(circle at 50% 50%, hsl(222 100% 65% / 0.15), hsl(222 47% 9% / 0.8) 70%)",
-                    backdropFilter: "blur(4px)",
+                    borderRadius: "1.25rem",
+                    background: "linear-gradient(135deg, hsl(222 40% 10%), hsl(222 35% 7%))",
                   }}
                 >
-                  <span className="text-xs font-medium tracking-wider uppercase text-foreground/80 flex items-center gap-2">
-                    View
-                    <svg className="w-4 h-4" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5">
-                      <path d="M6 3l5 5-5 5" />
-                    </svg>
-                  </span>
-                </div>
-              </div>
+                  {/* Subtle grid */}
+                  <div
+                    className="absolute inset-0 opacity-[0.03]"
+                    style={{
+                      backgroundImage: `linear-gradient(hsl(222 100% 65% / 0.4) 1px, transparent 1px), linear-gradient(90deg, hsl(222 100% 65% / 0.4) 1px, transparent 1px)`,
+                      backgroundSize: "16px 16px",
+                    }}
+                  />
 
-              <div className="mt-4 flex items-start justify-between">
-                <div>
-                  <h3 className="font-display text-base mb-2 group-hover:text-primary transition-colors">{project.name}</h3>
-                  <div className="flex gap-2 flex-wrap">
-                    {project.tags.map((tag) => (
-                      <span
-                        key={tag}
-                        className="text-[10px] tracking-wider uppercase text-muted-foreground/50"
+                  {/* Hero animation */}
+                  {card.heroType === "blueprint" && (
+                    <div className="absolute inset-3">
+                      <SystemBlueprint compact />
+                    </div>
+                  )}
+                  {card.heroType === "binary" && (
+                    <div className="absolute inset-0">
+                      <BinaryRain />
+                    </div>
+                  )}
+                  {card.heroType === "stats" && (
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <motion.div
+                        className="text-center"
+                        animate={{ opacity: [0.5, 1, 0.5] }}
+                        transition={{ duration: 3, repeat: Infinity }}
                       >
-                        {tag}
-                      </span>
-                    ))}
+                        <span
+                          className="font-display text-5xl sm:text-6xl font-bold"
+                          style={{ color: card.accentColor, textShadow: `0 0 40px ${card.accentGlow}` }}
+                        >
+                          +15%
+                        </span>
+                        <p className="text-[10px] font-mono tracking-[0.2em] uppercase text-muted-foreground/40 mt-2">
+                          AOV Increase
+                        </p>
+                      </motion.div>
+                    </div>
+                  )}
+
+                  {/* Hover glow */}
+                  <motion.div
+                    className="absolute inset-0 pointer-events-none rounded-[1.25rem] opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                    style={{
+                      background: `radial-gradient(circle at 50% 50%, ${card.accentGlow}, transparent 70%)`,
+                    }}
+                  />
+                </div>
+
+                {/* Icon + Title */}
+                <div className="flex items-start gap-3 mb-2">
+                  <div
+                    className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5"
+                    style={{
+                      background: `linear-gradient(135deg, ${card.accentColor}15, ${card.accentColor}08)`,
+                      border: `1px solid ${card.accentColor}20`,
+                    }}
+                  >
+                    <Icon className="w-4 h-4" style={{ color: card.accentColor }} />
+                  </div>
+                  <div>
+                    <h3 className="font-display text-sm sm:text-base group-hover:text-primary transition-colors duration-300">
+                      {card.title}
+                    </h3>
+                    <p className="text-[10px] font-mono tracking-wider uppercase text-muted-foreground/40">
+                      {card.subtitle}
+                    </p>
                   </div>
                 </div>
-                {project.status === "online" && (
-                  <span
-                    className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider shrink-0"
-                    style={{ color: "hsl(330 80% 65%)" }}
-                  >
-                    <span className="w-1.5 h-1.5 rounded-full bg-current animate-pulse" />
-                    ONLINE
-                  </span>
-                )}
-              </div>
-            </motion.div>
-          ))}
+
+                {/* Stat line */}
+                <div className="ml-11">
+                  <motion.div
+                    className="h-px mb-3"
+                    style={{
+                      background: `linear-gradient(90deg, ${card.accentColor}30, transparent)`,
+                      transformOrigin: "left",
+                    }}
+                    animate={{ scaleX: isInView ? 1 : 0 }}
+                    transition={{ delay: 0.4 + i * 0.15, duration: 0.8 }}
+                  />
+                  <p className="text-xs text-muted-foreground/60 leading-relaxed">
+                    {card.stat}
+                  </p>
+
+                  {/* Privacy Badge */}
+                  <PrivacyBadge />
+                </div>
+              </motion.div>
+            );
+          })}
         </div>
       </div>
     </section>
