@@ -1,5 +1,6 @@
 import { useRef, useEffect, useState } from "react";
 import { motion, useInView, useScroll, useTransform } from "framer-motion";
+import { ROICalculator } from "@/components/tools/ROICalculator";
 
 /* ── Animated counter ── */
 const CountUp = ({ end, suffix = "", prefix = "" }: { end: number; suffix?: string; prefix?: string }) => {
@@ -290,6 +291,37 @@ export const GrowthImpact = () => {
             <BarChart isInView={isInView} />
           </motion.div>
         </div>
+
+        {/* Revenue Simulator */}
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.7, delay: 0.6 }}
+          className="mt-24 sm:mt-32"
+        >
+          <div className="mb-10">
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={isInView ? { opacity: 1 } : {}}
+              transition={{ delay: 0.7 }}
+              className="text-muted-foreground text-[10px] tracking-[0.3em] uppercase mb-4 flex items-center gap-3"
+            >
+              <span className="w-8 h-px bg-primary/50" />
+              Revenue Simulator
+            </motion.p>
+            <h3 className="font-display text-2xl sm:text-3xl md:text-4xl mb-3">
+              Good Design Costs Money.{" "}
+              <span className="text-primary">Bad Design Costs Revenue.</span>
+            </h3>
+            <p className="text-muted-foreground text-sm max-w-lg leading-relaxed">
+              Adjust the sliders to model your business. Toggle "Agency Impact" to see the projected lift from our UX and upsell systems.
+            </p>
+          </div>
+
+          <div className="max-w-xl">
+            <ROICalculator />
+          </div>
+        </motion.div>
 
         {/* Disclaimer */}
         <motion.p
