@@ -110,7 +110,7 @@ const systemCards = [
     id: "logistics",
     icon: Route,
     title: "Autonomous Logistics CRM",
-    subtitle: "Pet Industry Vertical",
+    subtitle: "",
     stat: "Automated 90% of driver dispatching.",
     accentColor: "hsl(190 90% 55%)",
     accentGlow: "hsl(190 90% 55% / 0.15)",
@@ -119,9 +119,9 @@ const systemCards = [
   {
     id: "rag",
     icon: Cpu,
-    title: "AI Knowledge Assistant",
-    subtitle: "Education Platform",
-    stat: "Instant answers from thousands of documents.",
+    title: "SaaS Powered with AI",
+    subtitle: "",
+    stat: "Smart automation that scales with your business growth.",
     accentColor: "hsl(270 80% 65%)",
     accentGlow: "hsl(270 80% 65% / 0.15)",
     heroType: "binary" as const,
@@ -130,7 +130,7 @@ const systemCards = [
     id: "ecom",
     icon: Zap,
     title: "Headless Commerce Core",
-    subtitle: "Fashion Retail",
+    subtitle: "",
     stat: "+15% average order value through smart product recommendations.",
     accentColor: "hsl(163 56% 50%)",
     accentGlow: "hsl(163 56% 50% / 0.15)",
@@ -170,7 +170,7 @@ export const FeaturedWork = () => {
             Systems Portfolio
           </motion.p>
           <h2 className="font-display text-3xl sm:text-5xl md:text-6xl lg:text-7xl">
-            FEATURED <span className="text-primary">WORK</span>
+            ALL <span className="text-primary">POSSIBILITIES</span>
           </h2>
           <p className="text-muted-foreground text-sm max-w-lg mt-4 leading-relaxed">
             Production-grade systems engineered for scale. No templates. No shortcuts — just results.
@@ -261,9 +261,11 @@ export const FeaturedWork = () => {
                     <h3 className="font-display text-sm sm:text-base group-hover:text-primary transition-colors duration-300">
                       {card.title}
                     </h3>
-                    <p className="text-[10px] font-mono tracking-wider uppercase text-muted-foreground/40">
-                      {card.subtitle}
-                    </p>
+                    {card.subtitle && (
+                      <p className="text-[10px] font-mono tracking-wider uppercase text-muted-foreground/40">
+                        {card.subtitle}
+                      </p>
+                    )}
                   </div>
                 </div>
 
@@ -282,8 +284,6 @@ export const FeaturedWork = () => {
                     {card.stat}
                   </p>
 
-                  {/* Privacy Badge */}
-                  <PrivacyBadge />
                 </div>
               </motion.div>
             );

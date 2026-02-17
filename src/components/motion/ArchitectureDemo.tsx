@@ -1,189 +1,157 @@
-import { useState, useCallback, useEffect, useRef } from "react";
+import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
-const METRICS = [
-  { label: "Active Users", end: 1247, prefix: "", suffix: "" },
-  { label: "Monthly Revenue", end: 483, prefix: "$", suffix: "K" },
-  { label: "Uptime", end: 9997, prefix: "", suffix: "%", divisor: 100 },
+const CODE_LINES = [
+  { indent: 0, text: "export const SaaSApp = () => {" },
+  { indent: 1, text: "const [users, setUsers] = useState([])" },
+  { indent: 1, text: "const { data } = useQuery('metrics')" },
+  { indent: 1, text: "" },
+  { indent: 1, text: "return (" },
+  { indent: 2, text: "<Dashboard>" },
+  { indent: 3, text: "<MetricsPanel data={data} />" },
+  { indent: 3, text: "<UserTable users={users} />" },
+  { indent: 3, text: "<RevenueChart period='monthly' />" },
+  { indent: 2, text: "</Dashboard>" },
+  { indent: 1, text: ")" },
+  { indent: 0, text: "}" },
 ];
 
-const BAR_HEIGHTS = [65, 85, 45, 90, 70];
-
 export const ArchitectureDemo = () => {
-  const [phase, setPhase] = useState<"idle" | "refreshing" | "live">("idle");
-  const [counts, setCounts] = useState([0, 0, 0]);
-  const [hovered, setHovered] = useState(false);
-  const animRef = useRef<number[]>([]);
-
-  const animateCounters = useCallback(() => {
-    if (phase === "refreshing") return;
-    setPhase("refreshing");
-    setCounts([0, 0, 0]);
-
-    const duration = 1800;
-    const startTime = performance.now();
-
-    const tick = (now: number) => {
-      const progress = Math.min((now - startTime) / duration, 1);
-      const eased = 1 - Math.pow(1 - progress, 4);
-
-      setCounts(METRICS.map((m) => Math.floor(eased * m.end)));
-
-      if (progress < 1) {
-        animRef.current[0] = requestAnimationFrame(tick);
-      } else {
-        setPhase("live");
-      }
-    };
-
-    animRef.current[0] = requestAnimationFrame(tick);
-  }, [phase]);
-
-  useEffect(() => {
-    return () => animRef.current.forEach(cancelAnimationFrame);
-  }, []);
-
-  const formatValue = (i: number, val: number) => {
-    const m = METRICS[i];
-    const display = m.divisor ? (val / m.divisor).toFixed(2) : val.toLocaleString();
-    return `${m.prefix}${display}${m.suffix}`;
-  };
+  const [revealed, setRevealed] = useState(false);
 
   return (
-    <div
-      className="relative py-6 flex flex-col items-center min-h-[280px] select-none"
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-    >
-      {/* Dashboard card */}
-      <div
-        className="w-full max-w-sm mx-auto relative overflow-hidden"
-        style={{
-          background: "linear-gradient(135deg, hsl(222 40% 12% / 0.6), hsl(222 40% 8% / 0.4))",
-          backdropFilter: "blur(20px)",
-          border: "1px solid hsl(222 100% 65% / 0.1)",
-          borderRadius: "1rem",
-          padding: "20px",
-          boxShadow: "0 12px 40px hsl(222 100% 10% / 0.4)",
-        }}
-      >
-        {/* Header */}
-        <div className="flex items-center justify-between mb-5">
-          <div className="flex items-center gap-2">
-            <motion.div
-              className="w-2 h-2 rounded-full"
-              style={{ background: phase === "live" ? "hsl(163 56% 50%)" : "hsl(222 100% 65%)" }}
-              animate={phase === "live" ? { boxShadow: ["0 0 0px hsl(163 56% 50% / 0)", "0 0 10px hsl(163 56% 50% / 0.6)", "0 0 0px hsl(163 56% 50% / 0)"] } : {}}
-              transition={{ duration: 2, repeat: Infinity }}
-            />
-            <span className="text-[9px] tracking-[0.2em] uppercase text-muted-foreground/50 font-mono">
-              {phase === "live" ? "Live" : phase === "refreshing" ? "Loading..." : "Dashboard"}
-            </span>
-          </div>
-          <button
-            onClick={animateCounters}
-            disabled={phase === "refreshing"}
-            className="text-[9px] tracking-[0.15em] uppercase font-mono px-3 py-1 rounded-full transition-all"
-            style={{
-              background: "hsl(222 100% 65% / 0.08)",
-              border: "1px solid hsl(222 100% 65% / 0.15)",
-              color: "hsl(222 100% 70%)",
-              opacity: phase === "refreshing" ? 0.4 : 1,
-              cursor: phase === "refreshing" ? "not-allowed" : "pointer",
-            }}
-          >
-            ↻ Refresh
-          </button>
-        </div>
-
-        {/* Metric rows */}
-        <div className="space-y-3 mb-5">
-          {METRICS.map((metric, i) => (
-            <div key={metric.label} className="flex items-center justify-between">
-              <span className="text-[10px] font-mono tracking-wider text-muted-foreground/50">{metric.label}</span>
-              <motion.span
-                className="text-sm font-mono font-semibold"
-                style={{ color: i === 0 ? "hsl(190 90% 60%)" : i === 1 ? "hsl(163 56% 55%)" : "hsl(270 80% 70%)" }}
-                animate={phase === "live" ? { opacity: [1, 0.7, 1] } : {}}
-                transition={{ duration: 3, repeat: Infinity, delay: i * 0.5 }}
-              >
-                {phase === "idle" ? "—" : formatValue(i, counts[i])}
-              </motion.span>
-            </div>
-          ))}
-        </div>
-
-        {/* Separator */}
-        <div className="h-px mb-4" style={{ background: "linear-gradient(90deg, transparent, hsl(222 100% 65% / 0.12), transparent)" }} />
-
-        {/* Mini bar chart */}
-        <div className="flex items-end gap-2 h-16 px-2">
-          {BAR_HEIGHTS.map((h, i) => (
-            <motion.div
-              key={i}
-              className="flex-1 rounded-t-sm"
-              style={{
-                background: `linear-gradient(to top, hsl(222 100% 65% / 0.3), hsl(222 100% 65% / 0.08))`,
-                boxShadow: phase === "live" ? `0 0 8px hsl(222 100% 65% / 0.15)` : "none",
-              }}
-              initial={{ height: 0 }}
-              animate={{
-                height: phase !== "idle" ? `${h}%` : "4px",
-              }}
-              transition={{
-                duration: 0.8,
-                delay: phase === "refreshing" ? i * 0.1 : 0,
-                ease: "easeOut",
-              }}
-            />
-          ))}
-        </div>
-
-        {/* Chart label */}
-        <p className="text-[8px] font-mono tracking-[0.2em] uppercase text-muted-foreground/25 mt-2 text-center">
-          Weekly Growth
-        </p>
-      </div>
-
-      {/* Hover tooltip */}
-      <AnimatePresence>
-        {hovered && phase === "live" && (
+    <div className="relative py-6 flex flex-col items-center min-h-[280px] select-none">
+      <AnimatePresence mode="wait">
+        {!revealed ? (
           <motion.div
-            initial={{ opacity: 0, y: 10, scale: 0.9 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 5, scale: 0.95 }}
-            transition={{ type: "spring", damping: 20, stiffness: 300 }}
-            className="absolute bottom-2 right-2 sm:right-4 max-w-[220px]"
-            style={{
-              background: "linear-gradient(135deg, hsl(222 40% 12% / 0.8), hsl(222 40% 8% / 0.6))",
-              backdropFilter: "blur(20px)",
-              border: "1px solid hsl(163 56% 45% / 0.15)",
-              borderRadius: "1rem 1rem 1rem 0.25rem",
-              padding: "12px 16px",
-              boxShadow: "0 12px 40px hsl(222 100% 10% / 0.5)",
-            }}
+            key="laptop"
+            className="cursor-pointer flex flex-col items-center"
+            onClick={() => setRevealed(true)}
+            exit={{ scale: 0.8, opacity: 0, rotateY: 90 }}
+            transition={{ duration: 0.4 }}
           >
-            <div className="flex items-center gap-2 mb-2">
-              <div className="w-1.5 h-1.5 rounded-full bg-[hsl(163_56%_45%)] animate-pulse" />
-              <span className="text-[9px] tracking-[0.15em] uppercase text-[hsl(163_56%_55%)]">Multi-tenant</span>
+            {/* Laptop screen */}
+            <div
+              className="relative w-56 h-36 sm:w-64 sm:h-40 flex items-center justify-center"
+              style={{
+                background: "linear-gradient(135deg, hsl(222 40% 12%), hsl(222 40% 8%))",
+                border: "2px solid hsl(222 100% 65% / 0.15)",
+                borderRadius: "0.75rem 0.75rem 0 0",
+                boxShadow: "0 0 40px hsl(222 100% 65% / 0.08), inset 0 1px 0 hsl(0 0% 100% / 0.03)",
+              }}
+            >
+              {/* Grid bg */}
+              <div
+                className="absolute inset-0 opacity-[0.03]"
+                style={{
+                  backgroundImage: `linear-gradient(hsl(222 100% 65% / 0.4) 1px, transparent 1px), linear-gradient(90deg, hsl(222 100% 65% / 0.4) 1px, transparent 1px)`,
+                  backgroundSize: "16px 16px",
+                  borderRadius: "0.75rem 0.75rem 0 0",
+                }}
+              />
+              {/* SaaS icon */}
+              <div className="flex flex-col items-center gap-2 relative z-10">
+                <svg viewBox="0 0 40 40" className="w-10 h-10" style={{ color: "hsl(222 100% 65%)" }}>
+                  <rect x="4" y="8" width="32" height="24" rx="3" fill="none" stroke="currentColor" strokeWidth="1.2" />
+                  <line x1="4" y1="14" x2="36" y2="14" stroke="currentColor" strokeWidth="0.8" />
+                  <circle cx="8" cy="11" r="1" fill="currentColor" opacity="0.5" />
+                  <circle cx="12" cy="11" r="1" fill="currentColor" opacity="0.5" />
+                  <circle cx="16" cy="11" r="1" fill="currentColor" opacity="0.5" />
+                  <rect x="8" y="18" width="10" height="4" rx="1" fill="currentColor" opacity="0.15" />
+                  <rect x="8" y="24" width="14" height="4" rx="1" fill="currentColor" opacity="0.1" />
+                  <rect x="22" y="18" width="10" height="10" rx="1" fill="currentColor" opacity="0.08" />
+                </svg>
+                <motion.p
+                  className="text-xs font-mono text-primary/70 tracking-wider"
+                  animate={{ opacity: [0.5, 1, 0.5] }}
+                  transition={{ duration: 2, repeat: Infinity }}
+                >
+                  Click on me
+                </motion.p>
+              </div>
             </div>
-            <p className="text-xs text-foreground/70 leading-relaxed">
-              Your clients see their own data. Multi-tenant. Secure.
-            </p>
+            {/* Laptop base */}
+            <div
+              className="w-72 h-3 sm:w-80"
+              style={{
+                background: "linear-gradient(180deg, hsl(222 30% 18%), hsl(222 30% 14%))",
+                borderRadius: "0 0 0.5rem 0.5rem",
+                borderTop: "1px solid hsl(222 100% 65% / 0.08)",
+              }}
+            />
+            {/* Laptop bottom edge */}
+            <div
+              className="w-20 h-1 rounded-b-full"
+              style={{ background: "hsl(222 30% 20%)" }}
+            />
+          </motion.div>
+        ) : (
+          <motion.div
+            key="code"
+            initial={{ scale: 0.8, opacity: 0, rotateY: -90 }}
+            animate={{ scale: 1, opacity: 1, rotateY: 0 }}
+            transition={{ duration: 0.5, type: "spring", damping: 20 }}
+            className="w-full max-w-sm cursor-pointer"
+            onClick={() => setRevealed(false)}
+          >
+            {/* Code editor */}
+            <div
+              className="relative overflow-hidden"
+              style={{
+                background: "linear-gradient(135deg, hsl(222 40% 10% / 0.8), hsl(222 40% 6% / 0.6))",
+                border: "1px solid hsl(222 100% 65% / 0.1)",
+                borderRadius: "0.75rem",
+                boxShadow: "0 12px 40px hsl(222 100% 10% / 0.4)",
+              }}
+            >
+              {/* Title bar */}
+              <div className="flex items-center gap-1.5 px-4 py-2.5 border-b" style={{ borderColor: "hsl(222 100% 65% / 0.06)" }}>
+                <div className="w-2 h-2 rounded-full" style={{ background: "hsl(0 70% 55%)" }} />
+                <div className="w-2 h-2 rounded-full" style={{ background: "hsl(45 80% 55%)" }} />
+                <div className="w-2 h-2 rounded-full" style={{ background: "hsl(140 60% 45%)" }} />
+                <span className="ml-3 text-[9px] font-mono text-muted-foreground/30 tracking-wider">app.tsx</span>
+              </div>
+              {/* Code */}
+              <div className="p-4 space-y-0.5 font-mono text-[10px] sm:text-[11px] leading-relaxed">
+                {CODE_LINES.map((line, i) => (
+                  <motion.div
+                    key={i}
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: i * 0.05, duration: 0.3 }}
+                    style={{ paddingLeft: `${line.indent * 16}px` }}
+                    className="whitespace-pre"
+                  >
+                    <span className="text-muted-foreground/20 mr-3 select-none inline-block w-4 text-right">
+                      {i + 1}
+                    </span>
+                    {line.text ? (
+                      <span style={{ color: line.text.includes("export") || line.text.includes("const") || line.text.includes("return")
+                        ? "hsl(270 80% 70%)"
+                        : line.text.startsWith("<") || line.text.startsWith("</")
+                        ? "hsl(190 90% 60%)"
+                        : line.text.includes("'") || line.text.includes('"')
+                        ? "hsl(163 56% 55%)"
+                        : "hsl(220 15% 65%)"
+                      }}>
+                        {line.text}
+                      </span>
+                    ) : null}
+                  </motion.div>
+                ))}
+              </div>
+              {/* Bottom hint */}
+              <motion.p
+                className="text-center text-[8px] font-mono text-muted-foreground/20 tracking-[0.2em] uppercase pb-3"
+                animate={{ opacity: [0.2, 0.5, 0.2] }}
+                transition={{ duration: 3, repeat: Infinity }}
+              >
+                Click to go back
+              </motion.p>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
-
-      {/* Click hint */}
-      {phase === "idle" && (
-        <motion.p
-          className="absolute bottom-2 text-[9px] tracking-[0.2em] uppercase text-muted-foreground/25"
-          animate={{ opacity: [0.25, 0.5, 0.25] }}
-          transition={{ duration: 3, repeat: Infinity }}
-        >
-          Click Refresh to see live data
-        </motion.p>
-      )}
     </div>
   );
 };
