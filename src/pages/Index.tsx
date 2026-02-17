@@ -20,13 +20,13 @@ import { ScrollRevealText } from "@/components/motion/ScrollRevealText";
 import { useFullScreenTransitions, TransitionSection } from "@/components/motion/SectionTransition";
 
 const TRANSITION_SECTIONS = [
-  { id: "services", variant: "glitch" as const },
+  { id: "services", variant: "shutter" as const },
   { id: "designlab", variant: "circuit" as const },
   { id: "process", variant: "data" as const },
-  { id: "growth", variant: "glitch" as const },
+  { id: "growth", variant: "shutter" as const },
   { id: "work", variant: "circuit" as const },
   { id: "cta", variant: "data" as const },
-  { id: "contact", variant: "glitch" as const },
+  { id: "contact", variant: "shutter" as const },
 ];
 
 const Index = () => {

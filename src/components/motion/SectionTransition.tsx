@@ -1,7 +1,7 @@
 import { useRef, useEffect, useState, useCallback, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
-type Variant = "glitch" | "circuit" | "data";
+type Variant = "shutter" | "circuit" | "data";
 
 interface TransitionSection {
   id: string;
@@ -15,67 +15,63 @@ interface FullScreenTransitionProviderProps {
 
 /* ── Full-screen overlay variants ── */
 
-const GlitchOverlay = ({ onDone }: { onDone: () => void }) => {
+const ShutterOverlay = ({ onDone }: { onDone: () => void }) => {
   useEffect(() => {
-    const t = setTimeout(onDone, 650);
+    const t = setTimeout(onDone, 700);
     return () => clearTimeout(t);
   }, [onDone]);
 
-  const slices = 6;
+  const blinds = 8;
   return (
     <motion.div
       className="fixed inset-0 z-[150] pointer-events-auto"
-      style={{ background: "hsl(var(--background))" }}
-      initial={{ clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)" }}
-      exit={{ clipPath: "polygon(0% 100%, 100% 100%, 100% 100%, 0% 100%)" }}
-      transition={{ duration: 0.35, ease: [0.76, 0, 0.24, 1] }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.2 }}
     >
-      {/* Horizontal slices sliding in */}
-      {Array.from({ length: slices }).map((_, i) => (
+      {/* Vertical blinds snapping shut */}
+      {Array.from({ length: blinds }).map((_, i) => (
         <motion.div
           key={i}
-          className="absolute left-0 right-0"
+          className="absolute top-0 bottom-0"
           style={{
-            top: `${(i / slices) * 100}%`,
-            height: `${100 / slices + 0.5}%`,
-            background: i % 2 === 0
-              ? "hsl(var(--primary) / 0.12)"
-              : "hsl(var(--accent-green) / 0.08)",
+            left: `${(i / blinds) * 100}%`,
+            width: `${100 / blinds + 0.2}%`,
+            background: "hsl(var(--background))",
+            borderRight: "1px solid hsl(var(--primary) / 0.15)",
           }}
-          initial={{ x: i % 2 === 0 ? "-100%" : "100%" }}
-          animate={{ x: "0%" }}
-          transition={{ duration: 0.3, delay: i * 0.04, ease: [0.22, 1, 0.36, 1] }}
+          initial={{ scaleX: 0 }}
+          animate={{ scaleX: [0, 1, 1, 0] }}
+          transition={{
+            duration: 0.65,
+            delay: i * 0.03,
+            times: [0, 0.35, 0.65, 1],
+            ease: [0.22, 1, 0.36, 1],
+          }}
+          style-origin="left"
         />
       ))}
 
-      {/* RGB glitch flicker */}
+      {/* Horizontal accent flash */}
       <motion.div
-        className="absolute inset-0"
+        className="absolute top-1/2 left-0 right-0 h-[2px] -translate-y-1/2"
         style={{
-          background: "linear-gradient(90deg, hsl(var(--primary) / 0.2) 33%, hsl(var(--destructive) / 0.15) 33% 66%, hsl(var(--accent-green) / 0.15) 66%)",
-          mixBlendMode: "screen",
+          background: "hsl(var(--primary))",
+          boxShadow: "0 0 20px 4px hsl(var(--primary) / 0.5)",
         }}
-        animate={{ opacity: [0, 0.8, 0, 0.6, 0, 0.4, 0] }}
-        transition={{ duration: 0.3, times: [0, 0.15, 0.3, 0.45, 0.6, 0.75, 1] }}
-      />
-
-      {/* Scan line */}
-      <motion.div
-        className="absolute left-0 right-0 h-[1px]"
-        style={{ background: "linear-gradient(90deg, transparent, hsl(var(--primary) / 0.5), transparent)" }}
-        animate={{ top: ["0%", "100%"] }}
-        transition={{ duration: 0.5, ease: "linear" }}
+        initial={{ scaleX: 0 }}
+        animate={{ scaleX: [0, 1, 1, 0] }}
+        transition={{ duration: 0.55, times: [0, 0.3, 0.6, 1], ease: [0.22, 1, 0.36, 1] }}
       />
 
       {/* Center label */}
-      <div className="absolute inset-0 flex items-center justify-center">
+      <div className="absolute inset-0 flex items-center justify-center z-10">
         <motion.span
-          className="font-mono text-[10px] tracking-[0.4em] uppercase text-muted-foreground"
+          className="font-mono text-[10px] tracking-[0.4em] uppercase text-primary/60"
           initial={{ opacity: 0 }}
-          animate={{ opacity: 0.6 }}
-          transition={{ delay: 0.1 }}
+          animate={{ opacity: [0, 0.7, 0.7, 0] }}
+          transition={{ duration: 0.65, times: [0, 0.3, 0.6, 1] }}
         >
-          Loading Section
+          ◈ Transitioning
         </motion.span>
       </div>
     </motion.div>
@@ -244,7 +240,7 @@ const DataOverlay = ({ onDone }: { onDone: () => void }) => {
 };
 
 const overlayComponents: Record<Variant, React.FC<{ onDone: () => void }>> = {
-  glitch: GlitchOverlay,
+  shutter: ShutterOverlay,
   circuit: CircuitOverlay,
   data: DataOverlay,
 };
