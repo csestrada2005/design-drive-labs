@@ -3,6 +3,7 @@ import { motion, useInView } from "framer-motion";
 import { Send, Check, AlertCircle } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { VariableProximity } from "./VariableProximity";
 
 const isValidEmail = (email: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
@@ -96,24 +97,15 @@ export const ContactSection = () => {
           transition={{ duration: 0.7 }}
           className="mb-10"
         >
-          <h2 className="font-display text-4xl sm:text-5xl md:text-6xl mb-3 leading-[0.95]">
-            <motion.span
-              className="inline-block"
-              initial={{ opacity: 0, x: -30 }}
-              animate={isInView ? { opacity: 1, x: 0 } : {}}
-              transition={{ duration: 0.6, delay: 0.1, ease: [0.25, 1, 0.5, 1] }}
-            >
-              LET'S{" "}
-            </motion.span>
-            <motion.span
-              className="inline-block text-primary"
-              initial={{ opacity: 0, x: -30, scale: 0.9 }}
-              animate={isInView ? { opacity: 1, x: 0, scale: 1 } : {}}
-              transition={{ duration: 0.7, delay: 0.25, ease: [0.25, 1, 0.5, 1] }}
-              style={{ textShadow: "0 0 40px hsl(222 100% 65% / 0.4)" }}
-            >
-              TALK.
-            </motion.span>
+          <h2 className="font-sans text-4xl sm:text-5xl md:text-6xl mb-3 leading-[0.95]">
+            <VariableProximity
+              label="LET'S TALK."
+              className="inline-block cursor-default"
+              containerRef={ref as React.RefObject<HTMLElement>}
+              radius={150}
+              fromFontVariationSettings="'wght' 300"
+              toFontVariationSettings="'wght' 900"
+            />
           </h2>
           <motion.p
             className="text-muted-foreground text-sm"
