@@ -3,27 +3,27 @@ import { motion, useInView } from "framer-motion";
 
 const services = [
   {
-    title: "WEBSITES",
-    subtitle: "High-converting",
-    bullets: ["Custom design systems", "Conversion-optimized UX", "Performance-first builds"],
+    title: "HEADLESS COMMERCE",
+    subtitle: "Shopify Hydrogen & Custom",
+    bullets: ["Headless Shopify storefronts", "Checkout & subscription flows", "Inventory & fulfillment APIs"],
     geometry: "hex",
   },
   {
-    title: "E-COMMERCE",
-    subtitle: "Shopify & Custom",
-    bullets: ["Product page optimization", "Checkout flow design", "Inventory integration"],
+    title: "AI AGENTS & RAG",
+    subtitle: "Custom Intelligence",
+    bullets: ["Vector DB pipelines", "RAG-powered assistants", "LLM orchestration & fine-tuning"],
     geometry: "square",
   },
   {
-    title: "SYSTEMS",
-    subtitle: "CRM / Portals / Automations",
-    bullets: ["Custom dashboards", "Workflow automation", "API integrations"],
+    title: "LOGISTICS CRMs",
+    subtitle: "Operations Software",
+    bullets: ["Route optimization algorithms", "Real-time tracking dashboards", "FastAPI microservices"],
     geometry: "circle",
   },
   {
-    title: "LANDING PAGES",
-    subtitle: "Campaign-ready",
-    bullets: ["A/B test ready", "Lead capture flows", "Analytics integration"],
+    title: "SAAS PLATFORMS",
+    subtitle: "Revenue Engines",
+    bullets: ["Multi-tenant architectures", "Billing & usage metering", "Conversion rate optimization"],
     geometry: "triangle",
   },
 ];
