@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useRef, useState, useCallback } from "react";
 import { motion, useInView, AnimatePresence } from "framer-motion";
 import { Store, Cog, Rocket, Sparkles } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
@@ -58,6 +58,14 @@ export const ServicesSection = () => {
   const isInView = useInView(ref, { once: true, margin: "-100px" });
   const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
   const [showPanel, setShowPanel] = useState(false);
+  const panelRef = useRef<HTMLDivElement>(null);
+
+  const openPanel = useCallback(() => {
+    setShowPanel(true);
+    setTimeout(() => {
+      panelRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+    }, 100);
+  }, []);
 
   return (
     <section ref={ref} className="py-24 sm:py-32 relative overflow-hidden" id="services">
@@ -238,7 +246,7 @@ export const ServicesSection = () => {
 
                     {/* CTA — Prompt a demo */}
                     <button
-                      onClick={() => setShowPanel(true)}
+                      onClick={openPanel}
                       className="inline-flex items-center gap-2 text-[10px] tracking-[0.2em] uppercase mt-5 transition-colors duration-300 group/link cursor-pointer bg-transparent border-0 p-0"
                       style={{ color: `${tier.accentColor}50` }}
                       onMouseEnter={(e) => (e.currentTarget.style.color = tier.accentColor)}
@@ -262,6 +270,7 @@ export const ServicesSection = () => {
               animate={{ opacity: 1, height: 560 }}
               exit={{ opacity: 0, height: 0 }}
               transition={{ duration: 0.5, type: "spring", bounce: 0.15 }}
+              ref={panelRef}
               className="mt-8 rounded-2xl overflow-hidden border border-primary/10"
               style={{
                 background: "linear-gradient(135deg, hsl(222 40% 9%), hsl(222 35% 6%))",
