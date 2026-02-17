@@ -411,10 +411,9 @@ const RevealWipe = () => {
 
 /* ── Demo config ── */
 const demos = [
-  { id: "architecture", label: "LIVE DASHBOARD", desc: "Real-time SaaS metrics", component: ArchitectureDemo, caption: "We build custom dashboards where each of your clients sees only their own data — secure, real-time, and beautifully designed." },
+  { id: "architecture", label: "SAAS DEMO", desc: "Click to reveal the code", component: ArchitectureDemo, caption: "We transform ideas into production-ready software. Click the laptop to see the code behind the experience." },
   { id: "electro", label: "ELECTRO TEXT", desc: "Lightning + glow on hover", component: ElectroText },
   { id: "glass", label: "GLASS POP-UP", desc: "Spring + blur physics", component: GlassPopup },
-  { id: "trail", label: "CURSOR TRAIL", desc: "Magnetic particle trail", component: CursorTrail },
   { id: "tilt", label: "3D TILT", desc: "Dynamic specular lighting", component: TiltObject },
   { id: "morph", label: "SCROLL MORPH", desc: "Scroll-driven shapes", component: ScrollMorphShapes },
   { id: "reveal", label: "REVEAL WIPE", desc: "Clip-path transitions", component: RevealWipe },

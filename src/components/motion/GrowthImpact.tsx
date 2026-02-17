@@ -314,7 +314,7 @@ export const GrowthImpact = () => {
               <span className="text-primary">Bad Design Costs Revenue.</span>
             </h3>
             <p className="text-muted-foreground text-sm max-w-lg leading-relaxed">
-              Adjust the sliders to model your business. Toggle "Agency Impact" to see the projected lift from our UX and upsell systems.
+              See what your revenue looks like now — and what it could look like with our design and technology systems working for you.
             </p>
           </div>
 
