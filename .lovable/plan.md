@@ -1,48 +1,73 @@
 
-# Show Only Preview (No Code) in Tier Demo Cards
+# Section Transition Effects -- Scroll-Triggered "Page Reveal" System
 
-## What Changes
+## Concept
+Each major section of the page will be wrapped in a transition component that detects when the user scrolls past the boundary between sections. When triggered, a techy visual effect plays -- making it feel like a new "page" is loading in, even though it's all one route.
 
-### 1. Redesign `TierDemoChat.tsx` -- Preview-First Layout
-Currently the chat shows raw code text in message bubbles and has a side preview panel. The new layout will:
+## Transition Effects (Rotating Per Section)
+The system will cycle through 3 distinct transition styles so it never feels repetitive:
 
-- Keep the chat input at the bottom (user still types prompts)
-- Hide all raw assistant message text -- never show the code to the user
-- Show ONLY the rendered iframe preview as the main content area, taking up the full card space
-- While loading/streaming, show a centered loading spinner with "Generating your demo..."
-- Once HTML is extracted from the AI response, render it full-bleed in the iframe inside the card
-- Keep the header with tier name and close button
-- Remove the side-by-side split layout entirely -- the preview IS the content
+1. **Glitch Slice** -- The incoming section splits into horizontal slices that stagger-slide in from alternating left/right, with a brief RGB-shift glitch overlay
+2. **Circuit Wipe** -- A horizontal scan-line sweeps across with a glowing electric-blue edge, revealing the new section behind it like a digital curtain
+3. **Data Dissolve** -- The section fades in through a grid of tiny squares that fill in randomly (like pixels loading), with a brief binary/matrix rain overlay
 
-### 2. Update `ServicesSection.tsx` -- Full-Width Card Expansion
-When a card is expanded (chat mode), instead of staying in the 3-column grid, the expanded card should:
+## How It Works
 
-- Use `layout` + `layoutId` with framer-motion to smoothly animate the card to span all 3 columns (`md:col-span-3`)
-- Increase the height to give the preview room (e.g., `h-[520px]`)
-- Non-expanded cards stay visible but shrink/fade slightly
-- Smooth animation using `AnimatePresence` and `layout` transitions
+### New Component: `SectionTransition.tsx`
+A wrapper component that:
+- Uses `useInView` from Framer Motion with a threshold to detect when the section enters the viewport
+- Plays the assigned transition effect once (on first scroll-in)
+- Wraps each section's children so existing components are untouched
+- Accepts a `variant` prop ("glitch" | "circuit" | "data") to pick the effect
 
-### Flow
-1. User clicks "Prompt a demo with our AI"
-2. Card smoothly expands to full width across all 3 columns
-3. User sees a clean input bar at the bottom + empty state with sparkle icon
-4. User types a prompt (e.g., "A website for a company that sells videogames")
-5. Loading spinner appears while AI streams
-6. Once HTML is extracted, the iframe preview renders full-bleed inside the card -- no code visible
-7. User can type another prompt to regenerate
-8. Close button collapses back to normal card
+### Changes to `Index.tsx`
+Wrap each major section in `<SectionTransition variant="...">`:
+
+```text
+HeroSection          -- No transition (it's the first thing visible)
+MarqueeTicker        -- No transition (small divider)
+StatsStrip           -- No transition (small divider)
+ScrollRevealText     -- No transition (already has its own reveal)
+ServicesSection      -- Glitch Slice
+DesignLab            -- Circuit Wipe
+ProcessSection       -- Data Dissolve
+GrowthImpact         -- Glitch Slice
+FeaturedWork         -- Circuit Wipe
+BigCTA               -- Data Dissolve
+ContactSection       -- Glitch Slice
+```
+
+### CSS additions to `index.css`
+- Keyframes for the glitch RGB-shift flicker
+- Keyframes for the scan-line sweep
+- Keyframes for the pixel-grid fill pattern
 
 ## Technical Details
 
-### `TierDemoChat.tsx`
-- Remove the message bubble rendering for assistant messages
-- Keep messages state internally for conversation context (sent to AI), but don't render assistant messages
-- Show user messages as small chips/pills above the input so user remembers what they asked
-- Main area: if `htmlPreview` exists, render full iframe; if loading, show spinner; if empty, show placeholder
-- Remove the `md:flex-row` split layout and the conditional preview panel
+### `SectionTransition.tsx` implementation
+- Uses a `ref` + `useInView(ref, { once: true, amount: 0.15 })` to trigger when ~15% of the section is visible
+- Before trigger: section content is hidden via `clip-path: inset(100%)` or `opacity: 0`
+- On trigger: runs the chosen animation variant using Framer Motion's `animate` + CSS keyframes
+- Each variant is ~0.6-0.8s duration so it feels snappy, not sluggish
+- All animations respect `prefers-reduced-motion` (instant reveal, no effects)
 
-### `ServicesSection.tsx`
-- When `expandedIdx !== null`, the expanded card gets `md:col-span-3` class
-- Non-expanded cards get `hidden md:block opacity-30 pointer-events-none` to fade out
-- Use `motion.div` `layout` prop for smooth grid reflow animation
-- Increase expanded card height from `h-[480px]` to `h-[520px]`
+### Glitch Slice variant
+- Section is split into 5 visual horizontal slices using `clip-path`
+- Each slice slides in from alternating directions with staggered delays (0, 80ms, 160ms...)
+- A brief (200ms) RGB-offset overlay flickers on top
+
+### Circuit Wipe variant
+- A full-width scan-line div (2px tall, electric blue glow) sweeps top-to-bottom
+- Content is revealed progressively behind the line using `clip-path: inset(X% 0 0 0)` animated from 100% to 0%
+- Scan-line has a `box-shadow` glow trail
+
+### Data Dissolve variant
+- An SVG/CSS grid mask of small squares (e.g. 20x12 grid)
+- Squares flip from opaque to transparent in a pseudo-random order over ~600ms
+- Brief matrix-style character rain overlay that fades out
+
+### Performance considerations
+- All animations use `transform`, `clip-path`, and `opacity` only (GPU-composited)
+- `once: true` ensures each transition fires only on first scroll-in, never replays
+- `will-change: transform` added before animation, removed after
+- Mobile: simpler variants (fewer slices, no matrix rain) to keep 60fps
