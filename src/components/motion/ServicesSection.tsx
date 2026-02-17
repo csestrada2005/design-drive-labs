@@ -57,7 +57,7 @@ export const ServicesSection = () => {
   const ref = useRef<HTMLElement>(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
   const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
-  const [expandedIdx, setExpandedIdx] = useState<number | null>(null);
+  const [showPanel, setShowPanel] = useState(false);
 
   return (
     <section ref={ref} className="py-24 sm:py-32 relative overflow-hidden" id="services">
@@ -92,31 +92,23 @@ export const ServicesSection = () => {
         </motion.div>
 
         {/* Tier Cards */}
-        <div className="grid md:grid-cols-3 gap-6 lg:gap-8 relative">
+        <div className="grid md:grid-cols-3 gap-6 lg:gap-8">
           {tiers.map((tier, i) => {
             const Icon = tier.icon;
             const isHovered = hoveredIdx === i;
-            const isExpanded = expandedIdx === i;
 
             return (
               <motion.div
                 key={tier.tier}
                 initial={{ opacity: 0, y: 50 }}
                 animate={isInView ? { opacity: 1, y: 0 } : {}}
-                transition={{ duration: 0.6, delay: isExpanded ? 0 : i * 0.15, layout: { duration: 0.5, type: "spring", bounce: 0.15 } }}
-                onMouseEnter={() => !isExpanded && setHoveredIdx(i)}
+                transition={{ duration: 0.6, delay: i * 0.15 }}
+                onMouseEnter={() => setHoveredIdx(i)}
                 onMouseLeave={() => setHoveredIdx(null)}
-                className={`relative group ${
-                  expandedIdx !== null
-                    ? isExpanded
-                      ? "md:col-span-3"
-                      : "hidden md:block opacity-30 pointer-events-none"
-                    : ""
-                }`}
-                layout
+                className="relative group"
               >
                 {/* Most Popular badge */}
-                {tier.popular && !isExpanded && (
+                {tier.popular && (
                   <motion.div
                     className="absolute -top-3 left-1/2 -translate-x-1/2 z-20 px-4 py-1 rounded-full text-[10px] font-mono tracking-[0.15em] uppercase font-medium"
                     style={{
@@ -170,125 +162,116 @@ export const ServicesSection = () => {
                     }}
                   />
 
-                  <AnimatePresence mode="wait">
-                    {isExpanded ? (
-                      <motion.div
-                        key="chat"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        transition={{ duration: 0.3 }}
-                        className="relative h-[520px]"
+                  <CardContent className="relative p-6 sm:p-8 flex flex-col h-full">
+                    {/* Tier number + icon */}
+                    <div className="flex items-center justify-between mb-6">
+                      <span
+                        className="text-[10px] font-mono tracking-[0.25em] uppercase"
+                        style={{ color: `${tier.accentColor}80` }}
                       >
-                        <TierDemoChat
-                          tierName={tier.name}
-                          tierKey={tier.tierKey}
-                          accentColor={tier.accentColor}
-                          onClose={() => setExpandedIdx(null)}
-                        />
-                      </motion.div>
-                    ) : (
-                      <motion.div
-                        key="content"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        transition={{ duration: 0.3 }}
+                        Tier {tier.tier}
+                      </span>
+                      <div
+                        className="w-9 h-9 rounded-lg flex items-center justify-center transition-all duration-300"
+                        style={{
+                          background: `${tier.accentColor}10`,
+                          border: `1px solid ${tier.accentColor}${isHovered ? "30" : "15"}`,
+                        }}
                       >
-                        <CardContent className="relative p-6 sm:p-8 flex flex-col h-full">
-                          {/* Tier number + icon */}
-                          <div className="flex items-center justify-between mb-6">
-                            <span
-                              className="text-[10px] font-mono tracking-[0.25em] uppercase"
-                              style={{ color: `${tier.accentColor}80` }}
-                            >
-                              Tier {tier.tier}
-                            </span>
-                            <div
-                              className="w-9 h-9 rounded-lg flex items-center justify-center transition-all duration-300"
-                              style={{
-                                background: `${tier.accentColor}10`,
-                                border: `1px solid ${tier.accentColor}${isHovered ? "30" : "15"}`,
-                              }}
-                            >
-                              <Icon className="w-4 h-4" style={{ color: tier.accentColor }} />
-                            </div>
-                          </div>
+                        <Icon className="w-4 h-4" style={{ color: tier.accentColor }} />
+                      </div>
+                    </div>
 
-                          {/* Name */}
-                          <h3 className="font-display text-lg sm:text-xl mb-1 group-hover:text-primary transition-colors duration-300">
-                            {tier.name}
-                          </h3>
-                          <p
-                            className="text-[11px] font-mono tracking-wider uppercase mb-5"
-                            style={{ color: `${tier.accentColor}80` }}
-                          >
-                            {tier.category}
-                          </p>
+                    {/* Name */}
+                    <h3 className="font-display text-lg sm:text-xl mb-1 group-hover:text-primary transition-colors duration-300">
+                      {tier.name}
+                    </h3>
+                    <p
+                      className="text-[11px] font-mono tracking-wider uppercase mb-5"
+                      style={{ color: `${tier.accentColor}80` }}
+                    >
+                      {tier.category}
+                    </p>
 
-                          {/* Separator */}
-                          <motion.div
-                            className="h-px mb-5"
-                            style={{
-                              background: `linear-gradient(90deg, ${tier.accentColor}25, transparent)`,
-                              transformOrigin: "left",
-                            }}
-                            animate={{ scaleX: isHovered ? 1 : 0.4 }}
-                            transition={{ duration: 0.5 }}
-                          />
+                    {/* Separator */}
+                    <motion.div
+                      className="h-px mb-5"
+                      style={{
+                        background: `linear-gradient(90deg, ${tier.accentColor}25, transparent)`,
+                        transformOrigin: "left",
+                      }}
+                      animate={{ scaleX: isHovered ? 1 : 0.4 }}
+                      transition={{ duration: 0.5 }}
+                    />
 
-                          {/* Features */}
-                          <ul className="space-y-3 mb-6 flex-1">
-                            {tier.features.map((feature, fi) => (
-                              <motion.li
-                                key={feature}
-                                className="flex items-start gap-2.5 text-sm text-muted-foreground group-hover:text-foreground/70 transition-colors"
-                                initial={{ opacity: 0, x: -10 }}
-                                animate={isInView ? { opacity: 1, x: 0 } : {}}
-                                transition={{ delay: i * 0.15 + fi * 0.06 + 0.3 }}
-                              >
-                                <div
-                                  className="w-1 h-1 rounded-full flex-shrink-0 mt-2 group-hover:scale-150 transition-transform"
-                                  style={{ background: `${tier.accentColor}60` }}
-                                />
-                                {feature}
-                              </motion.li>
-                            ))}
-                          </ul>
-
-                          {/* Best for */}
+                    {/* Features */}
+                    <ul className="space-y-3 mb-6 flex-1">
+                      {tier.features.map((feature, fi) => (
+                        <motion.li
+                          key={feature}
+                          className="flex items-start gap-2.5 text-sm text-muted-foreground group-hover:text-foreground/70 transition-colors"
+                          initial={{ opacity: 0, x: -10 }}
+                          animate={isInView ? { opacity: 1, x: 0 } : {}}
+                          transition={{ delay: i * 0.15 + fi * 0.06 + 0.3 }}
+                        >
                           <div
-                            className="pt-4 mt-auto"
-                            style={{ borderTop: `1px solid ${tier.accentColor}10` }}
-                          >
-                            <p className="text-[10px] font-mono tracking-[0.12em] uppercase text-muted-foreground/40 mb-1">
-                              Best for
-                            </p>
-                            <p className="text-xs text-foreground/60 leading-relaxed">
-                              {tier.bestFor}
-                            </p>
-                          </div>
+                            className="w-1 h-1 rounded-full flex-shrink-0 mt-2 group-hover:scale-150 transition-transform"
+                            style={{ background: `${tier.accentColor}60` }}
+                          />
+                          {feature}
+                        </motion.li>
+                      ))}
+                    </ul>
 
-                          {/* CTA — Prompt a demo */}
-                          <button
-                            onClick={() => setExpandedIdx(i)}
-                            className="inline-flex items-center gap-2 text-[10px] tracking-[0.2em] uppercase mt-5 transition-colors duration-300 group/link cursor-pointer bg-transparent border-0 p-0"
-                            style={{ color: `${tier.accentColor}50` }}
-                            onMouseEnter={(e) => (e.currentTarget.style.color = tier.accentColor)}
-                            onMouseLeave={(e) => (e.currentTarget.style.color = `${tier.accentColor}50`)}
-                          >
-                            <Sparkles className="w-3 h-3" />
-                            Prompt a demo with our AI
-                          </button>
-                        </CardContent>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
+                    {/* Best for */}
+                    <div
+                      className="pt-4 mt-auto"
+                      style={{ borderTop: `1px solid ${tier.accentColor}10` }}
+                    >
+                      <p className="text-[10px] font-mono tracking-[0.12em] uppercase text-muted-foreground/40 mb-1">
+                        Best for
+                      </p>
+                      <p className="text-xs text-foreground/60 leading-relaxed">
+                        {tier.bestFor}
+                      </p>
+                    </div>
+
+                    {/* CTA — Prompt a demo */}
+                    <button
+                      onClick={() => setShowPanel(true)}
+                      className="inline-flex items-center gap-2 text-[10px] tracking-[0.2em] uppercase mt-5 transition-colors duration-300 group/link cursor-pointer bg-transparent border-0 p-0"
+                      style={{ color: `${tier.accentColor}50` }}
+                      onMouseEnter={(e) => (e.currentTarget.style.color = tier.accentColor)}
+                      onMouseLeave={(e) => (e.currentTarget.style.color = `${tier.accentColor}50`)}
+                    >
+                      <Sparkles className="w-3 h-3" />
+                      Prompt a demo with our AI
+                    </button>
+                  </CardContent>
                 </Card>
               </motion.div>
             );
           })}
         </div>
+
+        {/* CUATRE AI Panel — appears below the cards */}
+        <AnimatePresence>
+          {showPanel && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 560 }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.5, type: "spring", bounce: 0.15 }}
+              className="mt-8 rounded-2xl overflow-hidden border border-primary/10"
+              style={{
+                background: "linear-gradient(135deg, hsl(222 40% 9%), hsl(222 35% 6%))",
+                boxShadow: "0 0 60px hsl(190 90% 55% / 0.08), inset 0 1px 0 hsl(0 0% 100% / 0.03)",
+              }}
+            >
+              <TierDemoChat onClose={() => setShowPanel(false)} />
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </section>
   );

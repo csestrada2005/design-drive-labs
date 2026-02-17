@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Send, Sparkles, Loader2 } from "lucide-react";
 
@@ -7,18 +7,14 @@ const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/demo-chat`;
 type Msg = { role: "user" | "assistant"; content: string };
 
 interface TierDemoChatProps {
-  tierName: string;
-  tierKey: string;
-  accentColor: string;
   onClose: () => void;
 }
 
-export const TierDemoChat = ({ tierName, tierKey, accentColor, onClose }: TierDemoChatProps) => {
+export const TierDemoChat = ({ onClose }: TierDemoChatProps) => {
   const [messages, setMessages] = useState<Msg[]>([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [htmlPreview, setHtmlPreview] = useState<string | null>(null);
-  const abortRef = useRef<AbortController | null>(null);
 
   const extractHTML = (text: string): string | null => {
     const codeBlockMatch = text.match(/```(?:html)?\s*([\s\S]*?)```/);
@@ -36,6 +32,7 @@ export const TierDemoChat = ({ tierName, tierKey, accentColor, onClose }: TierDe
     setMessages(newMessages);
     setInput("");
     setIsLoading(true);
+    setHtmlPreview(null);
 
     let assistantSoFar = "";
 
@@ -46,7 +43,7 @@ export const TierDemoChat = ({ tierName, tierKey, accentColor, onClose }: TierDe
           "Content-Type": "application/json",
           Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
         },
-        body: JSON.stringify({ messages: newMessages, tier: tierKey }),
+        body: JSON.stringify({ messages: newMessages }),
       });
 
       if (!resp.ok || !resp.body) {
@@ -66,7 +63,6 @@ export const TierDemoChat = ({ tierName, tierKey, accentColor, onClose }: TierDe
 
       const upsertAssistant = (chunk: string) => {
         assistantSoFar += chunk;
-        // Try to extract HTML as it streams
         const html = extractHTML(assistantSoFar);
         if (html) setHtmlPreview(html);
 
@@ -105,7 +101,6 @@ export const TierDemoChat = ({ tierName, tierKey, accentColor, onClose }: TierDe
         }
       }
 
-      // Final extraction
       const finalHtml = extractHTML(assistantSoFar);
       if (finalHtml) setHtmlPreview(finalHtml);
     } catch {
@@ -116,20 +111,28 @@ export const TierDemoChat = ({ tierName, tierKey, accentColor, onClose }: TierDe
   };
 
   const userMessages = messages.filter((m) => m.role === "user");
+  const accentColor = "hsl(190 90% 55%)";
 
   return (
     <div className="flex flex-col h-full">
       {/* Header */}
-      <div className="flex items-center justify-between px-5 py-3 border-b" style={{ borderColor: `${accentColor}15` }}>
-        <div className="flex items-center gap-2">
-          <Sparkles className="w-4 h-4" style={{ color: accentColor }} />
-          <span className="text-xs font-mono tracking-[0.15em] uppercase text-foreground/70">
-            {tierName} — AI Demo
-          </span>
+      <div className="flex items-center justify-between px-6 py-4 border-b border-primary/10">
+        <div className="flex items-center gap-3">
+          <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-primary/10 border border-primary/20">
+            <Sparkles className="w-4 h-4 text-primary" />
+          </div>
+          <div>
+            <span className="text-sm font-display tracking-[0.1em] uppercase text-foreground">
+              CUATRE AI
+            </span>
+            <p className="text-[10px] text-muted-foreground/50 font-mono tracking-wider">
+              Interactive Demo Generator
+            </p>
+          </div>
         </div>
         <button
           onClick={onClose}
-          className="w-7 h-7 rounded-full flex items-center justify-center transition-colors hover:bg-muted/20"
+          className="w-8 h-8 rounded-full flex items-center justify-center transition-colors hover:bg-muted/20"
         >
           <X className="w-4 h-4 text-muted-foreground" />
         </button>
@@ -146,7 +149,7 @@ export const TierDemoChat = ({ tierName, tierKey, accentColor, onClose }: TierDe
               exit={{ opacity: 0 }}
               className="absolute inset-0 flex flex-col items-center justify-center gap-4"
             >
-              <Loader2 className="w-8 h-8 animate-spin" style={{ color: `${accentColor}60` }} />
+              <Loader2 className="w-8 h-8 animate-spin text-primary/60" />
               <p className="text-sm text-muted-foreground/50 font-mono tracking-wider">
                 Generating your demo...
               </p>
@@ -160,8 +163,8 @@ export const TierDemoChat = ({ tierName, tierKey, accentColor, onClose }: TierDe
             >
               <iframe
                 srcDoc={`<!DOCTYPE html><html><head><meta charset="utf-8"><style>*{margin:0;padding:0;box-sizing:border-box;font-family:system-ui,-apple-system,sans-serif}body{display:flex;align-items:center;justify-content:center;min-height:100vh;background:#0a0a14;color:#e0e0e0}</style></head><body>${htmlPreview}</body></html>`}
-                className="w-full h-full rounded-lg"
-                style={{ border: `1px solid ${accentColor}15`, background: "#0a0a14" }}
+                className="w-full h-full rounded-lg border border-primary/10"
+                style={{ background: "#0a0a14" }}
                 sandbox="allow-scripts"
                 title="Demo Preview"
               />
@@ -174,12 +177,12 @@ export const TierDemoChat = ({ tierName, tierKey, accentColor, onClose }: TierDe
               exit={{ opacity: 0 }}
               className="absolute inset-0 flex flex-col items-center justify-center gap-3"
             >
-              <Sparkles className="w-10 h-10" style={{ color: `${accentColor}30` }} />
+              <Sparkles className="w-10 h-10 text-primary/20" />
               <p className="text-sm text-muted-foreground/50 max-w-xs text-center">
                 Describe what you'd like to see and I'll generate a live preview.
               </p>
               <p className="text-[10px] font-mono text-muted-foreground/25 tracking-wider">
-                Try: "A product card with hover effects"
+                Try: "A dashboard for tracking sales metrics"
               </p>
             </motion.div>
           )}
@@ -187,14 +190,13 @@ export const TierDemoChat = ({ tierName, tierKey, accentColor, onClose }: TierDe
       </div>
 
       {/* User prompt pills + Input */}
-      <div className="px-3 pt-2 pb-3 border-t" style={{ borderColor: `${accentColor}10` }}>
+      <div className="px-4 pt-2 pb-4 border-t border-primary/10">
         {userMessages.length > 0 && (
           <div className="flex flex-wrap gap-1.5 mb-2">
             {userMessages.map((m, i) => (
               <span
                 key={i}
-                className="text-[10px] px-2.5 py-1 rounded-full truncate max-w-[200px]"
-                style={{ background: `${accentColor}10`, color: `${accentColor}90`, border: `1px solid ${accentColor}15` }}
+                className="text-[10px] px-2.5 py-1 rounded-full truncate max-w-[200px] bg-primary/10 text-primary/70 border border-primary/15"
               >
                 {m.content}
               </span>
@@ -207,14 +209,12 @@ export const TierDemoChat = ({ tierName, tierKey, accentColor, onClose }: TierDe
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && !e.shiftKey && send()}
             placeholder="Describe your demo..."
-            className="flex-1 bg-transparent text-sm px-3 py-2 rounded-lg outline-none placeholder:text-muted-foreground/30"
-            style={{ border: `1px solid ${accentColor}15` }}
+            className="flex-1 bg-transparent text-sm px-3 py-2 rounded-lg outline-none placeholder:text-muted-foreground/30 border border-primary/15 focus:border-primary/30 transition-colors"
           />
           <button
             onClick={send}
             disabled={isLoading || !input.trim()}
-            className="w-9 h-9 rounded-lg flex items-center justify-center transition-all disabled:opacity-30"
-            style={{ background: `${accentColor}15`, color: accentColor }}
+            className="w-9 h-9 rounded-lg flex items-center justify-center transition-all disabled:opacity-30 bg-primary/15 text-primary"
           >
             <Send className="w-4 h-4" />
           </button>
