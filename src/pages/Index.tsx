@@ -80,9 +80,9 @@ const Index = () => {
             <TransitionSection registerRef={registerRef(5)}>
               <BigCTA />
               <ContactSection />
+              <DramaticFooter />
             </TransitionSection>
           </main>
-          <DramaticFooter />
           <BottomNav />
         </>
       )}
