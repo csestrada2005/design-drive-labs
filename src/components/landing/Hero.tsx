@@ -1,11 +1,7 @@
-import { ArrowRight, CheckCircle2 } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-const benefits = [
-  "Páginas optimizadas para conversión",
-  "Diseño 100% responsive",
-  "Carga ultra rápida",
-];
+const techStack = ["Python", "React", "Supabase", "Vector DB"];
 
 export const Hero = () => {
   return (
@@ -20,39 +16,45 @@ export const Hero = () => {
           <div className="space-y-8">
             <div className="space-y-6">
               <span className="inline-block px-4 py-2 bg-primary/10 text-primary text-sm font-medium rounded-full animate-fade-up">
-                +50 clientes confían en mí
+                SaaS & Revenue Engineering Agency
               </span>
               
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground leading-tight text-balance animate-fade-up animation-delay-100">
-                Diseño landing pages y sitios web que{" "}
-                <span className="text-primary">convierten visitantes en clientes</span>
+                We Build High-Performance SaaS &{" "}
+                <span className="text-primary">Digital Revenue Engines.</span>
               </h1>
               
               <p className="text-lg md:text-xl text-muted-foreground max-w-xl animate-fade-up animation-delay-200">
-                Páginas web rápidas, optimizadas para SEO y diseñadas a medida para hacer crecer tu negocio online.
+                From Headless Shopify storefronts to Custom AI Agents and Logistics CRMs. We engineer the software that powers your growth.
               </p>
             </div>
 
             <div className="flex flex-col sm:flex-row gap-4 animate-fade-up animation-delay-300">
               <Button size="lg" asChild className="group">
                 <a href="#contacto">
-                  Solicitar propuesta gratuita
+                  Get a Proposal
                   <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
                 </a>
               </Button>
               <Button size="lg" variant="outline" asChild>
-                <a href="#portafolio">Ver proyectos</a>
+                <a href="#portafolio">View Work</a>
               </Button>
             </div>
 
-            <ul className="flex flex-col sm:flex-row gap-4 sm:gap-6 animate-fade-up animation-delay-400">
-              {benefits.map((benefit) => (
-                <li key={benefit} className="flex items-center gap-2 text-sm text-muted-foreground">
-                  <CheckCircle2 className="h-4 w-4 text-primary flex-shrink-0" />
-                  {benefit}
-                </li>
-              ))}
-            </ul>
+            {/* Tech Badge */}
+            <div className="animate-fade-up animation-delay-400">
+              <p className="text-xs tracking-[0.15em] uppercase text-muted-foreground/60 mb-2">Ship Enterprise Code</p>
+              <div className="flex flex-wrap gap-2">
+                {techStack.map((tech) => (
+                  <span
+                    key={tech}
+                    className="px-3 py-1 text-xs font-mono tracking-wide text-primary/80 bg-primary/5 border border-primary/10 rounded-full"
+                  >
+                    {tech}
+                  </span>
+                ))}
+              </div>
+            </div>
           </div>
 
           {/* Hero Image Placeholder */}
