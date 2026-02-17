@@ -1,5 +1,6 @@
 import { useRef, useState, useEffect, useCallback } from "react";
 import { motion, useInView, useScroll, useTransform, AnimatePresence } from "framer-motion";
+import { ArchitectureDemo } from "./ArchitectureDemo";
 
 /* ── Demo 1: Electro Text — Lightning arcs ── */
 const ElectroText = () => {
@@ -410,6 +411,7 @@ const RevealWipe = () => {
 
 /* ── Demo config ── */
 const demos = [
+  { id: "architecture", label: "RAG PIPELINE", desc: "Interactive system architecture", component: ArchitectureDemo, caption: "Beyond Frontend: We build custom RAG pipelines that allow your business to chat with its own data." },
   { id: "electro", label: "ELECTRO TEXT", desc: "Lightning + glow on hover", component: ElectroText },
   { id: "glass", label: "GLASS POP-UP", desc: "Spring + blur physics", component: GlassPopup },
   { id: "trail", label: "CURSOR TRAIL", desc: "Magnetic particle trail", component: CursorTrail },
@@ -498,6 +500,13 @@ export const DesignLab = () => {
 
                 {/* Demo */}
                 <DemoComponent />
+
+                {/* Caption if present */}
+                {"caption" in demo && demo.caption && (
+                  <p className="text-xs text-muted-foreground/50 leading-relaxed mt-4 max-w-sm italic">
+                    {demo.caption}
+                  </p>
+                )}
 
                 {/* CTA */}
                 <a
