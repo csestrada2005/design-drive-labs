@@ -2,41 +2,77 @@ import { useRef } from "react";
 import { motion, useInView, useScroll, useTransform } from "framer-motion";
 
 const projects = [
-  {
-    name: "Project Alpha",
-    tags: ["WEB", "UI/UX", "CRO"],
-  },
-  {
-    name: "Project Beta",
-    tags: ["ECOMMERCE", "SHOPIFY"],
-  },
-  {
-    name: "Project Gamma",
-    tags: ["LANDING PAGE", "CAMPAIGNS"],
-  },
-  {
-    name: "Project Delta",
-    tags: ["SYSTEM", "CRM", "PORTAL"],
-  },
+  { name: "Project Alpha", tags: ["WEB", "UI/UX", "CRO"] },
+  { name: "Project Beta", tags: ["ECOMMERCE", "SHOPIFY"] },
+  { name: "Project Gamma", tags: ["LANDING PAGE", "CAMPAIGNS"] },
+  { name: "Project Delta", tags: ["SYSTEM", "CRM", "PORTAL"] },
 ];
 
-const FloatingGeometry = ({ index }: { index: number }) => {
-  const shapes = [
-    <rect key="r" x="2" y="2" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="0.5" transform="rotate(15 12 12)" />,
-    <circle key="c" cx="12" cy="12" r="10" fill="none" stroke="currentColor" strokeWidth="0.5" strokeDasharray="2 3" />,
-    <polygon key="p" points="12,2 22,22 2,22" fill="none" stroke="currentColor" strokeWidth="0.5" />,
-    <polygon key="h" points="12,2 21,7 21,17 12,22 3,17 3,7" fill="none" stroke="currentColor" strokeWidth="0.5" />,
+const FloatingShapes = ({ index }: { index: number }) => {
+  const configs = [
+    // Different geometry arrangements per card
+    [
+      { type: "hex", x: "75%", y: "15%", size: 50, rotation: 15, delay: 0 },
+      { type: "circle-dotted", x: "85%", y: "60%", size: 30, rotation: 0, delay: 1 },
+      { type: "line", x: "10%", y: "80%", size: 40, rotation: -30, delay: 0.5 },
+    ],
+    [
+      { type: "square", x: "80%", y: "20%", size: 35, rotation: 45, delay: 0.3 },
+      { type: "triangle", x: "15%", y: "70%", size: 28, rotation: 0, delay: 0.8 },
+      { type: "circle-dotted", x: "70%", y: "75%", size: 45, rotation: 0, delay: 0 },
+    ],
+    [
+      { type: "diamond", x: "82%", y: "30%", size: 32, rotation: 0, delay: 0.2 },
+      { type: "hex", x: "8%", y: "25%", size: 40, rotation: 30, delay: 0.7 },
+      { type: "line", x: "90%", y: "70%", size: 50, rotation: 60, delay: 0 },
+    ],
+    [
+      { type: "circle-dotted", x: "78%", y: "25%", size: 55, rotation: 0, delay: 0 },
+      { type: "square", x: "12%", y: "65%", size: 25, rotation: 20, delay: 0.6 },
+      { type: "triangle", x: "85%", y: "70%", size: 30, rotation: 180, delay: 0.4 },
+    ],
   ];
+
+  const shapes = configs[index % configs.length];
+
   return (
-    <svg viewBox="0 0 24 24" className="w-16 h-16 text-primary/15 absolute" aria-hidden="true"
-      style={{
-        top: `${10 + (index * 20) % 60}%`,
-        right: `${5 + (index * 15) % 30}%`,
-        transform: `rotate(${index * 30}deg)`,
-      }}
-    >
-      {shapes[index % shapes.length]}
-    </svg>
+    <>
+      {shapes.map((shape, i) => (
+        <motion.svg
+          key={i}
+          className="absolute text-primary/[0.12] pointer-events-none"
+          style={{
+            left: shape.x,
+            top: shape.y,
+            width: shape.size,
+            height: shape.size,
+          }}
+          viewBox="0 0 40 40"
+          aria-hidden="true"
+          animate={{ rotate: [shape.rotation, shape.rotation + 360] }}
+          transition={{ duration: 30 + i * 10, repeat: Infinity, ease: "linear", delay: shape.delay }}
+        >
+          {shape.type === "hex" && (
+            <polygon points="20,4 36,12 36,28 20,36 4,28 4,12" fill="none" stroke="currentColor" strokeWidth="0.6" />
+          )}
+          {shape.type === "square" && (
+            <rect x="6" y="6" width="28" height="28" fill="none" stroke="currentColor" strokeWidth="0.6" />
+          )}
+          {shape.type === "circle-dotted" && (
+            <circle cx="20" cy="20" r="16" fill="none" stroke="currentColor" strokeWidth="0.6" strokeDasharray="3 4" />
+          )}
+          {shape.type === "triangle" && (
+            <polygon points="20,4 36,36 4,36" fill="none" stroke="currentColor" strokeWidth="0.6" />
+          )}
+          {shape.type === "diamond" && (
+            <polygon points="20,4 36,20 20,36 4,20" fill="none" stroke="currentColor" strokeWidth="0.6" />
+          )}
+          {shape.type === "line" && (
+            <line x1="0" y1="20" x2="40" y2="20" stroke="currentColor" strokeWidth="0.4" strokeDasharray="2 3" />
+          )}
+        </motion.svg>
+      ))}
+    </>
   );
 };
 
@@ -48,68 +84,118 @@ export const FeaturedWork = () => {
     offset: ["start end", "end start"],
   });
 
-  const y1 = useTransform(scrollYProgress, [0, 1], [40, -40]);
-  const y2 = useTransform(scrollYProgress, [0, 1], [20, -20]);
+  const y1 = useTransform(scrollYProgress, [0, 1], [60, -60]);
+  const y2 = useTransform(scrollYProgress, [0, 1], [30, -30]);
+  const y3 = useTransform(scrollYProgress, [0, 1], [45, -45]);
+
+  const yValues = [y1, y2, y3, y1];
 
   return (
     <section
       ref={ref}
-      className="py-24 sm:py-32 relative"
+      className="py-24 sm:py-32 relative overflow-hidden"
       id="work"
       style={{
-        background: "linear-gradient(180deg, hsl(222 47% 9%), hsl(222 47% 11%), hsl(222 47% 9%))",
+        background: "linear-gradient(180deg, hsl(222 47% 9%), hsl(222 45% 11%), hsl(222 47% 9%))",
       }}
     >
-      <div className="container">
-        <motion.h2
+      {/* Background decorative elements */}
+      <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
+        {/* Radial lines from center */}
+        <svg className="absolute inset-0 w-full h-full opacity-[0.03]" viewBox="0 0 1000 800">
+          {[...Array(12)].map((_, i) => {
+            const angle = (i / 12) * Math.PI * 2;
+            return (
+              <line
+                key={i}
+                x1="500"
+                y1="400"
+                x2={500 + Math.cos(angle) * 600}
+                y2={400 + Math.sin(angle) * 600}
+                stroke="currentColor"
+                strokeWidth="0.5"
+                className="text-primary"
+                strokeDasharray="4 8"
+              />
+            );
+          })}
+        </svg>
+      </div>
+
+      <div className="container relative">
+        <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
-          className="font-display text-3xl sm:text-5xl md:text-6xl mb-16"
+          className="mb-16"
         >
-          FEATURED <span className="text-primary">WORK</span>
-        </motion.h2>
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={isInView ? { opacity: 1 } : {}}
+            transition={{ delay: 0.1 }}
+            className="text-muted-foreground text-xs tracking-[0.25em] uppercase mb-4 flex items-center gap-3"
+          >
+            <span className="w-8 h-px bg-primary/50" />
+            Portfolio
+          </motion.p>
+          <h2 className="font-display text-3xl sm:text-5xl md:text-6xl lg:text-7xl">
+            FEATURED <span className="text-primary">WORK</span>
+          </h2>
+        </motion.div>
 
         <div className="grid sm:grid-cols-2 gap-6">
           {projects.map((project, i) => (
             <motion.div
               key={project.name}
-              initial={{ opacity: 0, y: 40 }}
+              initial={{ opacity: 0, y: 50 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.5, delay: i * 0.1 }}
-              style={{ y: i % 2 === 0 ? y1 : y2 }}
-              className="group relative overflow-hidden rounded-lg border border-border/30 hover:border-primary/30 transition-colors"
+              transition={{ duration: 0.6, delay: i * 0.12 }}
+              style={{ y: yValues[i] }}
+              className="group relative overflow-hidden rounded-lg border border-border/30 hover:border-primary/30 transition-all duration-500"
             >
-              {/* Image placeholder with shimmer */}
+              {/* Image placeholder with sophisticated shimmer */}
               <div className="relative aspect-[16/10] bg-card/60 overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-br from-secondary/50 to-card/50" />
+                <div className="absolute inset-0 bg-gradient-to-br from-secondary/50 to-card/30" />
 
-                {/* Shimmer effect */}
+                {/* Grid pattern inside card */}
+                <div
+                  className="absolute inset-0 opacity-[0.04]"
+                  style={{
+                    backgroundImage:
+                      "linear-gradient(rgba(79,124,255,0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(79,124,255,0.3) 1px, transparent 1px)",
+                    backgroundSize: "20px 20px",
+                  }}
+                />
+
+                {/* Shimmer */}
                 <div className="absolute inset-0 overflow-hidden">
                   <div
                     className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-primary/5 to-transparent"
-                    style={{ animation: "shimmer 3s infinite" }}
+                    style={{ animation: "shimmer 4s infinite" }}
                   />
                 </div>
 
-                {/* Floating geometry */}
-                <FloatingGeometry index={i} />
+                {/* Floating geometry overlays */}
+                <FloatingShapes index={i} />
 
                 {/* Hover overlay */}
-                <div className="absolute inset-0 bg-background/80 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                  <span className="text-xs font-medium tracking-wider uppercase text-muted-foreground">
-                    View Case Study →
+                <div className="absolute inset-0 bg-background/80 opacity-0 group-hover:opacity-100 transition-all duration-500 flex items-center justify-center backdrop-blur-sm">
+                  <span className="text-xs font-medium tracking-wider uppercase text-foreground/80 flex items-center gap-2">
+                    View Case Study
+                    <svg className="w-4 h-4" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5">
+                      <path d="M6 3l5 5-5 5" />
+                    </svg>
                   </span>
                 </div>
               </div>
 
               <div className="p-5">
-                <h3 className="font-display text-base mb-2">{project.name}</h3>
+                <h3 className="font-display text-base mb-2 group-hover:text-primary transition-colors">{project.name}</h3>
                 <div className="flex gap-2 flex-wrap">
                   {project.tags.map((tag) => (
                     <span
                       key={tag}
-                      className="text-[10px] tracking-wider uppercase text-muted-foreground border border-border/40 rounded px-2 py-0.5"
+                      className="text-[10px] tracking-wider uppercase text-muted-foreground border border-border/40 rounded px-2 py-0.5 group-hover:border-primary/30 transition-colors"
                     >
                       {tag}
                     </span>

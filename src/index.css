@@ -316,6 +316,12 @@
   .scan-bar {
     animation: scan 4s ease-in-out infinite;
   }
+
+  /* Shimmer */
+  @keyframes shimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(200%); }
+  }
 }
 
 /* Scrollbar */
