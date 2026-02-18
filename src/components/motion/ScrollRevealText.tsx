@@ -40,9 +40,9 @@ export const ScrollRevealText = ({ lines, className = "" }: ScrollRevealTextProp
               const isHighlight = highlights.some(hw => word.toLowerCase().includes(hw.toLowerCase()));
 
               return (
-                <Word key={i} progress={scrollYProgress} range={[start, end]} isHighlight={isHighlight}>
+                <InkWord key={i} progress={scrollYProgress} range={[start, end]} isHighlight={isHighlight}>
                   {word}
-                </Word>
+                </InkWord>
               );
             })}
           </p>
@@ -52,7 +52,7 @@ export const ScrollRevealText = ({ lines, className = "" }: ScrollRevealTextProp
   );
 };
 
-const Word = ({
+const InkWord = ({
   children,
   progress,
   range,
@@ -63,13 +63,19 @@ const Word = ({
   range: [number, number];
   isHighlight: boolean;
 }) => {
-  const opacity = useTransform(progress, range, [0.15, 1]);
-  const y = useTransform(progress, range, [8, 0]);
+  // Weight: 200 (pencil sketch) → 600 (wet ink)
+  const fontWeight = useTransform(progress, range, [200, 600]);
+  // Opacity: faint pencil → solid ink
+  const opacity = useTransform(progress, range, [0.25, 1]);
 
   return (
     <motion.span
-      style={{ opacity, y }}
-      className={`inline-block transition-colors duration-300 ${isHighlight ? "text-primary" : ""}`}
+      style={{
+        fontWeight,
+        opacity,
+        display: "inline-block",
+      }}
+      className={isHighlight ? "text-primary" : "text-foreground"}
     >
       {children}
     </motion.span>
