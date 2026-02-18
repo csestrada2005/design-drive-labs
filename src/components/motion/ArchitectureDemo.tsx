@@ -22,13 +22,11 @@ export const ArchitectureDemo = () => {
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: false, margin: "-50px" });
 
-  // Auto-flip on timer when in view
+  // Quick transition: show laptop briefly, then switch to code and stay
   useEffect(() => {
-    if (!isInView) return;
-    const interval = setInterval(() => {
-      setRevealed((prev) => !prev);
-    }, 3500);
-    return () => clearInterval(interval);
+    if (!isInView) { setRevealed(false); return; }
+    const timer = setTimeout(() => setRevealed(true), 1500);
+    return () => clearTimeout(timer);
   }, [isInView]);
 
   return (
@@ -39,28 +37,28 @@ export const ArchitectureDemo = () => {
             key="laptop"
             className="flex flex-col items-center"
             exit={{ scale: 0.8, opacity: 0, rotateY: 90 }}
-            transition={{ duration: 0.4 }}
+            transition={{ duration: 0.3 }}
           >
             {/* Laptop screen */}
             <div
               className="relative w-56 h-36 sm:w-64 sm:h-40 flex items-center justify-center"
               style={{
-                background: "linear-gradient(135deg, hsl(222 40% 12%), hsl(222 40% 8%))",
-                border: "2px solid hsl(222 100% 65% / 0.15)",
+                background: "linear-gradient(135deg, hsl(0 40% 12%), hsl(0 40% 8%))",
+                border: "2px solid hsl(0 100% 50% / 0.15)",
                 borderRadius: "0.75rem 0.75rem 0 0",
-                boxShadow: "0 0 40px hsl(222 100% 65% / 0.08), inset 0 1px 0 hsl(0 0% 100% / 0.03)",
+                boxShadow: "0 0 40px hsl(0 100% 50% / 0.08), inset 0 1px 0 hsl(0 0% 100% / 0.03)",
               }}
             >
               <div
                 className="absolute inset-0 opacity-[0.03]"
                 style={{
-                  backgroundImage: `linear-gradient(hsl(222 100% 65% / 0.4) 1px, transparent 1px), linear-gradient(90deg, hsl(222 100% 65% / 0.4) 1px, transparent 1px)`,
+                  backgroundImage: `linear-gradient(hsl(0 100% 50% / 0.4) 1px, transparent 1px), linear-gradient(90deg, hsl(0 100% 50% / 0.4) 1px, transparent 1px)`,
                   backgroundSize: "16px 16px",
                   borderRadius: "0.75rem 0.75rem 0 0",
                 }}
               />
               <div className="flex flex-col items-center gap-2 relative z-10">
-                <svg viewBox="0 0 40 40" className="w-10 h-10" style={{ color: "hsl(222 100% 65%)" }}>
+                <svg viewBox="0 0 40 40" className="w-10 h-10" style={{ color: "hsl(0 100% 50%)" }}>
                   <rect x="4" y="8" width="32" height="24" rx="3" fill="none" stroke="currentColor" strokeWidth="1.2" />
                   <line x1="4" y1="14" x2="36" y2="14" stroke="currentColor" strokeWidth="0.8" />
                   <circle cx="8" cy="11" r="1" fill="currentColor" opacity="0.5" />
@@ -83,31 +81,31 @@ export const ArchitectureDemo = () => {
             <div
               className="w-72 h-3 sm:w-80"
               style={{
-                background: "linear-gradient(180deg, hsl(222 30% 18%), hsl(222 30% 14%))",
+                background: "linear-gradient(180deg, hsl(0 30% 18%), hsl(0 30% 14%))",
                 borderRadius: "0 0 0.5rem 0.5rem",
-                borderTop: "1px solid hsl(222 100% 65% / 0.08)",
+                borderTop: "1px solid hsl(0 100% 50% / 0.08)",
               }}
             />
-            <div className="w-20 h-1 rounded-b-full" style={{ background: "hsl(222 30% 20%)" }} />
+            <div className="w-20 h-1 rounded-b-full" style={{ background: "hsl(0 30% 20%)" }} />
           </motion.div>
         ) : (
           <motion.div
             key="code"
             initial={{ scale: 0.8, opacity: 0, rotateY: -90 }}
             animate={{ scale: 1, opacity: 1, rotateY: 0 }}
-            transition={{ duration: 0.5, type: "spring", damping: 20 }}
+            transition={{ duration: 0.4, type: "spring", damping: 20 }}
             className="w-full max-w-sm"
           >
             <div
               className="relative overflow-hidden"
               style={{
-                background: "linear-gradient(135deg, hsl(222 40% 10% / 0.8), hsl(222 40% 6% / 0.6))",
-                border: "1px solid hsl(222 100% 65% / 0.1)",
+                background: "linear-gradient(135deg, hsl(0 40% 10% / 0.8), hsl(0 40% 6% / 0.6))",
+                border: "1px solid hsl(0 100% 50% / 0.12)",
                 borderRadius: "0.75rem",
-                boxShadow: "0 12px 40px hsl(222 100% 10% / 0.4)",
+                boxShadow: "0 12px 40px hsl(0 100% 10% / 0.4)",
               }}
             >
-              <div className="flex items-center gap-1.5 px-4 py-2.5 border-b" style={{ borderColor: "hsl(222 100% 65% / 0.06)" }}>
+              <div className="flex items-center gap-1.5 px-4 py-2.5 border-b" style={{ borderColor: "hsl(0 100% 50% / 0.06)" }}>
                 <div className="w-2 h-2 rounded-full" style={{ background: "hsl(0 70% 55%)" }} />
                 <div className="w-2 h-2 rounded-full" style={{ background: "hsl(45 80% 55%)" }} />
                 <div className="w-2 h-2 rounded-full" style={{ background: "hsl(140 60% 45%)" }} />
@@ -128,11 +126,11 @@ export const ArchitectureDemo = () => {
                     </span>
                     {line.text ? (
                       <span style={{ color: line.text.includes("export") || line.text.includes("const") || line.text.includes("return")
-                        ? "hsl(270 80% 70%)"
+                        ? "hsl(0 80% 65%)"
                         : line.text.startsWith("<") || line.text.startsWith("</")
-                        ? "hsl(190 90% 60%)"
+                        ? "hsl(350 90% 60%)"
                         : line.text.includes("'") || line.text.includes('"')
-                        ? "hsl(163 56% 55%)"
+                        ? "hsl(15 80% 55%)"
                         : "hsl(220 15% 65%)"
                       }}>
                         {line.text}
@@ -141,13 +139,6 @@ export const ArchitectureDemo = () => {
                   </motion.div>
                 ))}
               </div>
-              <motion.p
-                className="text-center text-[8px] font-mono text-muted-foreground/20 tracking-[0.2em] uppercase pb-3"
-                animate={{ opacity: [0.2, 0.5, 0.2] }}
-                transition={{ duration: 3, repeat: Infinity }}
-              >
-                Auto-cycling demo
-              </motion.p>
             </div>
           </motion.div>
         )}

@@ -191,7 +191,7 @@ export const GrowthImpact = () => {
               See what your revenue looks like now — and what it could look like with our design and technology systems working for you.
             </p>
           </div>
-          <div className="max-w-xl">
+          <div className="w-full max-w-4xl">
             <ROICalculator />
           </div>
         </motion.div>

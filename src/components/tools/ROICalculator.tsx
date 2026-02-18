@@ -62,11 +62,9 @@ export const ROICalculator = () => {
 
   return (
     <div
-      className="relative p-8 rounded-2xl overflow-hidden"
+      className="relative p-8 overflow-hidden"
       style={{
-        background:
-          "linear-gradient(135deg, hsl(0 10% 7% / 0.6), hsl(0 10% 4% / 0.4))",
-        border: "1px solid hsl(0 100% 50% / 0.08)",
+        border: "1px solid hsl(0 100% 50% / 0.12)",
       }}
     >
       <div
@@ -87,7 +85,7 @@ export const ROICalculator = () => {
             className="font-display text-3xl sm:text-4xl text-foreground/70"
           />
           <motion.div
-            className="mt-3 h-1 rounded-full"
+            className="mt-3 h-1"
             style={{
               background:
                 "linear-gradient(90deg, hsl(0 100% 50% / 0.3), hsl(0 100% 50% / 0.08))",
@@ -106,7 +104,7 @@ export const ROICalculator = () => {
             className="font-display text-3xl sm:text-4xl text-primary"
           />
           <motion.div
-            className="mt-3 h-1 rounded-full"
+            className="mt-3 h-1"
             style={{
               background:
                 "linear-gradient(90deg, hsl(20 100% 55% / 0.4), hsl(20 100% 55% / 0.08))",

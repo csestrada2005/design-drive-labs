@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect, useCallback } from "react";
+import { useRef, useEffect } from "react";
 import { motion, useInView } from "framer-motion";
 import { Route, Cpu, Zap, Shield } from "lucide-react";
 import { SystemBlueprint } from "./SystemBlueprint";
@@ -92,8 +92,6 @@ export const FeaturedWork = () => {
 
   return (
     <section ref={ref} className="py-24 sm:py-32 relative overflow-hidden" id="work">
-      <div className="absolute inset-0 pointer-events-none" style={{ background: "radial-gradient(ellipse 70% 50% at 50% 30%, hsl(0 100% 50% / 0.03), transparent)" }} aria-hidden="true" />
-
       <div className="container relative">
         <motion.div ref={headerPaint.ref} style={headerPaint.style} className="mb-16">
           <p className="text-muted-foreground text-xs tracking-[0.25em] uppercase mb-4 flex items-center gap-3">
@@ -113,8 +111,8 @@ export const FeaturedWork = () => {
             const Icon = card.icon;
             return (
               <motion.div key={card.id} initial={{ opacity: 0, y: 50 }} animate={isInView ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.6, delay: i * 0.15 }} className="group relative">
-                <div className="relative aspect-[4/3] overflow-hidden mb-5" style={{ borderRadius: "1.25rem", background: "linear-gradient(135deg, hsl(0 10% 7%), hsl(0 10% 4%))" }}>
-                  <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: `linear-gradient(hsl(0 100% 50% / 0.4) 1px, transparent 1px), linear-gradient(90deg, hsl(0 100% 50% / 0.4) 1px, transparent 1px)`, backgroundSize: "16px 16px" }} />
+                {/* Hero area — transparent, just the animation */}
+                <div className="relative aspect-[4/3] overflow-hidden mb-5">
                   {card.heroType === "blueprint" && <div className="absolute inset-3"><SystemBlueprint compact /></div>}
                   {card.heroType === "binary" && <div className="absolute inset-0"><BinaryRain /></div>}
                   {card.heroType === "stats" && (
@@ -125,10 +123,9 @@ export const FeaturedWork = () => {
                       </motion.div>
                     </div>
                   )}
-                  <motion.div className="absolute inset-0 pointer-events-none rounded-[1.25rem] opacity-0 group-hover:opacity-100 transition-opacity duration-500" style={{ background: `radial-gradient(circle at 50% 50%, ${card.accentGlow}, transparent 70%)` }} />
                 </div>
                 <div className="flex items-start gap-3 mb-2">
-                  <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5" style={{ background: `linear-gradient(135deg, ${card.accentColor}15, ${card.accentColor}08)`, border: `1px solid ${card.accentColor}20` }}>
+                  <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5" style={{ background: `${card.accentColor}15`, border: `1px solid ${card.accentColor}20` }}>
                     <Icon className="w-4 h-4" style={{ color: card.accentColor }} />
                   </div>
                   <div>
