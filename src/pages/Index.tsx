@@ -1,4 +1,5 @@
-import { useRef } from "react";
+import { useRef, useState, useCallback } from "react";
+import { AnimatePresence } from "framer-motion";
 import { HeroSection } from "@/components/motion/HeroSection";
 import { MarqueeTicker } from "@/components/motion/MarqueeTicker";
 import { StatsStrip } from "@/components/motion/StatsStrip";
@@ -16,14 +17,23 @@ import { CustomCursor } from "@/components/motion/CustomCursor";
 import { CornerCrosses } from "@/components/motion/CornerCrosses";
 import { ChatWidget } from "@/components/motion/ChatWidget";
 import { ScrollRevealText } from "@/components/motion/ScrollRevealText";
+import { LoadingScreen } from "@/components/motion/LoadingScreen";
 
 const Index = () => {
   const cursorZoneRef = useRef<HTMLDivElement>(null);
+  const [loaded, setLoaded] = useState(false);
+
+  const handleLoadComplete = useCallback(() => setLoaded(true), []);
 
   return (
     <div className="min-h-screen text-foreground">
-      <>
-        <SoundToggle />
+      <AnimatePresence mode="wait">
+        {!loaded && <LoadingScreen key="loader" onComplete={handleLoadComplete} />}
+      </AnimatePresence>
+
+      {loaded && (
+        <>
+          <SoundToggle />
           <CustomCursor containerRef={cursorZoneRef} />
           <CornerCrosses />
           <ChatWidget />
@@ -53,8 +63,9 @@ const Index = () => {
             <ContactSection />
             <DramaticFooter />
           </main>
-        <BottomNav />
-      </>
+          <BottomNav />
+        </>
+      )}
     </div>
   );
 };

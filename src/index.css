@@ -120,12 +120,33 @@
     font-family: 'Inter', sans-serif;
   }
 
-  /* Grid background — technical blueprint */
+  /* Grid background — animated technical blueprint */
   .grid-bg {
     background-image:
       linear-gradient(hsl(var(--foreground) / 0.06) 1px, transparent 1px),
       linear-gradient(90deg, hsl(var(--foreground) / 0.06) 1px, transparent 1px);
     background-size: 60px 60px;
+    animation: grid-pan 30s linear infinite;
+  }
+
+  @keyframes grid-pan {
+    0% { background-position: 0 0; }
+    100% { background-position: 60px 60px; }
+  }
+
+  /* Kinetic text stagger utility */
+  .kinetic-stagger > span {
+    display: inline-block;
+    opacity: 0;
+    transform: translateY(40px) rotateX(-60deg);
+    animation: kinetic-reveal 0.5s forwards;
+  }
+
+  @keyframes kinetic-reveal {
+    to {
+      opacity: 1;
+      transform: translateY(0) rotateX(0);
+    }
   }
 
   /* Nav — solid white, black border bottom */
