@@ -15,7 +15,7 @@ export const ScrollRevealText = ({ lines, className = "" }: ScrollRevealTextProp
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: ref,
-    offset: ["start 0.85", "end 0.4"],
+    offset: ["start 0.9", "end 0.6"],
   });
 
   const allWords = lines.flatMap(line => line.text.split(" "));

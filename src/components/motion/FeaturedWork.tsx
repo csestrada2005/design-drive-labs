@@ -135,7 +135,7 @@ export const FeaturedWork = () => {
                       {card.heroType === "stats" && (
                         <div className="absolute inset-0 flex items-center justify-center">
                           <motion.div className="text-center" animate={{ opacity: [0.8, 1, 0.8] }} transition={{ duration: 3, repeat: Infinity }}>
-                            <span className="font-display text-5xl sm:text-6xl font-bold text-primary" style={{ textShadow: "0 0 40px hsl(0 100% 50% / 0.3)" }}>+15%</span>
+                            <span className="font-display text-5xl sm:text-6xl font-bold text-primary">+15%</span>
                             <p className="text-[10px] font-mono tracking-[0.2em] uppercase text-muted-foreground/70 mt-2">AOV Increase</p>
                           </motion.div>
                         </div>
