@@ -213,7 +213,24 @@ export const ServicesSection = () => {
                         <Icon className="w-4 h-4" style={{ color: tier.accentColor }} />
                       </div>
                     </div>
-                    <h3 className="font-display text-lg sm:text-xl mb-1 group-hover:text-primary transition-colors duration-300">{tier.name}</h3>
+                    <h3 className="font-display text-lg sm:text-xl mb-1 group-hover:text-primary transition-colors duration-300 relative overflow-hidden">
+                      {tier.name}
+                      <motion.span
+                        className="absolute inset-0 pointer-events-none"
+                        style={{
+                          background: `linear-gradient(105deg, transparent 40%, ${tier.accentColor}55 50%, rgba(255,255,255,0.15) 55%, transparent 65%)`,
+                          backgroundSize: "200% 100%",
+                        }}
+                        animate={{ backgroundPosition: ["200% 0", "-100% 0"] }}
+                        transition={{
+                          duration: 1.2,
+                          delay: i * 1.2 + 2,
+                          repeat: Infinity,
+                          repeatDelay: 4,
+                          ease: "easeInOut",
+                        }}
+                      />
+                    </h3>
                     <p className="text-[11px] font-mono tracking-wider uppercase mb-5" style={{ color: `${tier.accentColor}80` }}>{tier.category}</p>
                     <motion.div className="h-px mb-5" style={{ background: `linear-gradient(90deg, ${tier.accentColor}25, transparent)`, transformOrigin: "left" }} animate={{ scaleX: isHovered ? 1 : 0.4 }} transition={{ duration: 0.5 }} />
                     <ul className="space-y-3 mb-6 flex-1">
