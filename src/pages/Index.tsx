@@ -35,8 +35,8 @@ const Index = () => {
             <section className="py-20 sm:py-28 relative overflow-hidden">
               <div className="container max-w-4xl">
                 <ScrollRevealText
-                  text="WE BUILD DIGITAL EXPERIENCES THAT TURN VISITORS INTO CUSTOMERS."
-                  highlightWords={["DIGITAL", "VISITORS", "CUSTOMERS"]}
+                  text="WE BUILD THE ENGINE; YOU BUILD THE EMPIRE."
+                  highlightWords={["ENGINE", "EMPIRE"]}
                 />
               </div>
             </section>
