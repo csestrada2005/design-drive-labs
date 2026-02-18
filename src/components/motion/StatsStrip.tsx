@@ -12,7 +12,7 @@ export const StatsStrip = () => {
   { label: "SEO-ready" }];
 
 
-  return;
+  return null;
 
 
 
