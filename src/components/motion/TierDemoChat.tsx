@@ -1,6 +1,6 @@
 import { useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Send, Sparkles, Loader2 } from "lucide-react";
+import { X, Send, Loader2 } from "lucide-react";
 
 const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/demo-chat`;
 
@@ -119,7 +119,7 @@ export const TierDemoChat = ({ onClose }: TierDemoChatProps) => {
       <div className="flex items-center justify-between px-6 py-4 border-b border-primary/10">
         <div className="flex items-center gap-3">
           <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-primary/10 border border-primary/20">
-            <Sparkles className="w-4 h-4 text-primary" />
+            <span className="text-primary text-xs font-bold">C4</span>
           </div>
           <div>
             <span className="text-sm font-display tracking-[0.1em] uppercase text-foreground">
@@ -177,7 +177,7 @@ export const TierDemoChat = ({ onClose }: TierDemoChatProps) => {
               exit={{ opacity: 0 }}
               className="absolute inset-0 flex flex-col items-center justify-center gap-3"
             >
-              <Sparkles className="w-10 h-10 text-primary/20" />
+              <span className="text-3xl text-primary/20 font-bold font-display">C4</span>
               <p className="text-sm text-muted-foreground/50 max-w-xs text-center">
                 Describe what you'd like to see and I'll generate a live preview.
               </p>
