@@ -307,7 +307,7 @@ export const DesignLab = () => {
           className="mb-24 sm:mb-32"
         >
           <h2 className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl mb-5">
-            <span className="text-white">DESIGN</span> <span className="text-white">LAB</span>
+            <span className="text-primary">DESIGN</span> <span className="text-white">LAB</span>
           </h2>
           <p className="text-white/70 text-sm max-w-md leading-relaxed">
             Esto es un demo. Todo puede adaptarse a tu marca. Los elementos se activan automáticamente al hacer scroll.
