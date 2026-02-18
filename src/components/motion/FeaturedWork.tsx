@@ -41,7 +41,7 @@ const BinaryRain = () => {
           const x = ci * 14;
           const y = col.y + ri * 12;
           const opacity = Math.max(0, 1 - ri / col.chars.length) * 0.3;
-          ctx.fillStyle = ri === 0 ? `hsla(15, 100%, 55%, ${opacity})` : `hsla(15, 80%, 45%, ${opacity * 0.6})`;
+          ctx.fillStyle = ri === 0 ? `hsla(0, 100%, 50%, ${opacity})` : `hsla(0, 80%, 40%, ${opacity * 0.6})`;
           ctx.fillText(ch, x, y);
         });
       });
@@ -56,7 +56,7 @@ const BinaryRain = () => {
       <canvas ref={canvasRef} className="absolute inset-0 w-full h-full" />
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
         <motion.div className="flex items-center gap-3" animate={{ opacity: [0.6, 1, 0.6] }} transition={{ duration: 3, repeat: Infinity }}>
-          <svg viewBox="0 0 40 48" className="w-8 h-10" style={{ color: "hsl(15 100% 55%)" }}>
+          <svg viewBox="0 0 40 48" className="w-8 h-10" style={{ color: "hsl(0 100% 50%)" }}>
             <path d="M6 2h20l8 10v34H6V2z" fill="none" stroke="currentColor" strokeWidth="1" />
             <path d="M26 2v10h8" fill="none" stroke="currentColor" strokeWidth="0.8" />
             {[16, 22, 28, 34].map(y => (
@@ -80,9 +80,9 @@ const PrivacyBadge = () => (
 );
 
 const systemCards = [
-  { id: "logistics", icon: Route, title: "Autonomous Logistics CRM", subtitle: "", stat: "Automated 90% of driver dispatching.", accentColor: "hsl(350 100% 60%)", accentGlow: "hsl(350 100% 60% / 0.15)", heroType: "blueprint" as const },
-  { id: "rag", icon: Cpu, title: "SaaS Powered with AI", subtitle: "", stat: "Smart automation that scales with your business growth.", accentColor: "hsl(15 100% 55%)", accentGlow: "hsl(15 100% 55% / 0.15)", heroType: "binary" as const },
-  { id: "ecom", icon: Zap, title: "Headless Commerce Core", subtitle: "", stat: "+15% average order value through smart product recommendations.", accentColor: "hsl(0 100% 50%)", accentGlow: "hsl(0 100% 50% / 0.15)", heroType: "stats" as const },
+  { id: "logistics", icon: Route, title: "Autonomous Logistics CRM", subtitle: "", stat: "Automated 90% of driver dispatching.", heroType: "blueprint" as const },
+  { id: "rag", icon: Cpu, title: "SaaS Powered with AI", subtitle: "", stat: "Smart automation that scales with your business growth.", heroType: "binary" as const },
+  { id: "ecom", icon: Zap, title: "Headless Commerce Core", subtitle: "", stat: "+15% average order value through smart product recommendations.", heroType: "stats" as const },
 ];
 
 /* ── Card with black cover reveal ── */
@@ -91,11 +91,11 @@ const RevealCard = ({ children, delay }: { children: React.ReactNode; delay: num
   const isInView = useInView(ref, { once: true, margin: "-80px" });
 
   return (
-    <div ref={ref} className="relative overflow-hidden bg-black p-5">
+    <div ref={ref} className="relative overflow-hidden">
       {children}
-      {/* Black cover that slides down to reveal */}
       <motion.div
-        className="absolute inset-0 bg-black z-30 pointer-events-none"
+        className="absolute inset-0 z-30 pointer-events-none"
+        style={{ background: "hsl(0 0% 5%)" }}
         initial={{ y: 0 }}
         animate={isInView ? { y: "100%" } : { y: 0 }}
         transition={{ duration: 0.8, delay, ease: [0.33, 1, 0.68, 1] }}
@@ -131,31 +131,33 @@ export const FeaturedWork = () => {
             return (
               <motion.div key={card.id} initial={{ opacity: 0, y: 50 }} animate={isInView ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.6, delay: i * 0.15 }} className="group relative">
                 <RevealCard delay={i * 0.15}>
-                  {/* Hero area */}
-                  <div className="relative aspect-[4/3] overflow-hidden mb-5">
-                    {card.heroType === "blueprint" && <div className="absolute inset-3"><SystemBlueprint compact /></div>}
-                    {card.heroType === "binary" && <div className="absolute inset-0"><BinaryRain /></div>}
-                    {card.heroType === "stats" && (
-                      <div className="absolute inset-0 flex items-center justify-center">
-                        <motion.div className="text-center" animate={{ opacity: [0.8, 1, 0.8] }} transition={{ duration: 3, repeat: Infinity }}>
-                          <span className="font-display text-5xl sm:text-6xl font-bold text-primary" style={{ textShadow: `0 0 40px ${card.accentGlow}` }}>+15%</span>
-                          <p className="text-[10px] font-mono tracking-[0.2em] uppercase text-muted-foreground/70 mt-2">AOV Increase</p>
-                        </motion.div>
+                  <div className="p-5" style={{ background: "hsl(0 0% 5%)", border: "1px solid hsl(0 100% 50% / 0.1)" }}>
+                    {/* Hero area */}
+                    <div className="relative aspect-[4/3] overflow-hidden mb-5" style={{ background: "hsl(0 0% 8%)" }}>
+                      {card.heroType === "blueprint" && <div className="absolute inset-3"><SystemBlueprint compact /></div>}
+                      {card.heroType === "binary" && <div className="absolute inset-0"><BinaryRain /></div>}
+                      {card.heroType === "stats" && (
+                        <div className="absolute inset-0 flex items-center justify-center">
+                          <motion.div className="text-center" animate={{ opacity: [0.8, 1, 0.8] }} transition={{ duration: 3, repeat: Infinity }}>
+                            <span className="font-display text-5xl sm:text-6xl font-bold text-primary" style={{ textShadow: "0 0 40px hsl(0 100% 50% / 0.3)" }}>+15%</span>
+                            <p className="text-[10px] font-mono tracking-[0.2em] uppercase text-muted-foreground/70 mt-2">AOV Increase</p>
+                          </motion.div>
+                        </div>
+                      )}
+                    </div>
+                    <div className="flex items-start gap-3 mb-2">
+                      <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5" style={{ background: "hsl(0 100% 50% / 0.08)", border: "1px solid hsl(0 100% 50% / 0.12)" }}>
+                        <Icon className="w-4 h-4 text-primary" />
                       </div>
-                    )}
-                  </div>
-                  <div className="flex items-start gap-3 mb-2">
-                    <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5" style={{ background: `${card.accentColor}15`, border: `1px solid ${card.accentColor}20` }}>
-                      <Icon className="w-4 h-4" style={{ color: card.accentColor }} />
+                      <div>
+                        <h3 className="font-display text-sm sm:text-base text-foreground group-hover:text-primary transition-colors duration-300">{card.title}</h3>
+                        {card.subtitle && <p className="text-[10px] font-mono tracking-wider uppercase text-muted-foreground/70">{card.subtitle}</p>}
+                      </div>
                     </div>
-                    <div>
-                      <h3 className="font-display text-sm sm:text-base group-hover:text-primary transition-colors duration-300">{card.title}</h3>
-                      {card.subtitle && <p className="text-[10px] font-mono tracking-wider uppercase text-muted-foreground/70">{card.subtitle}</p>}
+                    <div className="ml-11">
+                      <motion.div className="h-px mb-3" style={{ background: "linear-gradient(90deg, hsl(0 100% 50% / 0.2), transparent)", transformOrigin: "left" }} animate={{ scaleX: isInView ? 1 : 0 }} transition={{ delay: 0.4 + i * 0.15, duration: 0.8 }} />
+                      <p className="text-xs text-muted-foreground/80 leading-relaxed">{card.stat}</p>
                     </div>
-                  </div>
-                  <div className="ml-11">
-                    <motion.div className="h-px mb-3" style={{ background: `linear-gradient(90deg, ${card.accentColor}30, transparent)`, transformOrigin: "left" }} animate={{ scaleX: isInView ? 1 : 0 }} transition={{ delay: 0.4 + i * 0.15, duration: 0.8 }} />
-                    <p className="text-xs text-muted-foreground/80 leading-relaxed">{card.stat}</p>
                   </div>
                 </RevealCard>
               </motion.div>

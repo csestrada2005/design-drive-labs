@@ -243,10 +243,10 @@ const RevealWipe = () => {
           animate={isInView ? { clipPath: "polygon(0 0, 100% 0, 100% 100%, 0 100%)" } : { clipPath: "polygon(0 0, 0 0, 0 100%, 0 100%)" }}
           transition={{ duration: 0.9, delay: i * 0.18, ease: [0.33, 1, 0.68, 1] }}
         >
-          <div className="absolute inset-0" style={{ background: `linear-gradient(${135 + i * 30}deg, hsl(0 0% 20%), hsl(0 0% 10%))` }} />
+          <div className="absolute inset-0" style={{ background: `linear-gradient(${135 + i * 30}deg, hsl(0 0% 100%), hsl(0 0% 90%))` }} />
           <div className="absolute inset-0 opacity-[0.08]" style={{ backgroundImage: `linear-gradient(hsl(0 0% 100% / 0.3) 1px, transparent 1px), linear-gradient(90deg, hsl(0 0% 100% / 0.3) 1px, transparent 1px)`, backgroundSize: "20px 20px" }} />
           <div className="absolute inset-0 flex items-end p-4">
-            <span className="text-[9px] tracking-[0.2em] uppercase text-white/80 font-medium">Project {i + 1}</span>
+            <span className="text-[9px] tracking-[0.2em] uppercase text-black/80 font-medium">Project {i + 1}</span>
           </div>
         </motion.div>
       ))}
@@ -316,10 +316,10 @@ export const DesignLab = () => {
             <span className="w-10 h-px bg-white/40" />
             Interactive Demos
           </motion.p>
-          <h2 className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl mb-5 text-foreground">
-            DESIGN <span className="text-white">LAB</span>
+          <h2 className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl mb-5">
+            <span className="text-white">DESIGN</span> <span className="text-white">LAB</span>
           </h2>
-          <p className="text-muted-foreground text-sm max-w-md leading-relaxed">
+          <p className="text-white/70 text-sm max-w-md leading-relaxed">
             Esto es un demo. Todo puede adaptarse a tu marca. Los elementos se activan automáticamente al hacer scroll.
           </p>
         </motion.div>
@@ -342,18 +342,11 @@ export const DesignLab = () => {
                     animate={{ boxShadow: ["0 0 0px hsl(0 0% 100% / 0)", "0 0 12px hsl(0 0% 100% / 0.6)", "0 0 0px hsl(0 0% 100% / 0)"] }}
                     transition={{ duration: 3, repeat: Infinity, delay: i * 0.5 }}
                   />
-                  <span className="text-[10px] font-display tracking-[0.2em] text-foreground">{demo.label}</span>
-                  <span className="text-[9px] text-muted-foreground tracking-wider ml-auto">{demo.desc}</span>
+                  <span className="text-[10px] font-display tracking-[0.2em] text-white">{demo.label}</span>
+                  <span className="text-[9px] text-white/60 tracking-wider ml-auto">{demo.desc}</span>
                 </div>
                 <div className="h-px mb-6" style={{ background: "linear-gradient(90deg, hsl(0 0% 100% / 0.2), transparent 80%)" }} />
                 <DemoComponent />
-                <a
-                  href="#contact"
-                  className="inline-flex items-center gap-3 text-[9px] tracking-[0.2em] uppercase text-white/70 hover:text-white transition-colors duration-300 mt-4 group/link"
-                >
-                  <span className="w-4 h-px bg-current transition-all duration-300 group-hover/link:w-8" />
-                  Usar en mi proyecto
-                </a>
               </motion.div>
             );
           })}

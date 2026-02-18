@@ -22,7 +22,6 @@ export const ArchitectureDemo = () => {
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: false, margin: "-50px" });
 
-  // Quick transition: show laptop briefly, then switch to code and stay
   useEffect(() => {
     if (!isInView) { setRevealed(false); return; }
     const timer = setTimeout(() => setRevealed(true), 1500);
@@ -30,7 +29,7 @@ export const ArchitectureDemo = () => {
   }, [isInView]);
 
   return (
-    <div ref={ref} className="relative py-6 flex flex-col items-center min-h-[280px] select-none">
+    <div ref={ref} className="relative py-6 flex flex-col items-center h-[280px] select-none overflow-hidden">
       <AnimatePresence mode="wait">
         {!revealed ? (
           <motion.div
@@ -43,7 +42,7 @@ export const ArchitectureDemo = () => {
             <div
               className="relative w-56 h-36 sm:w-64 sm:h-40 flex items-center justify-center"
               style={{
-                background: "hsl(0 0% 98%)",
+                background: "hsl(0 0% 100%)",
                 border: "2px solid hsl(0 0% 85%)",
                 borderRadius: "0.75rem 0.75rem 0 0",
                 boxShadow: "0 4px 20px hsl(0 0% 0% / 0.08)",
@@ -81,12 +80,12 @@ export const ArchitectureDemo = () => {
             <div
               className="w-72 h-3 sm:w-80"
               style={{
-                background: "linear-gradient(180deg, hsl(0 0% 88%), hsl(0 0% 82%))",
+                background: "linear-gradient(180deg, hsl(0 0% 92%), hsl(0 0% 86%))",
                 borderRadius: "0 0 0.5rem 0.5rem",
                 borderTop: "1px solid hsl(0 0% 90%)",
               }}
             />
-            <div className="w-20 h-1 rounded-b-full" style={{ background: "hsl(0 0% 80%)" }} />
+            <div className="w-20 h-1 rounded-b-full" style={{ background: "hsl(0 0% 84%)" }} />
           </motion.div>
         ) : (
           <motion.div
@@ -99,17 +98,17 @@ export const ArchitectureDemo = () => {
             <div
               className="relative overflow-hidden"
               style={{
-                background: "linear-gradient(135deg, hsl(0 40% 10% / 0.8), hsl(0 40% 6% / 0.6))",
-                border: "1px solid hsl(0 100% 50% / 0.12)",
+                background: "hsl(0 0% 100%)",
+                border: "1px solid hsl(0 0% 88%)",
                 borderRadius: "0.75rem",
-                boxShadow: "0 12px 40px hsl(0 100% 10% / 0.4)",
+                boxShadow: "0 12px 40px hsl(0 0% 0% / 0.1)",
               }}
             >
-              <div className="flex items-center gap-1.5 px-4 py-2.5 border-b" style={{ borderColor: "hsl(0 100% 50% / 0.06)" }}>
+              <div className="flex items-center gap-1.5 px-4 py-2.5 border-b" style={{ borderColor: "hsl(0 0% 90%)" }}>
                 <div className="w-2 h-2 rounded-full" style={{ background: "hsl(0 70% 55%)" }} />
                 <div className="w-2 h-2 rounded-full" style={{ background: "hsl(45 80% 55%)" }} />
                 <div className="w-2 h-2 rounded-full" style={{ background: "hsl(140 60% 45%)" }} />
-                <span className="ml-3 text-[9px] font-mono text-muted-foreground/60 tracking-wider">app.tsx</span>
+                <span className="ml-3 text-[9px] font-mono text-black/40 tracking-wider">app.tsx</span>
               </div>
               <div className="p-4 space-y-0.5 font-mono text-[10px] sm:text-[11px] leading-relaxed">
                 {CODE_LINES.map((line, i) => (
@@ -121,17 +120,17 @@ export const ArchitectureDemo = () => {
                     style={{ paddingLeft: `${line.indent * 16}px` }}
                     className="whitespace-pre"
                   >
-                    <span className="text-muted-foreground/50 mr-3 select-none inline-block w-4 text-right">
+                    <span className="text-black/25 mr-3 select-none inline-block w-4 text-right">
                       {i + 1}
                     </span>
                     {line.text ? (
                       <span style={{ color: line.text.includes("export") || line.text.includes("const") || line.text.includes("return")
-                        ? "hsl(0 80% 65%)"
+                        ? "hsl(220 80% 50%)"
                         : line.text.startsWith("<") || line.text.startsWith("</")
-                        ? "hsl(350 90% 60%)"
+                        ? "hsl(340 70% 45%)"
                         : line.text.includes("'") || line.text.includes('"')
-                        ? "hsl(15 80% 55%)"
-                        : "hsl(220 15% 65%)"
+                        ? "hsl(30 70% 40%)"
+                        : "hsl(0 0% 30%)"
                       }}>
                         {line.text}
                       </span>

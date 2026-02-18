@@ -123,8 +123,7 @@ const ScrollBarChart = () => {
           const animatedY = useTransform(barProgress, [0, 1], [height - padY, y]);
           return (
             <g key={i}>
-              <motion.rect x={x} width={barWidth} rx={4} fill={hoveredIdx === i ? "hsl(0 100% 50%)" : "hsl(0 100% 50% / 0.6)"} style={{ height: animatedHeight, y: animatedY }} onMouseEnter={() => setHoveredIdx(i)} onMouseLeave={() => setHoveredIdx(null)} className="cursor-pointer" />
-              {hoveredIdx === i && <rect x={x - 2} y={y - 2} width={barWidth + 4} height={barH + 4} rx={6} fill="none" stroke="hsl(0 100% 50% / 0.3)" strokeWidth="1" />}
+              <motion.rect x={x} width={barWidth} rx={4} fill="hsl(0 100% 50%)" style={{ height: animatedHeight, y: animatedY }} onMouseEnter={() => setHoveredIdx(i)} onMouseLeave={() => setHoveredIdx(null)} className="cursor-pointer" />
               <text x={x + barWidth / 2} y={height - 8} fill="hsl(0 8% 55%)" fontSize="8" textAnchor="middle">{d.label}</text>
               {hoveredIdx === i && (
                 <g>
@@ -207,7 +206,7 @@ export const GrowthImpact = () => {
               See what your revenue looks like now — and what it could look like with our design and technology systems working for you.
             </p>
           </div>
-          <div className="w-full max-w-4xl ml-auto">
+          <div className="w-full max-w-4xl mx-auto">
             <ROICalculator />
           </div>
         </motion.div>
