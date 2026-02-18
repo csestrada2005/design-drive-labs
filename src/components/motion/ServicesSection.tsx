@@ -112,6 +112,7 @@ export const ServicesSection = () => {
                 onMouseLeave={() => setHoveredIdx(null)}
                 onClick={openPanel}
                 className="relative group cursor-pointer"
+                data-cursor="expand"
               >
                 {tier.popular && (
                   <motion.div

@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Send, Loader2 } from "lucide-react";
 
@@ -34,7 +34,7 @@ export const TierDemoChat = ({ onClose }: TierDemoChatProps) => {
     setIsLoading(true);
     setHtmlPreview(null);
 
-    let assistantSoFar = "";
+    let fullResponse = "";
 
     try {
       const resp = await fetch(CHAT_URL, {
@@ -61,20 +61,6 @@ export const TierDemoChat = ({ onClose }: TierDemoChatProps) => {
       const decoder = new TextDecoder();
       let textBuffer = "";
 
-      const upsertAssistant = (chunk: string) => {
-        assistantSoFar += chunk;
-        const html = extractHTML(assistantSoFar);
-        if (html) setHtmlPreview(html);
-
-        setMessages((prev) => {
-          const last = prev[prev.length - 1];
-          if (last?.role === "assistant") {
-            return prev.map((m, i) => (i === prev.length - 1 ? { ...m, content: assistantSoFar } : m));
-          }
-          return [...prev, { role: "assistant", content: assistantSoFar }];
-        });
-      };
-
       let streamDone = false;
       while (!streamDone) {
         const { done, value } = await reader.read();
@@ -93,7 +79,7 @@ export const TierDemoChat = ({ onClose }: TierDemoChatProps) => {
           try {
             const parsed = JSON.parse(jsonStr);
             const content = parsed.choices?.[0]?.delta?.content as string | undefined;
-            if (content) upsertAssistant(content);
+            if (content) fullResponse += content;
           } catch {
             textBuffer = line + "\n" + textBuffer;
             break;
@@ -101,7 +87,11 @@ export const TierDemoChat = ({ onClose }: TierDemoChatProps) => {
         }
       }
 
-      const finalHtml = extractHTML(assistantSoFar);
+      // Store the assistant message
+      setMessages((prev) => [...prev, { role: "assistant", content: fullResponse }]);
+
+      // Extract and show HTML only after full generation
+      const finalHtml = extractHTML(fullResponse);
       if (finalHtml) setHtmlPreview(finalHtml);
     } catch {
       setMessages((prev) => [...prev, { role: "assistant", content: "Connection error. Please try again." }]);
@@ -111,7 +101,6 @@ export const TierDemoChat = ({ onClose }: TierDemoChatProps) => {
   };
 
   const userMessages = messages.filter((m) => m.role === "user");
-  const accentColor = "hsl(190 90% 55%)";
 
   return (
     <div className="flex flex-col h-full">
@@ -141,7 +130,7 @@ export const TierDemoChat = ({ onClose }: TierDemoChatProps) => {
       {/* Main preview area */}
       <div className="flex-1 min-h-0 relative">
         <AnimatePresence mode="wait">
-          {isLoading && !htmlPreview ? (
+          {isLoading ? (
             <motion.div
               key="loading"
               initial={{ opacity: 0 }}
@@ -162,9 +151,9 @@ export const TierDemoChat = ({ onClose }: TierDemoChatProps) => {
               className="absolute inset-0 p-3"
             >
               <iframe
-                srcDoc={`<!DOCTYPE html><html><head><meta charset="utf-8"><style>*{margin:0;padding:0;box-sizing:border-box;font-family:system-ui,-apple-system,sans-serif}html,body{width:100%;height:100%;overflow:hidden;background:#0a0a14;color:#e0e0e0;cursor:none}body{display:flex;align-items:center;justify-content:center}body>div{width:100%;max-width:100%;padding:20px;overflow:hidden}::-webkit-scrollbar{display:none}</style></head><body>${htmlPreview}</body></html>`}
-                className="w-full h-full rounded-lg border border-primary/10 pointer-events-none"
-                style={{ background: "#0a0a14" }}
+                srcDoc={`<!DOCTYPE html><html><head><meta charset="utf-8"><style>*{margin:0;padding:0;box-sizing:border-box;font-family:system-ui,-apple-system,sans-serif}html,body{width:100%;height:100%;background:#0c0c0c;color:#f0f0f0}body{overflow-y:auto;overflow-x:hidden}body>div{width:100%;max-width:100%;padding:20px}::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:rgba(255,51,51,0.3);border-radius:2px}</style></head><body>${htmlPreview}</body></html>`}
+                className="w-full h-full rounded-lg border border-primary/10"
+                style={{ background: "#0c0c0c" }}
                 sandbox="allow-scripts"
                 title="Demo Preview"
               />
