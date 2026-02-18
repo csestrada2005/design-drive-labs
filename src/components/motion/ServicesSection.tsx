@@ -1,13 +1,13 @@
 import { useRef, useState, useCallback } from "react";
 import { motion, useInView, AnimatePresence } from "framer-motion";
-import { Store, Cog, Rocket, Sparkles } from "lucide-react";
+import { Store, Cog, Rocket } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { TierDemoChat } from "./TierDemoChat";
 
 const tiers = [
   {
     tier: "01",
-    name: "The Brand Storefront",
+    name: "Brand Storefront",
     category: "High-End Web",
     icon: Store,
     tierKey: "storefront",
@@ -19,7 +19,7 @@ const tiers = [
   },
   {
     tier: "02",
-    name: "The Business Engine",
+    name: "Business Engine",
     category: "Web + Systems",
     icon: Cog,
     tierKey: "engine",
@@ -36,13 +36,13 @@ const tiers = [
   },
   {
     tier: "03",
-    name: "The SaaS Architect",
+    name: "SaaS Architect",
     category: "Full Product",
     icon: Rocket,
     tierKey: "saas",
     features: [
-      "Powerful Custom Backends",
-      "AI That Understands Your Data",
+      "Custom Backends",
+      "Personalized AI Solutions & Integrations",
       "Smart AI Assistants",
       "Full Product Development",
     ],
@@ -110,7 +110,8 @@ export const ServicesSection = () => {
                 transition={{ duration: 0.6, delay: i * 0.15 }}
                 onMouseEnter={() => setHoveredIdx(i)}
                 onMouseLeave={() => setHoveredIdx(null)}
-                className="relative group"
+                onClick={openPanel}
+                className="relative group cursor-pointer"
               >
                 {tier.popular && (
                   <motion.div
@@ -231,16 +232,12 @@ export const ServicesSection = () => {
                       </p>
                     </div>
 
-                    <button
-                      onClick={openPanel}
-                      className="inline-flex items-center gap-2 text-[10px] tracking-[0.2em] uppercase mt-5 transition-colors duration-300 group/link cursor-pointer bg-transparent border-0 p-0"
+                    <span
+                      className="inline-flex items-center text-[10px] tracking-[0.2em] uppercase mt-5 transition-colors duration-300"
                       style={{ color: `${tier.accentColor}50` }}
-                      onMouseEnter={(e) => (e.currentTarget.style.color = tier.accentColor)}
-                      onMouseLeave={(e) => (e.currentTarget.style.color = `${tier.accentColor}50`)}
                     >
-                      <Sparkles className="w-3 h-3" />
                       Prompt a demo with our AI
-                    </button>
+                    </span>
                   </CardContent>
                 </Card>
               </motion.div>
@@ -258,8 +255,7 @@ export const ServicesSection = () => {
               ref={panelRef}
               className="mt-8 rounded-2xl overflow-hidden border border-primary/10"
               style={{
-                background: "linear-gradient(135deg, hsl(0 10% 6%), hsl(0 10% 4%))",
-                boxShadow: "0 0 60px hsl(350 100% 60% / 0.08), inset 0 1px 0 hsl(0 0% 100% / 0.03)",
+                background: "transparent",
               }}
             >
               <TierDemoChat onClose={() => setShowPanel(false)} />
