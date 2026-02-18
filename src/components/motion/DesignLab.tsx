@@ -139,11 +139,11 @@ const GlassPopup = () => {
               <div className="w-2 h-2 rounded-full bg-primary animate-pulse" />
               <span className="text-[10px] tracking-[0.2em] uppercase text-muted-foreground">Notification</span>
             </div>
-            <p className="text-sm text-foreground/80 leading-relaxed">
+            <p className="text-sm text-foreground leading-relaxed">
               Glassmorphism pop-up con spring physics. Escala + profundidad.
             </p>
             <div className="mt-4 h-px" style={{ background: "linear-gradient(90deg, transparent, hsl(0 100% 50% / 0.2), transparent)" }} />
-            <p className="mt-3 text-[9px] text-muted-foreground/40 tracking-[0.2em] uppercase">Cuatre Design System</p>
+            <p className="mt-3 text-[9px] text-muted-foreground/70 tracking-[0.2em] uppercase">Cuatre Design System</p>
           </motion.div>
         )}
       </AnimatePresence>
@@ -196,7 +196,7 @@ const TiltObject = () => {
           </circle>
         </svg>
         <div className="absolute -bottom-8 left-1/2 -translate-x-1/2">
-          <span className="text-[9px] tracking-[0.2em] uppercase text-muted-foreground/30">
+          <span className="text-[9px] tracking-[0.2em] uppercase text-muted-foreground/60">
             Tilt: {Math.round(tilt.x)}° / {Math.round(tilt.y)}°
           </span>
         </div>
@@ -220,7 +220,7 @@ const ScrollMorphShapes = () => {
     <div ref={ref} className="py-12 flex items-center justify-center gap-10 min-h-[220px]">
       <motion.div className="w-24 h-24 sm:w-32 sm:h-32" style={{ borderRadius: br1, scale: s1, rotate: r1, background: "linear-gradient(135deg, hsl(0 100% 50% / 0.2), hsl(0 100% 50% / 0.04))", border: "1px solid hsl(0 100% 50% / 0.2)", boxShadow: "0 0 40px hsl(0 100% 50% / 0.08)" }} />
       <motion.div className="w-20 h-20 sm:w-28 sm:h-28" style={{ borderRadius: br2, scale: s2, rotate: r2, background: "linear-gradient(135deg, hsl(350 100% 50% / 0.15), hsl(350 100% 50% / 0.03))", border: "1px solid hsl(350 100% 50% / 0.15)", boxShadow: "0 0 40px hsl(350 100% 50% / 0.06)" }} />
-      <p className="absolute text-[9px] tracking-[0.3em] uppercase text-muted-foreground/20 pointer-events-none">
+      <p className="absolute text-[9px] tracking-[0.3em] uppercase text-muted-foreground/60 pointer-events-none">
         Scroll para morph
       </p>
     </div>
@@ -246,7 +246,7 @@ const RevealWipe = () => {
           <div className="absolute inset-0" style={{ background: `linear-gradient(${135 + i * 30}deg, hsl(0 40% ${14 + i * 3}%), hsl(0 30% ${8 + i * 2}%))` }} />
           <div className="absolute inset-0 opacity-[0.04]" style={{ backgroundImage: `linear-gradient(hsl(0 100% 50% / 0.3) 1px, transparent 1px), linear-gradient(90deg, hsl(0 100% 50% / 0.3) 1px, transparent 1px)`, backgroundSize: "20px 20px" }} />
           <div className="absolute inset-0 flex items-end p-4">
-            <span className="text-[9px] tracking-[0.2em] uppercase text-foreground/25 font-medium">Project {i + 1}</span>
+            <span className="text-[9px] tracking-[0.2em] uppercase text-foreground/60 font-medium">Project {i + 1}</span>
           </div>
         </motion.div>
       ))}
@@ -316,14 +316,14 @@ export const DesignLab = () => {
                     animate={{ boxShadow: ["0 0 0px hsl(0 100% 50% / 0)", "0 0 12px hsl(0 100% 50% / 0.4)", "0 0 0px hsl(0 100% 50% / 0)"] }}
                     transition={{ duration: 3, repeat: Infinity, delay: i * 0.5 }}
                   />
-                  <span className="text-[10px] font-display tracking-[0.2em] text-foreground/50">{demo.label}</span>
-                  <span className="text-[9px] text-muted-foreground/30 tracking-wider ml-auto">{demo.desc}</span>
+                  <span className="text-[10px] font-display tracking-[0.2em] text-foreground/80">{demo.label}</span>
+                  <span className="text-[9px] text-muted-foreground/60 tracking-wider ml-auto">{demo.desc}</span>
                 </div>
                 <div className="h-px mb-6" style={{ background: "linear-gradient(90deg, hsl(0 100% 50% / 0.15), transparent 80%)" }} />
                 <DemoComponent />
                 <a
                   href="#contact"
-                  className="inline-flex items-center gap-3 text-[9px] tracking-[0.2em] uppercase text-muted-foreground/30 hover:text-primary/60 transition-colors duration-300 mt-4 group/link"
+                  className="inline-flex items-center gap-3 text-[9px] tracking-[0.2em] uppercase text-muted-foreground/60 hover:text-primary transition-colors duration-300 mt-4 group/link"
                 >
                   <span className="w-4 h-px bg-current transition-all duration-300 group-hover/link:w-8" />
                   Usar en mi proyecto

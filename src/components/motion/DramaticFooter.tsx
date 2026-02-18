@@ -75,7 +75,7 @@ export const DramaticFooter = () => {
       <div className="absolute inset-0 opacity-[0.04] pointer-events-none" style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")` }} aria-hidden="true" />
 
       {[...Array(10)].map((_, i) => (
-        <motion.span key={i} className="absolute text-primary/10 font-light select-none pointer-events-none" style={{ fontSize: `${14 + (i * 6)}px`, left: `${8 + (i * 10) % 85}%`, top: `${3 + (i * 12) % 65}%` }} animate={{ y: [0, -8, 0], opacity: [0.1, 0.4, 0.1], rotate: [0, 45, 0] }} transition={{ duration: 4 + i * 0.5, repeat: Infinity, delay: i * 0.6, ease: "easeInOut" }} aria-hidden="true">+</motion.span>
+        <motion.span key={i} className="absolute text-primary/30 font-light select-none pointer-events-none" style={{ fontSize: `${14 + (i * 6)}px`, left: `${8 + (i * 10) % 85}%`, top: `${3 + (i * 12) % 65}%` }} animate={{ y: [0, -8, 0], opacity: [0.3, 0.7, 0.3], rotate: [0, 45, 0] }} transition={{ duration: 4 + i * 0.5, repeat: Infinity, delay: i * 0.6, ease: "easeInOut" }} aria-hidden="true">+</motion.span>
       ))}
 
       <div className="container relative z-10">
@@ -84,7 +84,7 @@ export const DramaticFooter = () => {
             {statements.map((statement, i) => (
               <motion.div key={statement} initial={{ opacity: 0, x: -40 }} animate={isInView ? { opacity: 1, x: 0 } : {}} transition={{ duration: 0.6, delay: i * 0.12 }} className="flex items-center gap-4 group">
                 <motion.span className="text-primary text-xl font-light" animate={isInView ? { rotate: [0, 90, 0] } : {}} transition={{ duration: 2, delay: i * 0.12 + 0.5 }}>+</motion.span>
-                <h3 className="font-display text-xl sm:text-3xl md:text-4xl text-foreground/80 group-hover:text-foreground transition-colors">{statement}</h3>
+                <h3 className="font-display text-xl sm:text-3xl md:text-4xl text-foreground group-hover:text-foreground transition-colors">{statement}</h3>
               </motion.div>
             ))}
           </div>
@@ -93,7 +93,7 @@ export const DramaticFooter = () => {
         <div className="relative mb-16 rounded-xl overflow-hidden">
           <FluidGradientCanvas />
           <div className="absolute inset-0 flex items-center justify-center">
-            <h2 className="font-display text-5xl sm:text-7xl md:text-8xl text-foreground/10">CUATRE</h2>
+            <h2 className="font-display text-5xl sm:text-7xl md:text-8xl text-foreground/30">CUATRE</h2>
           </div>
         </div>
 
@@ -112,7 +112,7 @@ export const DramaticFooter = () => {
               ))}
             </nav>
           </div>
-          <p className="text-center text-muted-foreground/40 text-[10px] mt-10 tracking-wider">© {new Date().getFullYear()} CUATRE. ALL RIGHTS RESERVED.</p>
+          <p className="text-center text-muted-foreground/60 text-[10px] mt-10 tracking-wider">© {new Date().getFullYear()} CUATRE. ALL RIGHTS RESERVED.</p>
         </div>
       </div>
     </footer>

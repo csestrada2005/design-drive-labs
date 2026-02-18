@@ -66,9 +66,9 @@ const ShutterOverlay = ({ onDone }: { onDone: () => void }) => {
       {/* Center label */}
       <div className="absolute inset-0 flex items-center justify-center z-10">
         <motion.span
-          className="font-mono text-[10px] tracking-[0.4em] uppercase text-primary/60"
+          className="font-mono text-[10px] tracking-[0.4em] uppercase text-primary"
           initial={{ opacity: 0 }}
-          animate={{ opacity: [0, 0.7, 0.7, 0] }}
+          animate={{ opacity: [0, 1, 1, 0] }}
           transition={{ duration: 0.65, times: [0, 0.3, 0.6, 1] }}
         >
           ◈ Transitioning
@@ -147,9 +147,9 @@ const CircuitOverlay = ({ onDone }: { onDone: () => void }) => {
 
       <div className="absolute inset-0 flex items-center justify-center">
         <motion.span
-          className="font-mono text-[10px] tracking-[0.4em] uppercase text-primary/50"
+          className="font-mono text-[10px] tracking-[0.4em] uppercase text-primary/80"
           initial={{ opacity: 0, y: 5 }}
-          animate={{ opacity: 0.7, y: 0 }}
+          animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.15 }}
         >
           ▸ Rendering
@@ -210,9 +210,9 @@ const DataOverlay = ({ onDone }: { onDone: () => void }) => {
       {/* Matrix characters */}
       <div className="absolute inset-0 flex items-center justify-center overflow-hidden">
         <motion.div
-          className="font-mono text-[8px] leading-tight text-primary/20 whitespace-pre text-center"
+          className="font-mono text-[8px] leading-tight text-primary/50 whitespace-pre text-center"
           initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 0.4, y: 20 }}
+          animate={{ opacity: 0.8, y: 20 }}
           transition={{ duration: 0.6 }}
         >
           {Array.from({ length: 8 }).map((_, row) => (
@@ -227,9 +227,9 @@ const DataOverlay = ({ onDone }: { onDone: () => void }) => {
 
       <div className="absolute inset-0 flex items-center justify-center z-10">
         <motion.span
-          className="font-mono text-[10px] tracking-[0.4em] uppercase text-foreground/40"
+          className="font-mono text-[10px] tracking-[0.4em] uppercase text-foreground/70"
           initial={{ opacity: 0 }}
-          animate={{ opacity: 0.7 }}
+          animate={{ opacity: 1 }}
           transition={{ delay: 0.2 }}
         >
           Compiling

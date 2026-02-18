@@ -46,7 +46,7 @@ const LineChart = ({ isInView }: { isInView: boolean }) => {
 
   return (
     <div className="relative">
-      <p className="text-[10px] tracking-widest uppercase text-muted-foreground/50 mb-3">Conversion Rate Over Time</p>
+      <p className="text-[10px] tracking-widest uppercase text-muted-foreground/80 mb-3">Conversion Rate Over Time</p>
       <svg viewBox={`0 0 ${width} ${height}`} className="w-full max-w-md">
         {[0, 25, 50, 75].map((v) => {
           const y = height - padY - (v / 100) * (height - padY * 2);
@@ -58,7 +58,7 @@ const LineChart = ({ isInView }: { isInView: boolean }) => {
           );
         })}
         <motion.path d={pathData} fill="none" stroke="hsl(0 100% 50%)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" initial={{ pathLength: 0 }} animate={isInView ? { pathLength: 1 } : { pathLength: 0 }} transition={{ duration: 1.5, ease: "easeOut", delay: 0.3 }} />
-        <motion.path d={pathData} fill="none" stroke="hsl(0 100% 50% / 0.3)" strokeWidth="6" strokeLinecap="round" strokeLinejoin="round" filter="blur(4px)" initial={{ pathLength: 0 }} animate={isInView ? { pathLength: 1 } : { pathLength: 0 }} transition={{ duration: 1.5, ease: "easeOut", delay: 0.3 }} />
+        <motion.path d={pathData} fill="none" stroke="hsl(0 100% 50% / 0.3)" strokeWidth="6" strokeLinecap="round" strokeLinejoin="round" initial={{ pathLength: 0 }} animate={isInView ? { pathLength: 1 } : { pathLength: 0 }} transition={{ duration: 1.5, ease: "easeOut", delay: 0.3 }} />
         {points.map((p, i) => {
           const x = padX + (i / (points.length - 1)) * (width - padX * 2);
           const y = height - padY - (p / 100) * (height - padY * 2);
@@ -99,7 +99,7 @@ const BarChart = ({ isInView }: { isInView: boolean }) => {
 
   return (
     <div className="relative">
-      <p className="text-[10px] tracking-widest uppercase text-muted-foreground/50 mb-3">Average Order Value ($)</p>
+      <p className="text-[10px] tracking-widest uppercase text-muted-foreground/80 mb-3">Average Order Value ($)</p>
       <svg viewBox={`0 0 ${width} ${height}`} className="w-full max-w-md">
         {data.map((d, i) => {
           const x = padX + i * (barWidth + gap);
@@ -161,8 +161,8 @@ export const GrowthImpact = () => {
               <p className="font-display text-3xl sm:text-4xl md:text-5xl text-primary mb-2">
                 <CountUp end={m.value} suffix={m.suffix} prefix={m.prefix} />
               </p>
-              <p className="text-foreground/80 text-sm font-medium mb-1">{m.label}</p>
-              <p className="text-muted-foreground/50 text-[10px] tracking-wider">{m.sub}</p>
+              <p className="text-foreground text-sm font-medium mb-1">{m.label}</p>
+              <p className="text-muted-foreground/70 text-[10px] tracking-wider">{m.sub}</p>
               <motion.div className="absolute -bottom-4 left-0 h-px" style={{ background: "linear-gradient(90deg, hsl(0 100% 50% / 0.3), transparent)" }} initial={{ width: 0 }} animate={isInView ? { width: "80%" } : { width: 0 }} transition={{ duration: 0.8, delay: 0.5 + i * 0.1 }} />
             </motion.div>
           ))}
@@ -196,7 +196,7 @@ export const GrowthImpact = () => {
           </div>
         </motion.div>
 
-        <motion.p initial={{ opacity: 0 }} animate={isInView ? { opacity: 1 } : {}} transition={{ delay: 1.2 }} className="text-muted-foreground/30 text-[10px] tracking-wider mt-10 max-w-md">
+        <motion.p initial={{ opacity: 0 }} animate={isInView ? { opacity: 1 } : {}} transition={{ delay: 1.2 }} className="text-muted-foreground/60 text-[10px] tracking-wider mt-10 max-w-md">
           * Los numeros mostrados son rangos tipicos basados en proyectos anteriores. Los resultados reales varian segun industria, producto y estrategia.
         </motion.p>
       </div>

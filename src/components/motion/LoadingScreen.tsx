@@ -64,11 +64,11 @@ export const LoadingScreen = ({ onComplete }: { onComplete: () => void }) => {
               <motion.p
                 key={i}
                 initial={{ opacity: 0, x: -10 }}
-                animate={{ opacity: 0.6, x: 0 }}
+                animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.2, delay: i * 0.15 }}
-                className="text-muted-foreground/60 mb-1"
+                className="text-muted-foreground mb-1"
               >
-                <span className="text-primary/50 mr-2">▸</span>
+                <span className="text-primary mr-2">▸</span>
                 {line}
               </motion.p>
             ))}
@@ -95,7 +95,7 @@ export const LoadingScreen = ({ onComplete }: { onComplete: () => void }) => {
             />
           </div>
 
-          <p className="relative z-10 mt-4 text-[10px] tracking-[0.3em] uppercase text-muted-foreground/30 font-mono">
+          <p className="relative z-10 mt-4 text-[10px] tracking-[0.3em] uppercase text-muted-foreground/60 font-mono">
             CUATRE SYSTEMS
           </p>
         </motion.div>

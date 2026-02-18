@@ -15,7 +15,7 @@ export const CornerCrosses = () => {
           key={i}
           className={`absolute ${pos} w-4 h-4`}
           initial={{ opacity: 0, scale: 0 }}
-          animate={{ opacity: 0.25, scale: 1 }}
+          animate={{ opacity: 0.6, scale: 1 }}
           transition={{ duration: 0.6, delay: 1 + i * 0.15 }}
         >
           <svg viewBox="0 0 16 16" className="w-full h-full text-foreground">

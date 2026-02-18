@@ -69,7 +69,7 @@ export const ArchitectureDemo = () => {
                   <rect x="22" y="18" width="10" height="10" rx="1" fill="currentColor" opacity="0.08" />
                 </svg>
                 <motion.p
-                  className="text-xs font-mono text-primary/70 tracking-wider"
+                  className="text-xs font-mono text-primary tracking-wider"
                   animate={{ opacity: [0.5, 1, 0.5] }}
                   transition={{ duration: 2, repeat: Infinity }}
                 >
@@ -109,7 +109,7 @@ export const ArchitectureDemo = () => {
                 <div className="w-2 h-2 rounded-full" style={{ background: "hsl(0 70% 55%)" }} />
                 <div className="w-2 h-2 rounded-full" style={{ background: "hsl(45 80% 55%)" }} />
                 <div className="w-2 h-2 rounded-full" style={{ background: "hsl(140 60% 45%)" }} />
-                <span className="ml-3 text-[9px] font-mono text-muted-foreground/30 tracking-wider">app.tsx</span>
+                <span className="ml-3 text-[9px] font-mono text-muted-foreground/60 tracking-wider">app.tsx</span>
               </div>
               <div className="p-4 space-y-0.5 font-mono text-[10px] sm:text-[11px] leading-relaxed">
                 {CODE_LINES.map((line, i) => (
@@ -121,7 +121,7 @@ export const ArchitectureDemo = () => {
                     style={{ paddingLeft: `${line.indent * 16}px` }}
                     className="whitespace-pre"
                   >
-                    <span className="text-muted-foreground/20 mr-3 select-none inline-block w-4 text-right">
+                    <span className="text-muted-foreground/50 mr-3 select-none inline-block w-4 text-right">
                       {i + 1}
                     </span>
                     {line.text ? (

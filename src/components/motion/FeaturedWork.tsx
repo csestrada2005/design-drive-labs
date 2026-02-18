@@ -55,7 +55,7 @@ const BinaryRain = () => {
     <div className="relative w-full h-full overflow-hidden">
       <canvas ref={canvasRef} className="absolute inset-0 w-full h-full" />
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-        <motion.div className="flex items-center gap-3" animate={{ opacity: [0.3, 0.5, 0.3] }} transition={{ duration: 3, repeat: Infinity }}>
+        <motion.div className="flex items-center gap-3" animate={{ opacity: [0.6, 1, 0.6] }} transition={{ duration: 3, repeat: Infinity }}>
           <svg viewBox="0 0 40 48" className="w-8 h-10" style={{ color: "hsl(15 100% 55%)" }}>
             <path d="M6 2h20l8 10v34H6V2z" fill="none" stroke="currentColor" strokeWidth="1" />
             <path d="M26 2v10h8" fill="none" stroke="currentColor" strokeWidth="0.8" />
@@ -63,7 +63,7 @@ const BinaryRain = () => {
               <line key={y} x1="12" y1={y} x2={28 - (y % 8)} y2={y} stroke="currentColor" strokeWidth="0.5" opacity="0.4" />
             ))}
           </svg>
-          <motion.span className="text-[10px] font-mono text-muted-foreground/30" animate={{ opacity: [0.3, 0.6, 0.3] }} transition={{ duration: 2, repeat: Infinity }}>
+          <motion.span className="text-[10px] font-mono text-muted-foreground/60" animate={{ opacity: [0.6, 1, 0.6] }} transition={{ duration: 2, repeat: Infinity }}>
             → 0x7F...
           </motion.span>
         </motion.div>
@@ -74,8 +74,8 @@ const BinaryRain = () => {
 
 const PrivacyBadge = () => (
   <div className="flex items-center gap-1.5 mt-4">
-    <Shield className="w-3 h-3 text-muted-foreground/30" />
-    <span className="text-[8px] font-mono tracking-[0.15em] uppercase text-muted-foreground/25">Proprietary Architecture / Confidential Client</span>
+    <Shield className="w-3 h-3 text-muted-foreground/60" />
+    <span className="text-[8px] font-mono tracking-[0.15em] uppercase text-muted-foreground/60">Proprietary Architecture / Confidential Client</span>
   </div>
 );
 
@@ -117,9 +117,9 @@ export const FeaturedWork = () => {
                   {card.heroType === "binary" && <div className="absolute inset-0"><BinaryRain /></div>}
                   {card.heroType === "stats" && (
                     <div className="absolute inset-0 flex items-center justify-center">
-                      <motion.div className="text-center" animate={{ opacity: [0.5, 1, 0.5] }} transition={{ duration: 3, repeat: Infinity }}>
+                      <motion.div className="text-center" animate={{ opacity: [0.8, 1, 0.8] }} transition={{ duration: 3, repeat: Infinity }}>
                         <span className="font-display text-5xl sm:text-6xl font-bold" style={{ color: card.accentColor, textShadow: `0 0 40px ${card.accentGlow}` }}>+15%</span>
-                        <p className="text-[10px] font-mono tracking-[0.2em] uppercase text-muted-foreground/40 mt-2">AOV Increase</p>
+                        <p className="text-[10px] font-mono tracking-[0.2em] uppercase text-muted-foreground/70 mt-2">AOV Increase</p>
                       </motion.div>
                     </div>
                   )}
@@ -130,12 +130,12 @@ export const FeaturedWork = () => {
                   </div>
                   <div>
                     <h3 className="font-display text-sm sm:text-base group-hover:text-primary transition-colors duration-300">{card.title}</h3>
-                    {card.subtitle && <p className="text-[10px] font-mono tracking-wider uppercase text-muted-foreground/40">{card.subtitle}</p>}
+                    {card.subtitle && <p className="text-[10px] font-mono tracking-wider uppercase text-muted-foreground/70">{card.subtitle}</p>}
                   </div>
                 </div>
                 <div className="ml-11">
                   <motion.div className="h-px mb-3" style={{ background: `linear-gradient(90deg, ${card.accentColor}30, transparent)`, transformOrigin: "left" }} animate={{ scaleX: isInView ? 1 : 0 }} transition={{ delay: 0.4 + i * 0.15, duration: 0.8 }} />
-                  <p className="text-xs text-muted-foreground/60 leading-relaxed">{card.stat}</p>
+                  <p className="text-xs text-muted-foreground/80 leading-relaxed">{card.stat}</p>
                 </div>
               </motion.div>
             );

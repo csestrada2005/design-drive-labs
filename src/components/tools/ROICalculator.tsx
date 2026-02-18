@@ -77,7 +77,7 @@ export const ROICalculator = () => {
 
       <div className="relative grid sm:grid-cols-2 gap-8">
         <div>
-          <p className="text-[10px] font-mono tracking-[0.15em] uppercase text-muted-foreground/50 mb-2">
+          <p className="text-[10px] font-mono tracking-[0.15em] uppercase text-muted-foreground/80 mb-2">
             Current Revenue
           </p>
           <AnimatedValue
@@ -96,7 +96,7 @@ export const ROICalculator = () => {
         </div>
 
         <div>
-          <p className="text-[10px] font-mono tracking-[0.15em] uppercase text-muted-foreground/50 mb-2">
+          <p className="text-[10px] font-mono tracking-[0.15em] uppercase text-muted-foreground/80 mb-2">
             Projected Value With Us
           </p>
           <AnimatedValue

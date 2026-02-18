@@ -53,7 +53,7 @@ export const ContactSection = () => {
   };
 
   const inputClass = (field: string) =>
-    `w-full h-12 px-4 glass-input rounded-lg text-sm bg-card/40 border ${errors[field] ? "border-destructive" : "border-border/40"} focus:outline-none focus:border-primary/50 focus:ring-2 focus:ring-primary/10 text-foreground placeholder:text-muted-foreground/50`;
+    `w-full h-12 px-4 glass-input rounded-lg text-sm bg-card/40 border ${errors[field] ? "border-destructive" : "border-border/40"} focus:outline-none focus:border-primary/50 focus:ring-2 focus:ring-primary/10 text-foreground placeholder:text-muted-foreground/70`;
 
   const fieldVariants = {
     hidden: { opacity: 0, y: 20 },

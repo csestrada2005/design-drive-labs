@@ -68,8 +68,8 @@ export const ProcessSection = () => {
           ref={headerPaint.ref}
           style={headerPaint.style}
           className="mb-6"
-          initial={{ opacity: 0, filter: "blur(6px)" }}
-          whileInView={{ opacity: 1, filter: "blur(0px)" }}
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
@@ -117,8 +117,8 @@ export const ProcessSection = () => {
               return (
                 <motion.div
                   key={phase.id}
-                  initial={{ opacity: 0, x: isLeft ? -40 : 40, y: 30, filter: "blur(6px)" }}
-                  whileInView={{ opacity: 1, x: 0, y: 0, filter: "blur(0px)" }}
+                  initial={{ opacity: 0, x: isLeft ? -40 : 40, y: 30 }}
+                  whileInView={{ opacity: 1, x: 0, y: 0 }}
                   viewport={{ once: true, margin: "-100px" }}
                   transition={{ duration: 0.6, delay: 0.1, ease: [0.33, 1, 0.68, 1] }}
                   className="relative flex gap-6 sm:gap-8 md:items-center"
@@ -141,7 +141,7 @@ export const ProcessSection = () => {
                       <p className="text-muted-foreground text-sm mb-3 leading-relaxed">{phase.description}</p>
                       <div className="flex flex-wrap gap-x-4 gap-y-1">
                         {phase.bullets.map((bullet) => (
-                          <span key={bullet} className="text-muted-foreground/60 text-xs flex items-center gap-1.5">
+                          <span key={bullet} className="text-muted-foreground text-xs flex items-center gap-1.5">
                             <span className="w-1 h-1 rounded-full bg-primary/40" />
                             {bullet}
                           </span>
@@ -165,7 +165,7 @@ export const ProcessSection = () => {
                         <p className="text-muted-foreground text-sm mb-3 leading-relaxed">{phase.description}</p>
                         <div className={`flex flex-wrap gap-x-4 gap-y-1 ${isLeft ? "justify-end" : ""}`}>
                           {phase.bullets.map((bullet) => (
-                            <span key={bullet} className="text-muted-foreground/60 text-xs flex items-center gap-1.5">
+                            <span key={bullet} className="text-muted-foreground text-xs flex items-center gap-1.5">
                               <span className="w-1 h-1 rounded-full bg-primary/40" />
                               {bullet}
                             </span>

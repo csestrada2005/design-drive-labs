@@ -111,11 +111,10 @@ const containerVariants = {
 };
 
 const cardVariants = {
-  hidden: { opacity: 0, scale: 0.8, filter: "blur(8px)" },
+  hidden: { opacity: 0, scale: 0.8 },
   visible: {
     opacity: 1,
     scale: 1,
-    filter: "blur(0px)",
     transition: {
       type: "spring" as const,
       stiffness: 200,
@@ -144,8 +143,8 @@ export const ServicesSection = () => {
           ref={headerPaint.ref}
           style={headerPaint.style}
           className="mb-16"
-          initial={{ opacity: 0, filter: "blur(6px)" }}
-          whileInView={{ opacity: 1, filter: "blur(0px)" }}
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
@@ -223,15 +222,15 @@ export const ServicesSection = () => {
                     <motion.div className="h-px mb-5" style={{ background: `linear-gradient(90deg, ${tier.accentColor}25, transparent)`, transformOrigin: "left" }} animate={{ scaleX: isHovered ? 1 : 0.4 }} transition={{ duration: 0.5 }} />
                     <ul className="space-y-3 mb-6 flex-1">
                       {tier.features.map((feature, fi) => (
-                        <motion.li key={feature} className="flex items-start gap-2.5 text-sm text-muted-foreground group-hover:text-foreground/70 transition-colors" initial={{ opacity: 0, x: -10 }} animate={isInView ? { opacity: 1, x: 0 } : {}} transition={{ delay: i * 0.15 + fi * 0.06 + 0.3 }}>
+                        <motion.li key={feature} className="flex items-start gap-2.5 text-sm text-muted-foreground group-hover:text-foreground transition-colors" initial={{ opacity: 0, x: -10 }} animate={isInView ? { opacity: 1, x: 0 } : {}} transition={{ delay: i * 0.15 + fi * 0.06 + 0.3 }}>
                           <div className="w-1 h-1 rounded-full flex-shrink-0 mt-2 group-hover:scale-150 transition-transform" style={{ background: `${tier.accentColor}60` }} />
                           {feature}
                         </motion.li>
                       ))}
                     </ul>
                     <div className="pt-4 mt-auto" style={{ borderTop: `1px solid ${tier.accentColor}10` }}>
-                      <p className="text-[10px] font-mono tracking-[0.12em] uppercase text-muted-foreground/40 mb-1">Best for</p>
-                      <p className="text-xs text-foreground/60 leading-relaxed">{tier.bestFor}</p>
+                      <p className="text-[10px] font-mono tracking-[0.12em] uppercase text-muted-foreground/70 mb-1">Best for</p>
+                      <p className="text-xs text-foreground/80 leading-relaxed">{tier.bestFor}</p>
                     </div>
                   </CardContent>
                 </Card>
