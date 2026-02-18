@@ -1,36 +1,53 @@
 import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 
-interface ScrollRevealTextProps {
+interface LineConfig {
   text: string;
-  className?: string;
   highlightWords?: string[];
 }
 
-export const ScrollRevealText = ({ text, className = "", highlightWords = [] }: ScrollRevealTextProps) => {
+interface ScrollRevealTextProps {
+  lines: LineConfig[];
+  className?: string;
+}
+
+export const ScrollRevealText = ({ lines, className = "" }: ScrollRevealTextProps) => {
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start 0.85", "end 0.4"],
   });
 
-  const words = text.split(" ");
+  const allWords = lines.flatMap(line => line.text.split(" "));
+  const totalWords = allWords.length;
+  let wordIndex = 0;
 
   return (
-    <div ref={ref} className={`overflow-hidden ${className}`}>
-      <p className="font-display text-2xl sm:text-4xl md:text-5xl lg:text-6xl leading-[1.1] flex flex-wrap gap-x-[0.3em] gap-y-1">
-        {words.map((word, i) => {
-          const start = i / words.length;
-          const end = start + 1 / words.length;
-          const isHighlight = highlightWords.some(hw => word.toLowerCase().includes(hw.toLowerCase()));
+    <div ref={ref} className={`overflow-hidden text-center ${className}`}>
+      {lines.map((line, lineIdx) => {
+        const words = line.text.split(" ");
+        const highlights = line.highlightWords || [];
 
-          return (
-            <Word key={i} progress={scrollYProgress} range={[start, end]} isHighlight={isHighlight}>
-              {word}
-            </Word>
-          );
-        })}
-      </p>
+        return (
+          <p
+            key={lineIdx}
+            className="font-display text-2xl sm:text-4xl md:text-5xl lg:text-6xl leading-[1.1] flex flex-wrap justify-center gap-x-[0.3em] gap-y-1 mb-2"
+          >
+            {words.map((word, i) => {
+              const globalIndex = wordIndex++;
+              const start = globalIndex / totalWords;
+              const end = start + 1 / totalWords;
+              const isHighlight = highlights.some(hw => word.toLowerCase().includes(hw.toLowerCase()));
+
+              return (
+                <Word key={i} progress={scrollYProgress} range={[start, end]} isHighlight={isHighlight}>
+                  {word}
+                </Word>
+              );
+            })}
+          </p>
+        );
+      })}
     </div>
   );
 };
