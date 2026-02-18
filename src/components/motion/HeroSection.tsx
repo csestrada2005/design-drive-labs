@@ -149,9 +149,8 @@ export const HeroSection = () => {
             transition={{ duration: 0.8, delay: 0.2, ease: [0.33, 1, 0.68, 1] }}
             className="font-display text-[clamp(3rem,10vw,8rem)] leading-[0.88] tracking-tighter uppercase"
           >
-            <span className="block">WE BUILD</span>
-            <span className="block text-primary">REVENUE</span>
-            <span className="block">ENGINES.</span>
+            <span className="block">NEBU</span>
+            <span className="block text-primary">STUDIO</span>
           </motion.h1>
         </div>
 
