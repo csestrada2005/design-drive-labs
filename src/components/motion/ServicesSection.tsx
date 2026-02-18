@@ -128,15 +128,14 @@ export const ServicesSection = () => {
                 )}
 
                 <Card
-                  className="relative overflow-hidden border-0 h-full transition-all duration-500"
+                  className="relative overflow-hidden border h-full transition-all duration-500"
                   style={{
-                    background: isHovered
-                      ? `linear-gradient(135deg, hsl(0 10% 8%), hsl(0 10% 5%))`
-                      : `linear-gradient(135deg, hsl(0 10% 6%), hsl(0 10% 4%))`,
+                    background: "transparent",
+                    borderColor: isHovered ? `${tier.accentColor}40` : "hsl(0 0% 100% / 0.08)",
                     borderRadius: "1.25rem",
                     boxShadow: isHovered
-                      ? `0 0 40px ${tier.accentGlow}, inset 0 1px 0 hsl(0 0% 100% / 0.03)`
-                      : "inset 0 1px 0 hsl(0 0% 100% / 0.02)",
+                      ? `0 0 40px ${tier.accentGlow}`
+                      : "none",
                   }}
                 >
                   <motion.div
