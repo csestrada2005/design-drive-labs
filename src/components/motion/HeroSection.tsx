@@ -137,10 +137,10 @@ export const HeroSection = () => {
       </AnimatePresence>
 
       <section
-        className="relative h-[100dvh] flex items-center justify-center overflow-hidden bg-background"
+        className="relative h-[100dvh] flex items-center justify-center overflow-hidden"
         id="hero"
       >
-        <div className="absolute inset-0 grid-bg" aria-hidden="true" />
+        <div className="absolute inset-0 grid-bg opacity-30" aria-hidden="true" />
 
         <div className="container relative z-10 text-center">
           <motion.h1
