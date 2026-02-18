@@ -84,7 +84,7 @@ const ElectroText = () => {
               key={i}
               className="font-display text-4xl sm:text-6xl lg:text-7xl select-none relative"
               animate={{
-                color: activeIdx === i ? "hsl(0, 100%, 75%)" : activeIdx !== null && Math.abs(activeIdx - i) <= 1 ? "hsl(0, 100%, 55%)" : "hsl(0, 0%, 97%)",
+                color: activeIdx === i ? "hsl(0, 100%, 90%)" : activeIdx !== null && Math.abs(activeIdx - i) <= 1 ? "hsl(0, 100%, 75%)" : "hsl(0, 0%, 100%)",
                 textShadow: activeIdx === i ? "0 0 30px hsl(0 100% 50% / 0.9), 0 0 80px hsl(0 100% 50% / 0.5)" : "none",
                 scale: activeIdx === i ? 1.15 : 1,
                 y: activeIdx === i ? -4 : 0,
@@ -113,7 +113,7 @@ const ElectroText = () => {
   );
 };
 
-/* ── Demo 2: Glass Pop-up — RED, no blur ── */
+/* ── Demo 2: Glass Pop-up — RED ── */
 const GlassPopup = () => {
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: false, margin: "-50px" });
@@ -129,21 +129,21 @@ const GlassPopup = () => {
             transition={{ type: "spring", damping: 22, stiffness: 280 }}
             className="relative p-6 max-w-xs w-full"
             style={{
-              background: "linear-gradient(135deg, hsl(0 40% 12% / 0.7), hsl(0 40% 6% / 0.5))",
-              border: "1px solid hsl(0 100% 50% / 0.2)",
+              background: "linear-gradient(135deg, hsl(0 0% 100% / 0.15), hsl(0 0% 100% / 0.05))",
+              border: "1px solid hsl(0 0% 100% / 0.2)",
               borderRadius: "1.25rem",
-              boxShadow: "0 24px 80px -20px hsl(0 100% 20% / 0.6), inset 0 1px 0 hsl(0 0% 100% / 0.04)",
+              boxShadow: "0 24px 80px -20px hsl(0 0% 0% / 0.4), inset 0 1px 0 hsl(0 0% 100% / 0.1)",
             }}
           >
             <div className="flex items-center gap-3 mb-3">
-              <div className="w-2 h-2 rounded-full bg-primary animate-pulse" />
-              <span className="text-[10px] tracking-[0.2em] uppercase text-muted-foreground">Notification</span>
+              <div className="w-2 h-2 rounded-full bg-white animate-pulse" />
+              <span className="text-[10px] tracking-[0.2em] uppercase text-white/70">Notification</span>
             </div>
-            <p className="text-sm text-foreground leading-relaxed">
+            <p className="text-sm text-white leading-relaxed">
               Glassmorphism pop-up con spring physics. Escala + profundidad.
             </p>
-            <div className="mt-4 h-px" style={{ background: "linear-gradient(90deg, transparent, hsl(0 100% 50% / 0.2), transparent)" }} />
-            <p className="mt-3 text-[9px] text-muted-foreground/70 tracking-[0.2em] uppercase">Cuatre Design System</p>
+            <div className="mt-4 h-px" style={{ background: "linear-gradient(90deg, transparent, hsl(0 0% 100% / 0.3), transparent)" }} />
+            <p className="mt-3 text-[9px] text-white/60 tracking-[0.2em] uppercase">Cuatre Design System</p>
           </motion.div>
         )}
       </AnimatePresence>
@@ -177,16 +177,16 @@ const TiltObject = () => {
     <div ref={ref} className="py-12 flex items-center justify-center min-h-[220px]" style={{ perspective: "800px" }}>
       <motion.div className="relative w-36 h-36 sm:w-44 sm:h-44" animate={{ rotateX: tilt.y, rotateY: tilt.x }} transition={{ type: "spring", stiffness: 180, damping: 18 }}>
         <div className="absolute inset-0" style={{
-          background: "linear-gradient(135deg, hsl(0 100% 50% / 0.15), hsl(0 100% 50% / 0.03))",
-          border: "1px solid hsl(0 100% 50% / 0.25)",
+          background: "linear-gradient(135deg, hsl(0 0% 100% / 0.15), hsl(0 0% 100% / 0.03))",
+          border: "1px solid hsl(0 0% 100% / 0.25)",
           borderRadius: "2rem",
-          boxShadow: `${-tilt.x * 0.8}px ${tilt.y * 0.8}px 40px hsl(0 100% 50% / 0.12)`,
+          boxShadow: `${-tilt.x * 0.8}px ${tilt.y * 0.8}px 40px hsl(0 0% 0% / 0.3)`,
         }} />
         <div className="absolute inset-0 pointer-events-none" style={{
           borderRadius: "2rem",
-          background: `radial-gradient(circle at ${50 + tilt.x * 1.2}% ${50 - tilt.y * 1.2}%, hsl(0 0% 100% / 0.12), transparent 55%)`,
+          background: `radial-gradient(circle at ${50 + tilt.x * 1.2}% ${50 - tilt.y * 1.2}%, hsl(0 0% 100% / 0.15), transparent 55%)`,
         }} />
-        <svg className="absolute inset-6" viewBox="0 0 60 60" style={{ color: "hsl(0 100% 50% / 0.3)" }}>
+        <svg className="absolute inset-6" viewBox="0 0 60 60" style={{ color: "hsl(0 0% 100% / 0.4)" }}>
           <polygon points="30,5 55,20 55,40 30,55 5,40 5,20" fill="none" stroke="currentColor" strokeWidth="0.6" />
           <circle cx="30" cy="30" r="12" fill="none" stroke="currentColor" strokeWidth="0.4" strokeDasharray="2 4">
             <animateTransform attributeName="transform" type="rotate" from="0 30 30" to="360 30 30" dur="12s" repeatCount="indefinite" />
@@ -196,7 +196,7 @@ const TiltObject = () => {
           </circle>
         </svg>
         <div className="absolute -bottom-8 left-1/2 -translate-x-1/2">
-          <span className="text-[9px] tracking-[0.2em] uppercase text-muted-foreground/60">
+          <span className="text-[9px] tracking-[0.2em] uppercase text-white/60">
             Tilt: {Math.round(tilt.x)}° / {Math.round(tilt.y)}°
           </span>
         </div>
@@ -218,9 +218,9 @@ const ScrollMorphShapes = () => {
 
   return (
     <div ref={ref} className="py-12 flex items-center justify-center gap-10 min-h-[220px]">
-      <motion.div className="w-24 h-24 sm:w-32 sm:h-32" style={{ borderRadius: br1, scale: s1, rotate: r1, background: "linear-gradient(135deg, hsl(0 100% 50% / 0.2), hsl(0 100% 50% / 0.04))", border: "1px solid hsl(0 100% 50% / 0.2)", boxShadow: "0 0 40px hsl(0 100% 50% / 0.08)" }} />
-      <motion.div className="w-20 h-20 sm:w-28 sm:h-28" style={{ borderRadius: br2, scale: s2, rotate: r2, background: "linear-gradient(135deg, hsl(350 100% 50% / 0.15), hsl(350 100% 50% / 0.03))", border: "1px solid hsl(350 100% 50% / 0.15)", boxShadow: "0 0 40px hsl(350 100% 50% / 0.06)" }} />
-      <p className="absolute text-[9px] tracking-[0.3em] uppercase text-muted-foreground/60 pointer-events-none">
+      <motion.div className="w-24 h-24 sm:w-32 sm:h-32" style={{ borderRadius: br1, scale: s1, rotate: r1, background: "linear-gradient(135deg, hsl(0 0% 100% / 0.15), hsl(0 0% 100% / 0.03))", border: "1px solid hsl(0 0% 100% / 0.2)", boxShadow: "0 0 40px hsl(0 0% 0% / 0.2)" }} />
+      <motion.div className="w-20 h-20 sm:w-28 sm:h-28" style={{ borderRadius: br2, scale: s2, rotate: r2, background: "linear-gradient(135deg, hsl(0 0% 100% / 0.1), hsl(0 0% 100% / 0.02))", border: "1px solid hsl(0 0% 100% / 0.15)", boxShadow: "0 0 40px hsl(0 0% 0% / 0.15)" }} />
+      <p className="absolute text-[9px] tracking-[0.3em] uppercase text-white/60 pointer-events-none">
         Scroll para morph
       </p>
     </div>
@@ -243,10 +243,10 @@ const RevealWipe = () => {
           animate={isInView ? { clipPath: "polygon(0 0, 100% 0, 100% 100%, 0 100%)" } : { clipPath: "polygon(0 0, 0 0, 0 100%, 0 100%)" }}
           transition={{ duration: 0.9, delay: i * 0.18, ease: [0.33, 1, 0.68, 1] }}
         >
-          <div className="absolute inset-0" style={{ background: `linear-gradient(${135 + i * 30}deg, hsl(0 40% ${14 + i * 3}%), hsl(0 30% ${8 + i * 2}%))` }} />
-          <div className="absolute inset-0 opacity-[0.04]" style={{ backgroundImage: `linear-gradient(hsl(0 100% 50% / 0.3) 1px, transparent 1px), linear-gradient(90deg, hsl(0 100% 50% / 0.3) 1px, transparent 1px)`, backgroundSize: "20px 20px" }} />
+          <div className="absolute inset-0" style={{ background: `linear-gradient(${135 + i * 30}deg, hsl(0 0% 20%), hsl(0 0% 10%))` }} />
+          <div className="absolute inset-0 opacity-[0.08]" style={{ backgroundImage: `linear-gradient(hsl(0 0% 100% / 0.3) 1px, transparent 1px), linear-gradient(90deg, hsl(0 0% 100% / 0.3) 1px, transparent 1px)`, backgroundSize: "20px 20px" }} />
           <div className="absolute inset-0 flex items-end p-4">
-            <span className="text-[9px] tracking-[0.2em] uppercase text-foreground/60 font-medium">Project {i + 1}</span>
+            <span className="text-[9px] tracking-[0.2em] uppercase text-white/80 font-medium">Project {i + 1}</span>
           </div>
         </motion.div>
       ))}
@@ -254,7 +254,7 @@ const RevealWipe = () => {
   );
 };
 
-/* ── Demo config (particles removed) ── */
+/* ── Demo config ── */
 const demos = [
   { id: "architecture", label: "SAAS DEMO", desc: "Auto-cycling preview", component: ArchitectureDemo },
   { id: "electro", label: "ELECTRO TEXT", desc: "Auto-cycling lightning", component: ElectroText },
@@ -264,16 +264,42 @@ const demos = [
   { id: "reveal", label: "REVEAL WIPE", desc: "Clip-path transitions", component: RevealWipe },
 ];
 
-/* ── Main Section ── */
+/* ── Main Section with scroll-driven red background ── */
 export const DesignLab = () => {
   const sectionRef = useRef<HTMLElement>(null);
   const isInView = useInView(sectionRef, { once: true, margin: "-100px" });
 
-  return (
-    <section ref={sectionRef} className="py-32 sm:py-40 relative overflow-hidden" id="lab">
-      <div className="absolute top-1/4 left-1/5 w-[500px] h-[500px] rounded-full pointer-events-none" style={{ background: "radial-gradient(circle, hsl(0 100% 50% / 0.03), transparent 70%)" }} aria-hidden="true" />
+  // Scroll-driven red fill: maps scroll progress to background opacity
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start end", "end start"],
+  });
 
-      <div className="container relative z-10">
+  // First 30% of scroll: red fills in (0 → 1). Last 30%: red fades out (1 → 0).
+  const redOpacity = useTransform(scrollYProgress, [0.05, 0.25, 0.75, 0.95], [0, 1, 1, 0]);
+
+  return (
+    <section ref={sectionRef} className="relative overflow-hidden" id="lab">
+      {/* Scroll-driven red background */}
+      <motion.div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          backgroundColor: "hsl(0 100% 50%)",
+          opacity: redOpacity,
+        }}
+        aria-hidden="true"
+      />
+      {/* Subtle dark vignette for depth on red */}
+      <motion.div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          background: "radial-gradient(ellipse at center, transparent 40%, hsl(0 100% 20% / 0.4) 100%)",
+          opacity: redOpacity,
+        }}
+        aria-hidden="true"
+      />
+
+      <div className="container relative z-10 py-32 sm:py-40">
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
@@ -284,12 +310,13 @@ export const DesignLab = () => {
             initial={{ opacity: 0, x: -20 }}
             animate={isInView ? { opacity: 1, x: 0 } : {}}
             transition={{ delay: 0.15 }}
-            className="text-muted-foreground text-[10px] tracking-[0.3em] uppercase mb-5 flex items-center gap-4"
+            className="text-[10px] tracking-[0.3em] uppercase mb-5 flex items-center gap-4 text-white/70"
+            style={{ mixBlendMode: "difference" }}
           >
-            <span className="w-10 h-px bg-primary/40" />
+            <span className="w-10 h-px bg-white/40" />
             Interactive Demos
           </motion.p>
-          <h2 className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl mb-5">
+          <h2 className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl mb-5 text-foreground">
             DESIGN <span className="text-primary">LAB</span>
           </h2>
           <p className="text-muted-foreground text-sm max-w-md leading-relaxed">
@@ -311,19 +338,18 @@ export const DesignLab = () => {
               >
                 <div className="flex items-center gap-3 mb-2">
                   <motion.div
-                    className="w-2 h-2 rounded-full"
-                    style={{ background: "hsl(0 100% 50% / 0.5)" }}
-                    animate={{ boxShadow: ["0 0 0px hsl(0 100% 50% / 0)", "0 0 12px hsl(0 100% 50% / 0.4)", "0 0 0px hsl(0 100% 50% / 0)"] }}
+                    className="w-2 h-2 rounded-full bg-white"
+                    animate={{ boxShadow: ["0 0 0px hsl(0 0% 100% / 0)", "0 0 12px hsl(0 0% 100% / 0.6)", "0 0 0px hsl(0 0% 100% / 0)"] }}
                     transition={{ duration: 3, repeat: Infinity, delay: i * 0.5 }}
                   />
-                  <span className="text-[10px] font-display tracking-[0.2em] text-foreground/80">{demo.label}</span>
-                  <span className="text-[9px] text-muted-foreground/60 tracking-wider ml-auto">{demo.desc}</span>
+                  <span className="text-[10px] font-display tracking-[0.2em] text-foreground">{demo.label}</span>
+                  <span className="text-[9px] text-muted-foreground tracking-wider ml-auto">{demo.desc}</span>
                 </div>
-                <div className="h-px mb-6" style={{ background: "linear-gradient(90deg, hsl(0 100% 50% / 0.15), transparent 80%)" }} />
+                <div className="h-px mb-6" style={{ background: "linear-gradient(90deg, hsl(0 0% 100% / 0.2), transparent 80%)" }} />
                 <DemoComponent />
                 <a
                   href="#contact"
-                  className="inline-flex items-center gap-3 text-[9px] tracking-[0.2em] uppercase text-muted-foreground/60 hover:text-primary transition-colors duration-300 mt-4 group/link"
+                  className="inline-flex items-center gap-3 text-[9px] tracking-[0.2em] uppercase text-white/70 hover:text-white transition-colors duration-300 mt-4 group/link"
                 >
                   <span className="w-4 h-px bg-current transition-all duration-300 group-hover/link:w-8" />
                   Usar en mi proyecto
