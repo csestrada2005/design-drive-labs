@@ -1,73 +1,36 @@
 
-# Section Transition Effects -- Scroll-Triggered "Page Reveal" System
 
-## Concept
-Each major section of the page will be wrapped in a transition component that detects when the user scrolls past the boundary between sections. When triggered, a techy visual effect plays -- making it feel like a new "page" is loading in, even though it's all one route.
+# Refactor Loading Video and Hero Image
 
-## Transition Effects (Rotating Per Section)
-The system will cycle through 3 distinct transition styles so it never feels repetitive:
+## What changes
+1. **Replace the loading video** with the newly uploaded one (`WhatsApp_Video_2026-02-18_at_15.34.20.mp4`)
+2. **Replace the hero background image** with the uploaded Nebu Studio owl image (`Gemini_Generated_Image_sv4w0isv4w0isv4w.png`)
+3. Keep all existing behavior: video plays to completion, then hero shows as a static full-screen image with scroll-lock, first scroll triggers the red laser transition
 
-1. **Glitch Slice** -- The incoming section splits into horizontal slices that stagger-slide in from alternating left/right, with a brief RGB-shift glitch overlay
-2. **Circuit Wipe** -- A horizontal scan-line sweeps across with a glowing electric-blue edge, revealing the new section behind it like a digital curtain
-3. **Data Dissolve** -- The section fades in through a grid of tiny squares that fill in randomly (like pixels loading), with a brief binary/matrix rain overlay
+## Why static image over paused video
+- Pausing a video can't guarantee the exact frame across browsers
+- Mobile browsers often won't render a paused video reliably
+- A static image uses less memory and loads instantly
+- Pixel-perfect, consistent result everywhere
 
-## How It Works
+## Technical Steps
 
-### New Component: `SectionTransition.tsx`
-A wrapper component that:
-- Uses `useInView` from Framer Motion with a threshold to detect when the section enters the viewport
-- Plays the assigned transition effect once (on first scroll-in)
-- Wraps each section's children so existing components are untouched
-- Accepts a `variant` prop ("glitch" | "circuit" | "data") to pick the effect
+### Step 1: Copy new assets
+- Copy `WhatsApp_Video_2026-02-18_at_15.34.20.mp4` to `public/videos/intro.mp4` (replacing the current one)
+- Copy `Gemini_Generated_Image_sv4w0isv4w0isv4w.png` to `public/images/hero-logo.jpeg` (replacing the current one)
 
-### Changes to `Index.tsx`
-Wrap each major section in `<SectionTransition variant="...">`:
+### Step 2: Update HeroSection.tsx
+- Remove the "NEBU / STUDIO" text overlay since the image itself already contains the branding
+- Keep the hero as a pure full-screen background image display with the scroll-lock and laser transition logic unchanged
+- Remove the grid overlay and any text elements that would cover the logo image
 
-```text
-HeroSection          -- No transition (it's the first thing visible)
-MarqueeTicker        -- No transition (small divider)
-StatsStrip           -- No transition (small divider)
-ScrollRevealText     -- No transition (already has its own reveal)
-ServicesSection      -- Glitch Slice
-DesignLab            -- Circuit Wipe
-ProcessSection       -- Data Dissolve
-GrowthImpact         -- Glitch Slice
-FeaturedWork         -- Circuit Wipe
-BigCTA               -- Data Dissolve
-ContactSection       -- Glitch Slice
-```
+### Step 3: No changes needed to
+- `LoadingScreen.tsx` (already reads from `/videos/intro.mp4`)
+- `Index.tsx` (flow is already correct)
+- `src/index.css` (background settings unchanged)
 
-### CSS additions to `index.css`
-- Keyframes for the glitch RGB-shift flicker
-- Keyframes for the scan-line sweep
-- Keyframes for the pixel-grid fill pattern
+## Files Modified
+- `public/videos/intro.mp4` -- replaced asset
+- `public/images/hero-logo.jpeg` -- replaced asset
+- `src/components/motion/HeroSection.tsx` -- remove text overlay, keep image-only hero
 
-## Technical Details
-
-### `SectionTransition.tsx` implementation
-- Uses a `ref` + `useInView(ref, { once: true, amount: 0.15 })` to trigger when ~15% of the section is visible
-- Before trigger: section content is hidden via `clip-path: inset(100%)` or `opacity: 0`
-- On trigger: runs the chosen animation variant using Framer Motion's `animate` + CSS keyframes
-- Each variant is ~0.6-0.8s duration so it feels snappy, not sluggish
-- All animations respect `prefers-reduced-motion` (instant reveal, no effects)
-
-### Glitch Slice variant
-- Section is split into 5 visual horizontal slices using `clip-path`
-- Each slice slides in from alternating directions with staggered delays (0, 80ms, 160ms...)
-- A brief (200ms) RGB-offset overlay flickers on top
-
-### Circuit Wipe variant
-- A full-width scan-line div (2px tall, electric blue glow) sweeps top-to-bottom
-- Content is revealed progressively behind the line using `clip-path: inset(X% 0 0 0)` animated from 100% to 0%
-- Scan-line has a `box-shadow` glow trail
-
-### Data Dissolve variant
-- An SVG/CSS grid mask of small squares (e.g. 20x12 grid)
-- Squares flip from opaque to transparent in a pseudo-random order over ~600ms
-- Brief matrix-style character rain overlay that fades out
-
-### Performance considerations
-- All animations use `transform`, `clip-path`, and `opacity` only (GPU-composited)
-- `once: true` ensures each transition fires only on first scroll-in, never replays
-- `will-change: transform` added before animation, removed after
-- Mobile: simpler variants (fewer slices, no matrix rain) to keep 60fps
