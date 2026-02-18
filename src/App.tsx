@@ -9,6 +9,7 @@ import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import { FilmGrain } from "@/components/motion/FilmGrain";
 import { LivingBackground } from "@/components/motion/LivingBackground";
+import { JapaneseBrushStrokes } from "@/components/motion/JapaneseBrushStrokes";
 
 import owlBg from "@/assets/owl-bg.png";
 
@@ -28,7 +29,7 @@ const App = () => (
         <ReactLenis root options={lenisOptions}>
           <div
             id="bg-wrapper"
-            className="min-h-screen"
+            className="min-h-screen relative"
             style={{
               backgroundImage: `url(${owlBg})`,
               backgroundSize: "cover",
@@ -37,6 +38,7 @@ const App = () => (
               backgroundAttachment: "fixed",
             }}
           >
+            <JapaneseBrushStrokes />
             <LivingBackground />
             <FilmGrain />
             <Toaster />
