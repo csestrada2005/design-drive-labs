@@ -1,6 +1,4 @@
-import { useState, useCallback, useRef } from "react";
-import { AnimatePresence } from "framer-motion";
-import { LoadingScreen } from "@/components/motion/LoadingScreen";
+import { useRef } from "react";
 import { HeroSection } from "@/components/motion/HeroSection";
 import { MarqueeTicker } from "@/components/motion/MarqueeTicker";
 import { StatsStrip } from "@/components/motion/StatsStrip";
@@ -20,22 +18,12 @@ import { ChatWidget } from "@/components/motion/ChatWidget";
 import { ScrollRevealText } from "@/components/motion/ScrollRevealText";
 
 const Index = () => {
-  const [isLoaded, setIsLoaded] = useState(false);
   const cursorZoneRef = useRef<HTMLDivElement>(null);
-
-  const handleLoadComplete = useCallback(() => {
-    setIsLoaded(true);
-  }, []);
 
   return (
     <div className="min-h-screen text-foreground">
-      <AnimatePresence>
-        {!isLoaded && <LoadingScreen onComplete={handleLoadComplete} />}
-      </AnimatePresence>
-
-      {isLoaded && (
-        <>
-          <SoundToggle />
+      <>
+        <SoundToggle />
           <CustomCursor containerRef={cursorZoneRef} />
           <CornerCrosses />
           <ChatWidget />
@@ -62,9 +50,8 @@ const Index = () => {
             <ContactSection />
             <DramaticFooter />
           </main>
-          <BottomNav />
-        </>
-      )}
+        <BottomNav />
+      </>
     </div>
   );
 };

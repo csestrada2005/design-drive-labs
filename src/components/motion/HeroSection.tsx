@@ -106,7 +106,8 @@ export const HeroSection = () => {
         id="hero"
         style={{
           backgroundImage: "url('/images/hero-logo.jpeg')",
-          backgroundSize: "cover",
+          backgroundSize: "60%",
+          backgroundRepeat: "no-repeat",
           backgroundPosition: "center",
         }}
       >
