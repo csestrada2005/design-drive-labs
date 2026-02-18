@@ -5,6 +5,9 @@ import domePapachoa from "@/assets/dome-papachoa.jpg";
 import domeRawPaw from "@/assets/dome-rawpaw.jpg";
 import domeJewelry from "@/assets/dome-jewelry.jpg";
 import domePawnshop from "@/assets/dome-pawnshop.jpg";
+import { BlackSandReveal } from "@/components/motion/BlackSandReveal";
+import { KineticType } from "@/components/motion/KineticType";
+
 
 /* ─────────────────────────────────────
    LIQUID GLASS WRAPPER
@@ -801,46 +804,48 @@ const DemoTile = ({ demo, index }: { demo: DemoConfig; index: number }) => {
    MAIN SECTION
 ───────────────────────────────────────*/
 export const DesignLab = () => {
-  const sectionRef = useRef<HTMLElement>(null);
-  const isInView = useInView(sectionRef, { once: true, margin: "-100px" });
-
   return (
-    <section ref={sectionRef} className="relative" id="lab">
-      <div className="container relative z-10 py-32 sm:py-40">
-        {/* heading */}
-        <motion.div
-          initial={{ opacity: 0, y: 36 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.75 }}
-          className="mb-24 sm:mb-32"
-        >
-          <h2 className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl mb-5">
-            <span className="text-primary">DESIGN</span>{" "}
-            <span className="text-foreground">LAB</span>
-          </h2>
-          <p className="text-foreground/45 text-sm max-w-sm leading-relaxed font-mono tracking-wide">
-            Six live demos. Move, click, brush, play — every effect ships with your project.
-          </p>
-        </motion.div>
-
-        {/* layout */}
-        <div className="space-y-16 sm:space-y-20">
-          <div className="grid md:grid-cols-2 gap-10 sm:gap-14 lg:gap-20">
-            <DemoTile demo={demos[0]} index={0} />
-            <DemoTile demo={demos[1]} index={1} />
+    <section className="relative" id="lab">
+      <BlackSandReveal mode="section">
+        <div className="container relative z-10 py-32 sm:py-40">
+          {/* heading */}
+          <div className="mb-24 sm:mb-32">
+            <KineticType
+              text="DESIGN LAB"
+              className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl mb-5 text-foreground"
+              delay={0.15}
+              wordDelay={0.12}
+            />
+            <motion.p
+              className="text-foreground/45 text-sm max-w-sm leading-relaxed font-mono tracking-wide"
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-60px" }}
+              transition={{ duration: 0.6, delay: 0.4 }}
+            >
+              Six live demos. Move, click, brush, play — every effect ships with your project.
+            </motion.p>
           </div>
 
-          <div className="grid md:grid-cols-5 gap-10 sm:gap-14">
-            <div className="md:col-span-3"><DemoTile demo={demos[2]} index={2} /></div>
-            <div className="md:col-span-2"><DemoTile demo={demos[3]} index={3} /></div>
-          </div>
+          {/* layout */}
+          <div className="space-y-16 sm:space-y-20">
+            <div className="grid md:grid-cols-2 gap-10 sm:gap-14 lg:gap-20">
+              <DemoTile demo={demos[0]} index={0} />
+              <DemoTile demo={demos[1]} index={1} />
+            </div>
 
-          <div className="grid md:grid-cols-2 gap-10 sm:gap-14 lg:gap-20">
-            <DemoTile demo={demos[4]} index={4} />
-            <DemoTile demo={demos[5]} index={5} />
+            <div className="grid md:grid-cols-5 gap-10 sm:gap-14">
+              <div className="md:col-span-3"><DemoTile demo={demos[2]} index={2} /></div>
+              <div className="md:col-span-2"><DemoTile demo={demos[3]} index={3} /></div>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-10 sm:gap-14 lg:gap-20">
+              <DemoTile demo={demos[4]} index={4} />
+              <DemoTile demo={demos[5]} index={5} />
+            </div>
           </div>
         </div>
-      </div>
+      </BlackSandReveal>
     </section>
   );
 };

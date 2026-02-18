@@ -1,5 +1,7 @@
 import { useRef, useState } from "react";
 import { motion, useInView, AnimatePresence } from "framer-motion";
+import { KineticType } from "@/components/motion/KineticType";
+import { useGlassParallax } from "@/hooks/useGlassParallax";
 
 const steps = [
   {
@@ -64,7 +66,10 @@ const StepRow = ({
     >
       <div
         className="flex items-start gap-6 sm:gap-10 py-8 cursor-default"
-        style={{ borderBottom: index < total - 1 ? "1px solid hsl(0 0% 100% / 0.07)" : "none" }}
+        style={{
+          borderBottom:
+            index < total - 1 ? "1px solid hsl(0 0% 100% / 0.07)" : "none",
+        }}
       >
         {/* Number */}
         <motion.span
@@ -120,9 +125,41 @@ const StepRow = ({
 export const ProcessSection = () => {
   const ref = useRef<HTMLElement>(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
+  const { sectionRef, bgY, lightX, lightOp } = useGlassParallax(32);
 
   return (
-    <section ref={ref} className="py-24 sm:py-32 relative overflow-hidden" id="process">
+    <section
+      ref={(el) => {
+        (ref as React.MutableRefObject<HTMLElement | null>).current = el;
+        (sectionRef as React.MutableRefObject<HTMLElement | null>).current = el;
+      }}
+      className="py-24 sm:py-32 relative overflow-hidden"
+      id="process"
+    >
+      {/* Glass Depth Parallax — background drift */}
+      <motion.div
+        aria-hidden
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          y: bgY,
+          background:
+            "radial-gradient(ellipse 60% 50% at 20% 60%, hsl(0 100% 50% / 0.025), transparent 65%)",
+        }}
+      />
+
+      {/* Glass light band */}
+      <motion.div
+        aria-hidden
+        className="absolute top-0 bottom-0 pointer-events-none"
+        style={{
+          x: lightX,
+          opacity: lightOp,
+          width: "30%",
+          background:
+            "linear-gradient(90deg, transparent, hsl(0 0% 100% / 0.04) 50%, transparent)",
+        }}
+      />
+
       <div className="container relative z-10">
         {/* Header */}
         <motion.div
@@ -134,10 +171,13 @@ export const ProcessSection = () => {
           <p className="text-[10px] font-mono tracking-[0.3em] uppercase text-primary mb-4">
             Process
           </p>
-          <h2 className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl mb-5">
-            A PROCESS THAT{" "}
-            <span className="text-primary">SHIPS.</span>
-          </h2>
+          <KineticType
+            text="A PROCESS THAT SHIPS."
+            as="h2"
+            className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl mb-5 text-foreground"
+            delay={0.1}
+            wordDelay={0.08}
+          />
           <p className="text-muted-foreground text-sm leading-relaxed max-w-md">
             Five phases. No surprises. Hover each step to see the outcome.
           </p>

@@ -2,6 +2,8 @@ import { useRef, useEffect, useState } from "react";
 import { motion, useInView, useScroll, useTransform } from "framer-motion";
 import { ROICalculator } from "@/components/tools/ROICalculator";
 import { useScrollPaint } from "@/hooks/useScrollPaint";
+import { KineticType } from "@/components/motion/KineticType";
+
 
 /* ── Animated counter ── */
 const CountUp = ({ end, suffix = "", prefix = "" }: { end: number; suffix?: string; prefix?: string }) => {
@@ -158,9 +160,13 @@ export const GrowthImpact = () => {
 
       <div className="container relative z-10">
         <motion.div ref={headerPaint.ref} style={headerPaint.style} className="mb-16">
-          <h2 className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl mb-4">
-            GROWTH <span className="text-primary">IMPACT</span>
-          </h2>
+          <KineticType
+            text="GROWTH IMPACT"
+            as="h2"
+            className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl mb-4 text-foreground"
+            delay={0.05}
+            wordDelay={0.1}
+          />
           <p className="text-muted-foreground text-sm max-w-lg">
             No hacemos "paginas bonitas". Hacemos sistemas que venden. Estos son resultados tipicos de nuestros proyectos.
           </p>
