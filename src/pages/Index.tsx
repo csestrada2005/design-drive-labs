@@ -18,6 +18,7 @@ import { CornerCrosses } from "@/components/motion/CornerCrosses";
 import { ChatWidget } from "@/components/motion/ChatWidget";
 import { ScrollRevealText } from "@/components/motion/ScrollRevealText";
 import { LoadingScreen } from "@/components/motion/LoadingScreen";
+import { SectionSeparator } from "@/components/motion/SectionSeparator";
 
 const Index = () => {
   const cursorZoneRef = useRef<HTMLDivElement>(null);
@@ -54,11 +55,17 @@ const Index = () => {
               </div>
             </section>
 
+            <SectionSeparator />
             <ServicesSection />
+            <SectionSeparator />
             <DesignLab />
+            <SectionSeparator />
             <ProcessSection />
+            <SectionSeparator />
             <GrowthImpact />
+            <SectionSeparator />
             <FeaturedWork />
+            <SectionSeparator />
             <BigCTA />
             <ContactSection />
             <DramaticFooter />

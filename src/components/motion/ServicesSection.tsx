@@ -50,6 +50,81 @@ const tiers = [
   },
 ];
 
+/* Hex grid background pattern */
+const HexGrid = () => (
+  <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
+    <svg className="absolute inset-0 w-full h-full" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <pattern id="hex-pattern" x="0" y="0" width="60" height="52" patternUnits="userSpaceOnUse">
+          <polygon
+            points="30,2 55,15 55,37 30,50 5,37 5,15"
+            fill="none"
+            stroke="hsl(0 100% 50% / 0.06)"
+            strokeWidth="0.5"
+          />
+        </pattern>
+      </defs>
+      <rect width="100%" height="100%" fill="url(#hex-pattern)" />
+    </svg>
+    {/* Pulsing hex highlights */}
+    {[...Array(6)].map((_, i) => (
+      <motion.div
+        key={i}
+        className="absolute"
+        style={{
+          left: `${15 + (i % 3) * 30}%`,
+          top: `${20 + Math.floor(i / 3) * 40}%`,
+          width: 60,
+          height: 52,
+        }}
+        animate={{
+          opacity: [0, 0.15, 0],
+          scale: [0.8, 1.2, 0.8],
+        }}
+        transition={{
+          duration: 3 + i * 0.5,
+          repeat: Infinity,
+          delay: i * 0.6,
+          ease: "easeInOut",
+        }}
+      >
+        <svg width="60" height="52" viewBox="0 0 60 52">
+          <polygon
+            points="30,2 55,15 55,37 30,50 5,37 5,15"
+            fill="hsl(0 100% 50% / 0.05)"
+            stroke="hsl(0 100% 50% / 0.15)"
+            strokeWidth="1"
+          />
+        </svg>
+      </motion.div>
+    ))}
+  </div>
+);
+
+const containerVariants = {
+  hidden: {},
+  visible: {
+    transition: {
+      staggerChildren: 0.2,
+    },
+  },
+};
+
+const cardVariants = {
+  hidden: { opacity: 0, scale: 0.8, filter: "blur(8px)" },
+  visible: {
+    opacity: 1,
+    scale: 1,
+    filter: "blur(0px)",
+    transition: {
+      type: "spring" as const,
+      stiffness: 200,
+      damping: 20,
+      mass: 0.8,
+    },
+  },
+};
+
 export const ServicesSection = () => {
   const ref = useRef<HTMLElement>(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
@@ -58,15 +133,21 @@ export const ServicesSection = () => {
 
   return (
     <section ref={ref} className="py-24 sm:py-32 relative overflow-hidden" id="services">
+      <HexGrid />
+
       <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
         <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent scan-bar" />
       </div>
 
-      <div className="container">
+      <div className="container relative z-10">
         <motion.div
           ref={headerPaint.ref}
           style={headerPaint.style}
           className="mb-16"
+          initial={{ opacity: 0, filter: "blur(6px)" }}
+          whileInView={{ opacity: 1, filter: "blur(0px)" }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
         >
           <p className="text-muted-foreground text-xs tracking-[0.25em] uppercase mb-4 flex items-center gap-3">
             <span className="w-8 h-px bg-primary/50" />
@@ -80,7 +161,12 @@ export const ServicesSection = () => {
           </p>
         </motion.div>
 
-        <div className="grid md:grid-cols-3 gap-6 lg:gap-8">
+        <motion.div
+          className="grid md:grid-cols-3 gap-6 lg:gap-8"
+          variants={containerVariants}
+          initial="hidden"
+          animate={isInView ? "visible" : "hidden"}
+        >
           {tiers.map((tier, i) => {
             const Icon = tier.icon;
             const isHovered = hoveredIdx === i;
@@ -88,10 +174,7 @@ export const ServicesSection = () => {
             return (
               <motion.div
                 key={tier.tier}
-                initial={{ opacity: 0, y: 60, scale: 0.95 }}
-                whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                viewport={{ once: true, margin: "-80px" }}
-                transition={{ duration: 0.7, delay: i * 0.12, ease: [0.33, 1, 0.68, 1] }}
+                variants={cardVariants}
                 onMouseEnter={() => setHoveredIdx(i)}
                 onMouseLeave={() => setHoveredIdx(null)}
                 className="relative group"
@@ -117,7 +200,7 @@ export const ServicesSection = () => {
                   style={{
                     background: "transparent",
                     borderColor: isHovered ? `${tier.accentColor}60` : "hsl(0 100% 50% / 0.25)",
-                    borderRadius: "1.25rem",
+                    clipPath: "polygon(12px 0%, calc(100% - 12px) 0%, 100% 12px, 100% calc(100% - 12px), calc(100% - 12px) 100%, 12px 100%, 0% calc(100% - 12px), 0% 12px)",
                     boxShadow: isHovered ? `0 0 40px ${tier.accentGlow}` : "none",
                   }}
                 >
@@ -155,7 +238,7 @@ export const ServicesSection = () => {
               </motion.div>
             );
           })}
-        </div>
+        </motion.div>
       </div>
     </section>
   );

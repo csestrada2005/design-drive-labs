@@ -64,11 +64,14 @@ export const ProcessSection = () => {
       </div>
 
       <div className="container relative">
-        {/* Header */}
         <motion.div
           ref={headerPaint.ref}
           style={headerPaint.style}
           className="mb-6"
+          initial={{ opacity: 0, filter: "blur(6px)" }}
+          whileInView={{ opacity: 1, filter: "blur(0px)" }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
         >
           <p className="text-muted-foreground text-xs tracking-[0.25em] uppercase mb-4 flex items-center gap-3">
             <span className="w-8 h-px bg-primary/50" />
@@ -83,10 +86,9 @@ export const ProcessSection = () => {
           <a href="#contact" className="btn-primary text-sm">Schedule Call</a>
         </motion.div>
 
-        {/* Zigzag Timeline */}
         <div className="relative mt-16">
-          {/* Center progress line (desktop) */}
-          <div className="hidden md:block absolute left-1/2 -translate-x-1/2 top-0 bottom-0 w-px bg-border/10">
+          {/* Desktop: red-only progress line (no grey track) */}
+          <div className="hidden md:block absolute left-1/2 -translate-x-1/2 top-0 bottom-0 w-px">
             <motion.div
               className="absolute top-0 left-0 w-full"
               style={{
@@ -96,8 +98,8 @@ export const ProcessSection = () => {
               }}
             />
           </div>
-          {/* Mobile left line */}
-          <div className="md:hidden absolute left-5 top-0 bottom-0 w-px bg-border/10">
+          {/* Mobile: red-only progress line (no grey track) */}
+          <div className="md:hidden absolute left-5 top-0 bottom-0 w-px">
             <motion.div
               className="absolute top-0 left-0 w-full"
               style={{
@@ -115,18 +117,14 @@ export const ProcessSection = () => {
               return (
                 <motion.div
                   key={phase.id}
-                  initial={{ opacity: 0, x: isLeft ? -40 : 40, y: 30 }}
-                  whileInView={{ opacity: 1, x: 0, y: 0 }}
+                  initial={{ opacity: 0, x: isLeft ? -40 : 40, y: 30, filter: "blur(6px)" }}
+                  whileInView={{ opacity: 1, x: 0, y: 0, filter: "blur(0px)" }}
                   viewport={{ once: true, margin: "-100px" }}
                   transition={{ duration: 0.6, delay: 0.1, ease: [0.33, 1, 0.68, 1] }}
-                  className={`relative flex gap-6 sm:gap-8 md:items-center ${
-                    /* Mobile: always left-aligned. Desktop: zigzag */
-                    ""
-                  }`}
+                  className="relative flex gap-6 sm:gap-8 md:items-center"
                 >
                   {/* Mobile layout */}
                   <div className="md:hidden flex gap-6">
-                    {/* Circle */}
                     <div className="relative z-10 flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center"
                       style={{
                         background: "radial-gradient(circle, hsl(0 100% 50% / 0.15), transparent)",
@@ -137,7 +135,6 @@ export const ProcessSection = () => {
                         {String(i + 1).padStart(2, "0")}
                       </span>
                     </div>
-                    {/* Content */}
                     <div className="flex-1 pb-4">
                       <h3 className="font-display text-base sm:text-lg text-foreground mb-1">{phase.title}</h3>
                       <div className="h-px mb-3" style={{ background: "linear-gradient(90deg, hsl(0 100% 50% / 0.15), transparent 60%)" }} />
@@ -155,7 +152,6 @@ export const ProcessSection = () => {
 
                   {/* Desktop zigzag layout */}
                   <div className="hidden md:grid md:grid-cols-[1fr_auto_1fr] md:gap-8 md:items-start w-full">
-                    {/* Left content or spacer */}
                     <div className={isLeft ? "" : "order-3"}>
                       <div className={`${isLeft ? "text-right pr-4" : "text-left pl-4"}`}>
                         <h3 className="font-display text-lg text-foreground mb-1">{phase.title}</h3>
@@ -178,7 +174,6 @@ export const ProcessSection = () => {
                       </div>
                     </div>
 
-                    {/* Center circle */}
                     <div className="relative z-10 flex-shrink-0 w-12 h-12 rounded-full flex items-center justify-center order-2"
                       style={{
                         background: "radial-gradient(circle, hsl(0 100% 50% / 0.15), transparent)",
@@ -191,7 +186,6 @@ export const ProcessSection = () => {
                       </span>
                     </div>
 
-                    {/* Right spacer or content */}
                     <div className={isLeft ? "order-3" : ""} />
                   </div>
                 </motion.div>
