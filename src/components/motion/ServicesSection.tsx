@@ -1,5 +1,5 @@
 import { useRef, useState, useCallback } from "react";
-import { motion, useInView, AnimatePresence } from "framer-motion";
+import { motion, useInView } from "framer-motion";
 import { Store, Cog, Rocket } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { TierDemoChat } from "./TierDemoChat";
@@ -246,23 +246,15 @@ export const ServicesSection = () => {
           })}
         </div>
 
-        <AnimatePresence>
-          {showPanel && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: 560 }}
-              exit={{ opacity: 0, height: 0 }}
-              transition={{ duration: 0.5, type: "spring", bounce: 0.15 }}
-              ref={panelRef}
-              className="mt-8 rounded-2xl overflow-hidden border border-primary/10"
-              style={{
-                background: "transparent",
-              }}
-            >
-              <TierDemoChat onClose={() => setShowPanel(false)} />
-            </motion.div>
-          )}
-        </AnimatePresence>
+        {showPanel && (
+          <div
+            ref={panelRef}
+            className="mt-8 rounded-2xl overflow-hidden border border-primary/10"
+            style={{ height: 560, background: "transparent" }}
+          >
+            <TierDemoChat onClose={() => setShowPanel(false)} />
+          </div>
+        )}
       </div>
     </section>
   );
