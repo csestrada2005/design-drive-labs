@@ -6,59 +6,59 @@
 
 @layer base {
   :root {
-    /* Tron Ares Dark Design System */
-    --background: 0 10% 5%;
-    --foreground: 0 0% 97%;
+    /* AGGRESSIVE MINIMALIST SYSTEM */
+    --background: 0 0% 100%;
+    --foreground: 0 0% 0%;
 
-    --card: 0 12% 8%;
-    --card-foreground: 0 0% 97%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 0%;
 
-    --popover: 0 10% 7%;
-    --popover-foreground: 0 0% 97%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 0%;
 
     --primary: 0 100% 50%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 0 10% 12%;
-    --secondary-foreground: 0 0% 97%;
+    --secondary: 0 0% 96%;
+    --secondary-foreground: 0 0% 0%;
 
-    --muted: 0 10% 12%;
-    --muted-foreground: 0 8% 55%;
+    --muted: 0 0% 90%;
+    --muted-foreground: 0 0% 40%;
 
     --accent: 0 100% 50%;
     --accent-foreground: 0 0% 100%;
-    --accent-green: 20 100% 50%;
+    --accent-green: 120 60% 40%;
 
-    --destructive: 0 72% 51%;
+    --destructive: 0 100% 50%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 0 10% 15%;
-    --input: 0 10% 15%;
+    --border: 0 0% 0%;
+    --input: 0 0% 0%;
     --ring: 0 100% 50%;
 
-    --radius: 0.75rem;
+    --radius: 0px;
   }
 
   .dark {
-    --background: 0 10% 5%;
-    --foreground: 0 0% 97%;
-    --card: 0 12% 8%;
-    --card-foreground: 0 0% 97%;
-    --popover: 0 10% 7%;
-    --popover-foreground: 0 0% 97%;
+    --background: 0 0% 100%;
+    --foreground: 0 0% 0%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 0%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 0%;
     --primary: 0 100% 50%;
     --primary-foreground: 0 0% 100%;
-    --secondary: 0 10% 12%;
-    --secondary-foreground: 0 0% 97%;
-    --muted: 0 10% 12%;
-    --muted-foreground: 0 8% 55%;
+    --secondary: 0 0% 96%;
+    --secondary-foreground: 0 0% 0%;
+    --muted: 0 0% 90%;
+    --muted-foreground: 0 0% 40%;
     --accent: 0 100% 50%;
     --accent-foreground: 0 0% 100%;
-    --accent-green: 20 100% 50%;
-    --destructive: 0 72% 51%;
+    --accent-green: 120 60% 40%;
+    --destructive: 0 100% 50%;
     --destructive-foreground: 0 0% 100%;
-    --border: 0 10% 15%;
-    --input: 0 10% 15%;
+    --border: 0 0% 0%;
+    --input: 0 0% 0%;
     --ring: 0 100% 50%;
   }
 }
@@ -96,13 +96,12 @@
   }
 
   ::selection {
-    @apply bg-primary/20 text-foreground;
+    @apply bg-black text-white;
   }
 
   h1, h2, h3, h4 {
     font-family: 'Archivo Black', sans-serif;
-    @apply text-foreground tracking-tight;
-    text-transform: uppercase;
+    @apply text-foreground tracking-tighter uppercase;
   }
 
   p {
@@ -110,7 +109,7 @@
   }
 }
 
-/* ===== CUATRE DESIGN SYSTEM ===== */
+/* ===== AGGRESSIVE MINIMALIST SYSTEM ===== */
 @layer components {
   .font-display {
     font-family: 'Archivo Black', sans-serif;
@@ -120,86 +119,71 @@
     font-family: 'Inter', sans-serif;
   }
 
-  /* Noise texture */
-  .noise-overlay {
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    z-index: 1;
-    opacity: 0.03;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
-  }
-
-  /* Grid background */
+  /* Grid background — technical blueprint */
   .grid-bg {
     background-image:
-      linear-gradient(hsl(var(--foreground) / 0.03) 1px, transparent 1px),
-      linear-gradient(90deg, hsl(var(--foreground) / 0.03) 1px, transparent 1px);
+      linear-gradient(hsl(var(--foreground) / 0.06) 1px, transparent 1px),
+      linear-gradient(90deg, hsl(var(--foreground) / 0.06) 1px, transparent 1px);
     background-size: 60px 60px;
   }
 
-  /* Glass nav */
+  /* Nav — solid white, black border bottom */
   .glass-nav {
-    background: hsl(var(--background) / 0.85);
-    backdrop-filter: blur(20px) saturate(150%);
-    -webkit-backdrop-filter: blur(20px) saturate(150%);
-    border: 1px solid hsl(var(--border) / 0.5);
+    background: hsl(var(--background));
+    border-bottom: 2px solid hsl(var(--border));
   }
 
-  /* Glass card */
+  /* Card — no glass, solid border */
   .glass-card {
-    background: hsl(var(--card) / 0.6);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid hsl(var(--border) / 0.4);
-    border-radius: var(--radius);
-    transition: all 0.3s ease;
+    background: hsl(var(--card));
+    border: 2px solid hsl(var(--border));
+    transition: all 0.2s ease;
   }
 
   .glass-card:hover {
-    border-color: hsl(var(--primary) / 0.3);
+    border-color: hsl(var(--primary));
   }
 
-  /* Glass input */
+  /* Input — solid border */
   .glass-input {
-    background: hsl(var(--muted) / 0.4);
-    border: 1px solid hsl(var(--border) / 0.5);
-    transition: all 0.3s ease;
+    background: hsl(var(--background));
+    border: 2px solid hsl(var(--border));
+    transition: all 0.2s ease;
   }
 
   .glass-input:focus {
-    background: hsl(var(--muted) / 0.6);
-    border-color: hsl(var(--primary) / 0.5);
-    box-shadow: 0 0 0 3px hsl(var(--primary) / 0.1);
+    border-color: hsl(var(--primary));
+    box-shadow: none;
   }
 
-  /* Button primary */
+  /* Button primary — sharp, no rounded, no shadow glow */
   .btn-primary {
-    @apply inline-flex items-center justify-center gap-2 px-7 py-3.5 bg-primary text-primary-foreground font-semibold rounded-full relative overflow-hidden;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 20px -4px hsl(var(--primary) / 0.4);
+    @apply inline-flex items-center justify-center gap-2 px-7 py-3.5 bg-primary text-primary-foreground font-semibold relative overflow-hidden;
+    border: 2px solid hsl(var(--foreground));
+    transition: all 0.2s ease;
   }
 
   .btn-primary:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 30px -4px hsl(var(--primary) / 0.5);
+    background: hsl(var(--foreground));
   }
 
   .btn-primary:active {
     transform: translateY(0);
   }
 
-  /* Button ghost */
+  /* Button ghost — sharp border */
   .btn-ghost {
-    @apply inline-flex items-center justify-center gap-2 px-7 py-3.5 font-medium rounded-full;
-    border: 1px solid hsl(var(--border));
+    @apply inline-flex items-center justify-center gap-2 px-7 py-3.5 font-medium;
+    border: 2px solid hsl(var(--border));
     color: hsl(var(--foreground));
-    transition: all 0.3s ease;
+    transition: all 0.2s ease;
   }
 
   .btn-ghost:hover {
-    border-color: hsl(var(--primary) / 0.5);
-    background: hsl(var(--primary) / 0.05);
+    border-color: hsl(var(--primary));
+    background: hsl(var(--primary));
+    color: hsl(var(--primary-foreground));
   }
 
   /* Marquee */
@@ -258,74 +242,7 @@
     padding-bottom: max(1.5rem, env(safe-area-inset-bottom));
   }
 
-  /* Animated gradient mesh */
-  @keyframes gradient-mesh {
-    0%, 100% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-  }
-
-  .gradient-mesh {
-    background: linear-gradient(
-      135deg,
-      hsl(var(--primary) / 0.15) 0%,
-      hsl(var(--accent-green) / 0.1) 25%,
-      hsl(var(--primary) / 0.08) 50%,
-      hsl(var(--accent-green) / 0.05) 75%,
-      hsl(var(--primary) / 0.12) 100%
-    );
-    background-size: 400% 400%;
-    animation: gradient-mesh 20s ease-in-out infinite;
-  }
-
-  /* Fluid blob */
-  @keyframes blob-morph {
-    0%, 100% {
-      border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
-    }
-    25% {
-      border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%;
-    }
-    50% {
-      border-radius: 50% 60% 30% 60% / 40% 70% 40% 60%;
-    }
-    75% {
-      border-radius: 40% 30% 60% 50% / 60% 40% 60% 30%;
-    }
-  }
-
-  .blob-morph {
-    animation: blob-morph 15s ease-in-out infinite;
-  }
-
-  /* Floating plus */
-  @keyframes float-plus {
-    0%, 100% { transform: translateY(0) rotate(0deg); opacity: 0.3; }
-    50% { transform: translateY(-10px) rotate(45deg); opacity: 0.6; }
-  }
-
-  .float-plus {
-    animation: float-plus 6s ease-in-out infinite;
-  }
-
-  /* Scanning bar */
-  @keyframes scan {
-    0% { transform: translateX(-100%); }
-    100% { transform: translateX(200%); }
-  }
-
-  .scan-bar {
-    animation: scan 4s ease-in-out infinite;
-  }
-
-  /* Shimmer */
-  @keyframes shimmer {
-    0% { transform: translateX(-100%); }
-    100% { transform: translateX(200%); }
-  }
-
-  /* ── Section Transition Effects ── */
-
-  /* Glitch RGB overlay */
+  /* Section transitions */
   @keyframes glitch-rgb {
     0% { opacity: 0.8; transform: translate(0); }
     20% { opacity: 0.6; transform: translate(-2px, 1px); }
@@ -340,13 +257,12 @@
       90deg,
       hsl(var(--primary) / 0.15) 33%,
       hsl(var(--destructive) / 0.1) 33% 66%,
-      hsl(var(--accent-green) / 0.1) 66%
+      hsl(var(--muted) / 0.1) 66%
     );
-    mix-blend-mode: screen;
+    mix-blend-mode: multiply;
     animation: glitch-rgb 0.35s steps(4) forwards;
   }
 
-  /* Matrix rain overlay */
   @keyframes matrix-fade {
     0% { opacity: 0.5; background-position: 0 0; }
     100% { opacity: 0; background-position: 0 40px; }
@@ -355,7 +271,7 @@
   .section-matrix-rain {
     background-image: repeating-linear-gradient(
       0deg,
-      hsl(var(--primary) / 0.08) 0px,
+      hsl(var(--foreground) / 0.08) 0px,
       transparent 2px,
       transparent 8px
     );
@@ -372,11 +288,10 @@
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: hsl(var(--muted-foreground) / 0.2);
-  border-radius: 3px;
+  background: hsl(var(--muted-foreground) / 0.3);
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: hsl(var(--muted-foreground) / 0.4);
+  background: hsl(var(--muted-foreground) / 0.5);
 }
 
 /* Reduced motion */
@@ -390,13 +305,7 @@
 
 /* Mobile perf */
 @media (max-width: 768px) {
-  .glass-nav {
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-  }
   .glass-card {
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
-    background: hsl(var(--card) / 0.85);
+    background: hsl(var(--card));
   }
 }
