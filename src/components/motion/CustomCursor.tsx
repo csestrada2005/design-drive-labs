@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion, useSpring } from "framer-motion";
 
 interface CustomCursorProps {
@@ -7,14 +7,17 @@ interface CustomCursorProps {
 
 export const CustomCursor = ({ containerRef }: CustomCursorProps) => {
   const [visible, setVisible] = useState(false);
-  const [isHovering, setIsHovering] = useState(false);
-  const [isText, setIsText] = useState(false);
+  const [state, setState] = useState<"default" | "hover" | "text">("default");
+  const stateRef = useRef<"default" | "hover" | "text">("default");
 
-  const dotX = useSpring(0, { stiffness: 500, damping: 28 });
-  const dotY = useSpring(0, { stiffness: 500, damping: 28 });
-  const ringX = useSpring(0, { stiffness: 120, damping: 20 });
-  const ringY = useSpring(0, { stiffness: 120, damping: 20 });
-  const ringScale = useSpring(1, { stiffness: 200, damping: 20 });
+  // Dot — snaps instantly to cursor
+  const dotX = useSpring(0, { stiffness: 2000, damping: 60, mass: 0.1 });
+  const dotY = useSpring(0, { stiffness: 2000, damping: 60, mass: 0.1 });
+
+  // Ring — follows with slight lag for elegance
+  const ringX = useSpring(0, { stiffness: 280, damping: 28, mass: 0.5 });
+  const ringY = useSpring(0, { stiffness: 280, damping: 28, mass: 0.5 });
+  const ringScale = useSpring(1, { stiffness: 350, damping: 30 });
 
   useEffect(() => {
     const el = containerRef.current;
@@ -23,7 +26,6 @@ export const CustomCursor = ({ containerRef }: CustomCursorProps) => {
     const mq = window.matchMedia("(pointer: fine)");
     if (!mq.matches) return;
 
-    // Hide default cursor
     document.documentElement.style.cursor = "none";
     el.style.cursor = "none";
 
@@ -39,30 +41,32 @@ export const CustomCursor = ({ containerRef }: CustomCursorProps) => {
       );
       const textEl = target.closest("h1, h2, h3, h4, p, span, li");
 
+      let newState: "default" | "hover" | "text" = "default";
       if (interactive) {
-        setIsHovering(true);
-        setIsText(false);
-        ringScale.set(2.5);
+        newState = "hover";
+        ringScale.set(2.2);
       } else if (textEl) {
-        setIsHovering(false);
-        setIsText(true);
-        ringScale.set(1.8);
+        newState = "text";
+        ringScale.set(1.6);
       } else {
-        setIsHovering(false);
-        setIsText(false);
         ringScale.set(1);
+      }
+
+      if (newState !== stateRef.current) {
+        stateRef.current = newState;
+        setState(newState);
       }
     };
 
     const onEnter = () => setVisible(true);
     const onLeave = () => {
       setVisible(false);
-      setIsHovering(false);
-      setIsText(false);
+      stateRef.current = "default";
+      setState("default");
       ringScale.set(1);
     };
 
-    el.addEventListener("mousemove", onMove);
+    el.addEventListener("mousemove", onMove, { passive: true });
     el.addEventListener("mouseenter", onEnter);
     el.addEventListener("mouseleave", onLeave);
 
@@ -77,42 +81,89 @@ export const CustomCursor = ({ containerRef }: CustomCursorProps) => {
 
   if (!visible) return null;
 
+  const isHover = state === "hover";
+  const isText = state === "text";
+
   return (
     <div className="pointer-events-none fixed inset-0 z-[9999] hidden md:block">
-      {/* Dot */}
+      {/* Inner dot — snappy */}
       <motion.div
-        className="fixed top-0 left-0 w-2 h-2 rounded-full"
+        className="fixed top-0 left-0 rounded-full"
         style={{
           x: dotX,
           y: dotY,
           translateX: "-50%",
           translateY: "-50%",
-          backgroundColor: isHovering
-            ? "hsl(0 100% 50%)"
-            : "hsl(var(--foreground))",
-          scale: isHovering ? 0 : 1,
+          width: isHover ? 0 : 6,
+          height: isHover ? 0 : 6,
+          backgroundColor: isHover ? "transparent" : "hsl(var(--foreground))",
         }}
       />
-      {/* Ring */}
+
+      {/* Outer ring — elegant lag */}
       <motion.div
-        className="fixed top-0 left-0 w-8 h-8 rounded-full"
+        className="fixed top-0 left-0 rounded-full"
         style={{
           x: ringX,
           y: ringY,
           translateX: "-50%",
           translateY: "-50%",
+          width: 32,
+          height: 32,
           scale: ringScale,
-          border: isHovering
-            ? "1.5px solid hsl(0 100% 50% / 0.6)"
+          border: isHover
+            ? "1.5px solid hsl(0 88% 40% / 0.8)"
             : isText
-            ? "1px solid hsl(var(--foreground) / 0.5)"
-            : "1px solid hsl(var(--foreground) / 0.3)",
-          backgroundColor: isHovering
-            ? "hsl(0 100% 50% / 0.08)"
+            ? "1px solid hsl(var(--foreground) / 0.6)"
+            : "1px solid hsl(var(--foreground) / 0.35)",
+          backgroundColor: isHover
+            ? "hsl(0 88% 40% / 0.1)"
             : "transparent",
-          mixBlendMode: isText ? "difference" : isHovering ? "normal" : "difference",
+          mixBlendMode: isText ? "difference" : "normal",
         }}
       />
+
+      {/* Crosshair lines on hover — surgical feel */}
+      {isHover && (
+        <motion.div
+          className="fixed top-0 left-0"
+          style={{
+            x: ringX,
+            y: ringY,
+            translateX: "-50%",
+            translateY: "-50%",
+          }}
+          initial={{ opacity: 0, scale: 0.5 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.15 }}
+        >
+          {/* H line */}
+          <div
+            className="absolute"
+            style={{
+              width: 12,
+              height: 1,
+              background: "hsl(0 88% 40% / 0.9)",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+            }}
+          />
+          {/* V line */}
+          <div
+            className="absolute"
+            style={{
+              width: 1,
+              height: 12,
+              background: "hsl(0 88% 40% / 0.9)",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+            }}
+          />
+        </motion.div>
+      )}
     </div>
   );
 };

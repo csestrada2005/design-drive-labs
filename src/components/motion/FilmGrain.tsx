@@ -9,56 +9,68 @@ export const FilmGrain = () => {
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    let frame = 0;
+    // Pre-generate a fixed-size grain tile and just reuse it
+    // Much cheaper than generating fullscreen every frame
+    const TILE = 256;
+    const offscreen = document.createElement("canvas");
+    offscreen.width = TILE;
+    offscreen.height = TILE;
+    const octx = offscreen.getContext("2d")!;
+
     let animId: number;
+    let frame = 0;
+
+    // Pre-build 4 grain tiles to cycle through (avoids visible pattern)
+    const tiles: ImageData[] = [];
+    for (let t = 0; t < 4; t++) {
+      const id = octx.createImageData(TILE, TILE);
+      const d = id.data;
+      for (let i = 0; i < d.length; i += 4) {
+        const v = Math.random() * 255;
+        d[i] = v;
+        d[i + 1] = v;
+        d[i + 2] = v;
+        d[i + 3] = 14;
+      }
+      tiles.push(id);
+    }
+
+    const resize = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    };
+    resize();
 
     const draw = () => {
-      const w = (canvas.width = window.innerWidth);
-      const h = (canvas.height = window.innerHeight);
-      const imageData = ctx.createImageData(w, h);
-      const data = imageData.data;
-
-      for (let i = 0; i < data.length; i += 4) {
-        const v = Math.random() * 255;
-        data[i] = v;
-        data[i + 1] = v;
-        data[i + 2] = v;
-        data[i + 3] = 18; // very subtle
-      }
-
-      ctx.putImageData(imageData, 0, 0);
       frame++;
+      // Only redraw every 4 frames (~15fps grain) — nearly invisible difference, huge CPU saving
+      if (frame % 4 === 0) {
+        const tileIdx = (frame / 4) % tiles.length;
+        octx.putImageData(tiles[tileIdx], 0, 0);
+
+        const pat = ctx.createPattern(offscreen, "repeat");
+        if (pat) {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          ctx.fillStyle = pat;
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+        }
+      }
       animId = requestAnimationFrame(draw);
     };
 
-    // Only re-render grain every 3 frames for performance
-    const throttledDraw = () => {
-      frame++;
-      if (frame % 3 === 0) {
-        const w = (canvas.width = window.innerWidth);
-        const h = (canvas.height = window.innerHeight);
-        const imageData = ctx.createImageData(w, h);
-        const data = imageData.data;
-        for (let i = 0; i < data.length; i += 4) {
-          const v = Math.random() * 255;
-          data[i] = v;
-          data[i + 1] = v;
-          data[i + 2] = v;
-          data[i + 3] = 14;
-        }
-        ctx.putImageData(imageData, 0, 0);
-      }
-      animId = requestAnimationFrame(throttledDraw);
-    };
+    animId = requestAnimationFrame(draw);
 
-    animId = requestAnimationFrame(throttledDraw);
-    return () => cancelAnimationFrame(animId);
+    window.addEventListener("resize", resize, { passive: true });
+    return () => {
+      cancelAnimationFrame(animId);
+      window.removeEventListener("resize", resize);
+    };
   }, []);
 
   return (
     <canvas
       ref={canvasRef}
-      className="pointer-events-none fixed inset-0 z-[9998] opacity-40"
+      className="pointer-events-none fixed inset-0 z-[9998] opacity-35"
       style={{ mixBlendMode: "overlay" }}
       aria-hidden="true"
     />

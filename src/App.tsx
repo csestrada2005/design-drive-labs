@@ -15,10 +15,12 @@ import owlBg from "@/assets/owl-bg.png";
 const queryClient = new QueryClient();
 
 const lenisOptions = {
-  lerp: 0.07,
-  duration: 1.4,
+  lerp: 0.12,
+  duration: 1.0,
   smoothWheel: true,
-  wheelMultiplier: 0.8,
+  wheelMultiplier: 1.0,
+  touchMultiplier: 1.5,
+  infinite: false,
 };
 
 const App = () => (
