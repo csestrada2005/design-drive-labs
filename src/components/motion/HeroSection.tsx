@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import heroLogo from "@/assets/hero-logo.jpeg";
 
 const LaserTransition = ({ onDone }: { onDone: () => void }) => {
   useEffect(() => {
@@ -111,7 +112,7 @@ export const HeroSection = () => {
         className="relative h-[100dvh] flex items-center justify-center overflow-hidden"
         id="hero"
         style={{
-          backgroundImage: "url('/images/hero-logo.jpeg')",
+          backgroundImage: `url(${heroLogo})`,
           backgroundSize: "60%",
           backgroundRepeat: "no-repeat",
           backgroundPosition: "center",
