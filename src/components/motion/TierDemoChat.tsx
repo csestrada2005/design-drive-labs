@@ -1,10 +1,9 @@
-import { useState, useCallback } from "react";
+import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Send, Loader2, ExternalLink } from "lucide-react";
+import { X, Send, Loader2 } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 
 const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/demo-chat`;
-const DEMO_STORAGE_KEY = "cuatre_demo_html";
 
 type Msg = { role: "user" | "assistant"; content: string };
 
@@ -17,19 +16,7 @@ export const TierDemoChat = ({ onClose }: TierDemoChatProps) => {
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [progress, setProgress] = useState(0);
-  const [demoReady, setDemoReady] = useState(false);
-
-  const extractHTML = (text: string): string | null => {
-    const codeBlockMatch = text.match(/```(?:html)?\s*([\s\S]*?)```/);
-    if (codeBlockMatch) return codeBlockMatch[1].trim();
-    const divMatch = text.match(/(<div[\s\S]*<\/div>)/i);
-    if (divMatch) return divMatch[1];
-    return null;
-  };
-
-  const openPreview = useCallback(() => {
-    window.location.href = "/demo-preview";
-  }, []);
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
 
   const send = async () => {
     if (!input.trim() || isLoading) return;
@@ -40,22 +27,18 @@ export const TierDemoChat = ({ onClose }: TierDemoChatProps) => {
     setInput("");
     setIsLoading(true);
     setProgress(0);
-    setDemoReady(false);
+    setImageUrl(null);
 
-    // Simulate progress with an interval
     const progressInterval = setInterval(() => {
       setProgress((prev) => {
         if (prev >= 90) {
           clearInterval(progressInterval);
           return 90;
         }
-        // Slow down as we approach 90%
         const increment = Math.max(1, Math.floor((90 - prev) / 10));
         return Math.min(prev + increment, 90);
       });
-    }, 400);
-
-    let fullResponse = "";
+    }, 500);
 
     try {
       const resp = await fetch(CHAT_URL, {
@@ -67,8 +50,9 @@ export const TierDemoChat = ({ onClose }: TierDemoChatProps) => {
         body: JSON.stringify({ messages: newMessages }),
       });
 
-      if (!resp.ok || !resp.body) {
-        clearInterval(progressInterval);
+      clearInterval(progressInterval);
+
+      if (!resp.ok) {
         const errorText = resp.status === 429
           ? "Too many requests — please wait a moment."
           : resp.status === 402
@@ -80,45 +64,15 @@ export const TierDemoChat = ({ onClose }: TierDemoChatProps) => {
         return;
       }
 
-      const reader = resp.body.getReader();
-      const decoder = new TextDecoder();
-      let textBuffer = "";
-
-      let streamDone = false;
-      while (!streamDone) {
-        const { done, value } = await reader.read();
-        if (done) break;
-        textBuffer += decoder.decode(value, { stream: true });
-
-        let newlineIndex: number;
-        while ((newlineIndex = textBuffer.indexOf("\n")) !== -1) {
-          let line = textBuffer.slice(0, newlineIndex);
-          textBuffer = textBuffer.slice(newlineIndex + 1);
-          if (line.endsWith("\r")) line = line.slice(0, -1);
-          if (line.startsWith(":") || line.trim() === "") continue;
-          if (!line.startsWith("data: ")) continue;
-          const jsonStr = line.slice(6).trim();
-          if (jsonStr === "[DONE]") { streamDone = true; break; }
-          try {
-            const parsed = JSON.parse(jsonStr);
-            const content = parsed.choices?.[0]?.delta?.content as string | undefined;
-            if (content) fullResponse += content;
-          } catch {
-            textBuffer = line + "\n" + textBuffer;
-            break;
-          }
-        }
-      }
-
-      clearInterval(progressInterval);
-      setProgress(100);
-
-      setMessages((prev) => [...prev, { role: "assistant", content: fullResponse }]);
-
-      const finalHtml = extractHTML(fullResponse);
-      if (finalHtml) {
-        sessionStorage.setItem(DEMO_STORAGE_KEY, finalHtml);
-        setDemoReady(true);
+      const data = await resp.json();
+      
+      if (data.error) {
+        setMessages((prev) => [...prev, { role: "assistant", content: data.error }]);
+        setProgress(0);
+      } else if (data.imageUrl) {
+        setProgress(100);
+        setImageUrl(data.imageUrl);
+        setMessages((prev) => [...prev, { role: "assistant", content: "Demo generated." }]);
       }
     } catch {
       clearInterval(progressInterval);
@@ -151,13 +105,14 @@ export const TierDemoChat = ({ onClose }: TierDemoChatProps) => {
         <button
           onClick={onClose}
           className="w-8 h-8 rounded-full flex items-center justify-center transition-colors hover:bg-muted/20"
+          data-cursor="expand"
         >
           <X className="w-4 h-4 text-muted-foreground" />
         </button>
       </div>
 
-      {/* Main preview area */}
-      <div className="flex-1 min-h-0 relative">
+      {/* Main area */}
+      <div className="flex-1 min-h-0 relative overflow-hidden">
         <AnimatePresence mode="wait">
           {isLoading ? (
             <motion.div
@@ -175,24 +130,18 @@ export const TierDemoChat = ({ onClose }: TierDemoChatProps) => {
                 </p>
               </div>
             </motion.div>
-          ) : demoReady ? (
+          ) : imageUrl ? (
             <motion.div
-              key="ready"
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              className="absolute inset-0 flex flex-col items-center justify-center gap-4"
+              key="image"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="absolute inset-0 overflow-auto"
             >
-              <span className="text-3xl text-primary font-bold font-display">✓</span>
-              <p className="text-sm text-foreground/70 font-mono tracking-wider">
-                Demo generated successfully
-              </p>
-              <button
-                onClick={openPreview}
-                className="flex items-center gap-2 px-6 py-3 rounded-lg text-sm font-mono tracking-wider uppercase border border-primary/30 text-primary hover:bg-primary/10 transition-colors"
-              >
-                <ExternalLink className="w-4 h-4" />
-                Click here to preview demo
-              </button>
+              <img
+                src={imageUrl}
+                alt="Generated demo preview"
+                className="w-full h-auto block"
+              />
             </motion.div>
           ) : (
             <motion.div
@@ -214,7 +163,7 @@ export const TierDemoChat = ({ onClose }: TierDemoChatProps) => {
         </AnimatePresence>
       </div>
 
-      {/* User prompt pills + Input */}
+      {/* Input */}
       <div className="px-4 pt-2 pb-4 border-t border-primary/10">
         {userMessages.length > 0 && (
           <div className="flex flex-wrap gap-1.5 mb-2">
