@@ -10,26 +10,9 @@ import { motion, AnimatePresence, useInView, useDragControls } from "framer-moti
 import { X, ArrowUpRight } from "lucide-react";
 import { useScrollPaint } from "@/hooks/useScrollPaint";
 
-// ── Real assets ──────────────────────────────────────────────────────────────
-import papachoaImg from "@/assets/dome-papachoa.jpg";
-import pawnshopImg from "@/assets/dome-pawnshop.jpg";
-import jewelryImg from "@/assets/dome-jewelry.jpg";
-import rawpawImg from "@/assets/dome-rawpaw.jpg";
-
-// ── Placeholder generator (returns a gradient data URL for missing images) ──
-const placeholder = (hue: number, label: string) =>
-  `data:image/svg+xml,${encodeURIComponent(`
-    <svg xmlns="http://www.w3.org/2000/svg" width="800" height="560">
-      <defs>
-        <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stop-color="hsl(${hue},12%,88%)"/>
-          <stop offset="100%" stop-color="hsl(${hue},8%,78%)"/>
-        </linearGradient>
-      </defs>
-      <rect width="800" height="560" fill="url(#g)"/>
-      <text x="400" y="290" font-family="sans-serif" font-size="18" fill="hsl(${hue},8%,40%)" text-anchor="middle" dominant-baseline="middle" letter-spacing="4">${label}</text>
-    </svg>
-  `)}`;
+// ── Storage base URL ─────────────────────────────────────────────────────────
+const BASE = `${import.meta.env.VITE_SUPABASE_URL}/storage/v1/object/public/project-mockups`;
+const img = (project: string, n: number) => `${BASE}/${project}/${n}.png`;
 
 // ── Project data ─────────────────────────────────────────────────────────────
 const PROJECTS = [
@@ -39,13 +22,7 @@ const PROJECTS = [
     descriptor: "High-trust brand website",
     tags: ["Website", "Landing"],
     index: "01",
-    images: [
-      papachoaImg,
-      placeholder(20, "PAPACHOA · 02"),
-      placeholder(20, "PAPACHOA · 03"),
-      placeholder(20, "PAPACHOA · 04"),
-      placeholder(20, "PAPACHOA · 05"),
-    ],
+    images: [1, 2, 3, 4, 5].map((n) => img("papachoa", n)),
   },
   {
     id: "pawnshop",
@@ -53,13 +30,7 @@ const PROJECTS = [
     descriptor: "Conversion-focused e-commerce",
     tags: ["E-commerce", "Website"],
     index: "02",
-    images: [
-      pawnshopImg,
-      placeholder(30, "PAWN SHOP · 02"),
-      placeholder(30, "PAWN SHOP · 03"),
-      placeholder(30, "PAWN SHOP · 04"),
-      placeholder(30, "PAWN SHOP · 05"),
-    ],
+    images: [1, 2, 3, 4, 5].map((n) => img("pawnshop", n)),
   },
   {
     id: "jewelry",
@@ -67,13 +38,7 @@ const PROJECTS = [
     descriptor: "Luxury product showcase",
     tags: ["E-commerce", "Landing"],
     index: "03",
-    images: [
-      jewelryImg,
-      placeholder(40, "JEWELRY · 02"),
-      placeholder(40, "JEWELRY · 03"),
-      placeholder(40, "JEWELRY · 04"),
-      placeholder(40, "JEWELRY · 05"),
-    ],
+    images: [1, 2, 3, 4, 5].map((n) => img("jewelry", n)),
   },
   {
     id: "rawpaw",
@@ -81,13 +46,7 @@ const PROJECTS = [
     descriptor: "D2C brand storefront",
     tags: ["Website", "E-commerce"],
     index: "04",
-    images: [
-      rawpawImg,
-      placeholder(200, "RAW PAW · 02"),
-      placeholder(200, "RAW PAW · 03"),
-      placeholder(200, "RAW PAW · 04"),
-      placeholder(200, "RAW PAW · 05"),
-    ],
+    images: [1, 2, 3, 4, 5].map((n) => img("rawpaw", n)),
   },
   {
     id: "system",
@@ -95,13 +54,7 @@ const PROJECTS = [
     descriptor: "Internal platform & automation",
     tags: ["System", "Dashboard"],
     index: "05",
-    images: [
-      placeholder(0, "SYSTEM · 01"),
-      placeholder(0, "SYSTEM · 02"),
-      placeholder(0, "SYSTEM · 03"),
-      placeholder(0, "SYSTEM · 04"),
-      placeholder(0, "SYSTEM · 05"),
-    ],
+    images: [1, 2, 3, 4, 5].map((n) => img("system", n)),
   },
 ];
 
