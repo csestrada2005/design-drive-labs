@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef, useMemo } from "react";
+import { useState, useCallback, useRef } from "react";
 import { LoadingScreen } from "@/components/motion/LoadingScreen";
 import { HeroSection } from "@/components/motion/HeroSection";
 import { MarqueeTicker } from "@/components/motion/MarqueeTicker";
@@ -17,21 +17,10 @@ import { CustomCursor } from "@/components/motion/CustomCursor";
 import { CornerCrosses } from "@/components/motion/CornerCrosses";
 import { ChatWidget } from "@/components/motion/ChatWidget";
 import { ScrollRevealText } from "@/components/motion/ScrollRevealText";
-import { useFullScreenTransitions, TransitionSection } from "@/components/motion/SectionTransition";
-
-const TRANSITION_SECTIONS = [
-  { id: "services", variant: "shutter" as const },
-  { id: "designlab", variant: "circuit" as const },
-  { id: "process", variant: "data" as const },
-  { id: "growth", variant: "shutter" as const },
-  { id: "work", variant: "circuit" as const },
-  { id: "cta-contact", variant: "data" as const },
-];
 
 const Index = () => {
   const [isLoaded, setIsLoaded] = useState(false);
   const cursorZoneRef = useRef<HTMLDivElement>(null);
-  const { registerRef, OverlayPortal } = useFullScreenTransitions(TRANSITION_SECTIONS);
 
   const handleLoadComplete = useCallback(() => {
     setIsLoaded(true);
@@ -47,7 +36,6 @@ const Index = () => {
           <CustomCursor containerRef={cursorZoneRef} />
           <CornerCrosses />
           <ChatWidget />
-          <OverlayPortal />
           <main ref={cursorZoneRef}>
             <HeroSection />
             <MarqueeTicker />
@@ -62,26 +50,14 @@ const Index = () => {
               </div>
             </section>
 
-            <TransitionSection registerRef={registerRef(0)}>
-              <ServicesSection />
-            </TransitionSection>
-            <TransitionSection registerRef={registerRef(1)}>
-              <DesignLab />
-            </TransitionSection>
-            <TransitionSection registerRef={registerRef(2)}>
-              <ProcessSection />
-            </TransitionSection>
-            <TransitionSection registerRef={registerRef(3)}>
-              <GrowthImpact />
-            </TransitionSection>
-            <TransitionSection registerRef={registerRef(4)}>
-              <FeaturedWork />
-            </TransitionSection>
-            <TransitionSection registerRef={registerRef(5)}>
-              <BigCTA />
-              <ContactSection />
-              <DramaticFooter />
-            </TransitionSection>
+            <ServicesSection />
+            <DesignLab />
+            <ProcessSection />
+            <GrowthImpact />
+            <FeaturedWork />
+            <BigCTA />
+            <ContactSection />
+            <DramaticFooter />
           </main>
           <BottomNav />
         </>
