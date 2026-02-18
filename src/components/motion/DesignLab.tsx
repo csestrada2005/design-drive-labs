@@ -296,148 +296,139 @@ const GhostCursor = () => {
 };
 
 /* ─────────────────────────────────────
-   DEMO 4 — DOME GALLERY
-   Globe / dome arrangement of AI photos
+   DEMO 4 — THROW CARDS
+   Drag, throw, and watch them spring back
 ───────────────────────────────────────*/
-const domeTiles = [
-  { label: "PAPACHOA", img: domePapachoa },
-  { label: "RAW PAW",  img: domeRawPaw },
-  { label: "JEWELRY",  img: domeJewelry },
-  { label: "PAWN SHOP",img: domePawnshop },
+const throwCards = [
+  { label: "PAPACHOA",  img: domePapachoa,  color: "hsl(14 70% 40%)" },
+  { label: "RAW PAW",   img: domeRawPaw,    color: "hsl(200 60% 32%)" },
+  { label: "JEWELRY",   img: domeJewelry,   color: "hsl(45 65% 38%)" },
+  { label: "PAWN SHOP", img: domePawnshop,  color: "hsl(270 40% 38%)" },
 ];
 
-const DomeGallery = () => {
+/* Initial resting positions (% of container) */
+const restPositions = [
+  { x: 18, y: 22 },
+  { x: 56, y: 14 },
+  { x: 12, y: 60 },
+  { x: 62, y: 55 },
+];
+
+const ThrowCards = () => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [mouse, setMouse] = useState({ x: 0, y: 0 });
-  const [expanded, setExpanded] = useState<number | null>(null);
-
-  const handleMove = (e: React.MouseEvent) => {
-    const rect = containerRef.current?.getBoundingClientRect();
-    if (!rect) return;
-    setMouse({
-      x: ((e.clientX - rect.left) / rect.width - 0.5) * 2,
-      y: ((e.clientY - rect.top) / rect.height - 0.5) * 2,
-    });
-  };
-
-  /* globe positions — arc across top half of an ellipse */
-  const globePositions = [
-    { cx: "22%", cy: "52%", w: 88, h: 118, depth: 0.9 },
-    { cx: "40%", cy: "36%", w: 100, h: 132, depth: 0.6 },
-    { cx: "60%", cy: "36%", w: 100, h: 132, depth: 0.6 },
-    { cx: "78%", cy: "52%", w: 88, h: 118, depth: 0.9 },
-  ];
+  const [flipped, setFlipped] = useState<number | null>(null);
+  const [hint, setHint] = useState(true);
 
   return (
-    <GlassCard minH={260}>
+    <GlassCard minH={300}>
       <div
         ref={containerRef}
-        className="relative w-full min-h-[260px]"
-        onMouseMove={handleMove}
-        onMouseLeave={() => setMouse({ x: 0, y: 0 })}
+        className="relative w-full"
+        style={{ minHeight: 300 }}
       >
-        {/* Globe arc guide line */}
-        <svg
-          aria-hidden
-          className="absolute inset-0 w-full h-full pointer-events-none"
-          style={{ opacity: 0.07 }}
-        >
-          <ellipse cx="50%" cy="110%" rx="46%" ry="78%" fill="none" stroke="hsl(0 0% 0%)" strokeWidth="1" />
-        </svg>
-
-        {domeTiles.map((tile, i) => {
-          const gp = globePositions[i];
-          const px = parseFloat(gp.cx);
-          const py = parseFloat(gp.cy);
+        {throwCards.map((card, i) => {
+          const rest = restPositions[i];
+          const isFlipped = flipped === i;
           return (
             <motion.div
               key={i}
-              className="absolute cursor-pointer overflow-hidden"
+              drag
+              dragConstraints={containerRef}
+              dragElastic={0.18}
+              dragTransition={{ bounceStiffness: 280, bounceDamping: 22 }}
+              whileDrag={{ scale: 1.08, zIndex: 30, cursor: "grabbing" }}
+              whileHover={{ scale: 1.05 }}
+              onDrag={() => { if (hint) setHint(false); }}
+              onClick={() => setFlipped(isFlipped ? null : i)}
+              className="absolute cursor-grab select-none"
               style={{
-                width: gp.w,
-                height: gp.h,
-                left: gp.cx,
-                top: gp.cy,
-                transform: "translate(-50%, -50%)",
-                borderRadius: "50% 50% 50% 50% / 60% 60% 40% 40%",
-                boxShadow:
-                  "0 12px 40px hsl(0 0% 0% / 0.35), inset 0 1px 0 hsl(0 0% 100% / 0.2), 0 0 0 1px hsl(0 0% 100% / 0.06)",
+                left: `${rest.x}%`,
+                top: `${rest.y}%`,
+                width: 90,
+                height: 120,
+                zIndex: 10 + i,
               }}
-              animate={{
-                x: mouse.x * gp.depth * -10,
-                y: mouse.y * gp.depth * -8,
-                rotateX: mouse.y * gp.depth * -4,
-                rotateY: mouse.x * gp.depth * 4,
-              }}
-              whileHover={{
-                scale: 1.1,
-                boxShadow: "0 20px 60px hsl(0 0% 0% / 0.45), inset 0 1px 0 hsl(0 0% 100% / 0.3), 0 0 30px hsl(0 0% 100% / 0.06)",
-              }}
-              transition={{ type: "spring", stiffness: 160, damping: 20 }}
-              onClick={() => setExpanded(expanded === i ? null : i)}
+              initial={{ opacity: 0, scale: 0.7, rotate: (i % 2 === 0 ? -6 : 5) }}
+              animate={{ opacity: 1, scale: 1, rotate: (i % 2 === 0 ? -4 : 3) }}
+              transition={{ type: "spring", stiffness: 200, damping: 20, delay: i * 0.07 }}
             >
-              {/* Photo */}
-              <img
-                src={tile.img}
-                alt={tile.label}
-                className="absolute inset-0 w-full h-full object-cover"
-                draggable={false}
-              />
-              {/* bottom gradient + label */}
-              <div
-                className="absolute inset-0"
-                style={{ background: "linear-gradient(to top, hsl(0 0% 0% / 0.75) 0%, transparent 55%)" }}
-              />
-              {/* glass highlight on top of dome */}
-              <div
-                className="absolute top-0 left-0 right-0"
-                style={{
-                  height: "45%",
-                  background: "linear-gradient(to bottom, hsl(0 0% 100% / 0.18), transparent)",
-                  borderRadius: "inherit",
-                }}
-              />
-              <span className="absolute bottom-3 left-0 right-0 text-center text-[8px] font-mono tracking-widest text-white/90">
-                {tile.label}
-              </span>
+              <motion.div
+                className="relative w-full h-full"
+                style={{ transformStyle: "preserve-3d", perspective: 600 }}
+                animate={{ rotateY: isFlipped ? 180 : 0 }}
+                transition={{ type: "spring", stiffness: 220, damping: 24 }}
+              >
+                {/* Front — photo */}
+                <div
+                  className="absolute inset-0 overflow-hidden"
+                  style={{
+                    borderRadius: 14,
+                    backfaceVisibility: "hidden",
+                    WebkitBackfaceVisibility: "hidden",
+                    boxShadow: "0 10px 40px hsl(0 0% 0% / 0.28), inset 0 1px 0 hsl(0 0% 100% / 0.22)",
+                  }}
+                >
+                  <img src={card.img} alt={card.label} className="w-full h-full object-cover" draggable={false} />
+                  {/* glass top highlight */}
+                  <div
+                    className="absolute top-0 left-0 right-0 pointer-events-none"
+                    style={{
+                      height: "40%",
+                      background: "linear-gradient(to bottom, hsl(0 0% 100% / 0.22), transparent)",
+                      borderRadius: "14px 14px 0 0",
+                    }}
+                  />
+                  <div
+                    className="absolute inset-0"
+                    style={{ background: "linear-gradient(to top, hsl(0 0% 0% / 0.6), transparent 50%)" }}
+                  />
+                  <span className="absolute bottom-2.5 left-0 right-0 text-center text-[8px] font-mono tracking-widest text-white/90">
+                    {card.label}
+                  </span>
+                </div>
+
+                {/* Back — color panel */}
+                <div
+                  className="absolute inset-0 flex flex-col items-center justify-center gap-1"
+                  style={{
+                    borderRadius: 14,
+                    backfaceVisibility: "hidden",
+                    WebkitBackfaceVisibility: "hidden",
+                    transform: "rotateY(180deg)",
+                    background: `linear-gradient(135deg, ${card.color}cc, ${card.color}44)`,
+                    boxShadow: "0 10px 40px hsl(0 0% 0% / 0.2), inset 0 1px 0 hsl(0 0% 100% / 0.2)",
+                  }}
+                >
+                  <div className="w-8 h-px" style={{ background: "hsl(0 0% 100% / 0.4)" }} />
+                  <p className="text-[7px] font-mono tracking-[0.25em] text-white/80 text-center px-2 mt-1">
+                    NEBU<br />PROJECT
+                  </p>
+                  <div className="w-8 h-px mt-1" style={{ background: "hsl(0 0% 100% / 0.4)" }} />
+                </div>
+              </motion.div>
             </motion.div>
           );
         })}
 
-        {/* Lightbox */}
-        <AnimatePresence>
-          {expanded !== null && (
-            <motion.div
-              className="absolute inset-0 z-20 cursor-pointer flex items-center justify-center rounded-2xl overflow-hidden"
-              style={{ backdropFilter: "blur(18px)", background: "hsl(0 0% 0% / 0.7)" }}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={() => setExpanded(null)}
-            >
-              <motion.div
-                className="text-center"
-                initial={{ scale: 0.85, y: 16 }}
-                animate={{ scale: 1, y: 0 }}
-                exit={{ scale: 0.85, y: 16 }}
-              >
-                <img
-                  src={domeTiles[expanded].img}
-                  alt={domeTiles[expanded].label}
-                  className="w-28 h-36 object-cover mx-auto mb-3"
-                  style={{ borderRadius: "50% 50% 50% 50% / 60% 60% 40% 40%" }}
-                  draggable={false}
-                />
-                <p className="font-display text-2xl text-white mb-1">{domeTiles[expanded].label}</p>
-                <p className="text-[10px] font-mono text-white/40 tracking-widest">TAP TO CLOSE</p>
-              </motion.div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+        {/* Hint */}
+        {hint && (
+          <motion.p
+            className="absolute bottom-3 left-0 right-0 text-center text-[9px] font-mono tracking-widest text-foreground/30 pointer-events-none"
+            animate={{ opacity: [0.3, 0.75, 0.3] }}
+            transition={{ duration: 2.5, repeat: Infinity }}
+          >
+            DRAG · THROW · CLICK TO FLIP
+          </motion.p>
+        )}
 
-        <p className="absolute bottom-2 left-0 right-0 text-center text-[9px] font-mono tracking-widest text-foreground/25 pointer-events-none">
-          MOVE + CLICK TO EXPAND
-        </p>
+        {/* Reset */}
+        <button
+          onClick={() => { setFlipped(null); }}
+          className="absolute top-3 right-3 text-foreground/20 hover:text-foreground/60 transition-colors z-40"
+          aria-label="Reset"
+        >
+          <RotateCcw size={12} />
+        </button>
       </div>
     </GlassCard>
   );
@@ -654,7 +645,7 @@ const demos: DemoConfig[] = [
   { id: "focus", title: "TRUE FOCUS",   desc: "Focus window follows your cursor through blurred text",   type: "interactive", component: TrueFocus },
   { id: "blur",  title: "GRADUAL BLUR", desc: "Text assembles from blur to clarity in cinematic motion", type: "auto",        component: GradualBlur },
   { id: "ghost", title: "GHOST CURSOR", desc: "Your movement leaves an ink-red ghost trail behind",      type: "interactive", component: GhostCursor },
-  { id: "dome",  title: "DOME GALLERY", desc: "Globe of parallax photos — move and click to expand",     type: "interactive", component: DomeGallery },
+  { id: "throw", title: "THROW CARDS",  desc: "Drag, throw and flip the project cards — pure physics",   type: "interactive", component: ThrowCards },
   { id: "swap",  title: "CARD SWAP",    desc: "Stack of glass cards swaps forward with spring depth",    type: "auto",        component: CardSwap },
   { id: "ink",   title: "INK REVEAL",   desc: "Brush away the surface to reveal what's underneath",      type: "interactive", component: InkReveal },
 ];
