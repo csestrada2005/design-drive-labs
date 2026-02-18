@@ -16,7 +16,7 @@ export const Footer = () => {
       <div className="container px-4">
         <div className="flex flex-col sm:flex-row justify-between items-center gap-4 sm:gap-6">
           <Link to="/" className="font-display text-lg font-semibold">
-            cuatre<span className="text-accent">.</span>
+            Nebu Studio<span className="text-accent">.</span>
           </Link>
 
           <nav className="flex flex-wrap justify-center gap-4 sm:gap-6">
@@ -32,7 +32,7 @@ export const Footer = () => {
           </nav>
 
           <p className="text-xs text-muted-foreground">
-            © {year} cuatre
+            © {year} Nebu Studio
           </p>
         </div>
       </div>

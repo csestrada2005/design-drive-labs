@@ -143,7 +143,7 @@ const GlassPopup = () => {
               Glassmorphism pop-up con spring physics. Escala + profundidad.
             </p>
             <div className="mt-4 h-px" style={{ background: "linear-gradient(90deg, transparent, hsl(0 0% 0% / 0.15), transparent)" }} />
-            <p className="mt-3 text-[9px] text-black/60 tracking-[0.2em] uppercase">Cuatre Design System</p>
+            <p className="mt-3 text-[9px] text-black/60 tracking-[0.2em] uppercase">Nebu Design System</p>
           </motion.div>
         )}
       </AnimatePresence>

@@ -84,7 +84,7 @@ export const EasterEgg = () => {
               Cada detalle importa. Si llegaste hasta aqui, sabemos que aprecias la artesania digital tanto como nosotros.
             </p>
             <p className="text-muted-foreground/30 text-[10px] mt-3 tracking-wider">
-              — Cuatre Studios
+              — Nebu Studio
             </p>
             <button
               onClick={() => { setRevealed(false); setProgress(0); }}
