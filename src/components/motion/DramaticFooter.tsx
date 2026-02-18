@@ -71,7 +71,7 @@ export const DramaticFooter = () => {
   const headerPaint = useScrollPaint({ xDrift: 15, yDrift: 30 });
 
   return (
-    <footer ref={ref} className="relative overflow-hidden pt-20 pb-10" style={{ background: "hsl(0 10% 3%)" }}>
+    <footer ref={ref} className="relative overflow-hidden pt-20 pb-10">
       <div className="absolute inset-0 opacity-[0.04] pointer-events-none" style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")` }} aria-hidden="true" />
 
       {[...Array(10)].map((_, i) => (
@@ -93,14 +93,14 @@ export const DramaticFooter = () => {
         <div className="relative mb-16 rounded-xl overflow-hidden">
           <FluidGradientCanvas />
           <div className="absolute inset-0 flex items-center justify-center">
-            <h2 className="font-display text-5xl sm:text-7xl md:text-8xl text-foreground/30">CUATRE</h2>
+            <h2 className="font-display text-5xl sm:text-7xl md:text-8xl text-foreground/30">NEBU STUDIO</h2>
           </div>
         </div>
 
         <div className="border-t border-border/20 pt-10">
           <div className="flex flex-col sm:flex-row justify-between items-center gap-8">
             <motion.div initial={{ opacity: 0, y: 20 }} animate={isInView ? { opacity: 1, y: 0 } : {}} transition={{ delay: 0.8 }}>
-              <h2 className="font-display text-4xl sm:text-5xl mb-2">CUATRE</h2>
+              <h2 className="font-display text-4xl sm:text-5xl mb-2">NEBU STUDIO</h2>
               <p className="text-muted-foreground text-xs tracking-wider">Web Design • E-commerce • Systems</p>
             </motion.div>
             <nav className="flex gap-6" aria-label="Footer navigation">
@@ -112,7 +112,7 @@ export const DramaticFooter = () => {
               ))}
             </nav>
           </div>
-          <p className="text-center text-muted-foreground/60 text-[10px] mt-10 tracking-wider">© {new Date().getFullYear()} CUATRE. ALL RIGHTS RESERVED.</p>
+          <p className="text-center text-muted-foreground/60 text-[10px] mt-10 tracking-wider">© {new Date().getFullYear()} NEBU STUDIO. ALL RIGHTS RESERVED.</p>
         </div>
       </div>
     </footer>

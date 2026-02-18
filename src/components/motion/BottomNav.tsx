@@ -99,7 +99,7 @@ export const BottomNav = () => {
 
             {/* Header */}
             <div className="relative flex items-center justify-between px-6 py-5">
-              <span className="font-display text-lg">CUATRE</span>
+              <span className="font-display text-lg">NEBU STUDIO</span>
               <button
               onClick={() => setIsMenuOpen(false)}
               className="w-10 h-10 flex items-center justify-center rounded-full hover:bg-primary/10 transition-colors"

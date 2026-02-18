@@ -18,7 +18,7 @@ const translations: Translations = {
   "nav.services": { es: "Servicios", en: "Services" },
 
   // Hero
-  "hero.eyebrow": { es: "Somos Cuatre.", en: "We are Cuatre." },
+  "hero.eyebrow": { es: "Somos Nebu Studio.", en: "We are Nebu Studio." },
   "hero.headline1": { es: "Creamos sitios web que", en: "We create websites that" },
   "hero.headline2": { es: "generan clientes", en: "generate clients" },
   "hero.headline3": { es: ", no solo visitas.", en: ", not just visits." },

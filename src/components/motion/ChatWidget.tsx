@@ -55,7 +55,7 @@ export const ChatWidget = () => {
                     <span className="font-display text-sm text-primary">C</span>
                   </div>
                   <div>
-                    <p className="text-sm font-semibold">Cuatre Studio</p>
+                    <p className="text-sm font-semibold">Nebu Studio</p>
                     <div className="flex items-center gap-1.5">
                       <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
                       <span className="text-[10px] text-muted-foreground">Online now</span>

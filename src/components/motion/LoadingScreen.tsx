@@ -96,7 +96,7 @@ export const LoadingScreen = ({ onComplete }: { onComplete: () => void }) => {
           </div>
 
           <p className="relative z-10 mt-4 text-[10px] tracking-[0.3em] uppercase text-muted-foreground/60 font-mono">
-            CUATRE SYSTEMS
+            NEBU STUDIO
           </p>
         </motion.div>
       )}

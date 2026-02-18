@@ -41,7 +41,7 @@ export const Header = () => {
             to="/" 
             className="font-display text-xl font-semibold tracking-tight"
           >
-            cuatre<span className="text-accent">.</span>
+            Nebu Studio<span className="text-accent">.</span>
           </Link>
 
           {/* Desktop Nav */}
@@ -92,7 +92,7 @@ export const Header = () => {
       >
         <div className="flex items-center justify-between px-5 py-4">
           <Link to="/" className="font-display text-xl font-semibold" onClick={() => setIsMobileMenuOpen(false)}>
-            cuatre<span className="text-accent">.</span>
+            Nebu Studio<span className="text-accent">.</span>
           </Link>
           <div className="flex items-center gap-2">
             <button
