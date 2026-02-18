@@ -670,13 +670,13 @@ export const DesignLab = () => {
       {/* Scroll-driven dark-to-red wash */}
       <motion.div
         className="absolute inset-0 pointer-events-none"
-        style={{ backgroundColor: "hsl(0 80% 8%)", opacity: redOpacity }}
+        style={{ backgroundColor: "hsl(0 60% 6%)", opacity: useTransform(redOpacity, v => v * 0.45) }}
         aria-hidden="true"
       />
       <motion.div
         className="absolute inset-0 pointer-events-none"
         style={{
-          background: "radial-gradient(ellipse 80% 60% at 50% 50%, hsl(0 100% 30% / 0.18) 0%, transparent 70%)",
+          background: "radial-gradient(ellipse 70% 50% at 50% 50%, hsl(0 100% 20% / 0.1) 0%, transparent 70%)",
           opacity: redOpacity,
         }}
         aria-hidden="true"
