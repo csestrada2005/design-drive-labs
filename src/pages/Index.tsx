@@ -33,7 +33,7 @@ const Index = () => {
             <StatsStrip />
 
             <section className="py-20 sm:py-28 relative overflow-hidden">
-              <div className="container max-w-4xl">
+              <div className="container max-w-4xl pl-8 sm:pl-16">
                 <ScrollRevealText
                   text="WE BUILD THE ENGINE; YOU BUILD THE EMPIRE."
                   highlightWords={["ENGINE", "EMPIRE"]}
