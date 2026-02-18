@@ -8,6 +8,7 @@ import { ReactLenis } from "lenis/react";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import { FilmGrain } from "@/components/motion/FilmGrain";
+import { LivingBackground } from "@/components/motion/LivingBackground";
 
 import owlBg from "@/assets/owl-bg.png";
 
@@ -26,6 +27,7 @@ const App = () => (
       <TooltipProvider>
         <ReactLenis root options={lenisOptions}>
           <div
+            id="bg-wrapper"
             className="min-h-screen"
             style={{
               backgroundImage: `url(${owlBg})`,
@@ -35,6 +37,7 @@ const App = () => (
               backgroundAttachment: "fixed",
             }}
           >
+            <LivingBackground />
             <FilmGrain />
             <Toaster />
             <Sonner />
