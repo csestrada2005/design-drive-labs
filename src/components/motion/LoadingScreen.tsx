@@ -83,7 +83,7 @@ const EnsoCircle = () => {
           cy={500}
           r={r}
           fill="none"
-          stroke="hsl(0 0% 8%)"
+          stroke="hsl(0 88% 40%)"
           strokeWidth="38"
           strokeLinecap="round"
           strokeDasharray={circ}
@@ -154,7 +154,7 @@ export const LoadingScreen = ({ onComplete }: { onComplete: () => void }) => {
   // Progress counter — 1.8s total
   useEffect(() => {
     let raf: number;
-    const duration = 1200;
+    const duration = 1600;
 
     const tick = () => {
       const elapsed = Date.now() - startTime.current;
