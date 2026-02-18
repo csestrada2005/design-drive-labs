@@ -306,16 +306,6 @@ export const DesignLab = () => {
           transition={{ duration: 0.7 }}
           className="mb-24 sm:mb-32"
         >
-          <motion.p
-            initial={{ opacity: 0, x: -20 }}
-            animate={isInView ? { opacity: 1, x: 0 } : {}}
-            transition={{ delay: 0.15 }}
-            className="text-[10px] tracking-[0.3em] uppercase mb-5 flex items-center gap-4 text-white/70"
-            style={{ mixBlendMode: "difference" }}
-          >
-            <span className="w-10 h-px bg-white/40" />
-            Interactive Demos
-          </motion.p>
           <h2 className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl mb-5">
             <span className="text-white">DESIGN</span> <span className="text-white">LAB</span>
           </h2>

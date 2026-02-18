@@ -113,10 +113,6 @@ export const FeaturedWork = () => {
     <section ref={ref} className="py-24 sm:py-32 relative overflow-hidden" id="work">
       <div className="container relative">
         <motion.div ref={headerPaint.ref} style={headerPaint.style} className="mb-16">
-          <p className="text-muted-foreground text-xs tracking-[0.25em] uppercase mb-4 flex items-center gap-3">
-            <span className="w-8 h-px bg-primary/50" />
-            Systems Portfolio
-          </p>
           <h2 className="font-display text-3xl sm:text-5xl md:text-6xl lg:text-7xl">
             ALL <span className="text-primary">POSSIBILITIES</span>
           </h2>

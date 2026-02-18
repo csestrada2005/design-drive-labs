@@ -148,10 +148,6 @@ export const ServicesSection = () => {
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          <p className="text-muted-foreground text-xs tracking-[0.25em] uppercase mb-4 flex items-center gap-3">
-            <span className="w-8 h-px bg-primary/50" />
-            Growth Tiers
-          </p>
           <h2 className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl mb-4">
             WHAT WE <span className="text-primary">BUILD</span>
           </h2>

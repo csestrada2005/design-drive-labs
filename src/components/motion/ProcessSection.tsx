@@ -70,10 +70,6 @@ export const ProcessSection = () => {
           className="absolute inset-0 flex flex-col items-center justify-center z-10"
           style={{ opacity: titleOpacity, y: titleY, scale: titleScale }}
         >
-          <p className="text-muted-foreground text-xs tracking-[0.25em] uppercase mb-6 flex items-center gap-3">
-            <span className="w-8 h-px bg-primary/50" />
-            How We Work
-          </p>
           <h2 className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-center">
             A PROCESS THAT <span className="text-primary">SHIPS.</span>
           </h2>

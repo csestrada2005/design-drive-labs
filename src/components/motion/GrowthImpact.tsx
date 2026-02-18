@@ -158,10 +158,6 @@ export const GrowthImpact = () => {
 
       <div className="container relative z-10">
         <motion.div ref={headerPaint.ref} style={headerPaint.style} className="mb-16">
-          <p className="text-muted-foreground text-xs tracking-[0.25em] uppercase mb-4 flex items-center gap-3">
-            <span className="w-8 h-px bg-primary/50" />
-            Results
-          </p>
           <h2 className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl mb-4">
             GROWTH <span className="text-primary">IMPACT</span>
           </h2>
@@ -194,10 +190,6 @@ export const GrowthImpact = () => {
 
         <motion.div initial={{ opacity: 0, y: 40 }} animate={isInView ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.7, delay: 0.6 }} className="mt-24 sm:mt-32">
           <div className="mb-10">
-            <p className="text-muted-foreground text-[10px] tracking-[0.3em] uppercase mb-4 flex items-center gap-3">
-              <span className="w-8 h-px bg-primary/50" />
-              Revenue Simulator
-            </p>
             <h3 className="font-display text-2xl sm:text-3xl md:text-4xl mb-3">
               Good Design Costs Money.{" "}
               <span className="text-primary">Bad Design Costs Revenue.</span>
