@@ -2,7 +2,7 @@ import { useRef, useState, useCallback } from "react";
 import { AnimatePresence } from "framer-motion";
 import { HeroSection } from "@/components/motion/HeroSection";
 import { MarqueeTicker } from "@/components/motion/MarqueeTicker";
-import { ServicesSection } from "@/components/motion/ServicesSection";
+
 import { DesignLab } from "@/components/motion/DesignLab";
 import { ProcessSection } from "@/components/motion/ProcessSection";
 import { GrowthImpact } from "@/components/motion/GrowthImpact";
@@ -48,8 +48,7 @@ const Index = () => {
 
             <BuildModes />
 
-            <SectionSeparator />
-            <ServicesSection />
+            
             <DesignLab />
             <ProcessSection />
             <SectionSeparator />
