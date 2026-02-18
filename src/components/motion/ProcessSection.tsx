@@ -1,5 +1,5 @@
-import { useRef, useState } from "react";
-import { motion, useInView, useScroll, useTransform, AnimatePresence } from "framer-motion";
+import { useRef } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { useScrollPaint } from "@/hooks/useScrollPaint";
 
 const phases = [
@@ -43,8 +43,6 @@ const phases = [
 
 export const ProcessSection = () => {
   const sectionRef = useRef<HTMLElement>(null);
-  const isInView = useInView(sectionRef, { once: true, margin: "-100px" });
-  const [expandedId, setExpandedId] = useState<string | null>(null);
   const headerPaint = useScrollPaint({ xDrift: 20 });
 
   const { scrollYProgress } = useScroll({
@@ -56,7 +54,6 @@ export const ProcessSection = () => {
 
   return (
     <section ref={sectionRef} className="py-24 sm:py-32 relative" id="process">
-      {/* Background accent */}
       <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
         <div
           className="absolute top-0 right-0 w-1/3 h-full"
@@ -86,10 +83,21 @@ export const ProcessSection = () => {
           <a href="#contact" className="btn-primary text-sm">Schedule Call</a>
         </motion.div>
 
-        {/* Timeline — no cards */}
+        {/* Zigzag Timeline */}
         <div className="relative mt-16">
-          {/* Animated progress line */}
-          <div className="absolute left-5 sm:left-6 top-0 bottom-0 w-px bg-border/10">
+          {/* Center progress line (desktop) */}
+          <div className="hidden md:block absolute left-1/2 -translate-x-1/2 top-0 bottom-0 w-px bg-border/10">
+            <motion.div
+              className="absolute top-0 left-0 w-full"
+              style={{
+                height: lineHeight,
+                background: "linear-gradient(to bottom, hsl(0 100% 50%), hsl(0 100% 50% / 0.2))",
+                boxShadow: "0 0 12px hsl(0 100% 50% / 0.3)",
+              }}
+            />
+          </div>
+          {/* Mobile left line */}
+          <div className="md:hidden absolute left-5 top-0 bottom-0 w-px bg-border/10">
             <motion.div
               className="absolute top-0 left-0 w-full"
               style={{
@@ -100,91 +108,91 @@ export const ProcessSection = () => {
             />
           </div>
 
-          <div className="space-y-8">
+          <div className="space-y-12 md:space-y-16">
             {phases.map((phase, i) => {
-              const isExpanded = expandedId === phase.id;
+              const isLeft = i % 2 === 0;
+
               return (
                 <motion.div
                   key={phase.id}
-                  initial={{ opacity: 0, x: -30 }}
-                  animate={isInView ? { opacity: 1, x: 0 } : {}}
-                  transition={{ duration: 0.5, delay: i * 0.1 }}
-                  className="relative flex gap-6 sm:gap-8 group cursor-pointer"
-                  onClick={() => setExpandedId(isExpanded ? null : phase.id)}
-                >
-                  {/* Circle indicator — luminous node */}
-                  <div className={`relative z-10 flex-shrink-0 w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center transition-all duration-500 ${
-                    isExpanded
-                      ? "scale-110"
-                      : "group-hover:scale-105"
+                  initial={{ opacity: 0, x: isLeft ? -40 : 40, y: 30 }}
+                  whileInView={{ opacity: 1, x: 0, y: 0 }}
+                  viewport={{ once: true, margin: "-100px" }}
+                  transition={{ duration: 0.6, delay: 0.1, ease: [0.33, 1, 0.68, 1] }}
+                  className={`relative flex gap-6 sm:gap-8 md:items-center ${
+                    /* Mobile: always left-aligned. Desktop: zigzag */
+                    ""
                   }`}
-                    style={{
-                      background: isExpanded
-                        ? "radial-gradient(circle, hsl(0 100% 50% / 0.3), hsl(0 100% 50% / 0.05))"
-                        : "radial-gradient(circle, hsl(0 100% 50% / 0.1), transparent)",
-                      boxShadow: isExpanded
-                        ? "0 0 20px hsl(0 100% 50% / 0.3), 0 0 40px hsl(0 100% 50% / 0.1)"
-                        : "none",
-                      border: isExpanded
-                        ? "1px solid hsl(0 100% 50% / 0.5)"
-                        : "1px solid hsl(0 10% 15% / 0.5)",
-                    }}
-                  >
-                    <span className={`font-display text-[10px] transition-colors ${
-                      isExpanded ? "text-primary" : "text-muted-foreground group-hover:text-primary"
-                    }`}>
-                      {String(i + 1).padStart(2, "0")}
-                    </span>
+                >
+                  {/* Mobile layout */}
+                  <div className="md:hidden flex gap-6">
+                    {/* Circle */}
+                    <div className="relative z-10 flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center"
+                      style={{
+                        background: "radial-gradient(circle, hsl(0 100% 50% / 0.15), transparent)",
+                        border: "1px solid hsl(0 100% 50% / 0.25)",
+                      }}
+                    >
+                      <span className="font-display text-[10px] text-primary">
+                        {String(i + 1).padStart(2, "0")}
+                      </span>
+                    </div>
+                    {/* Content */}
+                    <div className="flex-1 pb-4">
+                      <h3 className="font-display text-base sm:text-lg text-foreground mb-1">{phase.title}</h3>
+                      <div className="h-px mb-3" style={{ background: "linear-gradient(90deg, hsl(0 100% 50% / 0.15), transparent 60%)" }} />
+                      <p className="text-muted-foreground text-sm mb-3 leading-relaxed">{phase.description}</p>
+                      <div className="flex flex-wrap gap-x-4 gap-y-1">
+                        {phase.bullets.map((bullet) => (
+                          <span key={bullet} className="text-muted-foreground/60 text-xs flex items-center gap-1.5">
+                            <span className="w-1 h-1 rounded-full bg-primary/40" />
+                            {bullet}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
                   </div>
 
-                  {/* Content — no card, just text */}
-                  <div className="flex-1 pb-4">
-                    <div className="flex items-center justify-between">
-                      <h3 className={`font-display text-base sm:text-lg transition-colors ${
-                        isExpanded ? "text-primary" : "group-hover:text-primary"
-                      }`}>
-                        {phase.title}
-                      </h3>
-                      <motion.svg
-                        className="w-4 h-4 text-muted-foreground/50"
-                        viewBox="0 0 16 16"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="1.5"
-                        animate={{ rotate: isExpanded ? 180 : 0 }}
-                        transition={{ duration: 0.3 }}
-                      >
-                        <path d="M4 6l4 4 4-4" />
-                      </motion.svg>
+                  {/* Desktop zigzag layout */}
+                  <div className="hidden md:grid md:grid-cols-[1fr_auto_1fr] md:gap-8 md:items-start w-full">
+                    {/* Left content or spacer */}
+                    <div className={isLeft ? "" : "order-3"}>
+                      <div className={`${isLeft ? "text-right pr-4" : "text-left pl-4"}`}>
+                        <h3 className="font-display text-lg text-foreground mb-1">{phase.title}</h3>
+                        <div className="h-px mb-3 ml-auto" style={{
+                          background: isLeft
+                            ? "linear-gradient(270deg, hsl(0 100% 50% / 0.15), transparent 60%)"
+                            : "linear-gradient(90deg, hsl(0 100% 50% / 0.15), transparent 60%)",
+                          maxWidth: "200px",
+                          marginLeft: isLeft ? "auto" : "0",
+                        }} />
+                        <p className="text-muted-foreground text-sm mb-3 leading-relaxed">{phase.description}</p>
+                        <div className={`flex flex-wrap gap-x-4 gap-y-1 ${isLeft ? "justify-end" : ""}`}>
+                          {phase.bullets.map((bullet) => (
+                            <span key={bullet} className="text-muted-foreground/60 text-xs flex items-center gap-1.5">
+                              <span className="w-1 h-1 rounded-full bg-primary/40" />
+                              {bullet}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
                     </div>
 
-                    {/* Separator */}
-                    <div className="h-px mt-3 mb-3" style={{ background: "linear-gradient(90deg, hsl(0 100% 50% / 0.1), transparent 60%)" }} />
-
-                    <AnimatePresence>
-                      {isExpanded && (
-                        <motion.div
-                          initial={{ height: 0, opacity: 0 }}
-                          animate={{ height: "auto", opacity: 1 }}
-                          exit={{ height: 0, opacity: 0 }}
-                          transition={{ duration: 0.4, ease: [0.33, 1, 0.68, 1] }}
-                          className="overflow-hidden"
-                        >
-                          <p className="text-muted-foreground text-sm mb-4 leading-relaxed">
-                            {phase.description}
-                          </p>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-
-                    <div className="flex flex-wrap gap-x-4 gap-y-1">
-                      {phase.bullets.map((bullet) => (
-                        <span key={bullet} className="text-muted-foreground/60 text-xs flex items-center gap-1.5">
-                          <span className="w-1 h-1 rounded-full bg-primary/40" />
-                          {bullet}
-                        </span>
-                      ))}
+                    {/* Center circle */}
+                    <div className="relative z-10 flex-shrink-0 w-12 h-12 rounded-full flex items-center justify-center order-2"
+                      style={{
+                        background: "radial-gradient(circle, hsl(0 100% 50% / 0.15), transparent)",
+                        border: "1px solid hsl(0 100% 50% / 0.25)",
+                        boxShadow: "0 0 20px hsl(0 100% 50% / 0.1)",
+                      }}
+                    >
+                      <span className="font-display text-[10px] text-primary">
+                        {String(i + 1).padStart(2, "0")}
+                      </span>
                     </div>
+
+                    {/* Right spacer or content */}
+                    <div className={isLeft ? "order-3" : ""} />
                   </div>
                 </motion.div>
               );

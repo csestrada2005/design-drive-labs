@@ -2,7 +2,7 @@ import { useRef, useState, useEffect, useCallback } from "react";
 import { motion, useInView, useScroll, useTransform, AnimatePresence } from "framer-motion";
 import { ArchitectureDemo } from "./ArchitectureDemo";
 
-/* ── Demo 1: Electro Text — Auto-cycling lightning ── */
+/* ── Demo 1: Electro Text — Auto-cycling lightning (RED) ── */
 const ElectroText = () => {
   const [activeIdx, setActiveIdx] = useState<number | null>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -11,7 +11,6 @@ const ElectroText = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
   const isInView = useInView(sectionRef, { once: false, margin: "-50px" });
 
-  // Auto-cycle through letters when in view
   useEffect(() => {
     if (!isInView) { setActiveIdx(null); return; }
     let idx = 0;
@@ -53,9 +52,9 @@ const ElectroText = () => {
         ctx.beginPath();
         ctx.moveTo(letterX, letterY);
         drawLightning(ctx, letterX, letterY, endX, endY, 4);
-        ctx.strokeStyle = `hsla(222, 100%, ${65 + Math.random() * 20}%, ${0.4 + Math.random() * 0.5})`;
+        ctx.strokeStyle = `hsla(0, 100%, ${55 + Math.random() * 20}%, ${0.4 + Math.random() * 0.5})`;
         ctx.lineWidth = 0.5 + Math.random() * 1.5;
-        ctx.shadowColor = "hsl(222, 100%, 65%)";
+        ctx.shadowColor = "hsl(0, 100%, 50%)";
         ctx.shadowBlur = 8 + Math.random() * 12;
         ctx.stroke();
       }
@@ -64,8 +63,8 @@ const ElectroText = () => {
         const sy = letterY + (Math.random() - 0.5) * 60;
         ctx.beginPath();
         ctx.arc(sx, sy, 1 + Math.random() * 2, 0, Math.PI * 2);
-        ctx.fillStyle = `hsla(222, 100%, 80%, ${Math.random() * 0.8})`;
-        ctx.shadowColor = "hsl(222, 100%, 75%)";
+        ctx.fillStyle = `hsla(0, 100%, 70%, ${Math.random() * 0.8})`;
+        ctx.shadowColor = "hsl(0, 100%, 60%)";
         ctx.shadowBlur = 10;
         ctx.fill();
       }
@@ -85,8 +84,8 @@ const ElectroText = () => {
               key={i}
               className="font-display text-4xl sm:text-6xl lg:text-7xl select-none relative"
               animate={{
-                color: activeIdx === i ? "hsl(222, 100%, 85%)" : activeIdx !== null && Math.abs(activeIdx - i) <= 1 ? "hsl(222, 100%, 65%)" : "hsl(0, 0%, 97%)",
-                textShadow: activeIdx === i ? "0 0 30px hsl(222 100% 65% / 0.9), 0 0 80px hsl(222 100% 65% / 0.5), 0 0 120px hsl(222 100% 65% / 0.2)" : "none",
+                color: activeIdx === i ? "hsl(0, 100%, 75%)" : activeIdx !== null && Math.abs(activeIdx - i) <= 1 ? "hsl(0, 100%, 55%)" : "hsl(0, 0%, 97%)",
+                textShadow: activeIdx === i ? "0 0 30px hsl(0 100% 50% / 0.9), 0 0 80px hsl(0 100% 50% / 0.5)" : "none",
                 scale: activeIdx === i ? 1.15 : 1,
                 y: activeIdx === i ? -4 : 0,
               }}
@@ -102,8 +101,7 @@ const ElectroText = () => {
             style={{
               left: `${(activeIdx / text.length) * 100}%`,
               width: "80px",
-              background: "radial-gradient(ellipse, hsl(222 100% 65% / 0.3), transparent 70%)",
-              filter: "blur(12px)",
+              background: "radial-gradient(ellipse, hsl(0 100% 50% / 0.3), transparent 70%)",
             }}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -115,7 +113,7 @@ const ElectroText = () => {
   );
 };
 
-/* ── Demo 2: Glass Pop-up — Auto-open on scroll ── */
+/* ── Demo 2: Glass Pop-up — RED, no blur ── */
 const GlassPopup = () => {
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: false, margin: "-50px" });
@@ -125,18 +123,16 @@ const GlassPopup = () => {
       <AnimatePresence>
         {isInView && (
           <motion.div
-            initial={{ opacity: 0, scale: 0.7, y: 30, filter: "blur(16px)" }}
-            animate={{ opacity: 1, scale: 1, y: 0, filter: "blur(0px)" }}
-            exit={{ opacity: 0, scale: 0.85, y: 15, filter: "blur(12px)" }}
+            initial={{ opacity: 0, scale: 0.7, y: 30 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.85, y: 15 }}
             transition={{ type: "spring", damping: 22, stiffness: 280 }}
             className="relative p-6 max-w-xs w-full"
             style={{
-              background: "linear-gradient(135deg, hsl(222 40% 12% / 0.7), hsl(222 40% 6% / 0.5))",
-              backdropFilter: "blur(30px) saturate(160%)",
-              WebkitBackdropFilter: "blur(30px) saturate(160%)",
-              border: "1px solid hsl(222 100% 65% / 0.12)",
+              background: "linear-gradient(135deg, hsl(0 40% 12% / 0.7), hsl(0 40% 6% / 0.5))",
+              border: "1px solid hsl(0 100% 50% / 0.2)",
               borderRadius: "1.25rem",
-              boxShadow: "0 24px 80px -20px hsl(222 100% 20% / 0.6), inset 0 1px 0 hsl(0 0% 100% / 0.04)",
+              boxShadow: "0 24px 80px -20px hsl(0 100% 20% / 0.6), inset 0 1px 0 hsl(0 0% 100% / 0.04)",
             }}
           >
             <div className="flex items-center gap-3 mb-3">
@@ -144,9 +140,9 @@ const GlassPopup = () => {
               <span className="text-[10px] tracking-[0.2em] uppercase text-muted-foreground">Notification</span>
             </div>
             <p className="text-sm text-foreground/80 leading-relaxed">
-              Glassmorphism pop-up con spring physics. Blur + escala + profundidad.
+              Glassmorphism pop-up con spring physics. Escala + profundidad.
             </p>
-            <div className="mt-4 h-px" style={{ background: "linear-gradient(90deg, transparent, hsl(222 100% 65% / 0.15), transparent)" }} />
+            <div className="mt-4 h-px" style={{ background: "linear-gradient(90deg, transparent, hsl(0 100% 50% / 0.2), transparent)" }} />
             <p className="mt-3 text-[9px] text-muted-foreground/40 tracking-[0.2em] uppercase">Cuatre Design System</p>
           </motion.div>
         )}
@@ -155,79 +151,7 @@ const GlassPopup = () => {
   );
 };
 
-/* ── Demo 3: Auto Particle System (replaces cursor trail) ── */
-const AutoParticles = () => {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const ref = useRef<HTMLDivElement>(null);
-  const isInView = useInView(ref, { once: false, margin: "-50px" });
-
-  useEffect(() => {
-    if (!isInView) return;
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
-
-    const rect = canvas.parentElement!.getBoundingClientRect();
-    canvas.width = rect.width;
-    canvas.height = rect.height;
-
-    const particles: { x: number; y: number; vx: number; vy: number; life: number; maxLife: number; size: number }[] = [];
-    let frameId: number;
-
-    const animate = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      
-      // Spawn particles
-      if (particles.length < 30) {
-        particles.push({
-          x: canvas.width * 0.5 + (Math.random() - 0.5) * canvas.width * 0.6,
-          y: canvas.height * 0.5 + (Math.random() - 0.5) * canvas.height * 0.4,
-          vx: (Math.random() - 0.5) * 1.5,
-          vy: (Math.random() - 0.5) * 1.5,
-          life: 0,
-          maxLife: 60 + Math.random() * 60,
-          size: 3 + Math.random() * 6,
-        });
-      }
-
-      for (let i = particles.length - 1; i >= 0; i--) {
-        const p = particles[i];
-        p.x += p.vx;
-        p.y += p.vy;
-        p.life++;
-        const progress = p.life / p.maxLife;
-        const alpha = progress < 0.3 ? progress / 0.3 : 1 - (progress - 0.3) / 0.7;
-
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-        ctx.fillStyle = `hsla(222, 100%, 75%, ${alpha * 0.5})`;
-        ctx.shadowColor = "hsl(222, 100%, 65%)";
-        ctx.shadowBlur = 10;
-        ctx.fill();
-
-        if (p.life >= p.maxLife) particles.splice(i, 1);
-      }
-
-      frameId = requestAnimationFrame(animate);
-    };
-    animate();
-    return () => cancelAnimationFrame(frameId);
-  }, [isInView]);
-
-  return (
-    <div ref={ref} className="py-12 flex flex-col items-center gap-4 min-h-[220px]">
-      <div className="relative w-full h-44 overflow-hidden" style={{ background: "radial-gradient(ellipse at center, hsl(222 100% 65% / 0.03), transparent 70%)" }}>
-        <canvas ref={canvasRef} className="absolute inset-0 w-full h-full" />
-        <p className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-muted-foreground/20 text-xs tracking-[0.3em] uppercase pointer-events-none select-none">
-          Particle System
-        </p>
-      </div>
-    </div>
-  );
-};
-
-/* ── Demo 4: 3D Tilt Object — Auto-animated ── */
+/* ── Demo 3: 3D Tilt Object — RED, auto-animated ── */
 const TiltObject = () => {
   const [tilt, setTilt] = useState({ x: 0, y: 0 });
   const ref = useRef<HTMLDivElement>(null);
@@ -253,16 +177,16 @@ const TiltObject = () => {
     <div ref={ref} className="py-12 flex items-center justify-center min-h-[220px]" style={{ perspective: "800px" }}>
       <motion.div className="relative w-36 h-36 sm:w-44 sm:h-44" animate={{ rotateX: tilt.y, rotateY: tilt.x }} transition={{ type: "spring", stiffness: 180, damping: 18 }}>
         <div className="absolute inset-0" style={{
-          background: "linear-gradient(135deg, hsl(222 100% 65% / 0.15), hsl(222 100% 65% / 0.03))",
-          border: "1px solid hsl(222 100% 65% / 0.2)",
+          background: "linear-gradient(135deg, hsl(0 100% 50% / 0.15), hsl(0 100% 50% / 0.03))",
+          border: "1px solid hsl(0 100% 50% / 0.25)",
           borderRadius: "2rem",
-          boxShadow: `${-tilt.x * 0.8}px ${tilt.y * 0.8}px 40px hsl(222 100% 65% / 0.12)`,
+          boxShadow: `${-tilt.x * 0.8}px ${tilt.y * 0.8}px 40px hsl(0 100% 50% / 0.12)`,
         }} />
         <div className="absolute inset-0 pointer-events-none" style={{
           borderRadius: "2rem",
           background: `radial-gradient(circle at ${50 + tilt.x * 1.2}% ${50 - tilt.y * 1.2}%, hsl(0 0% 100% / 0.12), transparent 55%)`,
         }} />
-        <svg className="absolute inset-6" viewBox="0 0 60 60" style={{ color: "hsl(222 100% 65% / 0.25)" }}>
+        <svg className="absolute inset-6" viewBox="0 0 60 60" style={{ color: "hsl(0 100% 50% / 0.3)" }}>
           <polygon points="30,5 55,20 55,40 30,55 5,40 5,20" fill="none" stroke="currentColor" strokeWidth="0.6" />
           <circle cx="30" cy="30" r="12" fill="none" stroke="currentColor" strokeWidth="0.4" strokeDasharray="2 4">
             <animateTransform attributeName="transform" type="rotate" from="0 30 30" to="360 30 30" dur="12s" repeatCount="indefinite" />
@@ -281,7 +205,7 @@ const TiltObject = () => {
   );
 };
 
-/* ── Demo 5: Scroll Morph Shapes ── */
+/* ── Demo 4: Scroll Morph Shapes — RED ── */
 const ScrollMorphShapes = () => {
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
@@ -294,8 +218,8 @@ const ScrollMorphShapes = () => {
 
   return (
     <div ref={ref} className="py-12 flex items-center justify-center gap-10 min-h-[220px]">
-      <motion.div className="w-24 h-24 sm:w-32 sm:h-32" style={{ borderRadius: br1, scale: s1, rotate: r1, background: "linear-gradient(135deg, hsl(222 100% 65% / 0.2), hsl(222 100% 65% / 0.04))", border: "1px solid hsl(222 100% 65% / 0.15)", boxShadow: "0 0 40px hsl(222 100% 65% / 0.08)" }} />
-      <motion.div className="w-20 h-20 sm:w-28 sm:h-28" style={{ borderRadius: br2, scale: s2, rotate: r2, background: "linear-gradient(135deg, hsl(163 56% 28% / 0.15), hsl(163 56% 28% / 0.03))", border: "1px solid hsl(163 56% 28% / 0.15)", boxShadow: "0 0 40px hsl(163 56% 28% / 0.06)" }} />
+      <motion.div className="w-24 h-24 sm:w-32 sm:h-32" style={{ borderRadius: br1, scale: s1, rotate: r1, background: "linear-gradient(135deg, hsl(0 100% 50% / 0.2), hsl(0 100% 50% / 0.04))", border: "1px solid hsl(0 100% 50% / 0.2)", boxShadow: "0 0 40px hsl(0 100% 50% / 0.08)" }} />
+      <motion.div className="w-20 h-20 sm:w-28 sm:h-28" style={{ borderRadius: br2, scale: s2, rotate: r2, background: "linear-gradient(135deg, hsl(350 100% 50% / 0.15), hsl(350 100% 50% / 0.03))", border: "1px solid hsl(350 100% 50% / 0.15)", boxShadow: "0 0 40px hsl(350 100% 50% / 0.06)" }} />
       <p className="absolute text-[9px] tracking-[0.3em] uppercase text-muted-foreground/20 pointer-events-none">
         Scroll para morph
       </p>
@@ -303,7 +227,7 @@ const ScrollMorphShapes = () => {
   );
 };
 
-/* ── Demo 6: Reveal Wipe ── */
+/* ── Demo 5: Reveal Wipe — RED ── */
 const RevealWipe = () => {
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: false, margin: "-40px" });
@@ -319,8 +243,8 @@ const RevealWipe = () => {
           animate={isInView ? { clipPath: "polygon(0 0, 100% 0, 100% 100%, 0 100%)" } : { clipPath: "polygon(0 0, 0 0, 0 100%, 0 100%)" }}
           transition={{ duration: 0.9, delay: i * 0.18, ease: [0.33, 1, 0.68, 1] }}
         >
-          <div className="absolute inset-0" style={{ background: `linear-gradient(${135 + i * 30}deg, hsl(222 40% ${14 + i * 3}%), hsl(222 30% ${8 + i * 2}%))` }} />
-          <div className="absolute inset-0 opacity-[0.04]" style={{ backgroundImage: `linear-gradient(hsl(222 100% 65% / 0.3) 1px, transparent 1px), linear-gradient(90deg, hsl(222 100% 65% / 0.3) 1px, transparent 1px)`, backgroundSize: "20px 20px" }} />
+          <div className="absolute inset-0" style={{ background: `linear-gradient(${135 + i * 30}deg, hsl(0 40% ${14 + i * 3}%), hsl(0 30% ${8 + i * 2}%))` }} />
+          <div className="absolute inset-0 opacity-[0.04]" style={{ backgroundImage: `linear-gradient(hsl(0 100% 50% / 0.3) 1px, transparent 1px), linear-gradient(90deg, hsl(0 100% 50% / 0.3) 1px, transparent 1px)`, backgroundSize: "20px 20px" }} />
           <div className="absolute inset-0 flex items-end p-4">
             <span className="text-[9px] tracking-[0.2em] uppercase text-foreground/25 font-medium">Project {i + 1}</span>
           </div>
@@ -330,12 +254,11 @@ const RevealWipe = () => {
   );
 };
 
-/* ── Demo config ── */
+/* ── Demo config (particles removed) ── */
 const demos = [
   { id: "architecture", label: "SAAS DEMO", desc: "Auto-cycling preview", component: ArchitectureDemo },
   { id: "electro", label: "ELECTRO TEXT", desc: "Auto-cycling lightning", component: ElectroText },
   { id: "glass", label: "GLASS POP-UP", desc: "Appears on scroll", component: GlassPopup },
-  { id: "particles", label: "PARTICLES", desc: "Auto-animated system", component: AutoParticles },
   { id: "tilt", label: "3D TILT", desc: "Auto-animated lighting", component: TiltObject },
   { id: "morph", label: "SCROLL MORPH", desc: "Scroll-driven shapes", component: ScrollMorphShapes },
   { id: "reveal", label: "REVEAL WIPE", desc: "Clip-path transitions", component: RevealWipe },
@@ -348,8 +271,7 @@ export const DesignLab = () => {
 
   return (
     <section ref={sectionRef} className="py-32 sm:py-40 relative overflow-hidden" id="lab">
-      <div className="absolute top-1/4 left-1/5 w-[500px] h-[500px] rounded-full pointer-events-none" style={{ background: "radial-gradient(circle, hsl(222 100% 65% / 0.03), transparent 70%)" }} aria-hidden="true" />
-      <div className="absolute bottom-1/4 right-1/5 w-[400px] h-[400px] rounded-full pointer-events-none" style={{ background: "radial-gradient(circle, hsl(163 56% 28% / 0.02), transparent 70%)" }} aria-hidden="true" />
+      <div className="absolute top-1/4 left-1/5 w-[500px] h-[500px] rounded-full pointer-events-none" style={{ background: "radial-gradient(circle, hsl(0 100% 50% / 0.03), transparent 70%)" }} aria-hidden="true" />
 
       <div className="container relative z-10">
         <motion.div
@@ -381,22 +303,23 @@ export const DesignLab = () => {
             return (
               <motion.div
                 key={demo.id}
-                initial={{ opacity: 0, y: 50 }}
-                animate={isInView ? { opacity: 1, y: 0 } : {}}
-                transition={{ duration: 0.7, delay: 0.1 + i * 0.12 }}
+                initial={{ opacity: 0, y: 60, scale: 0.95 }}
+                whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                viewport={{ once: true, margin: "-80px" }}
+                transition={{ duration: 0.7, delay: i * 0.08, ease: [0.33, 1, 0.68, 1] }}
                 className="relative"
               >
                 <div className="flex items-center gap-3 mb-2">
                   <motion.div
                     className="w-2 h-2 rounded-full"
-                    style={{ background: "hsl(222 100% 65% / 0.5)" }}
-                    animate={{ boxShadow: ["0 0 0px hsl(222 100% 65% / 0)", "0 0 12px hsl(222 100% 65% / 0.4)", "0 0 0px hsl(222 100% 65% / 0)"] }}
+                    style={{ background: "hsl(0 100% 50% / 0.5)" }}
+                    animate={{ boxShadow: ["0 0 0px hsl(0 100% 50% / 0)", "0 0 12px hsl(0 100% 50% / 0.4)", "0 0 0px hsl(0 100% 50% / 0)"] }}
                     transition={{ duration: 3, repeat: Infinity, delay: i * 0.5 }}
                   />
                   <span className="text-[10px] font-display tracking-[0.2em] text-foreground/50">{demo.label}</span>
                   <span className="text-[9px] text-muted-foreground/30 tracking-wider ml-auto">{demo.desc}</span>
                 </div>
-                <div className="h-px mb-6" style={{ background: "linear-gradient(90deg, hsl(222 100% 65% / 0.12), transparent 80%)" }} />
+                <div className="h-px mb-6" style={{ background: "linear-gradient(90deg, hsl(0 100% 50% / 0.15), transparent 80%)" }} />
                 <DemoComponent />
                 <a
                   href="#contact"
