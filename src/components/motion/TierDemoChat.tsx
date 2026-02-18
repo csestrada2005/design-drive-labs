@@ -1,5 +1,4 @@
 import { useState, useCallback } from "react";
-import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Send, Loader2, ExternalLink } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
@@ -19,7 +18,6 @@ export const TierDemoChat = ({ onClose }: TierDemoChatProps) => {
   const [isLoading, setIsLoading] = useState(false);
   const [progress, setProgress] = useState(0);
   const [demoReady, setDemoReady] = useState(false);
-  const navigate = useNavigate();
 
   const extractHTML = (text: string): string | null => {
     const codeBlockMatch = text.match(/```(?:html)?\s*([\s\S]*?)```/);
@@ -30,8 +28,8 @@ export const TierDemoChat = ({ onClose }: TierDemoChatProps) => {
   };
 
   const openPreview = useCallback(() => {
-    navigate("/demo-preview");
-  }, [navigate]);
+    window.location.href = "/demo-preview";
+  }, []);
 
   const send = async () => {
     if (!input.trim() || isLoading) return;

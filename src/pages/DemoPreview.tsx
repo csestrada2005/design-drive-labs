@@ -22,7 +22,7 @@ const DemoPreview = () => {
           No demo available. It may have expired.
         </p>
         <button
-          onClick={() => navigate("/")}
+          onClick={() => { sessionStorage.removeItem(DEMO_STORAGE_KEY); window.location.href = "/#services"; }}
           className="flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-mono tracking-wider uppercase border border-primary/20 text-primary hover:bg-primary/10 transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
@@ -46,7 +46,7 @@ const DemoPreview = () => {
           </span>
         </div>
         <button
-          onClick={() => navigate("/")}
+          onClick={() => { sessionStorage.removeItem(DEMO_STORAGE_KEY); window.location.href = "/#services"; }}
           className="flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-mono tracking-wider uppercase border border-primary/20 text-primary hover:bg-primary/10 transition-colors"
         >
           <ArrowLeft className="w-3.5 h-3.5" />
