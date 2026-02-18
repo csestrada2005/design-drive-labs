@@ -1,166 +1,543 @@
-import { useRef, useEffect } from "react";
-import { motion, useInView } from "framer-motion";
-import { Route, Cpu, Zap, Shield } from "lucide-react";
-import { SystemBlueprint } from "./SystemBlueprint";
+/**
+ * FeaturedWork — "Selected Work" interactive gallery
+ *
+ * 5 projects, each opens a stacked-cards image viewer.
+ * Japanese-tech minimal: no hard boxes, high contrast, premium motion.
+ */
+
+import { useRef, useState, useCallback, useEffect } from "react";
+import { motion, AnimatePresence, useInView, useDragControls } from "framer-motion";
+import { X, ArrowUpRight } from "lucide-react";
 import { useScrollPaint } from "@/hooks/useScrollPaint";
 
-/* ── Binary Rain Animation ── */
-const BinaryRain = () => {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const frameRef = useRef(0);
-  const columnsRef = useRef<{ chars: string[]; y: number; speed: number }[]>([]);
+// ── Real assets ──────────────────────────────────────────────────────────────
+import papachoaImg from "@/assets/dome-papachoa.jpg";
+import pawnshopImg from "@/assets/dome-pawnshop.jpg";
+import jewelryImg from "@/assets/dome-jewelry.jpg";
+import rawpawImg from "@/assets/dome-rawpaw.jpg";
 
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
-    const rect = canvas.getBoundingClientRect();
-    const dpr = window.devicePixelRatio || 1;
-    canvas.width = rect.width * dpr;
-    canvas.height = rect.height * dpr;
-    ctx.scale(dpr, dpr);
-    const colCount = Math.floor(rect.width / 14);
-    if (columnsRef.current.length === 0) {
-      columnsRef.current = Array.from({ length: colCount }, () => ({
-        chars: Array.from({ length: 8 }, () => Math.random() > 0.5 ? "1" : "0"),
-        y: Math.random() * -rect.height,
-        speed: 0.3 + Math.random() * 0.8,
-      }));
-    }
-    const animate = () => {
-      ctx.clearRect(0, 0, rect.width, rect.height);
-      ctx.font = "10px monospace";
-      columnsRef.current.forEach((col, ci) => {
-        col.y += col.speed;
-        if (col.y > rect.height + 100) {
-          col.y = -80;
-          col.chars = col.chars.map(() => Math.random() > 0.5 ? "1" : "0");
-        }
-        col.chars.forEach((ch, ri) => {
-          const x = ci * 14;
-          const y = col.y + ri * 12;
-          const opacity = Math.max(0, 1 - ri / col.chars.length) * 0.3;
-          ctx.fillStyle = ri === 0 ? `hsla(0, 100%, 50%, ${opacity})` : `hsla(0, 80%, 40%, ${opacity * 0.6})`;
-          ctx.fillText(ch, x, y);
-        });
-      });
-      frameRef.current = requestAnimationFrame(animate);
-    };
-    animate();
-    return () => cancelAnimationFrame(frameRef.current);
-  }, []);
+// ── Placeholder generator (returns a gradient data URL for missing images) ──
+const placeholder = (hue: number, label: string) =>
+  `data:image/svg+xml,${encodeURIComponent(`
+    <svg xmlns="http://www.w3.org/2000/svg" width="800" height="560">
+      <defs>
+        <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="hsl(${hue},12%,88%)"/>
+          <stop offset="100%" stop-color="hsl(${hue},8%,78%)"/>
+        </linearGradient>
+      </defs>
+      <rect width="800" height="560" fill="url(#g)"/>
+      <text x="400" y="290" font-family="sans-serif" font-size="18" fill="hsl(${hue},8%,40%)" text-anchor="middle" dominant-baseline="middle" letter-spacing="4">${label}</text>
+    </svg>
+  `)}`;
 
-  return (
-    <div className="relative w-full h-full overflow-hidden">
-      <canvas ref={canvasRef} className="absolute inset-0 w-full h-full" />
-      <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-        <motion.div className="flex items-center gap-3" animate={{ opacity: [0.6, 1, 0.6] }} transition={{ duration: 3, repeat: Infinity }}>
-          <svg viewBox="0 0 40 48" className="w-8 h-10" style={{ color: "hsl(0 100% 50%)" }}>
-            <path d="M6 2h20l8 10v34H6V2z" fill="none" stroke="currentColor" strokeWidth="1" />
-            <path d="M26 2v10h8" fill="none" stroke="currentColor" strokeWidth="0.8" />
-            {[16, 22, 28, 34].map(y => (
-              <line key={y} x1="12" y1={y} x2={28 - (y % 8)} y2={y} stroke="currentColor" strokeWidth="0.5" opacity="0.4" />
-            ))}
-          </svg>
-          <motion.span className="text-[10px] font-mono text-muted-foreground/60" animate={{ opacity: [0.6, 1, 0.6] }} transition={{ duration: 2, repeat: Infinity }}>
-            → 0x7F...
-          </motion.span>
-        </motion.div>
-      </div>
-    </div>
-  );
-};
-
-const PrivacyBadge = () => (
-  <div className="flex items-center gap-1.5 mt-4">
-    <Shield className="w-3 h-3 text-muted-foreground/60" />
-    <span className="text-[8px] font-mono tracking-[0.15em] uppercase text-muted-foreground/60">Proprietary Architecture / Confidential Client</span>
-  </div>
-);
-
-const systemCards = [
-  { id: "logistics", icon: Route, title: "Autonomous Logistics CRM", subtitle: "", stat: "Automated 90% of driver dispatching.", heroType: "blueprint" as const },
-  { id: "rag", icon: Cpu, title: "SaaS Powered with AI", subtitle: "", stat: "Smart automation that scales with your business growth.", heroType: "binary" as const },
-  { id: "ecom", icon: Zap, title: "Headless Commerce Core", subtitle: "", stat: "+15% average order value through smart product recommendations.", heroType: "stats" as const },
+// ── Project data ─────────────────────────────────────────────────────────────
+const PROJECTS = [
+  {
+    id: "papachoa",
+    title: "Papachoa",
+    descriptor: "High-trust brand website",
+    tags: ["Website", "Landing"],
+    index: "01",
+    images: [
+      papachoaImg,
+      placeholder(20, "PAPACHOA · 02"),
+      placeholder(20, "PAPACHOA · 03"),
+      placeholder(20, "PAPACHOA · 04"),
+      placeholder(20, "PAPACHOA · 05"),
+    ],
+  },
+  {
+    id: "pawnshop",
+    title: "Pawn Shop",
+    descriptor: "Conversion-focused e-commerce",
+    tags: ["E-commerce", "Website"],
+    index: "02",
+    images: [
+      pawnshopImg,
+      placeholder(30, "PAWN SHOP · 02"),
+      placeholder(30, "PAWN SHOP · 03"),
+      placeholder(30, "PAWN SHOP · 04"),
+      placeholder(30, "PAWN SHOP · 05"),
+    ],
+  },
+  {
+    id: "jewelry",
+    title: "Jewelry Catalog",
+    descriptor: "Luxury product showcase",
+    tags: ["E-commerce", "Landing"],
+    index: "03",
+    images: [
+      jewelryImg,
+      placeholder(40, "JEWELRY · 02"),
+      placeholder(40, "JEWELRY · 03"),
+      placeholder(40, "JEWELRY · 04"),
+      placeholder(40, "JEWELRY · 05"),
+    ],
+  },
+  {
+    id: "rawpaw",
+    title: "Raw Paw",
+    descriptor: "D2C brand storefront",
+    tags: ["Website", "E-commerce"],
+    index: "04",
+    images: [
+      rawpawImg,
+      placeholder(200, "RAW PAW · 02"),
+      placeholder(200, "RAW PAW · 03"),
+      placeholder(200, "RAW PAW · 04"),
+      placeholder(200, "RAW PAW · 05"),
+    ],
+  },
+  {
+    id: "system",
+    title: "Custom System",
+    descriptor: "Internal platform & automation",
+    tags: ["System", "Dashboard"],
+    index: "05",
+    images: [
+      placeholder(0, "SYSTEM · 01"),
+      placeholder(0, "SYSTEM · 02"),
+      placeholder(0, "SYSTEM · 03"),
+      placeholder(0, "SYSTEM · 04"),
+      placeholder(0, "SYSTEM · 05"),
+    ],
+  },
 ];
 
-/* ── Card with black cover reveal ── */
-const RevealCard = ({ children, delay }: { children: React.ReactNode; delay: number }) => {
-  const ref = useRef<HTMLDivElement>(null);
-  const isInView = useInView(ref, { once: true, margin: "-80px" });
+type Project = (typeof PROJECTS)[number];
+
+// ── Stacked Card Viewer ───────────────────────────────────────────────────────
+const StackedViewer = ({
+  project,
+  onClose,
+}: {
+  project: Project;
+  onClose: () => void;
+}) => {
+  const [current, setCurrent] = useState(0);
+  const [direction, setDirection] = useState(1);
+  const dragControls = useDragControls();
+  const total = project.images.length;
+
+  const next = useCallback(() => {
+    setDirection(1);
+    setCurrent((c) => (c + 1) % total);
+  }, [total]);
+
+  const prev = useCallback(() => {
+    setDirection(-1);
+    setCurrent((c) => (c - 1 + total) % total);
+  }, [total]);
+
+  // Keyboard nav
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+      if (e.key === "ArrowRight") next();
+      if (e.key === "ArrowLeft") prev();
+    };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, [onClose, next, prev]);
+
+  // Stack offsets: cards behind current
+  const getStackStyle = (offset: number) => {
+    if (offset === 0) return { scale: 1, y: 0, rotateZ: 0, zIndex: 10, opacity: 1 };
+    if (offset === 1) return { scale: 0.96, y: 10, rotateZ: 0.8, zIndex: 9, opacity: 0.7 };
+    if (offset === 2) return { scale: 0.92, y: 20, rotateZ: 1.6, zIndex: 8, opacity: 0.5 };
+    return { scale: 0.88, y: 28, rotateZ: 2.4, zIndex: 7, opacity: 0.3 };
+  };
 
   return (
-    <div ref={ref} className="relative overflow-hidden">
-      {children}
+    <motion.div
+      className="fixed inset-0 z-[200] flex items-center justify-center"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.3 }}
+    >
+      {/* Backdrop */}
       <motion.div
-        className="absolute inset-0 z-30 pointer-events-none"
-        style={{ background: "hsl(0 0% 5%)" }}
-        initial={{ y: 0 }}
-        animate={isInView ? { y: "100%" } : { y: 0 }}
-        transition={{ duration: 0.8, delay, ease: [0.33, 1, 0.68, 1] }}
+        className="absolute inset-0 cursor-pointer"
+        style={{ background: "hsl(0 0% 4% / 0.92)", backdropFilter: "blur(4px)" }}
+        onClick={onClose}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
       />
-    </div>
-  );
-};
 
-export const FeaturedWork = () => {
-  const ref = useRef<HTMLElement>(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
-  const headerPaint = useScrollPaint({ xDrift: 20 });
+      {/* Glass ghost sweep on open */}
+      <motion.div
+        className="absolute inset-0 pointer-events-none"
+        initial={{ x: "-100%" }}
+        animate={{ x: "110%" }}
+        transition={{ duration: 0.5, ease: [0.25, 1, 0.5, 1], delay: 0.05 }}
+        style={{
+          width: "35%",
+          background:
+            "linear-gradient(105deg, transparent, hsl(0 0% 100% / 0.07) 50%, transparent)",
+        }}
+      />
 
-  return (
-    <section ref={ref} className="py-24 sm:py-32 relative overflow-hidden" id="work">
-      <div className="container relative">
-        <motion.div ref={headerPaint.ref} style={headerPaint.style} className="mb-16">
-          <h2 className="font-display text-3xl sm:text-5xl md:text-6xl lg:text-7xl">
-            ALL <span className="text-primary">POSSIBILITIES</span>
-          </h2>
-          <p className="text-muted-foreground text-sm max-w-lg mt-4 leading-relaxed">
-            Production-grade systems engineered for scale. No templates. No shortcuts — just results.
-          </p>
-        </motion.div>
+      {/* Viewer container */}
+      <div className="relative z-10 w-full max-w-3xl px-4 sm:px-8">
+        {/* Header */}
+        <div className="flex items-center justify-between mb-6 sm:mb-8">
+          <div>
+            <p className="text-[9px] font-mono tracking-[0.3em] uppercase text-white/40 mb-1">
+              {project.index} / Selected Work
+            </p>
+            <h3 className="font-display text-xl sm:text-2xl text-white tracking-tight">
+              {project.title}
+            </h3>
+          </div>
 
-        <div className="grid md:grid-cols-3 gap-8 lg:gap-10">
-          {systemCards.map((card, i) => {
-            const Icon = card.icon;
+          <div className="flex items-center gap-4">
+            {/* Progress */}
+            <div className="flex items-center gap-1.5">
+              {Array.from({ length: total }).map((_, i) => (
+                <button
+                  key={i}
+                  onClick={() => { setDirection(i > current ? 1 : -1); setCurrent(i); }}
+                  className="transition-all duration-300"
+                  style={{
+                    width: i === current ? 20 : 6,
+                    height: 2,
+                    borderRadius: 1,
+                    background: i === current ? "hsl(0 100% 50%)" : "hsl(0 0% 100% / 0.25)",
+                  }}
+                />
+              ))}
+            </div>
+
+            {/* Counter */}
+            <span className="text-[10px] font-mono text-white/40">
+              {current + 1}/{total}
+            </span>
+
+            {/* Close */}
+            <button
+              onClick={onClose}
+              className="w-8 h-8 flex items-center justify-center rounded-sm transition-colors"
+              style={{ background: "hsl(0 0% 100% / 0.06)" }}
+            >
+              <X className="w-3.5 h-3.5 text-white/70" />
+            </button>
+          </div>
+        </div>
+
+        {/* Card Stack */}
+        <div
+          className="relative"
+          style={{ height: "min(56vw, 460px)", perspective: 1000 }}
+        >
+          {/* Render back cards (behind current) */}
+          {[3, 2, 1].map((offset) => {
+            const idx = (current + offset) % total;
+            const style = getStackStyle(offset);
             return (
-              <motion.div key={card.id} initial={{ opacity: 0, y: 50 }} animate={isInView ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.6, delay: i * 0.15 }} className="group relative">
-                <RevealCard delay={i * 0.15}>
-                  <div className="p-5">
-                    {/* Hero area */}
-                    <div className="relative aspect-[4/3] overflow-hidden mb-5">
-                      {card.heroType === "blueprint" && <div className="absolute inset-3"><SystemBlueprint compact /></div>}
-                      {card.heroType === "binary" && <div className="absolute inset-0"><BinaryRain /></div>}
-                      {card.heroType === "stats" && (
-                        <div className="absolute inset-0 flex items-center justify-center">
-                          <motion.div className="text-center" animate={{ opacity: [0.8, 1, 0.8] }} transition={{ duration: 3, repeat: Infinity }}>
-                            <span className="font-display text-5xl sm:text-6xl font-bold text-primary">+15%</span>
-                            <p className="text-[10px] font-mono tracking-[0.2em] uppercase text-muted-foreground/70 mt-2">AOV Increase</p>
-                          </motion.div>
-                        </div>
-                      )}
-                    </div>
-                    <div className="flex items-start gap-3 mb-2">
-                      <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5" style={{ background: "hsl(0 100% 50% / 0.08)", border: "1px solid hsl(0 100% 50% / 0.12)" }}>
-                        <Icon className="w-4 h-4 text-primary" />
-                      </div>
-                      <div>
-                        <h3 className="font-display text-sm sm:text-base text-foreground group-hover:text-primary transition-colors duration-300">{card.title}</h3>
-                        {card.subtitle && <p className="text-[10px] font-mono tracking-wider uppercase text-muted-foreground/70">{card.subtitle}</p>}
-                      </div>
-                    </div>
-                    <div className="ml-11">
-                      <motion.div className="h-px mb-3" style={{ background: "linear-gradient(90deg, hsl(0 100% 50% / 0.2), transparent)", transformOrigin: "left" }} animate={{ scaleX: isInView ? 1 : 0 }} transition={{ delay: 0.4 + i * 0.15, duration: 0.8 }} />
-                      <p className="text-xs text-muted-foreground/80 leading-relaxed">{card.stat}</p>
-                    </div>
-                  </div>
-                </RevealCard>
+              <motion.div
+                key={`back-${offset}`}
+                className="absolute inset-0 rounded-sm overflow-hidden"
+                animate={style}
+                transition={{ duration: 0.5, ease: [0.25, 1, 0.5, 1] }}
+                style={{ originY: 1 }}
+              >
+                <img
+                  src={project.images[idx]}
+                  alt=""
+                  className="w-full h-full object-cover"
+                  draggable={false}
+                />
+                <div className="absolute inset-0" style={{ background: "hsl(0 0% 0% / 0.25)" }} />
               </motion.div>
             );
           })}
+
+          {/* Top card — animated in/out */}
+          <AnimatePresence mode="popLayout" custom={direction}>
+            <motion.div
+              key={current}
+              custom={direction}
+              className="absolute inset-0 rounded-sm overflow-hidden cursor-grab active:cursor-grabbing"
+              style={{ zIndex: 10, originY: 1 }}
+              initial={{ x: direction > 0 ? "100%" : "-100%", opacity: 0 }}
+              animate={{ x: 0, opacity: 1, scale: 1, y: 0, rotateZ: 0 }}
+              exit={{ x: direction > 0 ? "-110%" : "110%", opacity: 0, scale: 0.94 }}
+              transition={{ duration: 0.45, ease: [0.25, 1, 0.5, 1] }}
+              drag="x"
+              dragConstraints={{ left: 0, right: 0 }}
+              dragElastic={0.2}
+              onDragEnd={(_, info) => {
+                if (info.offset.x < -60) next();
+                else if (info.offset.x > 60) prev();
+              }}
+              onClick={next}
+            >
+              <img
+                src={project.images[current]}
+                alt={`${project.title} — ${current + 1}`}
+                className="w-full h-full object-cover"
+                draggable={false}
+              />
+              {/* Subtle glass top edge */}
+              <div
+                className="absolute top-0 left-0 right-0 h-16 pointer-events-none"
+                style={{ background: "linear-gradient(to bottom, hsl(0 0% 100% / 0.04), transparent)" }}
+              />
+              {/* Tap hint */}
+              {current === 0 && (
+                <motion.div
+                  className="absolute bottom-4 right-4 flex items-center gap-1.5 px-3 py-1.5 rounded-sm"
+                  style={{ background: "hsl(0 0% 0% / 0.5)", backdropFilter: "blur(8px)" }}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ delay: 0.6 }}
+                >
+                  <span className="text-[9px] font-mono tracking-widest text-white/60 uppercase">
+                    tap or drag
+                  </span>
+                </motion.div>
+              )}
+            </motion.div>
+          </AnimatePresence>
+        </div>
+
+        {/* Nav arrows */}
+        <div className="flex items-center justify-between mt-6">
+          <button
+            onClick={prev}
+            className="text-[10px] font-mono tracking-[0.2em] uppercase text-white/40 hover:text-white transition-colors"
+          >
+            ← Prev
+          </button>
+          <p className="text-[10px] font-mono text-white/30 tracking-wider">
+            {project.descriptor}
+          </p>
+          <button
+            onClick={next}
+            className="text-[10px] font-mono tracking-[0.2em] uppercase text-white/40 hover:text-white transition-colors"
+          >
+            Next →
+          </button>
         </div>
       </div>
-    </section>
+    </motion.div>
+  );
+};
+
+// ── Project Row ───────────────────────────────────────────────────────────────
+const ProjectRow = ({
+  project,
+  onOpen,
+  index,
+}: {
+  project: Project;
+  onOpen: () => void;
+  index: number;
+}) => {
+  const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref, { once: true, margin: "-60px" });
+  const [hovered, setHovered] = useState(false);
+
+  return (
+    <motion.div
+      ref={ref}
+      className="group relative"
+      initial={{ opacity: 0, y: 24 }}
+      animate={isInView ? { opacity: 1, y: 0 } : {}}
+      transition={{ duration: 0.55, delay: index * 0.08, ease: [0.25, 1, 0.5, 1] }}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+    >
+      <button
+        onClick={onOpen}
+        className="w-full text-left"
+        aria-label={`View ${project.title}`}
+      >
+        <div
+          className="flex items-center gap-6 sm:gap-10 py-6 sm:py-8 transition-all duration-300"
+          style={{
+            borderBottom: "1px solid hsl(0 0% 0% / 0.08)",
+          }}
+        >
+          {/* Index */}
+          <motion.span
+            className="font-mono text-[10px] tracking-[0.25em] flex-shrink-0 w-7 hidden sm:block"
+            animate={{ color: hovered ? "hsl(0 100% 50%)" : "hsl(0 0% 0% / 0.25)" }}
+            transition={{ duration: 0.2 }}
+          >
+            {project.index}
+          </motion.span>
+
+          {/* Preview thumbnail */}
+          <motion.div
+            className="relative flex-shrink-0 overflow-hidden rounded-sm"
+            animate={{
+              width: hovered ? 80 : 52,
+              height: hovered ? 56 : 36,
+            }}
+            transition={{ duration: 0.4, ease: [0.25, 1, 0.5, 1] }}
+          >
+            <img
+              src={project.images[0]}
+              alt=""
+              className="w-full h-full object-cover"
+            />
+            <div
+              className="absolute inset-0 transition-opacity duration-300"
+              style={{ background: "hsl(0 0% 0% / 0.15)", opacity: hovered ? 0 : 1 }}
+            />
+          </motion.div>
+
+          {/* Title + descriptor */}
+          <div className="flex-1 min-w-0">
+            <motion.h3
+              className="font-display text-2xl sm:text-3xl md:text-4xl leading-none mb-1.5"
+              animate={{ color: hovered ? "hsl(0 0% 0%)" : "hsl(0 0% 0% / 0.85)" }}
+              transition={{ duration: 0.2 }}
+            >
+              {project.title}
+            </motion.h3>
+            <p className="text-xs text-muted-foreground hidden sm:block">
+              {project.descriptor}
+            </p>
+          </div>
+
+          {/* Tags */}
+          <div className="hidden md:flex items-center gap-1.5 flex-shrink-0">
+            {project.tags.map((tag) => (
+              <span
+                key={tag}
+                className="px-2 py-0.5 text-[8px] font-mono tracking-[0.18em] uppercase"
+                style={{
+                  background: "hsl(0 0% 0% / 0.05)",
+                  color: "hsl(0 0% 0% / 0.45)",
+                }}
+              >
+                {tag}
+              </span>
+            ))}
+          </div>
+
+          {/* View arrow */}
+          <motion.div
+            className="flex-shrink-0 flex items-center gap-1.5"
+            animate={{ x: hovered ? 0 : 4, opacity: hovered ? 1 : 0.4 }}
+            transition={{ duration: 0.25 }}
+          >
+            <span className="text-[9px] font-mono tracking-[0.2em] uppercase hidden sm:block">
+              View
+            </span>
+            <motion.div
+              animate={{ rotate: hovered ? 0 : -10 }}
+              transition={{ duration: 0.25 }}
+            >
+              <ArrowUpRight className="w-4 h-4" style={{ color: hovered ? "hsl(0 100% 50%)" : "currentColor" }} />
+            </motion.div>
+          </motion.div>
+        </div>
+
+        {/* Hover bottom bar */}
+        <div
+          className="absolute bottom-0 left-0 h-px w-full"
+          style={{
+            background: "hsl(0 100% 50%)",
+            transformOrigin: "left",
+            transform: hovered ? "scaleX(1)" : "scaleX(0)",
+            transition: "transform 0.35s cubic-bezier(0.25, 1, 0.5, 1)",
+          }}
+        />
+      </button>
+    </motion.div>
+  );
+};
+
+// ── Main Export ───────────────────────────────────────────────────────────────
+export const FeaturedWork = () => {
+  const ref = useRef<HTMLElement>(null);
+  const isInView = useInView(ref, { once: true, margin: "-100px" });
+  const headerPaint = useScrollPaint({ xDrift: 16 });
+  const [activeProject, setActiveProject] = useState<Project | null>(null);
+
+  // Lock scroll when viewer is open
+  useEffect(() => {
+    if (activeProject) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => { document.body.style.overflow = ""; };
+  }, [activeProject]);
+
+  return (
+    <>
+      <section ref={ref} className="py-24 sm:py-32 relative overflow-hidden" id="work">
+        <div className="container relative z-10">
+
+          {/* Header */}
+          <motion.div
+            ref={headerPaint.ref}
+            style={headerPaint.style}
+            className="mb-14 sm:mb-20"
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+          >
+            <p className="text-[9px] font-mono tracking-[0.35em] uppercase text-primary mb-4">
+              Selected Work
+            </p>
+            <h2 className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl mb-4 text-foreground">
+              WORK THAT <span className="text-primary">PERFORMS</span>
+            </h2>
+            <p className="text-muted-foreground text-sm max-w-md leading-relaxed">
+              Interactive demos. Real outcomes.
+            </p>
+          </motion.div>
+
+          {/* Project list */}
+          <div>
+            {PROJECTS.map((project, i) => (
+              <ProjectRow
+                key={project.id}
+                project={project}
+                index={i}
+                onOpen={() => setActiveProject(project)}
+              />
+            ))}
+          </div>
+
+          {/* CTA */}
+          <motion.div
+            className="mt-16 sm:mt-20"
+            initial={{ opacity: 0, y: 16 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.6, delay: 0.5 }}
+          >
+            <p className="text-sm text-muted-foreground">
+              Want yours next?{" "}
+              <a
+                href="#contact"
+                className="font-display text-foreground hover:text-primary transition-colors duration-200 underline underline-offset-4"
+              >
+                Let's talk.
+              </a>
+            </p>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Viewer overlay */}
+      <AnimatePresence>
+        {activeProject && (
+          <StackedViewer
+            key={activeProject.id}
+            project={activeProject}
+            onClose={() => setActiveProject(null)}
+          />
+        )}
+      </AnimatePresence>
+    </>
   );
 };
