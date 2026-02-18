@@ -1,37 +1,90 @@
 
 
-# Fix Persistent Image Caching Issue
+## Remove Hero Transition and Add Scroll-Driven "Canvas Painting" Experience
 
-## Root Cause
-Both background images (`owl-bg.png` and `hero-logo.jpeg`) are stored in the `public/` folder and referenced via static URL paths. When these files are replaced (same filename, new content), the browser cache continues serving the **old** versions. This is why you keep seeing the old owl/phoenix drawing instead of the marble texture and updated logo.
+### Overview
+Three major changes: strip the hero transition, make all page elements scroll-paint into view and vanish on exit, and convert Design Lab demos to auto-trigger on scroll without any user interaction.
 
-## Solution
-Move the images from `public/images/` to `src/assets/` and import them as JavaScript modules. Vite automatically adds a unique content hash to each filename during builds (e.g., `owl-bg-a3f2c1.png`), which forces the browser to download the new version whenever the file changes. This eliminates caching issues permanently.
+---
 
-## Technical Details
+### 1. Hero Section -- Remove Transition
 
-### Files to modify
+**File:** `src/components/motion/HeroSection.tsx`
 
-1. **Move assets**
-   - `public/images/owl-bg.png` -> `src/assets/owl-bg.png`
-   - `public/images/hero-logo.jpeg` -> `src/assets/hero-logo.jpeg`
+- Delete the entire `LaserTransition` component
+- Remove all scroll-lock logic (`document.body.style.overflow = "hidden"`, wheel/touch/key listeners)
+- Remove `hasTransitioned`, `showLaser`, `isTransitioning` state
+- Keep it as a simple full-viewport section with the logo background and no scroll hint
+- The hero itself will use the new scroll-driven vanish behavior (fades/scales out as user scrolls past)
 
-2. **`src/index.css`** -- Remove the `background-image` line from the `body` rule (CSS cannot use ES module imports)
+---
 
-3. **`src/App.tsx`** (or a new layout wrapper) -- Import `owl-bg.png` and apply it as an inline style on a wrapper `div`, so the marble texture background works site-wide:
-   ```
-   import owlBg from "@/assets/owl-bg.png";
-   // Apply via style={{ backgroundImage: `url(${owlBg})` }}
-   ```
+### 2. Scroll-Driven "Canvas Painting" System
 
-4. **`src/components/motion/HeroSection.tsx`** -- Import `hero-logo.jpeg` and use it in the inline style instead of the static string path:
-   ```
-   import heroLogo from "@/assets/hero-logo.jpeg";
-   // Use: backgroundImage: `url(${heroLogo})`
-   ```
+**New hook:** `src/hooks/useScrollPaint.ts`
 
-### Why this works
-- Vite processes imported assets and appends a content hash to the filename
-- Any time the file content changes, the hash changes, and the browser fetches the new version
-- No more stale cached images after updates
+A reusable hook that uses `framer-motion`'s `useScroll` and `useTransform` to:
+- **Paint in**: Elements fade from 0 to 1 opacity and translate from a random offset to their final position as they enter the viewport
+- **Vanish out**: Elements fade back to 0 and drift away as they scroll out of view
+- Returns `style` object with `opacity`, `y`, `x`, and `scale` motion values
+
+**Applied to all major sections** via wrapper or direct usage:
+- Each text block, heading, and content element gets scroll-driven entrance/exit
+- Text elements will have a subtle horizontal "walk" (small x translation that resolves to 0 at center of viewport)
+- Elements vanish (opacity to 0, slight y drift) as they leave the viewport top
+
+**File changes:**
+- `ServicesSection.tsx` -- wrap tier cards and headings with scroll-paint transforms
+- `ProcessSection.tsx`, `GrowthImpact.tsx`, `FeaturedWork.tsx`, `BigCTA.tsx`, `ContactSection.tsx`, `DramaticFooter.tsx` -- apply same pattern to headings and content blocks
+- `ScrollRevealText.tsx` -- already scroll-driven, add vanish-on-exit behavior
+- `StatsStrip.tsx`, `MarqueeTicker.tsx` -- apply paint-in/vanish if they render content
+
+---
+
+### 3. Design Lab -- Auto-Trigger on Scroll (No Click/Hover)
+
+**File:** `src/components/motion/DesignLab.tsx`
+
+Each demo component will be modified to auto-activate when scrolled into view using `useInView`:
+
+- **ElectroText**: Instead of `onMouseEnter`/`onMouseLeave`, use `useInView` to cycle through `activeIdx` automatically (sequentially lighting up each letter)
+- **GlassPopup**: Auto-open the modal when in view, no button click needed; hide button entirely or make it decorative
+- **CursorTrail**: Convert to an auto-animated particle system that runs when in view (no mouse dependency)
+- **TiltObject**: Auto-animate the tilt values in a gentle loop when in view
+- **ArchitectureDemo** (`ArchitectureDemo.tsx`): Auto-flip between laptop and code view on a timer when in view, removing click requirement
+- **ScrollMorphShapes**: Already scroll-driven, no changes needed
+- **RevealWipe**: Already scroll-driven, no changes needed
+
+All `cursor-pointer` classes and click/hover handlers will be removed from these demos. Elements become non-interactive visual showcases.
+
+---
+
+### Technical Details
+
+**useScrollPaint hook signature:**
+```typescript
+useScrollPaint(ref, options?: { 
+  offsetIn?: string,   // e.g. "start 0.9"
+  offsetOut?: string,  // e.g. "end 0.1"  
+  xDrift?: number,     // horizontal walk distance
+  yDrift?: number      // vertical drift distance
+})
+// Returns: { opacity, x, y, scale } as MotionValues
+```
+
+**Files to create:**
+- `src/hooks/useScrollPaint.ts`
+
+**Files to modify:**
+- `src/components/motion/HeroSection.tsx` (strip transition, add scroll-vanish)
+- `src/components/motion/DesignLab.tsx` (auto-trigger all demos)
+- `src/components/motion/ArchitectureDemo.tsx` (auto-flip on timer)
+- `src/components/motion/ServicesSection.tsx` (scroll-paint elements)
+- `src/components/motion/ScrollRevealText.tsx` (add vanish on exit)
+- `src/components/motion/ProcessSection.tsx` (scroll-paint)
+- `src/components/motion/GrowthImpact.tsx` (scroll-paint)
+- `src/components/motion/FeaturedWork.tsx` (scroll-paint)
+- `src/components/motion/BigCTA.tsx` (scroll-paint)
+- `src/components/motion/ContactSection.tsx` (scroll-paint)
+- `src/components/motion/DramaticFooter.tsx` (scroll-paint)
 
