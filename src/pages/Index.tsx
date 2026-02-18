@@ -1,4 +1,5 @@
 import { useState, useCallback, useRef } from "react";
+import { AnimatePresence } from "framer-motion";
 import { LoadingScreen } from "@/components/motion/LoadingScreen";
 import { HeroSection } from "@/components/motion/HeroSection";
 import { MarqueeTicker } from "@/components/motion/MarqueeTicker";
@@ -28,7 +29,9 @@ const Index = () => {
 
   return (
     <div className="min-h-screen text-foreground">
-      {!isLoaded && <LoadingScreen onComplete={handleLoadComplete} />}
+      <AnimatePresence>
+        {!isLoaded && <LoadingScreen onComplete={handleLoadComplete} />}
+      </AnimatePresence>
 
       {isLoaded && (
         <>
