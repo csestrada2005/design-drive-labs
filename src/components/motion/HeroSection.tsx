@@ -9,6 +9,8 @@ const LaserTransition = ({ onDone }: { onDone: () => void }) => {
 
   return (
     <motion.div className="fixed inset-0 z-[150] pointer-events-none" exit={{ opacity: 0 }} transition={{ duration: 0.3 }}>
+      {/* Solid background so hero doesn't peek through */}
+      <div className="absolute inset-0 bg-background" />
       {/* Red laser line sweeping bottom to top */}
       <motion.div
         className="absolute left-0 right-0 h-[3px]"
@@ -38,13 +40,17 @@ export const HeroSection = () => {
   const isTransitioning = useRef(false);
 
   const handleLaserDone = useCallback(() => {
-    setShowLaser(false);
-    setHasTransitioned(true);
-    document.body.style.overflow = "";
+    // First scroll instantly while overlay still covers
     const hero = document.getElementById("hero");
     if (hero) {
       window.scrollTo({ top: hero.offsetHeight, behavior: "instant" as ScrollBehavior });
     }
+    // Then remove laser and unlock scroll
+    requestAnimationFrame(() => {
+      setShowLaser(false);
+      setHasTransitioned(true);
+      document.body.style.overflow = "";
+    });
   }, []);
 
   useEffect(() => {
