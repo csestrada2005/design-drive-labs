@@ -131,7 +131,7 @@ export const ServicesSection = () => {
                   className="relative overflow-hidden border h-full transition-all duration-500"
                   style={{
                     background: "transparent",
-                    borderColor: isHovered ? `${tier.accentColor}40` : "hsl(0 0% 100% / 0.08)",
+                    borderColor: isHovered ? `${tier.accentColor}60` : "hsl(0 100% 50% / 0.25)",
                     borderRadius: "1.25rem",
                     boxShadow: isHovered
                       ? `0 0 40px ${tier.accentGlow}`
