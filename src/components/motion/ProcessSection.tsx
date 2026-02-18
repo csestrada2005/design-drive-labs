@@ -74,7 +74,7 @@ const StepRow = ({
         {/* Number */}
         <motion.span
           className="font-mono text-[11px] tracking-[0.25em] flex-shrink-0 w-8 pt-1 transition-colors duration-300"
-          animate={{ color: hovered ? "hsl(0 100% 50%)" : "hsl(0 0% 100% / 0.25)" }}
+          animate={{ color: hovered ? "hsl(0 100% 50%)" : "hsl(var(--foreground) / 0.3)" }}
         >
           {step.number}
         </motion.span>
@@ -84,7 +84,7 @@ const StepRow = ({
           <div className="flex items-start justify-between gap-4">
             <motion.h3
               className="font-display text-2xl sm:text-3xl md:text-4xl leading-none transition-colors duration-300"
-              animate={{ color: hovered ? "hsl(0 100% 50%)" : "hsl(0 0% 100%)" }}
+              animate={{ color: hovered ? "hsl(0 100% 50%)" : "hsl(var(--foreground))" }}
             >
               {step.title}
             </motion.h3>
