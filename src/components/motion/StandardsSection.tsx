@@ -3,6 +3,7 @@ import { motion, useInView } from "framer-motion";
 import { BlackSandReveal } from "@/components/motion/BlackSandReveal";
 import { KineticType } from "@/components/motion/KineticType";
 import { useGlassParallax } from "@/hooks/useGlassParallax";
+import { MetricsHUD } from "@/components/motion/MetricsHUD";
 
 const standards = [
   {
@@ -45,13 +46,13 @@ export const StandardsSection = () => {
   return (
     <section
       ref={(el) => {
-        // bind both refs
         (ref as React.MutableRefObject<HTMLElement | null>).current = el;
         (sectionRef as React.MutableRefObject<HTMLElement | null>).current = el;
       }}
       className="py-24 sm:py-32 relative overflow-hidden"
       id="standards"
     >
+      <MetricsHUD tags={["SPEED", "SEO"]} sectionId="standards" position="top-right" />
       {/* Glass Depth Parallax — background drift layer */}
       <motion.div
         aria-hidden

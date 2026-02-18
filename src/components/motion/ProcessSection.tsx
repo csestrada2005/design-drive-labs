@@ -2,6 +2,7 @@ import { useRef, useState } from "react";
 import { motion, useInView, AnimatePresence } from "framer-motion";
 import { KineticType } from "@/components/motion/KineticType";
 import { useGlassParallax } from "@/hooks/useGlassParallax";
+import { MetricsHUD } from "@/components/motion/MetricsHUD";
 
 const steps = [
   {
@@ -136,6 +137,7 @@ export const ProcessSection = () => {
       className="py-24 sm:py-32 relative overflow-hidden"
       id="process"
     >
+      <MetricsHUD tags={["CRO", "AOV"]} sectionId="process" position="top-right" />
       {/* Glass Depth Parallax — background drift */}
       <motion.div
         aria-hidden

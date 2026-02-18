@@ -2,6 +2,7 @@ import { useRef, useState } from "react";
 import { motion, useInView } from "framer-motion";
 import { Store, Cog, Rocket } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
+import { MetricsHUD } from "@/components/motion/MetricsHUD";
 import { useScrollPaint } from "@/hooks/useScrollPaint";
 
 const tiers = [
@@ -132,6 +133,7 @@ export const ServicesSection = () => {
 
   return (
     <section ref={ref} className="py-24 sm:py-32 relative overflow-hidden" id="services">
+      <MetricsHUD tags={["CRO", "SPEED"]} sectionId="services" position="top-right" />
       <HexGrid />
 
       <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
