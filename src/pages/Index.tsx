@@ -1,8 +1,6 @@
-import { useRef, useState, useCallback } from "react";
-import { AnimatePresence } from "framer-motion";
+import { useRef } from "react";
 import { HeroSection } from "@/components/motion/HeroSection";
 import { MarqueeTicker } from "@/components/motion/MarqueeTicker";
-
 import { DesignLab } from "@/components/motion/DesignLab";
 import { ProcessSection } from "@/components/motion/ProcessSection";
 import { GrowthImpact } from "@/components/motion/GrowthImpact";
@@ -15,7 +13,6 @@ import { SoundToggle } from "@/components/motion/SoundToggle";
 import { CustomCursor } from "@/components/motion/CustomCursor";
 import { CornerCrosses } from "@/components/motion/CornerCrosses";
 import { NebuOrb } from "@/components/motion/NebuOrb";
-import { LoadingScreen } from "@/components/motion/LoadingScreen";
 import { SectionSeparator } from "@/components/motion/SectionSeparator";
 import { BuildModes } from "@/components/motion/BuildModes";
 import { StandardsSection } from "@/components/motion/StandardsSection";
@@ -24,47 +21,33 @@ import { HeroTransition } from "@/components/motion/HeroTransition";
 
 const Index = () => {
   const cursorZoneRef = useRef<HTMLDivElement>(null);
-  const [loaded, setLoaded] = useState(false);
-
-  const handleLoadComplete = useCallback(() => setLoaded(true), []);
 
   return (
     <div className="min-h-screen text-foreground">
-      <AnimatePresence mode="wait">
-        {!loaded && <LoadingScreen key="loader" onComplete={handleLoadComplete} />}
-      </AnimatePresence>
-
-      {loaded && (
-        <>
-          <SoundToggle />
-          <CustomCursor containerRef={cursorZoneRef} />
-          <CornerCrosses />
-          <NebuOrb />
-          <SectionNav />
-          <HeroTransition />
-          <main ref={cursorZoneRef}>
-            <HeroSection />
-            <MarqueeTicker />
-
-            <BuildModes />
-
-            
-            <DesignLab />
-            <ProcessSection />
-            <SectionSeparator />
-            <GrowthImpact />
-            <SectionSeparator />
-            <FeaturedWork />
-            <SectionSeparator />
-            <StandardsSection />
-            <SectionSeparator />
-            <BigCTA />
-            <ChoosePathContact />
-            <DramaticFooter />
-          </main>
-          <BottomNav />
-        </>
-      )}
+      <SoundToggle />
+      <CustomCursor containerRef={cursorZoneRef} />
+      <CornerCrosses />
+      <NebuOrb />
+      <SectionNav />
+      <HeroTransition />
+      <main ref={cursorZoneRef}>
+        <HeroSection />
+        <MarqueeTicker />
+        <BuildModes />
+        <DesignLab />
+        <ProcessSection />
+        <SectionSeparator />
+        <GrowthImpact />
+        <SectionSeparator />
+        <FeaturedWork />
+        <SectionSeparator />
+        <StandardsSection />
+        <SectionSeparator />
+        <BigCTA />
+        <ChoosePathContact />
+        <DramaticFooter />
+      </main>
+      <BottomNav />
     </div>
   );
 };
