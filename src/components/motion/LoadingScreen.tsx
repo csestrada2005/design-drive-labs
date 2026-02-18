@@ -117,7 +117,7 @@ export const LoadingScreen = ({ onComplete }: { onComplete: () => void }) => {
   // Progress counter — 1.8s total
   useEffect(() => {
     let raf: number;
-    const duration = 1800;
+    const duration = 1200;
 
     const tick = () => {
       const elapsed = Date.now() - startTime.current;
@@ -219,6 +219,22 @@ export const LoadingScreen = ({ onComplete }: { onComplete: () => void }) => {
 
             {/* ── Hero counter ── */}
             <div className="absolute inset-0 flex flex-col items-center justify-center">
+              {/* Kanji watermark — 始 "begin" */}
+              <div
+                className="absolute inset-0 flex items-center justify-center pointer-events-none select-none"
+                aria-hidden
+                style={{
+                  fontSize: "clamp(6rem, 22vw, 17rem)",
+                  color: "hsl(0 60% 35% / 0.055)",
+                  fontFamily: "'Hiragino Mincho ProN', 'Yu Mincho', 'MS Mincho', serif",
+                  lineHeight: 1,
+                  transform: "scale(1.15) translateY(2%)",
+                  userSelect: "none",
+                }}
+              >
+                始
+              </div>
+
               {/* The big number */}
               <div className="relative select-none">
                 {/* Ink-bleed subtle glow behind digits */}
