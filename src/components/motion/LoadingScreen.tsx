@@ -60,32 +60,69 @@ const AmbientSweep = () => (
   />
 );
 
-// ── The exit transition overlay (glass sweep + ink dissolve) ──────────────────
+// ── Ensō SVG circle drawn with stroke-dashoffset ─────────────────────────────
+const EnsoCircle = () => {
+  const r = 420;
+  const circ = 2 * Math.PI * r;
+  return (
+    <motion.div
+      key="enso-wrap"
+      className="fixed inset-0 z-[302] flex items-center justify-center pointer-events-none"
+      initial={{ opacity: 1 }}
+      animate={{ opacity: [1, 1, 0] }}
+      transition={{ duration: 1.05, times: [0, 0.65, 1], ease: "easeInOut" }}
+    >
+      <svg
+        viewBox="0 0 1000 1000"
+        className="absolute w-[min(200vw,200vh)] h-[min(200vw,200vh)]"
+        style={{ overflow: "visible" }}
+      >
+        {/* Ink stroke circle — draws itself */}
+        <motion.circle
+          cx={500}
+          cy={500}
+          r={r}
+          fill="none"
+          stroke="hsl(0 0% 8%)"
+          strokeWidth="38"
+          strokeLinecap="round"
+          strokeDasharray={circ}
+          initial={{ strokeDashoffset: circ, opacity: 0.9 }}
+          animate={{ strokeDashoffset: 0, opacity: [0.9, 0.75, 0.55] }}
+          transition={{ duration: 0.7, ease: [0.4, 0, 0.2, 1] }}
+          style={{ rotate: "-100deg", transformOrigin: "500px 500px" }}
+        />
+        {/* Subtle inner fill that expands to cover screen */}
+        <motion.circle
+          cx={500}
+          cy={500}
+          r={r}
+          fill="hsl(32 18% 91%)"
+          initial={{ r: 0, opacity: 0 }}
+          animate={{ r: [0, r * 0.6, r * 4], opacity: [0, 0.7, 1] }}
+          transition={{ duration: 0.75, delay: 0.3, ease: [0.4, 0, 0.2, 1] }}
+        />
+      </svg>
+    </motion.div>
+  );
+};
+
+// ── The exit transition overlay ───────────────────────────────────────────────
 const ExitOverlay = ({ active }: { active: boolean }) => (
   <AnimatePresence>
     {active && (
       <>
-        {/* Glass sheen sweep */}
-        <motion.div
-          key="sheen"
-          className="fixed inset-0 z-[300] pointer-events-none"
-          initial={{ x: "-100%" }}
-          animate={{ x: "110%" }}
-          transition={{ duration: 0.35, ease: [0.25, 1, 0.5, 1] }}
-          style={{
-            width: "50%",
-            background:
-              "linear-gradient(105deg, transparent, hsl(0 0% 100% / 0.1) 50%, transparent)",
-          }}
-        />
-        {/* Ink dissolve (full paper tone fills in, then fades) */}
+        {/* Ensō ink circle — the hero transition moment */}
+        <EnsoCircle key="enso" />
+
+        {/* Final paper fade-out — reveals homepage underneath */}
         <motion.div
           key="ink"
-          className="fixed inset-0 z-[299]"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: [0, 0.85, 0] }}
-          transition={{ duration: 0.85, times: [0, 0.35, 1], ease: "easeInOut" }}
-          style={{ background: "hsl(32 18% 90%)" }}
+          className="fixed inset-0 z-[301]"
+          initial={{ opacity: 1 }}
+          animate={{ opacity: 0 }}
+          transition={{ duration: 0.55, delay: 0.7, ease: "easeInOut" }}
+          style={{ background: "hsl(32 18% 91%)", pointerEvents: "none" }}
         />
       </>
     )}
