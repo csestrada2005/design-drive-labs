@@ -1,210 +1,221 @@
 import { useRef, useState, useEffect, useCallback } from "react";
-import { motion, useInView, useScroll, useTransform, AnimatePresence, useSpring } from "framer-motion";
+import { motion, useInView, useScroll, AnimatePresence, useSpring } from "framer-motion";
 import { Play, Pause, RotateCcw } from "lucide-react";
+import domePapachoa from "@/assets/dome-papachoa.jpg";
+import domeRawPaw from "@/assets/dome-rawpaw.jpg";
+import domeJewelry from "@/assets/dome-jewelry.jpg";
+import domePawnshop from "@/assets/dome-pawnshop.jpg";
 
-/* ─────────────────────────────────────────────
-   DEMO 1 — TRUE FOCUS (Interactive)
-   Cursor/finger moves a sharp focus window over blurred text
-───────────────────────────────────────────────*/
+/* ─────────────────────────────────────
+   LIQUID GLASS WRAPPER
+   Every demo sits inside this reusable
+   glass container — no hard border.
+───────────────────────────────────────*/
+const GlassCard = ({
+  children,
+  className = "",
+  minH = 200,
+}: {
+  children: React.ReactNode;
+  className?: string;
+  minH?: number;
+}) => (
+  <div
+    className={`relative overflow-hidden rounded-2xl ${className}`}
+    style={{
+      minHeight: minH,
+      /* liquid glass base */
+      background:
+        "linear-gradient(135deg, hsl(0 0% 100% / 0.09) 0%, hsl(0 0% 100% / 0.04) 50%, hsl(0 0% 100% / 0.07) 100%)",
+      backdropFilter: "blur(22px) saturate(1.4)",
+      WebkitBackdropFilter: "blur(22px) saturate(1.4)",
+      /* soft specular rim — no hard border */
+      boxShadow:
+        "inset 0 1px 0 hsl(0 0% 100% / 0.18), inset 0 -1px 0 hsl(0 0% 0% / 0.08), inset 1px 0 0 hsl(0 0% 100% / 0.08), 0 8px 40px hsl(0 0% 0% / 0.22), 0 2px 8px hsl(0 0% 0% / 0.12)",
+    }}
+  >
+    {/* light refraction streak — top-left to bottom-right */}
+    <div
+      aria-hidden="true"
+      className="absolute pointer-events-none"
+      style={{
+        inset: 0,
+        background:
+          "linear-gradient(115deg, hsl(0 0% 100% / 0.13) 0%, transparent 40%, transparent 60%, hsl(0 0% 100% / 0.06) 100%)",
+        borderRadius: "inherit",
+      }}
+    />
+    {children}
+  </div>
+);
+
+/* ─────────────────────────────────────
+   DEMO 1 — TRUE FOCUS
+───────────────────────────────────────*/
 const TrueFocus = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [pos, setPos] = useState({ x: 50, y: 50 });
   const [active, setActive] = useState(false);
 
-  const rawX = useSpring(50, { stiffness: 180, damping: 22 });
-  const rawY = useSpring(50, { stiffness: 180, damping: 22 });
-
   const update = useCallback((cx: number, cy: number) => {
     const rect = containerRef.current?.getBoundingClientRect();
     if (!rect) return;
-    const x = ((cx - rect.left) / rect.width) * 100;
-    const y = ((cy - rect.top) / rect.height) * 100;
-    rawX.set(x);
-    rawY.set(y);
-    setPos({ x, y });
-  }, [rawX, rawY]);
+    setPos({
+      x: ((cx - rect.left) / rect.width) * 100,
+      y: ((cy - rect.top) / rect.height) * 100,
+    });
+  }, []);
 
-  const onMouseMove = (e: React.MouseEvent) => { setActive(true); update(e.clientX, e.clientY); };
-  const onTouchMove = (e: React.TouchEvent) => { e.preventDefault(); setActive(true); update(e.touches[0].clientX, e.touches[0].clientY); };
-
-  const focusR = 80; // px radius
-  const fxPct = pos.x;
-  const fyPct = pos.y;
-
-  const reset = () => { rawX.set(50); rawY.set(50); setPos({ x: 50, y: 50 }); setActive(false); };
+  const focusR = 82;
 
   return (
-    <div
-      ref={containerRef}
-      className="relative flex items-center justify-center min-h-[200px] select-none overflow-hidden rounded-2xl cursor-none"
-      style={{ background: "hsl(0 0% 4%)", touchAction: "none" }}
-      onMouseMove={onMouseMove}
-      onMouseEnter={() => setActive(true)}
-      onMouseLeave={() => setActive(false)}
-      onTouchMove={onTouchMove}
-      onTouchStart={() => setActive(true)}
-      onTouchEnd={() => setActive(false)}
-    >
-      {/* fully blurred text layer */}
-      <p
-        className="font-display text-3xl sm:text-4xl md:text-5xl text-white leading-none text-center pointer-events-none"
-        style={{ filter: "blur(8px)", userSelect: "none" }}
-        aria-hidden="true"
-      >
-        NEBU<br />STUDIO
-      </p>
-
-      {/* sharp reveal window using clip-path mask trick */}
+    <GlassCard>
       <div
-        className="absolute inset-0 flex items-center justify-center pointer-events-none"
-        style={{
-          WebkitMaskImage: active
-            ? `radial-gradient(circle ${focusR}px at ${fxPct}% ${fyPct}%, black 60%, transparent 100%)`
-            : "none",
-          maskImage: active
-            ? `radial-gradient(circle ${focusR}px at ${fxPct}% ${fyPct}%, black 60%, transparent 100%)`
-            : "none",
-        }}
+        ref={containerRef}
+        className="flex items-center justify-center min-h-[200px] select-none cursor-none"
+        style={{ touchAction: "none" }}
+        onMouseMove={(e) => { setActive(true); update(e.clientX, e.clientY); }}
+        onMouseEnter={() => setActive(true)}
+        onMouseLeave={() => setActive(false)}
+        onTouchMove={(e) => { e.preventDefault(); setActive(true); update(e.touches[0].clientX, e.touches[0].clientY); }}
+        onTouchEnd={() => setActive(false)}
       >
-        <p className="font-display text-3xl sm:text-4xl md:text-5xl text-white leading-none text-center" style={{ userSelect: "none" }}>
+        {/* blurred layer */}
+        <p
+          className="font-display text-3xl sm:text-4xl text-foreground leading-none text-center pointer-events-none absolute"
+          style={{ filter: "blur(9px)", userSelect: "none" }}
+          aria-hidden
+        >
           NEBU<br />STUDIO
         </p>
-      </div>
 
-      {/* Corner reticle brackets — follow cursor */}
-      {active && (
-        <motion.div
-          className="absolute pointer-events-none"
+        {/* sharp reveal mask */}
+        <div
+          className="absolute inset-0 flex items-center justify-center pointer-events-none"
           style={{
-            left: `${fxPct}%`,
-            top: `${fyPct}%`,
-            width: focusR * 2,
-            height: focusR * 2,
-            transform: "translate(-50%, -50%)",
+            WebkitMaskImage: active
+              ? `radial-gradient(circle ${focusR}px at ${pos.x}% ${pos.y}%, black 55%, transparent 100%)`
+              : "none",
+            maskImage: active
+              ? `radial-gradient(circle ${focusR}px at ${pos.x}% ${pos.y}%, black 55%, transparent 100%)`
+              : "none",
           }}
-          initial={{ opacity: 0, scale: 0.85 }}
-          animate={{ opacity: 1, scale: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.15 }}
         >
-          {/* TL */}
-          <span className="absolute top-0 left-0 w-4 h-4 border-t border-l border-primary" />
-          {/* TR */}
-          <span className="absolute top-0 right-0 w-4 h-4 border-t border-r border-primary" />
-          {/* BL */}
-          <span className="absolute bottom-0 left-0 w-4 h-4 border-b border-l border-primary" />
-          {/* BR */}
-          <span className="absolute bottom-0 right-0 w-4 h-4 border-b border-r border-primary" />
-        </motion.div>
-      )}
+          <p className="font-display text-3xl sm:text-4xl text-foreground leading-none text-center" style={{ userSelect: "none" }}>
+            NEBU<br />STUDIO
+          </p>
+        </div>
 
-      {/* Hint */}
-      {!active && (
-        <motion.p
-          className="absolute bottom-3 left-0 right-0 text-center text-[10px] font-mono tracking-widest text-white/30"
-          animate={{ opacity: [0.3, 0.7, 0.3] }}
-          transition={{ duration: 2.5, repeat: Infinity }}
-        >
-          MOVE CURSOR TO FOCUS
-        </motion.p>
-      )}
+        {/* reticle brackets */}
+        {active && (
+          <div
+            className="absolute pointer-events-none"
+            style={{ left: `${pos.x}%`, top: `${pos.y}%`, width: focusR * 2, height: focusR * 2, transform: "translate(-50%,-50%)" }}
+          >
+            <span className="absolute top-0 left-0 w-4 h-4 border-t border-l border-primary" />
+            <span className="absolute top-0 right-0 w-4 h-4 border-t border-r border-primary" />
+            <span className="absolute bottom-0 left-0 w-4 h-4 border-b border-l border-primary" />
+            <span className="absolute bottom-0 right-0 w-4 h-4 border-b border-r border-primary" />
+          </div>
+        )}
 
-      {/* Reset */}
-      <button
-        onClick={reset}
-        className="absolute top-3 right-3 text-white/20 hover:text-white/60 transition-colors"
-        aria-label="Reset"
-      >
-        <RotateCcw size={12} />
-      </button>
-    </div>
+        {!active && (
+          <motion.p
+            className="absolute bottom-3 left-0 right-0 text-center text-[10px] font-mono tracking-widest text-foreground/30"
+            animate={{ opacity: [0.3, 0.7, 0.3] }}
+            transition={{ duration: 2.5, repeat: Infinity }}
+          >
+            MOVE CURSOR TO FOCUS
+          </motion.p>
+        )}
+      </div>
+    </GlassCard>
   );
 };
 
-/* ─────────────────────────────────────────────
-   DEMO 2 — GRADUAL BLUR (Auto Demo + Play/Pause)
-───────────────────────────────────────────────*/
+/* ─────────────────────────────────────
+   DEMO 2 — GRADUAL BLUR
+───────────────────────────────────────*/
 const GradualBlur = () => {
   const [playing, setPlaying] = useState(false);
-  const [phase, setPhase] = useState(0); // 0=blurred, 1=sharp, 2=blurring back
+  const [phase, setPhase] = useState(0);
 
   useEffect(() => {
     if (!playing) return;
-    let t1: ReturnType<typeof setTimeout>, t2: ReturnType<typeof setTimeout>, t3: ReturnType<typeof setTimeout>;
     const cycle = () => {
       setPhase(1);
-      t2 = setTimeout(() => setPhase(2), 1400);
-      t3 = setTimeout(() => { setPhase(0); }, 2600);
+      const t2 = setTimeout(() => setPhase(2), 1400);
+      const t3 = setTimeout(() => setPhase(0), 2600);
+      return () => { clearTimeout(t2); clearTimeout(t3); };
     };
-    cycle();
-    const interval = setInterval(cycle, 3200);
-    return () => { clearTimeout(t1); clearTimeout(t2); clearTimeout(t3); clearInterval(interval); };
+    let cleanup = cycle();
+    const iv = setInterval(() => { cleanup(); cleanup = cycle(); }, 3200);
+    return () => { clearInterval(iv); cleanup(); };
   }, [playing]);
 
-  const blurVal = phase === 0 ? 14 : phase === 1 ? 0 : 14;
-  const opacityVal = phase === 0 ? 0.25 : phase === 1 ? 1 : 0.25;
+  const blurVal = phase === 1 ? 0 : 14;
+  const opacityVal = phase === 1 ? 1 : 0.25;
 
   return (
-    <div
-      className="relative flex items-center justify-center min-h-[200px] overflow-hidden rounded-2xl"
-      style={{ background: "hsl(0 0% 5%)" }}
-    >
-      {/* Subtle dot grid */}
+    <GlassCard>
+      {/* dot grid */}
       <div
+        aria-hidden
         className="absolute inset-0 pointer-events-none"
         style={{
-          backgroundImage: "radial-gradient(circle, hsl(0 0% 100% / 0.04) 1px, transparent 1px)",
+          backgroundImage: "radial-gradient(circle, hsl(0 0% 0% / 0.05) 1px, transparent 1px)",
           backgroundSize: "22px 22px",
         }}
       />
-
-      <motion.p
-        className="font-display text-4xl sm:text-5xl md:text-6xl text-white text-center leading-none pointer-events-none"
-        animate={{ filter: `blur(${blurVal}px)`, opacity: opacityVal }}
-        transition={{ duration: 1.1, ease: [0.25, 1, 0.5, 1] }}
-        style={{ userSelect: "none" }}
-      >
-        CLARITY<br />EMERGES
-      </motion.p>
-
-      {/* Play/Pause */}
-      <button
-        onClick={() => { setPlaying(p => !p); if (!playing) setPhase(0); }}
-        className="absolute inset-0 flex items-center justify-center group"
-        aria-label={playing ? "Pause" : "Play"}
-      >
-        <AnimatePresence mode="wait">
-          {!playing && (
-            <motion.div
-              key="play"
-              initial={{ opacity: 0, scale: 0.85 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.85 }}
-              className="w-12 h-12 rounded-full flex items-center justify-center"
-              style={{ background: "hsl(0 0% 100% / 0.08)", backdropFilter: "blur(8px)" }}
-            >
-              <Play size={18} className="text-white ml-0.5" />
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </button>
-
-      {playing && (
-        <button
-          onClick={() => { setPlaying(false); setPhase(0); }}
-          className="absolute top-3 right-3 text-white/30 hover:text-white/70 transition-colors"
-          aria-label="Pause"
+      <div className="relative flex items-center justify-center min-h-[200px]">
+        <motion.p
+          className="font-display text-4xl sm:text-5xl text-foreground text-center leading-none pointer-events-none"
+          animate={{ filter: `blur(${blurVal}px)`, opacity: opacityVal }}
+          transition={{ duration: 1.1, ease: [0.25, 1, 0.5, 1] }}
+          style={{ userSelect: "none" }}
         >
-          <Pause size={12} />
+          CLARITY<br />EMERGES
+        </motion.p>
+
+        {/* play overlay */}
+        <button
+          onClick={() => { setPlaying(p => !p); if (!playing) setPhase(0); }}
+          className="absolute inset-0 flex items-center justify-center"
+          aria-label={playing ? "Pause" : "Play"}
+        >
+          <AnimatePresence mode="wait">
+            {!playing && (
+              <motion.div
+                key="play"
+                initial={{ opacity: 0, scale: 0.85 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.85 }}
+                className="w-12 h-12 rounded-full flex items-center justify-center"
+                style={{ background: "hsl(0 0% 0% / 0.1)", backdropFilter: "blur(8px)" }}
+              >
+                <Play size={18} className="text-foreground ml-0.5" />
+              </motion.div>
+            )}
+          </AnimatePresence>
         </button>
-      )}
-    </div>
+
+        {playing && (
+          <button
+            onClick={() => { setPlaying(false); setPhase(0); }}
+            className="absolute top-3 right-3 text-foreground/30 hover:text-foreground/70 transition-colors"
+            aria-label="Pause"
+          >
+            <Pause size={12} />
+          </button>
+        )}
+      </div>
+    </GlassCard>
   );
 };
 
-/* ─────────────────────────────────────────────
-   DEMO 3 — GHOST CURSOR TRAIL (Interactive)
-───────────────────────────────────────────────*/
+/* ─────────────────────────────────────
+   DEMO 3 — GHOST CURSOR
+───────────────────────────────────────*/
 const GhostCursor = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [trails, setTrails] = useState<{ id: number; x: number; y: number; size: number }[]>([]);
@@ -219,79 +230,80 @@ const GhostCursor = () => {
     const y = cy - rect.top;
     const dx = x - lastPos.current.x;
     const dy = y - lastPos.current.y;
-    const dist = Math.sqrt(dx * dx + dy * dy);
-    if (dist < 8) return;
+    if (Math.sqrt(dx * dx + dy * dy) < 8) return;
     lastPos.current = { x, y };
     const id = ++idRef.current;
-    const size = Math.min(18, 6 + dist * 0.4);
+    const size = Math.min(18, 6 + Math.sqrt(dx * dx + dy * dy) * 0.4);
     setTrails(t => [...t.slice(-18), { id, x, y, size }]);
     setTimeout(() => setTrails(t => t.filter(p => p.id !== id)), 700);
   }, []);
 
-  const onMouseMove = (e: React.MouseEvent) => handleMove(e.clientX, e.clientY);
-  const onTouchMove = (e: React.TouchEvent) => { e.preventDefault(); handleMove(e.touches[0].clientX, e.touches[0].clientY); };
-
-  const reset = () => { setTrails([]); };
-
   return (
-    <div
-      ref={containerRef}
-      className="relative flex items-center justify-center min-h-[200px] overflow-hidden rounded-2xl cursor-none"
-      style={{ background: "hsl(0 0% 4%)", touchAction: "none" }}
-      onMouseMove={onMouseMove}
-      onMouseEnter={() => setIsOver(true)}
-      onMouseLeave={() => { setIsOver(false); }}
-      onTouchMove={onTouchMove}
-    >
-      <p className="font-display text-2xl sm:text-3xl text-white/80 pointer-events-none select-none text-center">
-        DRAW<br />YOUR PATH
-      </p>
+    <GlassCard>
+      <div
+        ref={containerRef}
+        className="relative flex items-center justify-center min-h-[200px] cursor-none"
+        style={{ touchAction: "none" }}
+        onMouseMove={(e) => { setIsOver(true); handleMove(e.clientX, e.clientY); }}
+        onMouseEnter={() => setIsOver(true)}
+        onMouseLeave={() => { setIsOver(false); }}
+        onTouchMove={(e) => { e.preventDefault(); handleMove(e.touches[0].clientX, e.touches[0].clientY); }}
+      >
+        <p className="font-display text-2xl sm:text-3xl text-foreground/80 pointer-events-none select-none text-center">
+          DRAW<br />YOUR PATH
+        </p>
 
-      {trails.map((t, i) => (
-        <motion.div
-          key={t.id}
-          className="absolute rounded-full pointer-events-none"
-          initial={{ opacity: 0.7, scale: 1 }}
-          animate={{ opacity: 0, scale: 0.2 }}
-          transition={{ duration: 0.65, ease: "easeOut" }}
-          style={{
-            left: t.x,
-            top: t.y,
-            width: t.size,
-            height: t.size,
-            translateX: "-50%",
-            translateY: "-50%",
-            background: `hsl(0 100% 50% / ${0.4 + (i / trails.length) * 0.5})`,
-            boxShadow: `0 0 ${t.size}px hsl(0 100% 50% / 0.3)`,
-          }}
-        />
-      ))}
+        {trails.map((t, i) => (
+          <motion.div
+            key={t.id}
+            className="absolute rounded-full pointer-events-none"
+            initial={{ opacity: 0.7, scale: 1 }}
+            animate={{ opacity: 0, scale: 0.2 }}
+            transition={{ duration: 0.65, ease: "easeOut" }}
+            style={{
+              left: t.x,
+              top: t.y,
+              width: t.size,
+              height: t.size,
+              translateX: "-50%",
+              translateY: "-50%",
+              background: `hsl(0 100% 50% / ${0.4 + (i / trails.length) * 0.5})`,
+              boxShadow: `0 0 ${t.size}px hsl(0 100% 50% / 0.35)`,
+            }}
+          />
+        ))}
 
-      {!isOver && (
-        <motion.p
-          className="absolute bottom-3 left-0 right-0 text-center text-[10px] font-mono tracking-widest text-white/30"
-          animate={{ opacity: [0.3, 0.7, 0.3] }}
-          transition={{ duration: 2.5, repeat: Infinity }}
+        {!isOver && (
+          <motion.p
+            className="absolute bottom-3 left-0 right-0 text-center text-[10px] font-mono tracking-widest text-foreground/30"
+            animate={{ opacity: [0.3, 0.7, 0.3] }}
+            transition={{ duration: 2.5, repeat: Infinity }}
+          >
+            MOVE CURSOR TO DRAW
+          </motion.p>
+        )}
+
+        <button
+          onClick={() => setTrails([])}
+          className="absolute top-3 right-3 text-foreground/20 hover:text-foreground/60 transition-colors"
+          aria-label="Reset"
         >
-          MOVE CURSOR TO DRAW
-        </motion.p>
-      )}
-
-      <button onClick={reset} className="absolute top-3 right-3 text-white/20 hover:text-white/60 transition-colors" aria-label="Reset">
-        <RotateCcw size={12} />
-      </button>
-    </div>
+          <RotateCcw size={12} />
+        </button>
+      </div>
+    </GlassCard>
   );
 };
 
-/* ─────────────────────────────────────────────
-   DEMO 4 — DOME GALLERY (Interactive parallax tiles)
-───────────────────────────────────────────────*/
-const tiles = [
-  { label: "PAPACHOA", accent: "hsl(14 80% 45%)" },
-  { label: "RAW PAW", accent: "hsl(200 60% 30%)" },
-  { label: "JEWELRY", accent: "hsl(45 70% 40%)" },
-  { label: "PAWN SHOP", accent: "hsl(270 40% 40%)" },
+/* ─────────────────────────────────────
+   DEMO 4 — DOME GALLERY
+   Globe / dome arrangement of AI photos
+───────────────────────────────────────*/
+const domeTiles = [
+  { label: "PAPACHOA", img: domePapachoa },
+  { label: "RAW PAW",  img: domeRawPaw },
+  { label: "JEWELRY",  img: domeJewelry },
+  { label: "PAWN SHOP",img: domePawnshop },
 ];
 
 const DomeGallery = () => {
@@ -308,83 +320,136 @@ const DomeGallery = () => {
     });
   };
 
+  /* globe positions — arc across top half of an ellipse */
+  const globePositions = [
+    { cx: "22%", cy: "52%", w: 88, h: 118, depth: 0.9 },
+    { cx: "40%", cy: "36%", w: 100, h: 132, depth: 0.6 },
+    { cx: "60%", cy: "36%", w: 100, h: 132, depth: 0.6 },
+    { cx: "78%", cy: "52%", w: 88, h: 118, depth: 0.9 },
+  ];
+
   return (
-    <div
-      ref={containerRef}
-      className="relative min-h-[200px] flex items-center justify-center overflow-hidden rounded-2xl"
-      style={{ background: "hsl(0 0% 4%)" }}
-      onMouseMove={handleMove}
-      onMouseLeave={() => setMouse({ x: 0, y: 0 })}
-    >
-      <div className="flex gap-3 sm:gap-4 p-4 flex-wrap justify-center">
-        {tiles.map((tile, i) => {
-          const depth = (i % 3 + 1) * 0.5;
+    <GlassCard minH={260}>
+      <div
+        ref={containerRef}
+        className="relative w-full min-h-[260px]"
+        onMouseMove={handleMove}
+        onMouseLeave={() => setMouse({ x: 0, y: 0 })}
+      >
+        {/* Globe arc guide line */}
+        <svg
+          aria-hidden
+          className="absolute inset-0 w-full h-full pointer-events-none"
+          style={{ opacity: 0.07 }}
+        >
+          <ellipse cx="50%" cy="110%" rx="46%" ry="78%" fill="none" stroke="hsl(0 0% 0%)" strokeWidth="1" />
+        </svg>
+
+        {domeTiles.map((tile, i) => {
+          const gp = globePositions[i];
+          const px = parseFloat(gp.cx);
+          const py = parseFloat(gp.cy);
           return (
             <motion.div
               key={i}
-              className="relative flex items-end p-3 overflow-hidden shrink-0 cursor-pointer"
+              className="absolute cursor-pointer overflow-hidden"
               style={{
-                width: 80,
-                height: 110,
-                borderRadius: 20,
-                background: `linear-gradient(135deg, ${tile.accent}33, hsl(0 0% 8%))`,
-                boxShadow: "0 8px 30px hsl(0 0% 0% / 0.4)",
+                width: gp.w,
+                height: gp.h,
+                left: gp.cx,
+                top: gp.cy,
+                transform: "translate(-50%, -50%)",
+                borderRadius: "50% 50% 50% 50% / 60% 60% 40% 40%",
+                boxShadow:
+                  "0 12px 40px hsl(0 0% 0% / 0.35), inset 0 1px 0 hsl(0 0% 100% / 0.2), 0 0 0 1px hsl(0 0% 100% / 0.06)",
               }}
               animate={{
-                x: mouse.x * depth * -8,
-                y: mouse.y * depth * -6,
-                rotateX: mouse.y * depth * -3,
-                rotateY: mouse.x * depth * 3,
+                x: mouse.x * gp.depth * -10,
+                y: mouse.y * gp.depth * -8,
+                rotateX: mouse.y * gp.depth * -4,
+                rotateY: mouse.x * gp.depth * 4,
               }}
-              whileHover={{ scale: 1.08, boxShadow: `0 16px 50px hsl(0 0% 0% / 0.5), 0 0 20px ${tile.accent}44` }}
+              whileHover={{
+                scale: 1.1,
+                boxShadow: "0 20px 60px hsl(0 0% 0% / 0.45), inset 0 1px 0 hsl(0 0% 100% / 0.3), 0 0 30px hsl(0 0% 100% / 0.06)",
+              }}
               transition={{ type: "spring", stiffness: 160, damping: 20 }}
               onClick={() => setExpanded(expanded === i ? null : i)}
             >
-              <div className="absolute inset-0" style={{ background: "linear-gradient(to top, hsl(0 0% 0% / 0.7), transparent 55%)" }} />
-              <span className="relative text-[8px] font-mono tracking-wider text-white/80 leading-tight">{tile.label}</span>
+              {/* Photo */}
+              <img
+                src={tile.img}
+                alt={tile.label}
+                className="absolute inset-0 w-full h-full object-cover"
+                draggable={false}
+              />
+              {/* bottom gradient + label */}
+              <div
+                className="absolute inset-0"
+                style={{ background: "linear-gradient(to top, hsl(0 0% 0% / 0.75) 0%, transparent 55%)" }}
+              />
+              {/* glass highlight on top of dome */}
+              <div
+                className="absolute top-0 left-0 right-0"
+                style={{
+                  height: "45%",
+                  background: "linear-gradient(to bottom, hsl(0 0% 100% / 0.18), transparent)",
+                  borderRadius: "inherit",
+                }}
+              />
+              <span className="absolute bottom-3 left-0 right-0 text-center text-[8px] font-mono tracking-widest text-white/90">
+                {tile.label}
+              </span>
             </motion.div>
           );
         })}
-      </div>
 
-      {/* Lightbox */}
-      <AnimatePresence>
-        {expanded !== null && (
-          <motion.div
-            className="absolute inset-0 flex items-center justify-center z-20 cursor-pointer rounded-2xl"
-            style={{ backdropFilter: "blur(16px)", background: "hsl(0 0% 0% / 0.75)" }}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={() => setExpanded(null)}
-          >
+        {/* Lightbox */}
+        <AnimatePresence>
+          {expanded !== null && (
             <motion.div
-              className="text-center p-8"
-              initial={{ scale: 0.85, y: 20 }}
-              animate={{ scale: 1, y: 0 }}
-              exit={{ scale: 0.85, y: 20 }}
+              className="absolute inset-0 z-20 cursor-pointer flex items-center justify-center rounded-2xl overflow-hidden"
+              style={{ backdropFilter: "blur(18px)", background: "hsl(0 0% 0% / 0.7)" }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setExpanded(null)}
             >
-              <p className="font-display text-3xl text-white mb-2">{tiles[expanded].label}</p>
-              <p className="text-[10px] font-mono text-white/40 tracking-widest">TAP TO CLOSE</p>
+              <motion.div
+                className="text-center"
+                initial={{ scale: 0.85, y: 16 }}
+                animate={{ scale: 1, y: 0 }}
+                exit={{ scale: 0.85, y: 16 }}
+              >
+                <img
+                  src={domeTiles[expanded].img}
+                  alt={domeTiles[expanded].label}
+                  className="w-28 h-36 object-cover mx-auto mb-3"
+                  style={{ borderRadius: "50% 50% 50% 50% / 60% 60% 40% 40%" }}
+                  draggable={false}
+                />
+                <p className="font-display text-2xl text-white mb-1">{domeTiles[expanded].label}</p>
+                <p className="text-[10px] font-mono text-white/40 tracking-widest">TAP TO CLOSE</p>
+              </motion.div>
             </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+          )}
+        </AnimatePresence>
 
-      <p className="absolute bottom-3 left-0 right-0 text-center text-[10px] font-mono tracking-widest text-white/25 pointer-events-none">
-        MOVE + CLICK TO EXPAND
-      </p>
-    </div>
+        <p className="absolute bottom-2 left-0 right-0 text-center text-[9px] font-mono tracking-widest text-foreground/25 pointer-events-none">
+          MOVE + CLICK TO EXPAND
+        </p>
+      </div>
+    </GlassCard>
   );
 };
 
-/* ─────────────────────────────────────────────
-   DEMO 5 — CARD SWAP (Auto Demo + Play/Pause)
-───────────────────────────────────────────────*/
+/* ─────────────────────────────────────
+   DEMO 5 — CARD SWAP
+───────────────────────────────────────*/
 const cardData = [
-  { label: "SMOOTH", sub: "60fps spring physics", hue: 220 },
-  { label: "CUSTOMIZABLE", sub: "Any stack, any depth", hue: 14 },
-  { label: "RELIABLE", sub: "Tested at scale", hue: 160 },
+  { label: "SMOOTH",       sub: "60fps spring physics", hue: 220 },
+  { label: "CUSTOMIZABLE", sub: "Any stack, any depth",  hue: 14 },
+  { label: "RELIABLE",     sub: "Tested at scale",       hue: 160 },
 ];
 
 const CardSwap = () => {
@@ -393,95 +458,92 @@ const CardSwap = () => {
 
   useEffect(() => {
     if (!playing) return;
-    const interval = setInterval(() => {
-      setTop(t => (t + 1) % cardData.length);
-    }, 1600);
-    return () => clearInterval(interval);
+    const iv = setInterval(() => setTop(t => (t + 1) % cardData.length), 1600);
+    return () => clearInterval(iv);
   }, [playing]);
 
-  const getOrder = (i: number) => {
-    const rel = ((i - top) % cardData.length + cardData.length) % cardData.length;
-    return rel; // 0=front, 1=mid, 2=back
-  };
+  const getOrder = (i: number) =>
+    ((i - top) % cardData.length + cardData.length) % cardData.length;
 
   return (
-    <div
-      className="relative flex items-center justify-center min-h-[200px] overflow-hidden rounded-2xl"
-      style={{ background: "hsl(0 0% 5%)", perspective: 1000 }}
-    >
-      <div className="relative w-48 h-28">
-        {cardData.map((card, i) => {
-          const order = getOrder(i);
-          const zIndex = cardData.length - order;
-          const yOffset = order * 10;
-          const scale = 1 - order * 0.07;
-          const opacityVal = order === 2 ? 0.3 : order === 1 ? 0.65 : 1;
-
-          return (
-            <motion.div
-              key={i}
-              className="absolute inset-0 flex flex-col justify-between p-4 rounded-xl"
-              style={{
-                background: `linear-gradient(135deg, hsl(${card.hue} 40% 14%), hsl(${card.hue} 20% 8%))`,
-                boxShadow: "0 8px 40px hsl(0 0% 0% / 0.5), inset 0 1px 0 hsl(0 0% 100% / 0.06)",
-                zIndex,
-              }}
-              animate={{ y: yOffset, scale, opacity: opacityVal, rotateX: order * 2 }}
-              transition={{ type: "spring", stiffness: 200, damping: 26 }}
-            >
-              <div
-                className="w-5 h-5 rounded-full"
-                style={{ background: `hsl(${card.hue} 80% 55% / 0.5)` }}
-              />
-              <div>
-                <p className="font-display text-[10px] tracking-[0.2em] text-white/90">{card.label}</p>
-                <p className="text-[9px] text-white/35 mt-0.5 font-mono">{card.sub}</p>
-              </div>
-            </motion.div>
-          );
-        })}
-      </div>
-
-      {/* Play/Pause */}
-      <button
-        onClick={() => setPlaying(p => !p)}
-        className="absolute bottom-3 right-3 flex items-center gap-1.5 text-white/30 hover:text-white/70 transition-colors"
-        aria-label={playing ? "Pause" : "Play"}
-      >
-        {playing ? <Pause size={11} /> : <Play size={11} />}
-        <span className="text-[9px] font-mono tracking-wider">{playing ? "PAUSE" : "PLAY"}</span>
-      </button>
-
-      {!playing && (
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-          <motion.div
-            className="w-11 h-11 rounded-full flex items-center justify-center pointer-events-auto cursor-pointer"
-            style={{ background: "hsl(0 0% 100% / 0.07)", backdropFilter: "blur(8px)" }}
-            whileHover={{ scale: 1.1 }}
-            onClick={() => setPlaying(true)}
-          >
-            <Play size={16} className="text-white ml-0.5" />
-          </motion.div>
+    <GlassCard>
+      <div className="relative flex items-center justify-center min-h-[200px]" style={{ perspective: 1000 }}>
+        <div className="relative w-48 h-28">
+          {cardData.map((card, i) => {
+            const order = getOrder(i);
+            return (
+              <motion.div
+                key={i}
+                className="absolute inset-0 flex flex-col justify-between p-4 rounded-xl overflow-hidden"
+                style={{
+                  background: `linear-gradient(135deg, hsl(${card.hue} 40% 96%), hsl(${card.hue} 20% 88%))`,
+                  boxShadow:
+                    "0 8px 40px hsl(0 0% 0% / 0.12), inset 0 1px 0 hsl(0 0% 100% / 0.8), 0 0 0 1px hsl(0 0% 0% / 0.06)",
+                  zIndex: cardData.length - order,
+                }}
+                animate={{
+                  y: order * 10,
+                  scale: 1 - order * 0.07,
+                  opacity: order === 2 ? 0.35 : order === 1 ? 0.65 : 1,
+                  rotateX: order * 2,
+                }}
+                transition={{ type: "spring", stiffness: 200, damping: 26 }}
+              >
+                {/* glass sheen on each card */}
+                <div
+                  className="absolute inset-0 pointer-events-none"
+                  style={{
+                    background: "linear-gradient(115deg, hsl(0 0% 100% / 0.5) 0%, transparent 50%)",
+                    borderRadius: "inherit",
+                  }}
+                />
+                <div
+                  className="w-5 h-5 rounded-full"
+                  style={{ background: `hsl(${card.hue} 70% 60% / 0.6)` }}
+                />
+                <div>
+                  <p className="font-display text-[10px] tracking-[0.2em] text-foreground/90">{card.label}</p>
+                  <p className="text-[9px] text-foreground/40 mt-0.5 font-mono">{card.sub}</p>
+                </div>
+              </motion.div>
+            );
+          })}
         </div>
-      )}
-    </div>
+
+        <button
+          onClick={() => setPlaying(p => !p)}
+          className="absolute bottom-3 right-3 flex items-center gap-1.5 text-foreground/30 hover:text-foreground/70 transition-colors"
+          aria-label={playing ? "Pause" : "Play"}
+        >
+          {playing ? <Pause size={11} /> : <Play size={11} />}
+          <span className="text-[9px] font-mono tracking-wider">{playing ? "PAUSE" : "PLAY"}</span>
+        </button>
+
+        {!playing && (
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+            <motion.div
+              className="w-11 h-11 rounded-full flex items-center justify-center pointer-events-auto cursor-pointer"
+              style={{ background: "hsl(0 0% 0% / 0.08)", backdropFilter: "blur(8px)" }}
+              whileHover={{ scale: 1.1 }}
+              onClick={() => setPlaying(true)}
+            >
+              <Play size={16} className="text-foreground ml-0.5" />
+            </motion.div>
+          </div>
+        )}
+      </div>
+    </GlassCard>
   );
 };
 
-/* ─────────────────────────────────────────────
-   DEMO 6 — INK REVEAL (Interactive brush mask)
-───────────────────────────────────────────────*/
+/* ─────────────────────────────────────
+   DEMO 6 — INK REVEAL
+───────────────────────────────────────*/
 const InkReveal = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const isPainting = useRef(false);
   const [revealed, setRevealed] = useState(0);
-  const animFrameRef = useRef<number>();
-
-  const getCtx = () => {
-    const canvas = canvasRef.current;
-    return canvas ? canvas.getContext("2d") : null;
-  };
 
   const paint = useCallback((cx: number, cy: number) => {
     const canvas = canvasRef.current;
@@ -491,8 +553,6 @@ const InkReveal = () => {
     if (!ctx) return;
     const x = cx - rect.left;
     const y = cy - rect.top;
-
-    // Use destination-out to erase the black overlay (reveal beneath)
     ctx.globalCompositeOperation = "destination-out";
     const r = 32 + Math.random() * 16;
     const grad = ctx.createRadialGradient(x, y, 0, x, y, r);
@@ -503,25 +563,21 @@ const InkReveal = () => {
     ctx.beginPath();
     ctx.arc(x, y, r, 0, Math.PI * 2);
     ctx.fill();
-
-    // Measure revealed %
     const data = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
     let transparent = 0;
-    for (let i = 3; i < data.length; i += 4) {
-      if (data[i] < 128) transparent++;
-    }
+    for (let i = 3; i < data.length; i += 4) { if (data[i] < 128) transparent++; }
     setRevealed(Math.round((transparent / (canvas.width * canvas.height)) * 100));
   }, []);
 
-  const reset = () => {
+  const reset = useCallback(() => {
     const canvas = canvasRef.current;
-    const ctx = getCtx();
+    const ctx = canvas?.getContext("2d");
     if (!canvas || !ctx) return;
     ctx.globalCompositeOperation = "source-over";
-    ctx.fillStyle = "hsl(0, 0%, 4%)";
+    ctx.fillStyle = "rgba(240,240,240,0.92)";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     setRevealed(0);
-  };
+  }, []);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -530,96 +586,84 @@ const InkReveal = () => {
     canvas.width = container.offsetWidth;
     canvas.height = container.offsetHeight;
     reset();
-  }, []);
-
-  const onMouseDown = (e: React.MouseEvent) => { isPainting.current = true; paint(e.clientX, e.clientY); };
-  const onMouseMove = (e: React.MouseEvent) => { if (isPainting.current) paint(e.clientX, e.clientY); };
-  const onMouseUp = () => { isPainting.current = false; };
-
-  const onTouchStart = (e: React.TouchEvent) => { e.preventDefault(); isPainting.current = true; paint(e.touches[0].clientX, e.touches[0].clientY); };
-  const onTouchMove = (e: React.TouchEvent) => { e.preventDefault(); if (isPainting.current) paint(e.touches[0].clientX, e.touches[0].clientY); };
-  const onTouchEnd = () => { isPainting.current = false; };
+  }, [reset]);
 
   return (
-    <div
-      ref={containerRef}
-      className="relative flex items-center justify-center min-h-[200px] overflow-hidden rounded-2xl"
-      style={{ background: "hsl(0 0% 4%)", touchAction: "none" }}
-    >
-      {/* Revealed layer beneath */}
-      <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-        <p className="font-display text-3xl sm:text-4xl md:text-5xl text-primary leading-none text-center">
-          NEBU<br />BUILDS
-        </p>
-      </div>
-
-      {/* Canvas overlay (ink mask) */}
-      <canvas
-        ref={canvasRef}
-        className="absolute inset-0 w-full h-full rounded-2xl"
-        onMouseDown={onMouseDown}
-        onMouseMove={onMouseMove}
-        onMouseUp={onMouseUp}
-        onMouseLeave={onMouseUp}
-        onTouchStart={onTouchStart}
-        onTouchMove={onTouchMove}
-        onTouchEnd={onTouchEnd}
-        style={{ cursor: "crosshair" }}
-      />
-
-      {/* % counter */}
-      <div className="absolute top-3 left-3 text-[9px] font-mono text-white/30 pointer-events-none">
-        {revealed}% revealed
-      </div>
-
-      {/* Hint */}
-      {revealed < 3 && (
-        <motion.p
-          className="absolute bottom-3 left-0 right-0 text-center text-[10px] font-mono tracking-widest pointer-events-none"
-          style={{ color: "hsl(0 0% 100% / 0.3)" }}
-          animate={{ opacity: [0.3, 0.8, 0.3] }}
-          transition={{ duration: 2.5, repeat: Infinity }}
-        >
-          BRUSH TO REVEAL
-        </motion.p>
-      )}
-
-      <button
-        onClick={reset}
-        className="absolute top-3 right-3 text-white/20 hover:text-white/60 transition-colors z-10"
-        aria-label="Reset"
+    <GlassCard>
+      <div
+        ref={containerRef}
+        className="relative flex items-center justify-center min-h-[200px]"
+        style={{ touchAction: "none" }}
       >
-        <RotateCcw size={12} />
-      </button>
-    </div>
+        {/* revealed layer */}
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+          <p className="font-display text-3xl sm:text-4xl text-primary leading-none text-center">
+            NEBU<br />BUILDS
+          </p>
+        </div>
+
+        {/* canvas mask */}
+        <canvas
+          ref={canvasRef}
+          className="absolute inset-0 w-full h-full rounded-2xl"
+          onMouseDown={(e) => { isPainting.current = true; paint(e.clientX, e.clientY); }}
+          onMouseMove={(e) => { if (isPainting.current) paint(e.clientX, e.clientY); }}
+          onMouseUp={() => { isPainting.current = false; }}
+          onMouseLeave={() => { isPainting.current = false; }}
+          onTouchStart={(e) => { e.preventDefault(); isPainting.current = true; paint(e.touches[0].clientX, e.touches[0].clientY); }}
+          onTouchMove={(e) => { e.preventDefault(); if (isPainting.current) paint(e.touches[0].clientX, e.touches[0].clientY); }}
+          onTouchEnd={() => { isPainting.current = false; }}
+          style={{ cursor: "crosshair" }}
+        />
+
+        <div className="absolute top-3 left-3 text-[9px] font-mono text-foreground/30 pointer-events-none">
+          {revealed}% revealed
+        </div>
+
+        {revealed < 3 && (
+          <motion.p
+            className="absolute bottom-3 left-0 right-0 text-center text-[10px] font-mono tracking-widest pointer-events-none text-foreground/35"
+            animate={{ opacity: [0.35, 0.8, 0.35] }}
+            transition={{ duration: 2.5, repeat: Infinity }}
+          >
+            BRUSH TO REVEAL
+          </motion.p>
+        )}
+
+        <button
+          onClick={reset}
+          className="absolute top-3 right-3 text-foreground/25 hover:text-foreground/60 transition-colors z-10"
+          aria-label="Reset"
+        >
+          <RotateCcw size={12} />
+        </button>
+      </div>
+    </GlassCard>
   );
 };
 
-/* ─────────────────────────────────────────────
-   DEMO WRAPPER — shared tile UI
-───────────────────────────────────────────────*/
+/* ─────────────────────────────────────
+   DEMO CONFIGS
+───────────────────────────────────────*/
 type DemoType = "interactive" | "auto";
-
 interface DemoConfig {
-  id: string;
-  title: string;
-  desc: string;
-  type: DemoType;
-  component: React.ComponentType;
+  id: string; title: string; desc: string; type: DemoType; component: React.ComponentType;
 }
 
 const demos: DemoConfig[] = [
-  { id: "focus",   title: "TRUE FOCUS",    desc: "Focus window follows your cursor through blurred text",    type: "interactive", component: TrueFocus },
-  { id: "blur",    title: "GRADUAL BLUR",  desc: "Text assembles from blur to clarity in cinematic motion",  type: "auto",        component: GradualBlur },
-  { id: "ghost",   title: "GHOST CURSOR",  desc: "Your movement leaves an ink-red ghost trail behind",       type: "interactive", component: GhostCursor },
-  { id: "dome",    title: "DOME GALLERY",  desc: "Parallax tiles drift with cursor — click to expand",       type: "interactive", component: DomeGallery },
-  { id: "swap",    title: "CARD SWAP",     desc: "Stack of cards swaps forward with spring depth",           type: "auto",        component: CardSwap },
-  { id: "ink",     title: "INK REVEAL",    desc: "Brush away darkness to reveal what's underneath",          type: "interactive", component: InkReveal },
+  { id: "focus", title: "TRUE FOCUS",   desc: "Focus window follows your cursor through blurred text",   type: "interactive", component: TrueFocus },
+  { id: "blur",  title: "GRADUAL BLUR", desc: "Text assembles from blur to clarity in cinematic motion", type: "auto",        component: GradualBlur },
+  { id: "ghost", title: "GHOST CURSOR", desc: "Your movement leaves an ink-red ghost trail behind",      type: "interactive", component: GhostCursor },
+  { id: "dome",  title: "DOME GALLERY", desc: "Globe of parallax photos — move and click to expand",     type: "interactive", component: DomeGallery },
+  { id: "swap",  title: "CARD SWAP",    desc: "Stack of glass cards swaps forward with spring depth",    type: "auto",        component: CardSwap },
+  { id: "ink",   title: "INK REVEAL",   desc: "Brush away the surface to reveal what's underneath",      type: "interactive", component: InkReveal },
 ];
 
+/* ─────────────────────────────────────
+   DEMO TILE WRAPPER
+───────────────────────────────────────*/
 const DemoTile = ({ demo, index }: { demo: DemoConfig; index: number }) => {
   const DemoComponent = demo.component;
-
   return (
     <motion.div
       initial={{ opacity: 0, y: 48 }}
@@ -627,63 +671,42 @@ const DemoTile = ({ demo, index }: { demo: DemoConfig; index: number }) => {
       viewport={{ once: true, margin: "-60px" }}
       transition={{ duration: 0.7, delay: index * 0.08, ease: [0.25, 1, 0.5, 1] }}
     >
-      {/* Header row */}
+      {/* header */}
       <div className="flex items-center gap-3 mb-3">
-        <span className="text-[11px] font-mono tracking-[0.22em] text-white font-medium">{demo.title}</span>
-        <div className="h-px flex-1" style={{ background: "hsl(0 0% 100% / 0.09)" }} />
+        <span className="text-[11px] font-mono tracking-[0.22em] text-foreground font-medium">{demo.title}</span>
+        <div className="h-px flex-1" style={{ background: "hsl(0 0% 0% / 0.1)" }} />
         <span
           className="text-[8px] font-mono tracking-[0.2em] px-2 py-0.5 rounded-full"
           style={{
-            background: demo.type === "interactive" ? "hsl(0 100% 50% / 0.12)" : "hsl(0 0% 100% / 0.07)",
-            color: demo.type === "interactive" ? "hsl(0 100% 65%)" : "hsl(0 0% 60%)",
+            background: demo.type === "interactive" ? "hsl(0 100% 50% / 0.1)" : "hsl(0 0% 0% / 0.06)",
+            color: demo.type === "interactive" ? "hsl(0 100% 38%)" : "hsl(0 0% 30%)",
           }}
         >
           {demo.type === "interactive" ? "INTERACTIVE" : "AUTO DEMO"}
         </span>
       </div>
 
-      {/* Demo canvas */}
       <DemoComponent />
 
-      {/* Footer desc */}
-      <p className="mt-2.5 text-[10px] text-white/35 font-mono tracking-wide leading-relaxed">
+      {/* footer desc — negro */}
+      <p className="mt-2.5 text-[10px] text-foreground/45 font-mono tracking-wide leading-relaxed">
         {demo.desc}
       </p>
     </motion.div>
   );
 };
 
-/* ─────────────────────────────────────────────
+/* ─────────────────────────────────────
    MAIN SECTION
-───────────────────────────────────────────────*/
+───────────────────────────────────────*/
 export const DesignLab = () => {
   const sectionRef = useRef<HTMLElement>(null);
   const isInView = useInView(sectionRef, { once: true, margin: "-100px" });
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start end", "end start"],
-  });
-  const redOpacity = useTransform(scrollYProgress, [0.05, 0.2, 0.8, 0.95], [0, 0.92, 0.92, 0]);
 
   return (
-    <section ref={sectionRef} className="relative overflow-hidden" id="lab">
-      {/* Scroll-driven dark-to-red wash */}
-      <motion.div
-        className="absolute inset-0 pointer-events-none"
-        style={{ backgroundColor: "hsl(0 60% 6%)", opacity: useTransform(redOpacity, v => v * 0.45) }}
-        aria-hidden="true"
-      />
-      <motion.div
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          background: "radial-gradient(ellipse 70% 50% at 50% 50%, hsl(0 100% 20% / 0.1) 0%, transparent 70%)",
-          opacity: redOpacity,
-        }}
-        aria-hidden="true"
-      />
-
+    <section ref={sectionRef} className="relative" id="lab">
       <div className="container relative z-10 py-32 sm:py-40">
-        {/* Section heading */}
+        {/* heading */}
         <motion.div
           initial={{ opacity: 0, y: 36 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
@@ -692,32 +715,25 @@ export const DesignLab = () => {
         >
           <h2 className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl mb-5">
             <span className="text-primary">DESIGN</span>{" "}
-            <span className="text-white">LAB</span>
+            <span className="text-foreground">LAB</span>
           </h2>
-          <p className="text-white/55 text-sm max-w-sm leading-relaxed font-mono tracking-wide">
+          <p className="text-foreground/45 text-sm max-w-sm leading-relaxed font-mono tracking-wide">
             Six live demos. Move, click, brush, play — every effect ships with your project.
           </p>
         </motion.div>
 
-        {/* Flowing 2-col layout */}
+        {/* layout */}
         <div className="space-y-16 sm:space-y-20">
-          {/* Row 1 */}
           <div className="grid md:grid-cols-2 gap-10 sm:gap-14 lg:gap-20">
             <DemoTile demo={demos[0]} index={0} />
             <DemoTile demo={demos[1]} index={1} />
           </div>
 
-          {/* Row 2 — asymmetric: 3/5 + 2/5 */}
           <div className="grid md:grid-cols-5 gap-10 sm:gap-14">
-            <div className="md:col-span-3">
-              <DemoTile demo={demos[2]} index={2} />
-            </div>
-            <div className="md:col-span-2">
-              <DemoTile demo={demos[3]} index={3} />
-            </div>
+            <div className="md:col-span-3"><DemoTile demo={demos[2]} index={2} /></div>
+            <div className="md:col-span-2"><DemoTile demo={demos[3]} index={3} /></div>
           </div>
 
-          {/* Row 3 */}
           <div className="grid md:grid-cols-2 gap-10 sm:gap-14 lg:gap-20">
             <DemoTile demo={demos[4]} index={4} />
             <DemoTile demo={demos[5]} index={5} />
