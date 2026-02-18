@@ -214,14 +214,98 @@ const GradualBlur = () => {
 };
 
 /* ─────────────────────────────────────
-   DEMO 3 — GHOST CURSOR
+   DEMO 3 — CURSOR TRAILS
+   3 selectable trail modes
 ───────────────────────────────────────*/
+type TrailMode = "diamond" | "paw" | "lava";
+
+const TRAIL_MODES: { id: TrailMode; icon: string; label: string }[] = [
+  { id: "diamond", icon: "◆", label: "Diamond" },
+  { id: "paw",     icon: "🐾", label: "Paw" },
+  { id: "lava",    icon: "🔴", label: "Lava" },
+];
+
+/* SVG diamond shape rendered as data-url for the trail particle */
+const DiamondParticle = ({ x, y, size, opacity }: { x: number; y: number; size: number; opacity: number }) => (
+  <motion.div
+    className="absolute pointer-events-none"
+    initial={{ opacity, scale: 1, rotate: 0 }}
+    animate={{ opacity: 0, scale: 0.1, rotate: 45 }}
+    transition={{ duration: 0.7, ease: "easeOut" }}
+    style={{
+      left: x,
+      top: y,
+      translateX: "-50%",
+      translateY: "-50%",
+      width: size,
+      height: size,
+      background: `hsl(210 80% 70%)`,
+      clipPath: "polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%)",
+      boxShadow: `0 0 ${size * 0.8}px hsl(210 100% 80% / 0.8), 0 0 ${size * 2}px hsl(210 100% 70% / 0.4)`,
+    }}
+  />
+);
+
+const PawParticle = ({ x, y, size, opacity }: { x: number; y: number; size: number; opacity: number }) => (
+  <motion.div
+    className="absolute pointer-events-none select-none"
+    initial={{ opacity, scale: 1 }}
+    animate={{ opacity: 0, scale: 0.3 }}
+    transition={{ duration: 0.85, ease: "easeOut" }}
+    style={{
+      left: x,
+      top: y,
+      translateX: "-50%",
+      translateY: "-50%",
+      fontSize: size * 1.2,
+      lineHeight: 1,
+    }}
+  >
+    🐾
+  </motion.div>
+);
+
+const LavaParticle = ({ x, y, size, opacity, idx, total }: { x: number; y: number; size: number; opacity: number; idx: number; total: number }) => {
+  const progress = idx / Math.max(total - 1, 1); // 0=oldest, 1=newest
+  const r = Math.round(255);
+  const g = Math.round(progress * 80);
+  return (
+    <motion.div
+      className="absolute pointer-events-none rounded-full"
+      initial={{ opacity: 1, scale: 1 }}
+      animate={{ opacity: 0, scale: 0.05 }}
+      transition={{ duration: 0.55, ease: "easeOut" }}
+      style={{
+        left: x,
+        top: y,
+        translateX: "-50%",
+        translateY: "-50%",
+        width: size * (1 + progress * 1.8),
+        height: size * (1 + progress * 1.8),
+        background: `radial-gradient(circle, rgb(${r},${g},0) 0%, rgb(200,0,0) 50%, transparent 100%)`,
+        boxShadow: [
+          `0 0 ${size * 1.5}px rgb(${r},${g},0)`,
+          `0 0 ${size * 3}px hsl(0 100% 50% / 0.8)`,
+          `0 0 ${size * 6}px hsl(20 100% 40% / 0.5)`,
+        ].join(", "),
+        filter: `blur(${progress < 0.5 ? 1 : 0}px)`,
+      }}
+    />
+  );
+};
+
 const GhostCursor = () => {
   const containerRef = useRef<HTMLDivElement>(null);
+  const [mode, setMode] = useState<TrailMode>("diamond");
   const [trails, setTrails] = useState<{ id: number; x: number; y: number; size: number }[]>([]);
   const idRef = useRef(0);
   const lastPos = useRef({ x: 0, y: 0 });
   const [isOver, setIsOver] = useState(false);
+
+  const minDist = mode === "paw" ? 28 : mode === "lava" ? 4 : 10;
+  const maxTrail = mode === "lava" ? 40 : mode === "paw" ? 10 : 22;
+  const ttl = mode === "lava" ? 500 : mode === "paw" ? 900 : 700;
+  const baseSize = mode === "lava" ? 22 : mode === "paw" ? 20 : 10;
 
   const handleMove = useCallback((cx: number, cy: number) => {
     const rect = containerRef.current?.getBoundingClientRect();
@@ -230,48 +314,74 @@ const GhostCursor = () => {
     const y = cy - rect.top;
     const dx = x - lastPos.current.x;
     const dy = y - lastPos.current.y;
-    if (Math.sqrt(dx * dx + dy * dy) < 8) return;
+    if (Math.sqrt(dx * dx + dy * dy) < minDist) return;
     lastPos.current = { x, y };
     const id = ++idRef.current;
-    const size = Math.min(18, 6 + Math.sqrt(dx * dx + dy * dy) * 0.4);
-    setTrails(t => [...t.slice(-18), { id, x, y, size }]);
-    setTimeout(() => setTrails(t => t.filter(p => p.id !== id)), 700);
-  }, []);
+    const speed = Math.sqrt(dx * dx + dy * dy);
+    const size = Math.min(baseSize * 2, baseSize + speed * 0.25);
+    setTrails(t => [...t.slice(-maxTrail), { id, x, y, size }]);
+    setTimeout(() => setTrails(t => t.filter(p => p.id !== id)), ttl);
+  }, [minDist, maxTrail, ttl, baseSize]);
+
+  const clearTrails = () => { setTrails([]); };
 
   return (
     <GlassCard>
+      {/* mode selector — 3 buttons top-left */}
+      <div className="absolute top-3 left-3 z-20 flex gap-1.5">
+        {TRAIL_MODES.map(m => (
+          <button
+            key={m.id}
+            onClick={() => { setMode(m.id); clearTrails(); }}
+            title={m.label}
+            className="w-7 h-7 rounded-lg flex items-center justify-center text-sm transition-all duration-200"
+            style={{
+              background: mode === m.id
+                ? "hsl(0 100% 50% / 0.15)"
+                : "hsl(0 0% 0% / 0.05)",
+              boxShadow: mode === m.id
+                ? "inset 0 0 0 1px hsl(0 100% 50% / 0.4)"
+                : "inset 0 0 0 1px hsl(0 0% 0% / 0.08)",
+              transform: mode === m.id ? "scale(1.1)" : "scale(1)",
+            }}
+          >
+            {m.icon}
+          </button>
+        ))}
+      </div>
+
       <div
         ref={containerRef}
-        className="relative flex items-center justify-center min-h-[200px] cursor-none"
+        className="relative flex items-center justify-center min-h-[200px] cursor-none overflow-hidden rounded-2xl"
         style={{ touchAction: "none" }}
         onMouseMove={(e) => { setIsOver(true); handleMove(e.clientX, e.clientY); }}
         onMouseEnter={() => setIsOver(true)}
-        onMouseLeave={() => { setIsOver(false); }}
+        onMouseLeave={() => setIsOver(false)}
         onTouchMove={(e) => { e.preventDefault(); handleMove(e.touches[0].clientX, e.touches[0].clientY); }}
       >
-        <p className="font-display text-2xl sm:text-3xl text-foreground/80 pointer-events-none select-none text-center">
-          DRAW<br />YOUR PATH
+        <p className="font-display text-2xl sm:text-3xl text-foreground/70 pointer-events-none select-none text-center">
+          CURSOR<br />TRAILS
         </p>
 
-        {trails.map((t, i) => (
-          <motion.div
-            key={t.id}
-            className="absolute rounded-full pointer-events-none"
-            initial={{ opacity: 0.7, scale: 1 }}
-            animate={{ opacity: 0, scale: 0.2 }}
-            transition={{ duration: 0.65, ease: "easeOut" }}
+        {/* lava: render glow overlay for extra intensity */}
+        {mode === "lava" && trails.length > 3 && (
+          <div
+            className="absolute inset-0 pointer-events-none rounded-2xl"
             style={{
-              left: t.x,
-              top: t.y,
-              width: t.size,
-              height: t.size,
-              translateX: "-50%",
-              translateY: "-50%",
-              background: `hsl(0 100% 50% / ${0.4 + (i / trails.length) * 0.5})`,
-              boxShadow: `0 0 ${t.size}px hsl(0 100% 50% / 0.35)`,
+              background: "radial-gradient(circle at 50% 50%, hsl(0 100% 30% / 0.06), transparent 70%)",
             }}
           />
-        ))}
+        )}
+
+        {trails.map((t, i) =>
+          mode === "diamond" ? (
+            <DiamondParticle key={t.id} x={t.x} y={t.y} size={t.size} opacity={0.4 + (i / trails.length) * 0.5} />
+          ) : mode === "paw" ? (
+            <PawParticle key={t.id} x={t.x} y={t.y} size={t.size} opacity={0.5 + (i / trails.length) * 0.4} />
+          ) : (
+            <LavaParticle key={t.id} x={t.x} y={t.y} size={t.size} opacity={1} idx={i} total={trails.length} />
+          )
+        )}
 
         {!isOver && (
           <motion.p
@@ -284,7 +394,7 @@ const GhostCursor = () => {
         )}
 
         <button
-          onClick={() => setTrails([])}
+          onClick={clearTrails}
           className="absolute top-3 right-3 text-foreground/20 hover:text-foreground/60 transition-colors"
           aria-label="Reset"
         >
@@ -644,7 +754,7 @@ interface DemoConfig {
 const demos: DemoConfig[] = [
   { id: "focus", title: "TRUE FOCUS",   desc: "Focus window follows your cursor through blurred text",   type: "interactive", component: TrueFocus },
   { id: "blur",  title: "GRADUAL BLUR", desc: "Text assembles from blur to clarity in cinematic motion", type: "auto",        component: GradualBlur },
-  { id: "ghost", title: "GHOST CURSOR", desc: "Your movement leaves an ink-red ghost trail behind",      type: "interactive", component: GhostCursor },
+  { id: "ghost", title: "CURSOR TRAILS",  desc: "Pick a trail style — diamond, paw or blazing lava",       type: "interactive", component: GhostCursor },
   { id: "throw", title: "THROW CARDS",  desc: "Drag, throw and flip the project cards — pure physics",   type: "interactive", component: ThrowCards },
   { id: "swap",  title: "CARD SWAP",    desc: "Stack of glass cards swaps forward with spring depth",    type: "auto",        component: CardSwap },
   { id: "ink",   title: "INK REVEAL",   desc: "Brush away the surface to reveal what's underneath",      type: "interactive", component: InkReveal },
