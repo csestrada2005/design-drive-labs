@@ -1,8 +1,11 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Send, Loader2 } from "lucide-react";
+import { X, Send, Loader2, ExternalLink } from "lucide-react";
+import { Progress } from "@/components/ui/progress";
 
 const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/demo-chat`;
+const DEMO_STORAGE_KEY = "cuatre_demo_html";
 
 type Msg = { role: "user" | "assistant"; content: string };
 
@@ -14,7 +17,9 @@ export const TierDemoChat = ({ onClose }: TierDemoChatProps) => {
   const [messages, setMessages] = useState<Msg[]>([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [htmlPreview, setHtmlPreview] = useState<string | null>(null);
+  const [progress, setProgress] = useState(0);
+  const [demoReady, setDemoReady] = useState(false);
+  const navigate = useNavigate();
 
   const extractHTML = (text: string): string | null => {
     const codeBlockMatch = text.match(/```(?:html)?\s*([\s\S]*?)```/);
@@ -24,6 +29,10 @@ export const TierDemoChat = ({ onClose }: TierDemoChatProps) => {
     return null;
   };
 
+  const openPreview = useCallback(() => {
+    navigate("/demo-preview");
+  }, [navigate]);
+
   const send = async () => {
     if (!input.trim() || isLoading) return;
 
@@ -32,7 +41,21 @@ export const TierDemoChat = ({ onClose }: TierDemoChatProps) => {
     setMessages(newMessages);
     setInput("");
     setIsLoading(true);
-    setHtmlPreview(null);
+    setProgress(0);
+    setDemoReady(false);
+
+    // Simulate progress with an interval
+    const progressInterval = setInterval(() => {
+      setProgress((prev) => {
+        if (prev >= 90) {
+          clearInterval(progressInterval);
+          return 90;
+        }
+        // Slow down as we approach 90%
+        const increment = Math.max(1, Math.floor((90 - prev) / 10));
+        return Math.min(prev + increment, 90);
+      });
+    }, 400);
 
     let fullResponse = "";
 
@@ -47,6 +70,7 @@ export const TierDemoChat = ({ onClose }: TierDemoChatProps) => {
       });
 
       if (!resp.ok || !resp.body) {
+        clearInterval(progressInterval);
         const errorText = resp.status === 429
           ? "Too many requests — please wait a moment."
           : resp.status === 402
@@ -54,6 +78,7 @@ export const TierDemoChat = ({ onClose }: TierDemoChatProps) => {
           : "Something went wrong. Try again.";
         setMessages((prev) => [...prev, { role: "assistant", content: errorText }]);
         setIsLoading(false);
+        setProgress(0);
         return;
       }
 
@@ -87,14 +112,20 @@ export const TierDemoChat = ({ onClose }: TierDemoChatProps) => {
         }
       }
 
-      // Store the assistant message
+      clearInterval(progressInterval);
+      setProgress(100);
+
       setMessages((prev) => [...prev, { role: "assistant", content: fullResponse }]);
 
-      // Extract and show HTML only after full generation
       const finalHtml = extractHTML(fullResponse);
-      if (finalHtml) setHtmlPreview(finalHtml);
+      if (finalHtml) {
+        sessionStorage.setItem(DEMO_STORAGE_KEY, finalHtml);
+        setDemoReady(true);
+      }
     } catch {
+      clearInterval(progressInterval);
       setMessages((prev) => [...prev, { role: "assistant", content: "Connection error. Please try again." }]);
+      setProgress(0);
     }
 
     setIsLoading(false);
@@ -136,27 +167,34 @@ export const TierDemoChat = ({ onClose }: TierDemoChatProps) => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="absolute inset-0 flex flex-col items-center justify-center gap-4"
+              className="absolute inset-0 flex flex-col items-center justify-center gap-6 px-8"
             >
               <Loader2 className="w-8 h-8 animate-spin text-primary/60" />
-              <p className="text-sm text-muted-foreground/50 font-mono tracking-wider">
-                Generating your demo...
-              </p>
+              <div className="w-full max-w-xs space-y-2">
+                <Progress value={progress} className="h-2 bg-muted/20" />
+                <p className="text-center text-xs font-mono text-muted-foreground/50 tracking-wider">
+                  {progress}% — Generating your demo...
+                </p>
+              </div>
             </motion.div>
-          ) : htmlPreview ? (
+          ) : demoReady ? (
             <motion.div
-              key="preview"
-              initial={{ opacity: 0, scale: 0.98 }}
+              key="ready"
+              initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
-              className="absolute inset-0 p-3"
+              className="absolute inset-0 flex flex-col items-center justify-center gap-4"
             >
-              <iframe
-                srcDoc={`<!DOCTYPE html><html><head><meta charset="utf-8"><style>*{margin:0;padding:0;box-sizing:border-box;font-family:system-ui,-apple-system,sans-serif}html,body{width:100%;height:100%;background:#0c0c0c;color:#f0f0f0}body{overflow-y:auto;overflow-x:hidden}body>div{width:100%;max-width:100%;padding:20px}::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:rgba(255,51,51,0.3);border-radius:2px}</style></head><body>${htmlPreview}</body></html>`}
-                className="w-full h-full rounded-lg border border-primary/10"
-                style={{ background: "#0c0c0c" }}
-                sandbox="allow-scripts"
-                title="Demo Preview"
-              />
+              <span className="text-3xl text-primary font-bold font-display">✓</span>
+              <p className="text-sm text-foreground/70 font-mono tracking-wider">
+                Demo generated successfully
+              </p>
+              <button
+                onClick={openPreview}
+                className="flex items-center gap-2 px-6 py-3 rounded-lg text-sm font-mono tracking-wider uppercase border border-primary/30 text-primary hover:bg-primary/10 transition-colors"
+              >
+                <ExternalLink className="w-4 h-4" />
+                Click here to preview demo
+              </button>
             </motion.div>
           ) : (
             <motion.div
