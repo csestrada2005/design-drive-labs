@@ -1,29 +1,24 @@
 
+## Fix: Bottom Navigation Bar Visibility
 
-## Fix Regression: Restore Previously Applied Changes
+### Problem
+The bottom nav bar uses `window.addEventListener("scroll", ...)` to detect scrolling, but **Lenis smooth scroll** (which wraps all scrolling in the app) can sometimes delay or skip native scroll events, causing `window.scrollY` to read as 0 and the bar to stay hidden (`opacity-0`, `pointer-events-none`).
 
-After reviewing all files, several changes that were previously applied have reverted or were never fully applied. Here is the full list of fixes:
+### Solution
 
-### 1. ScrollRevealText -- Make Faster (src/components/motion/ScrollRevealText.tsx)
+1. **Make the bar visible by default** -- Remove the scroll-based show/hide logic entirely. The bar should always be visible as a fixed element at the bottom of the screen (matching the old "Refactor Tron palette" behavior where it was always present).
 
-The "We build the engine..." text animation is still using the original slow scroll range. Changes needed:
-- Tighten the scroll offset from `["start 0.85", "end 0.4"]` to `["start 0.9", "end 0.6"]` so words reveal faster
-- Each word should paint in quickly (over a tighter progress band) and stay fully visible once revealed
+2. **Increase z-index to `z-[70]`** -- Ensures it sits above the NebuOrb (`z-[60]`) and any other overlays.
 
-### 2. AOV Blur in FeaturedWork (src/components/motion/FeaturedWork.tsx)
+3. **Remove the `isVisible` state and scroll listener** -- No more conditional opacity/translate. The bar is simply always there once the component mounts.
 
-Line 138 has `textShadow: "0 0 40px hsl(0 100% 50% / 0.3)"` on the `+15%` stat text. This creates a red blur/glow effect. Fix:
-- Remove the `style={{ textShadow: ... }}` from the `+15%` span so it's a clean solid red with no blur
+### Technical Details
 
-### 3. DesignLab "Design" Text Color (src/components/motion/DesignLab.tsx)
+**File: `src/components/motion/BottomNav.tsx`**
 
-Previous request was "make all text white except 'Design'". Currently both "DESIGN" and "LAB" are `text-white`. Fix:
-- Change "DESIGN" to use `text-primary` (red) while keeping "LAB" as `text-white`
+- Remove the `isVisible` state and the `useEffect` that listens for scroll
+- Remove the conditional classes `opacity-0 translate-y-8 pointer-events-none`
+- Change z-index from `z-[65]` to `z-[70]`
+- The nav element becomes simply: `fixed bottom-4 left-1/2 -translate-x-1/2 z-[70]`
 
-### Technical Summary
-
-Files to modify:
-1. `src/components/motion/ScrollRevealText.tsx` -- tighter scroll offset for faster word reveal
-2. `src/components/motion/FeaturedWork.tsx` -- remove textShadow blur from +15% stat
-3. `src/components/motion/DesignLab.tsx` -- change "DESIGN" text to `text-primary`
-
+This matches the previous versions where the bar was always visible at the bottom without any scroll-dependent visibility logic.
