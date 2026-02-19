@@ -99,9 +99,8 @@ export const BuildModes = () => {
 
 
           <h2 className="font-display text-3xl sm:text-4xl md:text-5xl text-foreground">
-            EVERY FORMAT.
-            <br />
-            <span className="text-muted-foreground">Full COMPROMISE.</span>
+            What we{" "}
+            <span className="text-primary">build.</span>
           </h2>
         </motion.div>
 

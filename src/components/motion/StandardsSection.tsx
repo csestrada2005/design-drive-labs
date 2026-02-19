@@ -85,12 +85,9 @@ export const StandardsSection = () => {
               <p className="text-[10px] font-mono tracking-[0.3em] uppercase text-primary mb-4">
 
               </p>
-              <KineticType
-                text="THINGS WE DON'T NEGOTIATE ON."
-                as="h2"
-                className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl mb-5 text-foreground"
-                delay={0.2}
-                wordDelay={0.07} />
+              <h2 className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl mb-5 text-foreground">
+                MINIMUM GUARANTEED OUTPUT.
+              </h2>
 
               <motion.p
                 className="text-muted-foreground text-sm leading-relaxed max-w-md"
