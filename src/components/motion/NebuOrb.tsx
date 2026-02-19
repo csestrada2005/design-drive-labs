@@ -13,7 +13,7 @@ export const NebuOrb = () => {
           <motion.button
             key="orb"
             onClick={() => setIsOpen(true)}
-            className="fixed bottom-20 sm:bottom-8 right-5 z-[60] flex flex-col items-center gap-1 group"
+            className="fixed bottom-20 sm:bottom-20 right-5 z-[60] flex flex-col items-center gap-1 group"
             initial={{ opacity: 0, scale: 0.5 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.5 }}
@@ -73,7 +73,7 @@ export const NebuOrb = () => {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 16, scale: 0.95 }}
               transition={{ duration: 0.3, ease: [0.25, 1, 0.5, 1] }}
-              className="fixed bottom-20 sm:bottom-8 right-5 z-[80] w-[300px] max-w-[calc(100vw-2.5rem)] overflow-hidden"
+              className="fixed bottom-20 sm:bottom-20 right-5 z-[80] w-[300px] max-w-[calc(100vw-2.5rem)] overflow-hidden"
               style={{
                 background: "hsl(0 10% 5% / 0.95)",
                 backdropFilter: "blur(20px)",

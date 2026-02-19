@@ -61,6 +61,7 @@ const TrueFocus = () => {
   const [active, setActive] = useState(false);
   const [userHovering, setUserHovering] = useState(false);
   const autoRef = useRef<number>(0);
+  const isInView = useInView(containerRef, { margin: "-100px" });
 
   const update = useCallback((cx: number, cy: number) => {
     const rect = containerRef.current?.getBoundingClientRect();
@@ -71,9 +72,12 @@ const TrueFocus = () => {
     });
   }, []);
 
-  // Auto-animate when not hovered
+  // Auto-animate only when in view and not hovered
   useEffect(() => {
-    if (userHovering) return;
+    if (userHovering || !isInView) {
+      cancelAnimationFrame(autoRef.current);
+      return;
+    }
     setActive(true);
     let t = 0;
     const tick = () => {
@@ -86,7 +90,7 @@ const TrueFocus = () => {
     };
     autoRef.current = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(autoRef.current);
-  }, [userHovering]);
+  }, [userHovering, isInView]);
 
   const focusR = 82;
 
@@ -146,9 +150,12 @@ const TrueFocus = () => {
 ───────────────────────────────────────*/
 const GradualBlur = () => {
   const [phase, setPhase] = useState(0);
+  const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref, { margin: "-100px" });
 
-  // Auto-play always
+  // Auto-play only when in view
   useEffect(() => {
+    if (!isInView) { setPhase(0); return; }
     const cycle = () => {
       setPhase(1);
       const t2 = setTimeout(() => setPhase(2), 1400);
@@ -158,13 +165,14 @@ const GradualBlur = () => {
     let cleanup = cycle();
     const iv = setInterval(() => {cleanup();cleanup = cycle();}, 3200);
     return () => {clearInterval(iv);cleanup();};
-  }, []);
+  }, [isInView]);
 
   const blurVal = phase === 1 ? 0 : 14;
   const opacityVal = phase === 1 ? 1 : 0.25;
 
   return (
     <GlassCard>
+      <div ref={ref}>
       {/* dot grid */}
       <div
         aria-hidden
@@ -184,6 +192,7 @@ const GradualBlur = () => {
           CLARITY<br />EMERGES
         </motion.p>
 
+      </div>
       </div>
     </GlassCard>);
 
@@ -540,19 +549,22 @@ const cardData = [
 
 const CardSwap = () => {
   const [top, setTop] = useState(0);
+  const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref, { margin: "-100px" });
 
-  // Auto-play always
+  // Auto-play only when in view
   useEffect(() => {
+    if (!isInView) return;
     const iv = setInterval(() => setTop((t) => (t + 1) % cardData.length), 1600);
     return () => clearInterval(iv);
-  }, []);
+  }, [isInView]);
 
   const getOrder = (i: number) =>
   ((i - top) % cardData.length + cardData.length) % cardData.length;
 
   return (
     <GlassCard>
-      <div className="relative flex items-center justify-center min-h-[200px]" style={{ perspective: 1000 }}>
+      <div ref={ref} className="relative flex items-center justify-center min-h-[200px]" style={{ perspective: 1000 }}>
         <div className="relative w-48 h-28">
           {cardData.map((card, i) => {
             const order = getOrder(i);
