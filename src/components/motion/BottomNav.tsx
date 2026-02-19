@@ -66,13 +66,6 @@ export const BottomNav = () => {
             NEBU STUDIO
           </span>
 
-          {/* Contact button */}
-          <button
-            onClick={() => scrollTo("contact")}
-            className="h-8 px-4 rounded-full bg-primary text-primary-foreground text-xs font-medium hover:bg-primary/90 transition-colors"
-          >
-            Contact
-          </button>
         </div>
       </nav>
 
