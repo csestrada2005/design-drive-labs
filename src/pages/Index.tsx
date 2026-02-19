@@ -12,7 +12,7 @@ import { DramaticFooter } from "@/components/motion/DramaticFooter";
 import { SoundToggle } from "@/components/motion/SoundToggle";
 import { CustomCursor } from "@/components/motion/CustomCursor";
 import { CornerCrosses } from "@/components/motion/CornerCrosses";
-import { NebuOrb } from "@/components/motion/NebuOrb";
+
 import { SectionSeparator } from "@/components/motion/SectionSeparator";
 import { BuildModes } from "@/components/motion/BuildModes";
 import { StandardsSection } from "@/components/motion/StandardsSection";
@@ -29,7 +29,7 @@ const Index = () => {
       <SoundToggle />
       <CustomCursor containerRef={cursorZoneRef} />
       <CornerCrosses />
-      <NebuOrb />
+      
       <SectionNav />
       <HeroTransition />
       <main ref={cursorZoneRef}>
