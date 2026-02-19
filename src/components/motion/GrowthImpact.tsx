@@ -143,10 +143,10 @@ const ScrollBarChart = () => {
 
 /* ── Metrics ── */
 const metrics = [
-{ label: "Increase CRO", value: 35, suffix: "%", prefix: "+", sub: "Typical lift: 15-35%" },
-{ label: "Increase AOV", value: 28, suffix: "%", prefix: "+", sub: "Typical lift: 10-28%" },
-{ label: "More Leads", value: 45, suffix: "%", prefix: "+", sub: "Typical lift: 20-45%" },
-{ label: "Faster Load", value: 60, suffix: "%", prefix: "", sub: "Typical improvement" }];
+{ label: "Increase CRO", value: 18, suffix: "%", prefix: "+", sub: "Typical lift: 8-18%" },
+{ label: "Increase AOV", value: 12, suffix: "%", prefix: "+", sub: "Typical lift: 5-12%" },
+{ label: "More Leads", value: 25, suffix: "%", prefix: "+", sub: "Typical lift: 10-25%" },
+{ label: "Faster Load", value: 40, suffix: "%", prefix: "", sub: "Typical improvement" }];
 
 
 export const GrowthImpact = () => {

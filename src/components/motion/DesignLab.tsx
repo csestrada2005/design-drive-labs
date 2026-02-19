@@ -59,6 +59,8 @@ const TrueFocus = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [pos, setPos] = useState({ x: 50, y: 50 });
   const [active, setActive] = useState(false);
+  const [userHovering, setUserHovering] = useState(false);
+  const autoRef = useRef<number>(0);
 
   const update = useCallback((cx: number, cy: number) => {
     const rect = containerRef.current?.getBoundingClientRect();
@@ -69,6 +71,23 @@ const TrueFocus = () => {
     });
   }, []);
 
+  // Auto-animate when not hovered
+  useEffect(() => {
+    if (userHovering) return;
+    setActive(true);
+    let t = 0;
+    const tick = () => {
+      t += 0.008;
+      setPos({
+        x: 50 + Math.sin(t * 1.3) * 30,
+        y: 50 + Math.cos(t * 0.9) * 25
+      });
+      autoRef.current = requestAnimationFrame(tick);
+    };
+    autoRef.current = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(autoRef.current);
+  }, [userHovering]);
+
   const focusR = 82;
 
   return (
@@ -77,18 +96,17 @@ const TrueFocus = () => {
         ref={containerRef}
         className="flex items-center justify-center min-h-[200px] select-none cursor-none"
         style={{ touchAction: "none" }}
-        onMouseMove={(e) => {setActive(true);update(e.clientX, e.clientY);}}
-        onMouseEnter={() => setActive(true)}
-        onMouseLeave={() => setActive(false)}
-        onTouchMove={(e) => {e.preventDefault();setActive(true);update(e.touches[0].clientX, e.touches[0].clientY);}}
-        onTouchEnd={() => setActive(false)}>
+        onMouseMove={(e) => {setUserHovering(true);setActive(true);update(e.clientX, e.clientY);}}
+        onMouseEnter={() => setUserHovering(true)}
+        onMouseLeave={() => setUserHovering(false)}
+        onTouchMove={(e) => {e.preventDefault();setUserHovering(true);setActive(true);update(e.touches[0].clientX, e.touches[0].clientY);}}
+        onTouchEnd={() => setUserHovering(false)}>
 
         {/* blurred layer */}
         <p
           className="font-display text-3xl sm:text-4xl text-foreground leading-none text-center pointer-events-none absolute"
           style={{ filter: "blur(9px)", userSelect: "none" }}
           aria-hidden>
-
           NEBU<br />STUDIO
         </p>
 
@@ -103,7 +121,6 @@ const TrueFocus = () => {
             `radial-gradient(circle ${focusR}px at ${pos.x}% ${pos.y}%, black 55%, transparent 100%)` :
             "none"
           }}>
-
           <p className="font-display text-3xl sm:text-4xl text-foreground leading-none text-center" style={{ userSelect: "none" }}>
             NEBU<br />STUDIO
           </p>
@@ -114,37 +131,24 @@ const TrueFocus = () => {
         <div
           className="absolute pointer-events-none"
           style={{ left: `${pos.x}%`, top: `${pos.y}%`, width: focusR * 2, height: focusR * 2, transform: "translate(-50%,-50%)" }}>
-
             <span className="absolute top-0 left-0 w-4 h-4 border-t border-l border-primary" />
             <span className="absolute top-0 right-0 w-4 h-4 border-t border-r border-primary" />
             <span className="absolute bottom-0 left-0 w-4 h-4 border-b border-l border-primary" />
             <span className="absolute bottom-0 right-0 w-4 h-4 border-b border-r border-primary" />
           </div>
         }
-
-        {!active &&
-        <motion.p
-          className="absolute bottom-3 left-0 right-0 text-center text-[10px] font-mono tracking-widest text-foreground/30"
-          animate={{ opacity: [0.3, 0.7, 0.3] }}
-          transition={{ duration: 2.5, repeat: Infinity }}>
-
-            MOVE CURSOR TO FOCUS
-          </motion.p>
-        }
       </div>
     </GlassCard>);
-
 };
 
 /* ─────────────────────────────────────
    DEMO 2 — GRADUAL BLUR
 ───────────────────────────────────────*/
 const GradualBlur = () => {
-  const [playing, setPlaying] = useState(false);
   const [phase, setPhase] = useState(0);
 
+  // Auto-play always
   useEffect(() => {
-    if (!playing) return;
     const cycle = () => {
       setPhase(1);
       const t2 = setTimeout(() => setPhase(2), 1400);
@@ -154,7 +158,7 @@ const GradualBlur = () => {
     let cleanup = cycle();
     const iv = setInterval(() => {cleanup();cleanup = cycle();}, 3200);
     return () => {clearInterval(iv);cleanup();};
-  }, [playing]);
+  }, []);
 
   const blurVal = phase === 1 ? 0 : 14;
   const opacityVal = phase === 1 ? 1 : 0.25;
@@ -180,37 +184,6 @@ const GradualBlur = () => {
           CLARITY<br />EMERGES
         </motion.p>
 
-        {/* play overlay */}
-        <button
-          onClick={() => {setPlaying((p) => !p);if (!playing) setPhase(0);}}
-          className="absolute inset-0 flex items-center justify-center"
-          aria-label={playing ? "Pause" : "Play"}>
-
-          <AnimatePresence mode="wait">
-            {!playing &&
-            <motion.div
-              key="play"
-              initial={{ opacity: 0, scale: 0.85 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.85 }}
-              className="w-12 h-12 rounded-full flex items-center justify-center"
-              style={{ background: "hsl(0 0% 0% / 0.1)", backdropFilter: "blur(8px)" }}>
-
-                <Play size={18} className="text-foreground ml-0.5" />
-              </motion.div>
-            }
-          </AnimatePresence>
-        </button>
-
-        {playing &&
-        <button
-          onClick={() => {setPlaying(false);setPhase(0);}}
-          className="absolute top-3 right-3 text-foreground/30 hover:text-foreground/70 transition-colors"
-          aria-label="Pause">
-
-            <Pause size={12} />
-          </button>
-        }
       </div>
     </GlassCard>);
 
@@ -462,8 +435,17 @@ const ThrowCards = () => {
                 zIndex: 10 + i
               }}
               initial={{ opacity: 0, scale: 0.7, rotate: i % 2 === 0 ? -6 : 5 }}
-              animate={{ opacity: 1, scale: 1, rotate: i % 2 === 0 ? -4 : 3 }}
-              transition={{ type: "spring", stiffness: 200, damping: 20, delay: i * 0.07 }}>
+              animate={{
+                opacity: 1,
+                scale: 1,
+                rotate: [i % 2 === 0 ? -4 : 3, i % 2 === 0 ? -1 : 6, i % 2 === 0 ? -4 : 3],
+                y: [0, -4 - i * 2, 0]
+              }}
+              transition={{
+                type: "spring", stiffness: 200, damping: 20, delay: i * 0.07,
+                rotate: { duration: 3 + i * 0.5, repeat: Infinity, ease: "easeInOut", delay: i * 0.3 },
+                y: { duration: 2.5 + i * 0.4, repeat: Infinity, ease: "easeInOut", delay: i * 0.2 }
+              }}>
 
               <motion.div
                 className="relative w-full h-full"
@@ -512,11 +494,11 @@ const ThrowCards = () => {
                     boxShadow: "0 10px 40px hsl(0 0% 0% / 0.2), inset 0 1px 0 hsl(0 0% 100% / 0.2)"
                   }}>
 
-                  <div className="w-8 h-px" style={{ background: "hsl(0 0% 100% / 0.4)" }} />
-                  <p className="text-[7px] font-mono tracking-[0.25em] text-white/80 text-center px-2 mt-1">
+                  <div className="w-8 h-px" style={{ background: "hsl(0 0% 0% / 0.3)" }} />
+                  <p className="text-[7px] font-mono tracking-[0.25em] text-black/80 text-center px-2 mt-1">
                     NEBU<br />PROJECT
                   </p>
-                  <div className="w-8 h-px mt-1" style={{ background: "hsl(0 0% 100% / 0.4)" }} />
+                  <div className="w-8 h-px mt-1" style={{ background: "hsl(0 0% 0% / 0.3)" }} />
                 </div>
               </motion.div>
             </motion.div>);
@@ -557,14 +539,13 @@ const cardData = [
 
 
 const CardSwap = () => {
-  const [playing, setPlaying] = useState(false);
   const [top, setTop] = useState(0);
 
+  // Auto-play always
   useEffect(() => {
-    if (!playing) return;
     const iv = setInterval(() => setTop((t) => (t + 1) % cardData.length), 1600);
     return () => clearInterval(iv);
-  }, [playing]);
+  }, []);
 
   const getOrder = (i: number) =>
   ((i - top) % cardData.length + cardData.length) % cardData.length;
@@ -614,27 +595,6 @@ const CardSwap = () => {
           })}
         </div>
 
-        <button
-          onClick={() => setPlaying((p) => !p)}
-          className="absolute bottom-3 right-3 flex items-center gap-1.5 text-foreground/30 hover:text-foreground/70 transition-colors"
-          aria-label={playing ? "Pause" : "Play"}>
-
-          {playing ? <Pause size={11} /> : <Play size={11} />}
-          <span className="text-[9px] font-mono tracking-wider">{playing ? "PAUSE" : "PLAY"}</span>
-        </button>
-
-        {!playing &&
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-            <motion.div
-            className="w-11 h-11 rounded-full flex items-center justify-center pointer-events-auto cursor-pointer"
-            style={{ background: "hsl(0 0% 0% / 0.08)", backdropFilter: "blur(8px)" }}
-            whileHover={{ scale: 1.1 }}
-            onClick={() => setPlaying(true)}>
-
-              <Play size={16} className="text-foreground ml-0.5" />
-            </motion.div>
-          </div>
-        }
       </div>
     </GlassCard>);
 

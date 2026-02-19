@@ -46,11 +46,11 @@ export const ROICalculator = () => {
     started.current = true;
 
     const t1 = setTimeout(() => setCurrentRevenue(144000), 300);
-    const t2 = setTimeout(() => setProjectedRevenue(248400), 600);
+    const t2 = setTimeout(() => setProjectedRevenue(172800), 600);
 
     const interval = setInterval(() => {
-      setCurrentRevenue((prev) => prev + Math.floor(Math.random() * 800 + 200));
-      setProjectedRevenue((prev) => prev + Math.floor(Math.random() * 1400 + 600));
+      setCurrentRevenue((prev) => prev + Math.floor(Math.random() * 400 + 100));
+      setProjectedRevenue((prev) => prev + Math.floor(Math.random() * 600 + 200));
     }, 4000);
 
     return () => {

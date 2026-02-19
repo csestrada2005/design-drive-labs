@@ -173,12 +173,9 @@ export const ProcessSection = () => {
           
 
 
-          <KineticType
-            text="A PROCESS THAT SHIPS."
-            as="h2"
-            className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl mb-5 text-foreground"
-            delay={0.1}
-            wordDelay={0.08} />
+          <h2 className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl mb-5 text-foreground">
+            How we <span className="text-primary">work.</span>
+          </h2>
 
           <p className="text-muted-foreground text-sm leading-relaxed max-w-md">Five phases. Hover each step to see the outcome.
 
