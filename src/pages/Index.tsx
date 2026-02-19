@@ -5,7 +5,7 @@ import { DesignLab } from "@/components/motion/DesignLab";
 import { ProcessSection } from "@/components/motion/ProcessSection";
 import { GrowthImpact } from "@/components/motion/GrowthImpact";
 import { FeaturedWork } from "@/components/motion/FeaturedWork";
-import { BigCTA } from "@/components/motion/BigCTA";
+
 import { ChoosePathContact } from "@/components/motion/ChoosePathContact";
 import { DramaticFooter } from "@/components/motion/DramaticFooter";
 // BottomNav moved to App.tsx (outside bg-wrapper) so position:fixed works
@@ -44,8 +44,6 @@ const Index = () => {
         <FeaturedWork />
         <SectionSeparator />
         <StandardsSection />
-        <SectionSeparator />
-        <BigCTA />
         <ChoosePathContact />
         <DramaticFooter />
       </main>
