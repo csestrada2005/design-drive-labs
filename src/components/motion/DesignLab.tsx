@@ -793,9 +793,9 @@ const DemoTile = ({ demo, index }: {demo: DemoConfig;index: number;}) => {
       <DemoComponent />
 
       {/* footer desc — negro */}
-      <p className="mt-2.5 text-[10px] text-foreground/45 font-mono tracking-wide leading-relaxed">
-        {demo.desc}
-      </p>
+      
+
+
     </motion.div>);
 
 };
@@ -821,9 +821,9 @@ export const DesignLab = () => {
               initial={{ opacity: 0, y: 16 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-60px" }}
-              transition={{ duration: 0.6, delay: 0.4 }}>Add  UI components to enhance your React web applications.  
+              transition={{ duration: 0.6, delay: 0.4 }}>
 
-
+              Six live demos. Move, click, brush, play — every effect ships with your project.
             </motion.p>
           </div>
 
