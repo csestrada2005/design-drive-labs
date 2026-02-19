@@ -6,7 +6,7 @@ import { KineticType } from "@/components/motion/KineticType";
 
 
 /* ── Animated counter ── */
-const CountUp = ({ end, suffix = "", prefix = "" }: { end: number; suffix?: string; prefix?: string }) => {
+const CountUp = ({ end, suffix = "", prefix = "" }: {end: number;suffix?: string;prefix?: string;}) => {
   const ref = useRef<HTMLSpanElement>(null);
   const isInView = useInView(ref, { once: true });
   const [value, setValue] = useState(0);
@@ -39,15 +39,15 @@ const ScrollLineChart = () => {
   const padY = 20;
 
   const pathData = points.map((p, i) => {
-    const x = padX + (i / (points.length - 1)) * (width - padX * 2);
-    const y = height - padY - (p / 100) * (height - padY * 2);
+    const x = padX + i / (points.length - 1) * (width - padX * 2);
+    const y = height - padY - p / 100 * (height - padY * 2);
     return `${i === 0 ? "M" : "L"} ${x} ${y}`;
   }).join(" ");
 
   const containerRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: containerRef,
-    offset: ["start end", "end center"],
+    offset: ["start end", "end center"]
   });
   const pathLength = useTransform(scrollYProgress, [0, 1], [0, 1]);
 
@@ -58,45 +58,45 @@ const ScrollLineChart = () => {
       <p className="text-[10px] tracking-widest uppercase text-muted-foreground/80 mb-3">Conversion Rate Over Time</p>
       <svg viewBox={`0 0 ${width} ${height}`} className="w-full max-w-md">
         {[0, 25, 50, 75].map((v) => {
-          const y = height - padY - (v / 100) * (height - padY * 2);
+          const y = height - padY - v / 100 * (height - padY * 2);
           return (
             <g key={v}>
               <line x1={padX} y1={y} x2={width - padX} y2={y} stroke="hsl(0 10% 15%)" strokeWidth="0.5" />
               <text x={padX - 5} y={y + 3} fill="hsl(0 8% 55%)" fontSize="8" textAnchor="end">{v}%</text>
-            </g>
-          );
+            </g>);
+
         })}
         <motion.path d={pathData} fill="none" stroke="hsl(0 100% 50%)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ pathLength }} />
         {points.map((p, i) => {
-          const x = padX + (i / (points.length - 1)) * (width - padX * 2);
-          const y = height - padY - (p / 100) * (height - padY * 2);
+          const x = padX + i / (points.length - 1) * (width - padX * 2);
+          const y = height - padY - p / 100 * (height - padY * 2);
           const pointThreshold = (i + 1) / points.length;
           return (
             <g key={i}>
               <motion.circle cx={x} cy={y} r={hoveredIdx === i ? 5 : 3} fill="hsl(0 100% 50%)" style={{ opacity: useTransform(scrollYProgress, [pointThreshold - 0.05, pointThreshold], [0, 1]) }} onMouseEnter={() => setHoveredIdx(i)} onMouseLeave={() => setHoveredIdx(null)} className="cursor-pointer" />
-              {hoveredIdx === i && (
-                <g>
+              {hoveredIdx === i &&
+              <g>
                   <rect x={x - 22} y={y - 28} width="44" height="20" rx="6" fill="hsl(0 12% 8% / 0.9)" stroke="hsl(0 100% 50% / 0.3)" strokeWidth="0.5" />
                   <text x={x} y={y - 15} fill="hsl(0 100% 50%)" fontSize="9" textAnchor="middle" fontWeight="600">{p}%</text>
                 </g>
-              )}
-            </g>
-          );
+              }
+            </g>);
+
         })}
       </svg>
-    </div>
-  );
+    </div>);
+
 };
 
 /* ── Scroll-driven Bar chart (SVG) ── */
 const ScrollBarChart = () => {
   const data = [
-    { label: "Before", value: 45 },
-    { label: "Month 1", value: 58 },
-    { label: "Month 2", value: 72 },
-    { label: "Month 3", value: 85 },
-    { label: "Month 6", value: 110 },
-  ];
+  { label: "Before", value: 45 },
+  { label: "Month 1", value: 58 },
+  { label: "Month 2", value: 72 },
+  { label: "Month 3", value: 85 },
+  { label: "Month 6", value: 110 }];
+
   const width = 400;
   const height = 160;
   const padX = 30;
@@ -109,7 +109,7 @@ const ScrollBarChart = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: containerRef,
-    offset: ["start end", "end center"],
+    offset: ["start end", "end center"]
   });
 
   return (
@@ -118,7 +118,7 @@ const ScrollBarChart = () => {
       <svg viewBox={`0 0 ${width} ${height}`} className="w-full max-w-md">
         {data.map((d, i) => {
           const x = padX + i * (barWidth + gap);
-          const barH = (d.value / maxVal) * (height - padY * 2);
+          const barH = d.value / maxVal * (height - padY * 2);
           const y = height - padY - barH;
           const barProgress = useTransform(scrollYProgress, [i * 0.15, 0.3 + i * 0.15], [0, 1]);
           const animatedHeight = useTransform(barProgress, [0, 1], [0, barH]);
@@ -127,27 +127,27 @@ const ScrollBarChart = () => {
             <g key={i}>
               <motion.rect x={x} width={barWidth} rx={4} fill="hsl(0 100% 50%)" style={{ height: animatedHeight, y: animatedY }} onMouseEnter={() => setHoveredIdx(i)} onMouseLeave={() => setHoveredIdx(null)} className="cursor-pointer" />
               <text x={x + barWidth / 2} y={height - 8} fill="hsl(0 8% 55%)" fontSize="8" textAnchor="middle">{d.label}</text>
-              {hoveredIdx === i && (
-                <g>
+              {hoveredIdx === i &&
+              <g>
                   <rect x={x + barWidth / 2 - 18} y={y - 22} width="36" height="18" rx="5" fill="hsl(0 12% 8% / 0.9)" stroke="hsl(0 100% 50% / 0.3)" strokeWidth="0.5" />
                   <text x={x + barWidth / 2} y={y - 10} fill="hsl(0 100% 50%)" fontSize="9" textAnchor="middle" fontWeight="600">${d.value}</text>
                 </g>
-              )}
-            </g>
-          );
+              }
+            </g>);
+
         })}
       </svg>
-    </div>
-  );
+    </div>);
+
 };
 
 /* ── Metrics ── */
 const metrics = [
-  { label: "Increase CRO", value: 35, suffix: "%", prefix: "+", sub: "Typical lift: 15-35%" },
-  { label: "Increase AOV", value: 28, suffix: "%", prefix: "+", sub: "Typical lift: 10-28%" },
-  { label: "More Leads", value: 45, suffix: "%", prefix: "+", sub: "Typical lift: 20-45%" },
-  { label: "Faster Load", value: 60, suffix: "%", prefix: "", sub: "Typical improvement" },
-];
+{ label: "Increase CRO", value: 35, suffix: "%", prefix: "+", sub: "Typical lift: 15-35%" },
+{ label: "Increase AOV", value: 28, suffix: "%", prefix: "+", sub: "Typical lift: 10-28%" },
+{ label: "More Leads", value: 45, suffix: "%", prefix: "+", sub: "Typical lift: 20-45%" },
+{ label: "Faster Load", value: 60, suffix: "%", prefix: "", sub: "Typical improvement" }];
+
 
 export const GrowthImpact = () => {
   const ref = useRef<HTMLElement>(null);
@@ -165,24 +165,24 @@ export const GrowthImpact = () => {
             as="h2"
             className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl mb-4 text-foreground"
             delay={0.05}
-            wordDelay={0.1}
-          />
+            wordDelay={0.1} />
+
           <p className="text-muted-foreground text-sm max-w-lg">
             No hacemos "paginas bonitas". Hacemos sistemas que venden. Estos son resultados tipicos de nuestros proyectos.
           </p>
         </motion.div>
 
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-10 mb-20">
-          {metrics.map((m, i) => (
-            <motion.div key={m.label} initial={{ opacity: 0, y: 30 }} animate={isInView ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.5, delay: 0.2 + i * 0.1 }} className="relative">
+          {metrics.map((m, i) =>
+          <motion.div key={m.label} initial={{ opacity: 0, y: 30 }} animate={isInView ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.5, delay: 0.2 + i * 0.1 }} className="relative">
               <p className="font-display text-3xl sm:text-4xl md:text-5xl text-primary mb-2">
                 <CountUp end={m.value} suffix={m.suffix} prefix={m.prefix} />
               </p>
               <p className="text-foreground text-sm font-medium mb-1">{m.label}</p>
-              <p className="text-muted-foreground/70 text-[10px] tracking-wider">{m.sub}</p>
+              
               <motion.div className="absolute -bottom-4 left-0 h-px" style={{ background: "linear-gradient(90deg, hsl(0 100% 50% / 0.3), transparent)" }} initial={{ width: 0 }} animate={isInView ? { width: "80%" } : { width: 0 }} transition={{ duration: 0.8, delay: 0.5 + i * 0.1 }} />
             </motion.div>
-          ))}
+          )}
         </div>
 
         <div className="grid md:grid-cols-2 gap-12 lg:gap-16">
@@ -213,6 +213,6 @@ export const GrowthImpact = () => {
           * Los numeros mostrados son rangos tipicos basados en proyectos anteriores. Los resultados reales varian segun industria, producto y estrategia.
         </motion.p>
       </div>
-    </section>
-  );
+    </section>);
+
 };
