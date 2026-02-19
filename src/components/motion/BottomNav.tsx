@@ -41,7 +41,7 @@ export const BottomNav = () => {
     <>
       {/* Bottom bar */}
       <nav
-        className={`fixed bottom-4 left-1/2 -translate-x-1/2 z-50 transition-all duration-500 ${
+        className={`fixed bottom-4 left-1/2 -translate-x-1/2 z-[65] transition-all duration-500 ${
           isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8 pointer-events-none"
         }`}
         aria-label="Main navigation"
