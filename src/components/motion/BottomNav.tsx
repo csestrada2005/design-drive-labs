@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Menu, X, ArrowRight } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useLenis } from "lenis/react";
 
 const menuLinks = [
   { label: "Home", id: "hero" },
@@ -15,6 +16,7 @@ const menuLinks = [
 
 export const BottomNav = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const lenis = useLenis();
 
   useEffect(() => {
     document.body.style.overflow = isMenuOpen ? "hidden" : "";
@@ -25,8 +27,13 @@ export const BottomNav = () => {
     setIsMenuOpen(false);
     setTimeout(() => {
       const el = document.getElementById(id);
-      if (el) el.scrollIntoView({ behavior: "smooth" });
-    }, 300);
+      if (!el) return;
+      if (lenis) {
+        lenis.scrollTo(el, { offset: 0, duration: 1.2 });
+      } else {
+        el.scrollIntoView({ behavior: "smooth" });
+      }
+    }, 350);
   };
 
   return (
