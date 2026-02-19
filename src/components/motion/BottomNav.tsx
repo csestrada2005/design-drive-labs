@@ -33,7 +33,7 @@ export const BottomNav = () => {
     <>
       {/* Bottom bar */}
       <nav
-        className="fixed bottom-4 left-1/2 -translate-x-1/2 z-[70]"
+        className="fixed bottom-4 left-1/2 -translate-x-1/2 z-[9999]"
         aria-label="Main navigation"
       >
         <div
@@ -77,7 +77,7 @@ export const BottomNav = () => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.35 }}
-            className="fixed inset-0 z-[100] flex flex-col"
+            className="fixed inset-0 z-[10000] flex flex-col"
             style={{
               background: "hsl(var(--background) / 0.97)",
               backdropFilter: "blur(24px)",

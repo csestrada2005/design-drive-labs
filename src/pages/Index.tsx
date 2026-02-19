@@ -8,7 +8,7 @@ import { FeaturedWork } from "@/components/motion/FeaturedWork";
 import { BigCTA } from "@/components/motion/BigCTA";
 import { ChoosePathContact } from "@/components/motion/ChoosePathContact";
 import { DramaticFooter } from "@/components/motion/DramaticFooter";
-import { BottomNav } from "@/components/motion/BottomNav";
+// BottomNav moved to App.tsx (outside bg-wrapper) so position:fixed works
 import { SoundToggle } from "@/components/motion/SoundToggle";
 import { CustomCursor } from "@/components/motion/CustomCursor";
 import { CornerCrosses } from "@/components/motion/CornerCrosses";
@@ -49,7 +49,7 @@ const Index = () => {
         <ChoosePathContact />
         <DramaticFooter />
       </main>
-      <BottomNav />
+      
     </div>
   );
 };
