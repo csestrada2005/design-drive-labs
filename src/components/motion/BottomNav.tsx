@@ -37,24 +37,25 @@ export const BottomNav = () => {
         aria-label="Main navigation"
       >
         <div
-          className="flex items-center gap-3 px-3 py-2 rounded-full border border-border/20"
+          className="flex items-center gap-3 px-4 py-2.5 rounded-full"
           style={{
-            background: "hsl(var(--background) / 0.7)",
+            background: "hsl(0 0% 8% / 0.92)",
             backdropFilter: "blur(16px) saturate(1.4)",
             WebkitBackdropFilter: "blur(16px) saturate(1.4)",
+            boxShadow: "0 4px 24px hsl(0 0% 0% / 0.25)",
           }}
         >
           {/* Menu button */}
           <button
             onClick={() => setIsMenuOpen(true)}
-            className="w-9 h-9 flex items-center justify-center rounded-full hover:bg-primary/10 transition-colors"
+            className="w-9 h-9 flex items-center justify-center rounded-full hover:bg-white/10 transition-colors"
             aria-label="Open menu"
           >
-            <Menu className="w-[18px] h-[18px] text-foreground" />
+            <Menu className="w-[18px] h-[18px] text-white" />
           </button>
 
           {/* Title */}
-          <span className="font-display text-xs tracking-[0.15em] text-foreground px-2 select-none">
+          <span className="font-display text-xs tracking-[0.15em] text-white/90 px-2 select-none">
             NEBU STUDIO
           </span>
 
