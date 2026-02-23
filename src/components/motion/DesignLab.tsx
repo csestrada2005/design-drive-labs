@@ -11,33 +11,23 @@ import { KineticType } from "@/components/motion/KineticType";
 
 /* ─────────────────────────────────────
    LIQUID GLASS WRAPPER
-   Every demo sits inside this reusable
-   glass container — no hard border.
 ───────────────────────────────────────*/
 const GlassCard = ({
   children,
   className = "",
   minH = 200
-
-
-
-
 }: {children: React.ReactNode;className?: string;minH?: number;}) =>
 <div
   className={`relative overflow-hidden rounded-2xl ${className}`}
   style={{
     minHeight: minH,
-    /* liquid glass base */
     background:
     "linear-gradient(135deg, hsl(0 0% 100% / 0.09) 0%, hsl(0 0% 100% / 0.04) 50%, hsl(0 0% 100% / 0.07) 100%)",
     backdropFilter: "blur(22px) saturate(1.4)",
     WebkitBackdropFilter: "blur(22px) saturate(1.4)",
-    /* soft specular rim — no hard border */
     boxShadow:
     "inset 0 1px 0 hsl(0 0% 100% / 0.18), inset 0 -1px 0 hsl(0 0% 0% / 0.08), inset 1px 0 0 hsl(0 0% 100% / 0.08), 0 8px 40px hsl(0 0% 0% / 0.22), 0 2px 8px hsl(0 0% 0% / 0.12)"
   }}>
-
-    {/* light refraction streak — top-left to bottom-right */}
     <div
     aria-hidden="true"
     className="absolute pointer-events-none"
@@ -47,7 +37,6 @@ const GlassCard = ({
       "linear-gradient(115deg, hsl(0 0% 100% / 0.13) 0%, transparent 40%, transparent 60%, hsl(0 0% 100% / 0.06) 100%)",
       borderRadius: "inherit"
     }} />
-
     {children}
   </div>;
 
@@ -72,7 +61,6 @@ const TrueFocus = () => {
     });
   }, []);
 
-  // Auto-animate only when in view and not hovered
   useEffect(() => {
     if (userHovering || !isInView) {
       cancelAnimationFrame(autoRef.current);
@@ -105,16 +93,12 @@ const TrueFocus = () => {
         onMouseLeave={() => setUserHovering(false)}
         onTouchMove={(e) => {e.preventDefault();setUserHovering(true);setActive(true);update(e.touches[0].clientX, e.touches[0].clientY);}}
         onTouchEnd={() => setUserHovering(false)}>
-
-        {/* blurred layer */}
         <p
           className="font-display text-3xl sm:text-4xl text-foreground leading-none text-center pointer-events-none absolute"
           style={{ filter: "blur(9px)", userSelect: "none" }}
           aria-hidden>
           NEBU<br />STUDIO
         </p>
-
-        {/* sharp reveal mask */}
         <div
           className="absolute inset-0 flex items-center justify-center pointer-events-none"
           style={{
@@ -129,8 +113,6 @@ const TrueFocus = () => {
             NEBU<br />STUDIO
           </p>
         </div>
-
-        {/* reticle brackets */}
         {active &&
         <div
           className="absolute pointer-events-none"
@@ -153,7 +135,6 @@ const GradualBlur = () => {
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { margin: "-100px" });
 
-  // Auto-play only when in view
   useEffect(() => {
     if (!isInView) { setPhase(0); return; }
     const cycle = () => {
@@ -173,7 +154,6 @@ const GradualBlur = () => {
   return (
     <GlassCard>
       <div ref={ref}>
-      {/* dot grid */}
       <div
         aria-hidden
         className="absolute inset-0 pointer-events-none"
@@ -181,116 +161,111 @@ const GradualBlur = () => {
           backgroundImage: "radial-gradient(circle, hsl(0 0% 0% / 0.05) 1px, transparent 1px)",
           backgroundSize: "22px 22px"
         }} />
-
       <div className="relative flex items-center justify-center min-h-[200px]">
         <motion.p
           className="font-display text-4xl sm:text-5xl text-foreground text-center leading-none pointer-events-none"
           animate={{ filter: `blur(${blurVal}px)`, opacity: opacityVal }}
           transition={{ duration: 1.1, ease: [0.25, 1, 0.5, 1] }}
           style={{ userSelect: "none" }}>
-
           CLARITY<br />EMERGES
         </motion.p>
-
       </div>
       </div>
     </GlassCard>);
-
 };
 
 /* ─────────────────────────────────────
    DEMO 3 — CURSOR TRAILS
-   3 selectable trail modes
+   Enhanced with aurora, neon, and ember modes
 ───────────────────────────────────────*/
-type TrailMode = "diamond" | "paw" | "lava";
+type TrailMode = "aurora" | "neon" | "ember";
 
 const TRAIL_MODES: {id: TrailMode;icon: string;label: string;}[] = [
-{ id: "diamond", icon: "◆", label: "Diamond" },
-{ id: "paw", icon: "🐾", label: "Paw" },
-{ id: "lava", icon: "🔴", label: "Lava" }];
+{ id: "aurora", icon: "✦", label: "Aurora" },
+{ id: "neon", icon: "⚡", label: "Neon" },
+{ id: "ember", icon: "🔥", label: "Ember" }];
 
-
-/* SVG diamond shape rendered as data-url for the trail particle */
-const DiamondParticle = ({ x, y, size, opacity }: {x: number;y: number;size: number;opacity: number;}) =>
-<motion.div
-  className="absolute pointer-events-none"
-  initial={{ opacity, scale: 1, rotate: 0 }}
-  animate={{ opacity: 0, scale: 0.1, rotate: 45 }}
-  transition={{ duration: 0.7, ease: "easeOut" }}
-  style={{
-    left: x,
-    top: y,
-    translateX: "-50%",
-    translateY: "-50%",
-    width: size,
-    height: size,
-    background: `hsl(210 80% 70%)`,
-    clipPath: "polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%)",
-    boxShadow: `0 0 ${size * 0.8}px hsl(210 100% 80% / 0.8), 0 0 ${size * 2}px hsl(210 100% 70% / 0.4)`
-  }} />;
-
-
-
-const PawParticle = ({ x, y, size, opacity }: {x: number;y: number;size: number;opacity: number;}) =>
-<motion.div
-  className="absolute pointer-events-none select-none"
-  initial={{ opacity, scale: 1 }}
-  animate={{ opacity: 0, scale: 0.3 }}
-  transition={{ duration: 0.85, ease: "easeOut" }}
-  style={{
-    left: x,
-    top: y,
-    translateX: "-50%",
-    translateY: "-50%",
-    fontSize: size * 1.2,
-    lineHeight: 1
-  }}>
-
-    🐾
-  </motion.div>;
-
-
-const LavaParticle = ({ x, y, size, opacity, idx, total }: {x: number;y: number;size: number;opacity: number;idx: number;total: number;}) => {
-  const progress = idx / Math.max(total - 1, 1); // 0=oldest, 1=newest
-  const r = Math.round(255);
-  const g = Math.round(progress * 80);
+const AuroraParticle = ({ x, y, size, opacity, idx }: {x: number;y: number;size: number;opacity: number;idx: number;}) => {
+  const hue = (idx * 37 + 180) % 360;
   return (
     <motion.div
       className="absolute pointer-events-none rounded-full"
-      initial={{ opacity: 1, scale: 1 }}
-      animate={{ opacity: 0, scale: 0.05 }}
-      transition={{ duration: 0.55, ease: "easeOut" }}
+      initial={{ opacity: 0.8, scale: 1.2 }}
+      animate={{ opacity: 0, scale: 0.05, rotate: 120 }}
+      transition={{ duration: 1.2, ease: "easeOut" }}
       style={{
         left: x,
         top: y,
         translateX: "-50%",
         translateY: "-50%",
-        width: size * (1 + progress * 1.8),
-        height: size * (1 + progress * 1.8),
-        background: `radial-gradient(circle, rgb(${r},${g},0) 0%, rgb(200,0,0) 50%, transparent 100%)`,
-        boxShadow: [
-        `0 0 ${size * 1.5}px rgb(${r},${g},0)`,
-        `0 0 ${size * 3}px hsl(0 100% 50% / 0.8)`,
-        `0 0 ${size * 6}px hsl(20 100% 40% / 0.5)`].
-        join(", "),
-        filter: `blur(${progress < 0.5 ? 1 : 0}px)`
-      }} />);
+        width: size * 2.2,
+        height: size * 2.2,
+        background: `radial-gradient(circle, hsl(${hue} 80% 70% / 0.7), hsl(${(hue + 60) % 360} 70% 50% / 0.3), transparent)`,
+        boxShadow: `0 0 ${size * 2}px hsl(${hue} 90% 65% / 0.6), 0 0 ${size * 4}px hsl(${hue} 80% 50% / 0.3)`,
+        filter: "blur(1px)"
+      }} />
+  );
+};
 
+const NeonParticle = ({ x, y, size, opacity, idx }: {x: number;y: number;size: number;opacity: number;idx: number;}) => {
+  const colors = ["hsl(280 100% 65%)", "hsl(200 100% 60%)", "hsl(320 100% 55%)"];
+  const color = colors[idx % colors.length];
+  return (
+    <motion.div
+      className="absolute pointer-events-none"
+      initial={{ opacity: 1, scale: 1 }}
+      animate={{ opacity: 0, scale: 0.1, y: -20 }}
+      transition={{ duration: 0.6, ease: "easeOut" }}
+      style={{
+        left: x,
+        top: y,
+        translateX: "-50%",
+        translateY: "-50%",
+        width: size * 0.6,
+        height: size * 2.5,
+        background: color,
+        borderRadius: size,
+        boxShadow: `0 0 ${size}px ${color}, 0 0 ${size * 3}px ${color}`,
+        transform: `rotate(${(idx * 45) % 180}deg)`
+      }} />
+  );
+};
 
+const EmberParticle = ({ x, y, size, opacity, idx, total }: {x: number;y: number;size: number;opacity: number;idx: number;total: number;}) => {
+  const progress = idx / Math.max(total - 1, 1);
+  const r = 255;
+  const g = Math.round(progress * 120 + 40);
+  return (
+    <motion.div
+      className="absolute pointer-events-none rounded-full"
+      initial={{ opacity: 1, scale: 1.3 }}
+      animate={{ opacity: 0, scale: 0.05, y: -(20 + Math.random() * 40) }}
+      transition={{ duration: 0.8, ease: "easeOut" }}
+      style={{
+        left: x,
+        top: y,
+        translateX: "-50%",
+        translateY: "-50%",
+        width: size * (1 + progress * 1.5),
+        height: size * (1 + progress * 1.5),
+        background: `radial-gradient(circle, rgb(${r},${g},0) 0%, rgb(200,20,0) 60%, transparent 100%)`,
+        boxShadow: `0 0 ${size * 2}px rgb(${r},${g},0), 0 0 ${size * 4}px hsl(0 100% 50% / 0.7), 0 0 ${size * 8}px hsl(20 100% 40% / 0.4)`,
+      }} />
+  );
 };
 
 const GhostCursor = () => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [mode, setMode] = useState<TrailMode>("diamond");
+  const [mode, setMode] = useState<TrailMode>("aurora");
   const [trails, setTrails] = useState<{id: number;x: number;y: number;size: number;}[]>([]);
   const idRef = useRef(0);
   const lastPos = useRef({ x: 0, y: 0 });
   const [isOver, setIsOver] = useState(false);
 
-  const minDist = mode === "paw" ? 28 : mode === "lava" ? 4 : 10;
-  const maxTrail = mode === "lava" ? 40 : mode === "paw" ? 10 : 22;
-  const ttl = mode === "lava" ? 500 : mode === "paw" ? 900 : 700;
-  const baseSize = mode === "lava" ? 22 : mode === "paw" ? 20 : 10;
+  const minDist = mode === "ember" ? 4 : mode === "neon" ? 8 : 10;
+  const maxTrail = mode === "ember" ? 40 : mode === "neon" ? 30 : 22;
+  const ttl = mode === "ember" ? 700 : mode === "neon" ? 600 : 1200;
+  const baseSize = mode === "ember" ? 18 : mode === "neon" ? 12 : 14;
 
   const handleMove = useCallback((cx: number, cy: number) => {
     const rect = containerRef.current?.getBoundingClientRect();
@@ -312,7 +287,6 @@ const GhostCursor = () => {
 
   return (
     <GlassCard>
-      {/* mode selector — 3 buttons top-left */}
       <div className="absolute top-3 left-3 z-20 flex gap-1.5">
         {TRAIL_MODES.map((m) =>
         <button
@@ -329,7 +303,6 @@ const GhostCursor = () => {
             "inset 0 0 0 1px hsl(0 0% 0% / 0.08)",
             transform: mode === m.id ? "scale(1.1)" : "scale(1)"
           }}>
-
             {m.icon}
           </button>
         )}
@@ -348,24 +321,21 @@ const GhostCursor = () => {
           CURSOR<br />TRAILS
         </p>
 
-        {/* lava: render glow overlay for extra intensity */}
-        {mode === "lava" && trails.length > 3 &&
+        {/* ambient glow for ember */}
+        {mode === "ember" && trails.length > 3 &&
         <div
           className="absolute inset-0 pointer-events-none rounded-2xl"
           style={{
             background: "radial-gradient(circle at 50% 50%, hsl(0 100% 30% / 0.06), transparent 70%)"
           }} />
-
         }
 
         {trails.map((t, i) =>
-        mode === "diamond" ?
-        <DiamondParticle key={t.id} x={t.x} y={t.y} size={t.size} opacity={0.4 + i / trails.length * 0.5} /> :
-        mode === "paw" ?
-        <PawParticle key={t.id} x={t.x} y={t.y} size={t.size} opacity={0.5 + i / trails.length * 0.4} /> :
-
-        <LavaParticle key={t.id} x={t.x} y={t.y} size={t.size} opacity={1} idx={i} total={trails.length} />
-
+        mode === "aurora" ?
+        <AuroraParticle key={t.id} x={t.x} y={t.y} size={t.size} opacity={0.8} idx={i} /> :
+        mode === "neon" ?
+        <NeonParticle key={t.id} x={t.x} y={t.y} size={t.size} opacity={1} idx={i} /> :
+        <EmberParticle key={t.id} x={t.x} y={t.y} size={t.size} opacity={1} idx={i} total={trails.length} />
         )}
 
         {!isOver &&
@@ -373,7 +343,6 @@ const GhostCursor = () => {
           className="absolute bottom-3 left-0 right-0 text-center text-[10px] font-mono tracking-widest text-foreground/30"
           animate={{ opacity: [0.3, 0.7, 0.3] }}
           transition={{ duration: 2.5, repeat: Infinity }}>
-
             MOVE CURSOR TO DRAW
           </motion.p>
         }
@@ -382,17 +351,14 @@ const GhostCursor = () => {
           onClick={clearTrails}
           className="absolute top-3 right-3 text-foreground/20 hover:text-foreground/60 transition-colors"
           aria-label="Reset">
-
           <RotateCcw size={12} />
         </button>
       </div>
     </GlassCard>);
-
 };
 
 /* ─────────────────────────────────────
    DEMO 4 — THROW CARDS
-   Drag, throw, and watch them spring back
 ───────────────────────────────────────*/
 const throwCards = [
 { label: "PAPACHOA", img: domePapachoa, color: "hsl(14 70% 40%)" },
@@ -400,14 +366,11 @@ const throwCards = [
 { label: "JEWELRY", img: domeJewelry, color: "hsl(45 65% 38%)" },
 { label: "PAWN SHOP", img: domePawnshop, color: "hsl(270 40% 38%)" }];
 
-
-/* Initial resting positions (% of container) */
 const restPositions = [
 { x: 18, y: 22 },
 { x: 56, y: 14 },
 { x: 12, y: 60 },
 { x: 62, y: 55 }];
-
 
 const ThrowCards = () => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -462,7 +425,7 @@ const ThrowCards = () => {
                 animate={{ rotateY: isFlipped ? 180 : 0 }}
                 transition={{ type: "spring", stiffness: 220, damping: 24 }}>
 
-                {/* Front — photo */}
+                {/* Front — photo only, no label */}
                 <div
                   className="absolute inset-0 overflow-hidden"
                   style={{
@@ -471,9 +434,7 @@ const ThrowCards = () => {
                     WebkitBackfaceVisibility: "hidden",
                     boxShadow: "0 10px 40px hsl(0 0% 0% / 0.28), inset 0 1px 0 hsl(0 0% 100% / 0.22)"
                   }}>
-
                   <img src={card.img} alt={card.label} className="w-full h-full object-cover" draggable={false} />
-                  {/* glass top highlight */}
                   <div
                     className="absolute top-0 left-0 right-0 pointer-events-none"
                     style={{
@@ -481,14 +442,6 @@ const ThrowCards = () => {
                       background: "linear-gradient(to bottom, hsl(0 0% 100% / 0.22), transparent)",
                       borderRadius: "14px 14px 0 0"
                     }} />
-
-                  <div
-                    className="absolute inset-0"
-                    style={{ background: "linear-gradient(to top, hsl(0 0% 0% / 0.6), transparent 50%)" }} />
-
-                  <span className="absolute bottom-2.5 left-0 right-0 text-center text-[8px] font-mono tracking-widest text-white/90">
-                    {card.label}
-                  </span>
                 </div>
 
                 {/* Back — color panel */}
@@ -502,7 +455,6 @@ const ThrowCards = () => {
                     background: `linear-gradient(135deg, ${card.color}cc, ${card.color}44)`,
                     boxShadow: "0 10px 40px hsl(0 0% 0% / 0.2), inset 0 1px 0 hsl(0 0% 100% / 0.2)"
                   }}>
-
                   <div className="w-8 h-px" style={{ background: "hsl(0 0% 0% / 0.3)" }} />
                   <p className="text-[7px] font-mono tracking-[0.25em] text-black/80 text-center px-2 mt-1">
                     NEBU<br />PROJECT
@@ -511,31 +463,25 @@ const ThrowCards = () => {
                 </div>
               </motion.div>
             </motion.div>);
-
         })}
 
-        {/* Hint */}
         {hint &&
         <motion.p
           className="absolute bottom-3 left-0 right-0 text-center text-[9px] font-mono tracking-widest text-foreground/30 pointer-events-none"
           animate={{ opacity: [0.3, 0.75, 0.3] }}
           transition={{ duration: 2.5, repeat: Infinity }}>
-
             DRAG · THROW · CLICK TO FLIP
           </motion.p>
         }
 
-        {/* Reset */}
         <button
           onClick={() => {setFlipped(null);}}
           className="absolute top-3 right-3 text-foreground/20 hover:text-foreground/60 transition-colors z-40"
           aria-label="Reset">
-
           <RotateCcw size={12} />
         </button>
       </div>
     </GlassCard>);
-
 };
 
 /* ─────────────────────────────────────
@@ -546,13 +492,11 @@ const cardData = [
 { label: "CUSTOMIZABLE", sub: "Any stack, any depth", hue: 14 },
 { label: "RELIABLE", sub: "Tested at scale", hue: 160 }];
 
-
 const CardSwap = () => {
   const [top, setTop] = useState(0);
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { margin: "-100px" });
 
-  // Auto-play only when in view
   useEffect(() => {
     if (!isInView) return;
     const iv = setInterval(() => setTop((t) => (t + 1) % cardData.length), 1600);
@@ -585,40 +529,32 @@ const CardSwap = () => {
                   rotateX: order * 2
                 }}
                 transition={{ type: "spring", stiffness: 200, damping: 26 }}>
-
-                {/* glass sheen on each card */}
                 <div
                   className="absolute inset-0 pointer-events-none"
                   style={{
                     background: "linear-gradient(115deg, hsl(0 0% 100% / 0.5) 0%, transparent 50%)",
                     borderRadius: "inherit"
                   }} />
-
                 <div
                   className="w-5 h-5 rounded-full"
                   style={{ background: `hsl(${card.hue} 70% 60% / 0.6)` }} />
-
                 <div>
                   <p className="font-display text-[10px] tracking-[0.2em] text-foreground/90">{card.label}</p>
                   <p className="text-[9px] text-foreground/40 mt-0.5 font-mono">{card.sub}</p>
                 </div>
               </motion.div>);
-
           })}
         </div>
-
       </div>
     </GlassCard>);
-
 };
 
 /* ─────────────────────────────────────
-   DEMO 6 — INK REVEAL
+   DEMO 6 — INK REVEAL (Black screen, mouse reveals)
 ───────────────────────────────────────*/
 const InkReveal = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-  const isPainting = useRef(false);
   const [revealed, setRevealed] = useState(0);
 
   const paint = useCallback((cx: number, cy: number) => {
@@ -630,10 +566,10 @@ const InkReveal = () => {
     const x = cx - rect.left;
     const y = cy - rect.top;
     ctx.globalCompositeOperation = "destination-out";
-    const r = 32 + Math.random() * 16;
+    const r = 40 + Math.random() * 20;
     const grad = ctx.createRadialGradient(x, y, 0, x, y, r);
     grad.addColorStop(0, "rgba(0,0,0,1)");
-    grad.addColorStop(0.5, "rgba(0,0,0,0.8)");
+    grad.addColorStop(0.5, "rgba(0,0,0,0.85)");
     grad.addColorStop(1, "rgba(0,0,0,0)");
     ctx.fillStyle = grad;
     ctx.beginPath();
@@ -650,7 +586,7 @@ const InkReveal = () => {
     const ctx = canvas?.getContext("2d");
     if (!canvas || !ctx) return;
     ctx.globalCompositeOperation = "source-over";
-    ctx.fillStyle = "rgba(240,240,240,0.92)";
+    ctx.fillStyle = "hsl(0 0% 3%)";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     setRevealed(0);
   }, []);
@@ -671,51 +607,45 @@ const InkReveal = () => {
         className="relative flex items-center justify-center min-h-[200px]"
         style={{ touchAction: "none" }}>
 
-        {/* revealed layer */}
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+        {/* revealed layer — content underneath the black */}
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none"
+          style={{
+            background: "linear-gradient(135deg, hsl(0 100% 50% / 0.15), hsl(280 80% 50% / 0.1), hsl(200 80% 50% / 0.1))"
+          }}>
           <p className="font-display text-3xl sm:text-4xl text-primary leading-none text-center">
             NEBU<br />BUILDS
           </p>
         </div>
 
-        {/* canvas mask */}
+        {/* Black canvas mask — user reveals by moving mouse */}
         <canvas
           ref={canvasRef}
           className="absolute inset-0 w-full h-full rounded-2xl"
-          onMouseDown={(e) => {isPainting.current = true;paint(e.clientX, e.clientY);}}
-          onMouseMove={(e) => {if (isPainting.current) paint(e.clientX, e.clientY);}}
-          onMouseUp={() => {isPainting.current = false;}}
-          onMouseLeave={() => {isPainting.current = false;}}
-          onTouchStart={(e) => {e.preventDefault();isPainting.current = true;paint(e.touches[0].clientX, e.touches[0].clientY);}}
-          onTouchMove={(e) => {e.preventDefault();if (isPainting.current) paint(e.touches[0].clientX, e.touches[0].clientY);}}
-          onTouchEnd={() => {isPainting.current = false;}}
+          onMouseMove={(e) => paint(e.clientX, e.clientY)}
+          onTouchMove={(e) => {e.preventDefault();paint(e.touches[0].clientX, e.touches[0].clientY);}}
           style={{ cursor: "crosshair" }} />
 
-
-        <div className="absolute top-3 left-3 text-[9px] font-mono text-foreground/30 pointer-events-none">
+        <div className="absolute top-3 left-3 text-[9px] font-mono text-white/50 pointer-events-none z-10">
           {revealed}% revealed
         </div>
 
         {revealed < 3 &&
         <motion.p
-          className="absolute bottom-3 left-0 right-0 text-center text-[10px] font-mono tracking-widest pointer-events-none text-foreground/35"
-          animate={{ opacity: [0.35, 0.8, 0.35] }}
+          className="absolute bottom-3 left-0 right-0 text-center text-[10px] font-mono tracking-widest pointer-events-none text-white/50 z-10"
+          animate={{ opacity: [0.4, 0.9, 0.4] }}
           transition={{ duration: 2.5, repeat: Infinity }}>
-
-            BRUSH TO REVEAL
+            MOVE TO REVEAL
           </motion.p>
         }
 
         <button
           onClick={reset}
-          className="absolute top-3 right-3 text-foreground/25 hover:text-foreground/60 transition-colors z-10"
+          className="absolute top-3 right-3 text-white/30 hover:text-white/70 transition-colors z-10"
           aria-label="Reset">
-
           <RotateCcw size={12} />
         </button>
       </div>
     </GlassCard>);
-
 };
 
 /* ─────────────────────────────────────
@@ -729,24 +659,19 @@ interface DemoConfig {
 const demos: DemoConfig[] = [
 { id: "focus", title: "TRUE FOCUS", desc: "Focus window follows your cursor through blurred text", type: "interactive", component: TrueFocus },
 { id: "blur", title: "GRADUAL BLUR", desc: "Text assembles from blur to clarity in cinematic motion", type: "auto", component: GradualBlur },
-{ id: "ghost", title: "CURSOR TRAILS", desc: "Pick a trail style — diamond, paw or blazing lava", type: "interactive", component: GhostCursor },
+{ id: "ghost", title: "CURSOR TRAILS", desc: "Pick a trail style — aurora, neon or blazing ember", type: "interactive", component: GhostCursor },
 { id: "throw", title: "THROW CARDS", desc: "Drag, throw and flip the project cards — pure physics", type: "interactive", component: ThrowCards },
 { id: "swap", title: "CARD SWAP", desc: "Stack of glass cards swaps forward with spring depth", type: "auto", component: CardSwap },
-{ id: "ink", title: "INK REVEAL", desc: "Brush away the surface to reveal what's underneath", type: "interactive", component: InkReveal }];
+{ id: "ink", title: "INK REVEAL", desc: "Move your cursor to reveal what's hiding in the dark", type: "interactive", component: InkReveal }];
 
 
 /* ─────────────────────────────────────
-   DEMO TILE WRAPPER
+   DEMO TILE WRAPPER — no scroll animation
 ───────────────────────────────────────*/
 const DemoTile = ({ demo, index }: {demo: DemoConfig;index: number;}) => {
   const DemoComponent = demo.component;
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 48 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-60px" }}
-      transition={{ duration: 0.7, delay: index * 0.08, ease: [0.25, 1, 0.5, 1] }}>
-
+    <div>
       {/* header */}
       <div className="flex items-center gap-3 mb-3">
         <span className="text-[11px] font-mono tracking-[0.22em] text-foreground font-medium">{demo.title}</span>
@@ -757,19 +682,11 @@ const DemoTile = ({ demo, index }: {demo: DemoConfig;index: number;}) => {
             background: demo.type === "interactive" ? "hsl(0 100% 50% / 0.1)" : "hsl(0 0% 0% / 0.06)",
             color: demo.type === "interactive" ? "hsl(0 100% 38%)" : "hsl(0 0% 30%)"
           }}>
-
           {demo.type === "interactive" ? "INTERACTIVE" : "AUTO DEMO"}
         </span>
       </div>
-
       <DemoComponent />
-
-      {/* footer desc — negro */}
-      
-
-
-    </motion.div>);
-
+    </div>);
 };
 
 /* ─────────────────────────────────────
@@ -787,16 +704,10 @@ export const DesignLab = () => {
               className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl mb-5 text-foreground"
               delay={0.15}
               wordDelay={0.12} />
-
-            <motion.p
-              className="text-foreground/45 text-sm max-w-sm leading-relaxed font-mono tracking-wide"
-              initial={{ opacity: 0, y: 16 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-60px" }}
-              transition={{ duration: 0.6, delay: 0.4 }}>
-
-              ​Add  UI components that to enhance and personalize your React web applications   
-            </motion.p>
+            <p
+              className="text-foreground/45 text-sm max-w-sm leading-relaxed font-mono tracking-wide">
+              Interactive UI components that enhance and personalize your web applications.
+            </p>
           </div>
 
           {/* layout */}
@@ -805,12 +716,10 @@ export const DesignLab = () => {
               <DemoTile demo={demos[0]} index={0} />
               <DemoTile demo={demos[1]} index={1} />
             </div>
-
             <div className="grid md:grid-cols-5 gap-10 sm:gap-14">
               <div className="md:col-span-3"><DemoTile demo={demos[2]} index={2} /></div>
               <div className="md:col-span-2"><DemoTile demo={demos[3]} index={3} /></div>
             </div>
-
             <div className="grid md:grid-cols-2 gap-10 sm:gap-14 lg:gap-20">
               <DemoTile demo={demos[4]} index={4} />
               <DemoTile demo={demos[5]} index={5} />
@@ -819,5 +728,4 @@ export const DesignLab = () => {
         </div>
       </BlackSandReveal>
     </section>);
-
 };

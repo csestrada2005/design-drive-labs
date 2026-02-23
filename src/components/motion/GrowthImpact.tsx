@@ -4,7 +4,6 @@ import { ROICalculator } from "@/components/tools/ROICalculator";
 import { useScrollPaint } from "@/hooks/useScrollPaint";
 import { KineticType } from "@/components/motion/KineticType";
 
-
 /* ── Animated counter ── */
 const CountUp = ({ end, suffix = "", prefix = "" }: {end: number;suffix?: string;prefix?: string;}) => {
   const ref = useRef<HTMLSpanElement>(null);
@@ -32,15 +31,16 @@ const CountUp = ({ end, suffix = "", prefix = "" }: {end: number;suffix?: string
 
 /* ── Scroll-driven Line chart (SVG) ── */
 const ScrollLineChart = () => {
-  const points = [10, 18, 15, 28, 25, 40, 38, 55, 52, 70, 68, 82];
+  const points = [2.1, 2.8, 3.2, 4.1, 4.5, 5.8, 6.2, 7.1, 7.8, 8.5, 9.2, 10.4];
   const width = 400;
   const height = 160;
   const padX = 30;
   const padY = 20;
+  const maxVal = 12;
 
   const pathData = points.map((p, i) => {
     const x = padX + i / (points.length - 1) * (width - padX * 2);
-    const y = height - padY - p / 100 * (height - padY * 2);
+    const y = height - padY - p / maxVal * (height - padY * 2);
     return `${i === 0 ? "M" : "L"} ${x} ${y}`;
   }).join(" ");
 
@@ -50,26 +50,24 @@ const ScrollLineChart = () => {
     offset: ["start end", "end center"]
   });
   const pathLength = useTransform(scrollYProgress, [0, 1], [0, 1]);
-
   const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
 
   return (
     <div ref={containerRef} className="relative">
-      <p className="text-[10px] tracking-widest uppercase text-muted-foreground/80 mb-3">Conversion Rate Over Time</p>
+      <p className="text-[10px] tracking-widest uppercase text-muted-foreground/80 mb-3">Conversion Rate Over Time (%)</p>
       <svg viewBox={`0 0 ${width} ${height}`} className="w-full max-w-md">
-        {[0, 25, 50, 75].map((v) => {
-          const y = height - padY - v / 100 * (height - padY * 2);
+        {[0, 3, 6, 9, 12].map((v) => {
+          const y = height - padY - v / maxVal * (height - padY * 2);
           return (
             <g key={v}>
               <line x1={padX} y1={y} x2={width - padX} y2={y} stroke="hsl(0 10% 15%)" strokeWidth="0.5" />
               <text x={padX - 5} y={y + 3} fill="hsl(0 8% 55%)" fontSize="8" textAnchor="end">{v}%</text>
             </g>);
-
         })}
         <motion.path d={pathData} fill="none" stroke="hsl(0 100% 50%)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ pathLength }} />
         {points.map((p, i) => {
           const x = padX + i / (points.length - 1) * (width - padX * 2);
-          const y = height - padY - p / 100 * (height - padY * 2);
+          const y = height - padY - p / maxVal * (height - padY * 2);
           const pointThreshold = (i + 1) / points.length;
           return (
             <g key={i}>
@@ -81,21 +79,19 @@ const ScrollLineChart = () => {
                 </g>
               }
             </g>);
-
         })}
       </svg>
     </div>);
-
 };
 
 /* ── Scroll-driven Bar chart (SVG) ── */
 const ScrollBarChart = () => {
   const data = [
-  { label: "Before", value: 45 },
-  { label: "Month 1", value: 58 },
-  { label: "Month 2", value: 72 },
-  { label: "Month 3", value: 85 },
-  { label: "Month 6", value: 110 }];
+  { label: "Before", value: 1.9 },
+  { label: "Month 1", value: 3.2 },
+  { label: "Month 3", value: 5.1 },
+  { label: "Month 6", value: 7.6 },
+  { label: "Month 12", value: 10.1 }];
 
   const width = 400;
   const height = 160;
@@ -103,7 +99,7 @@ const ScrollBarChart = () => {
   const padY = 25;
   const barWidth = 30;
   const gap = (width - padX * 2 - barWidth * data.length) / (data.length - 1);
-  const maxVal = 120;
+  const maxVal = 12;
   const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
 
   const containerRef = useRef<HTMLDivElement>(null);
@@ -114,7 +110,7 @@ const ScrollBarChart = () => {
 
   return (
     <div ref={containerRef} className="relative">
-      <p className="text-[10px] tracking-widest uppercase text-muted-foreground/80 mb-3">Average Order Value ($)</p>
+      <p className="text-[10px] tracking-widest uppercase text-muted-foreground/80 mb-3">Lead-to-Customer Rate (%)</p>
       <svg viewBox={`0 0 ${width} ${height}`} className="w-full max-w-md">
         {data.map((d, i) => {
           const x = padX + i * (barWidth + gap);
@@ -130,23 +126,21 @@ const ScrollBarChart = () => {
               {hoveredIdx === i &&
               <g>
                   <rect x={x + barWidth / 2 - 18} y={y - 22} width="36" height="18" rx="5" fill="hsl(0 12% 8% / 0.9)" stroke="hsl(0 100% 50% / 0.3)" strokeWidth="0.5" />
-                  <text x={x + barWidth / 2} y={y - 10} fill="hsl(0 100% 50%)" fontSize="9" textAnchor="middle" fontWeight="600">${d.value}</text>
+                  <text x={x + barWidth / 2} y={y - 10} fill="hsl(0 100% 50%)" fontSize="9" textAnchor="middle" fontWeight="600">{d.value}%</text>
                 </g>
               }
             </g>);
-
         })}
       </svg>
     </div>);
-
 };
 
-/* ── Metrics ── */
+/* ── Metrics — research-backed stats ── */
 const metrics = [
-{ label: "Increase CRO", value: 18, suffix: "%", prefix: "+", sub: "Typical lift: 8-18%" },
-{ label: "Increase AOV", value: 12, suffix: "%", prefix: "+", sub: "Typical lift: 5-12%" },
-{ label: "More Leads", value: 25, suffix: "%", prefix: "+", sub: "Typical lift: 10-25%" },
-{ label: "Faster Load", value: 40, suffix: "%", prefix: "", sub: "Typical improvement" }];
+{ label: "First Impressions", value: 94, suffix: "%", prefix: "", sub: "Influenced by web design (Hostinger)" },
+{ label: "Higher Conversion", value: 200, suffix: "%", prefix: "+", sub: "Well-designed sites vs poor UX (Forrester)" },
+{ label: "More Time on Site", value: 47, suffix: "%", prefix: "+", sub: "With quality visual content (Sproutworth)" },
+{ label: "Won't Return", value: 88, suffix: "%", prefix: "", sub: "After a bad user experience (Sweor)" }];
 
 
 export const GrowthImpact = () => {
@@ -168,7 +162,7 @@ export const GrowthImpact = () => {
             wordDelay={0.1} />
 
           <p className="text-muted-foreground text-sm max-w-lg">
-            No hacemos "paginas bonitas". Hacemos sistemas que venden. Estos son resultados tipicos de nuestros proyectos.
+            We don't make "pretty pages." We build systems that sell. These are research-backed statistics on how design impacts business.
           </p>
         </motion.div>
 
@@ -179,6 +173,7 @@ export const GrowthImpact = () => {
                 <CountUp end={m.value} suffix={m.suffix} prefix={m.prefix} />
               </p>
               <p className="text-foreground text-sm font-medium mb-1">{m.label}</p>
+              <p className="text-muted-foreground/60 text-[10px] tracking-wider">{m.sub}</p>
               
               <motion.div className="absolute -bottom-4 left-0 h-px" style={{ background: "linear-gradient(90deg, hsl(0 100% 50% / 0.3), transparent)" }} initial={{ width: 0 }} animate={isInView ? { width: "80%" } : { width: 0 }} transition={{ duration: 0.8, delay: 0.5 + i * 0.1 }} />
             </motion.div>
@@ -210,9 +205,8 @@ export const GrowthImpact = () => {
         </motion.div>
 
         <motion.p initial={{ opacity: 0 }} animate={isInView ? { opacity: 1 } : {}} transition={{ delay: 1.2 }} className="text-muted-foreground/60 text-[10px] tracking-wider mt-10 max-w-md">
-          * Los numeros mostrados son rangos tipicos basados en proyectos anteriores. Los resultados reales varian segun industria, producto y estrategia.
+          * Statistics sourced from Hostinger, Forrester Research, Sproutworth, Sweor and Business Dasher. Actual results vary by industry, product and strategy.
         </motion.p>
       </div>
     </section>);
-
 };
