@@ -196,7 +196,7 @@ export const HeroSection = () => {
   return (
     <section
       ref={ref}
-      className="relative h-[100dvh] flex items-center justify-center overflow-hidden border-2 border-primary"
+      className="relative h-[100dvh] flex items-center justify-center overflow-hidden"
       id="hero"
     >
       {/* Grid overlay */}
@@ -223,7 +223,7 @@ export const HeroSection = () => {
         <img
           src={nebuOwl}
           alt="Nebu Studio owl logo"
-          className="w-24 sm:w-32 md:w-40 mb-4 sm:mb-6"
+          className="w-48 sm:w-64 md:w-80 lg:w-96 mb-6 sm:mb-8"
         />
         <SumiHeroReveal />
       </div>

@@ -45,6 +45,7 @@ const Index = () => {
 
         {/* Below fold — lazy with separators between every section */}
         <Suspense fallback={<SectionSkeleton />}>
+          <SectionSeparator />
           <BuildModes />
         </Suspense>
 
