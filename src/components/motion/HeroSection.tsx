@@ -1,6 +1,6 @@
 import { useRef, useState, useEffect } from "react";
 import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
-import heroLogo from "@/assets/hero-logo.jpeg";
+import heroLogoNoBg from "@/assets/hero-logo-nobg.png";
 
 /* ── Glitch line component ── */
 const GlitchLine = ({ delay, y }: { delay: number; y: string }) => (
@@ -77,15 +77,13 @@ export const HeroSection = () => {
       id="hero"
       style={{ opacity, scale, y }}
     >
-      <div
-        className="absolute inset-0"
-        style={{
-          backgroundImage: `url(${heroLogo})`,
-          backgroundSize: "60%",
-          backgroundRepeat: "no-repeat",
-          backgroundPosition: "center",
-        }}
-      />
+      <div className="absolute inset-0 flex items-center justify-center">
+        <img
+          src={heroLogoNoBg}
+          alt="Nebu Studio"
+          className="w-[45%] max-w-[500px] object-contain drop-shadow-2xl"
+        />
+      </div>
 
       {/* Grid overlay */}
       <div
