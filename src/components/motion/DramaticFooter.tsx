@@ -29,10 +29,10 @@ const SumiReveal = () => {
     if (!wasVisible.current) {
       // First time: full sequence
       wasVisible.current = true;
-      const t1 = setTimeout(() => setPhase(1), 80);   // start ink fill
-      const t2 = setTimeout(() => setPhase(2), 1450); // light sweep
-      const t3 = setTimeout(() => setPhase(3), 2000); // red underline
-      const t4 = setTimeout(() => setPhase(4), 2650); // complete
+      const t1 = setTimeout(() => setPhase(1), 50);
+      const t2 = setTimeout(() => setPhase(2), 700);
+      const t3 = setTimeout(() => setPhase(3), 950);
+      const t4 = setTimeout(() => setPhase(4), 1300);
       timersRef.current = [t1, t2, t3, t4];
       return () => timersRef.current.forEach(clearTimeout);
     } else {
@@ -74,7 +74,7 @@ const SumiReveal = () => {
     <div
       ref={ref}
       className="relative select-none cursor-default"
-      style={{ paddingTop: "4rem", paddingBottom: "2rem" }}
+      style={{ paddingTop: "4rem", paddingBottom: "6rem" }}
       onMouseEnter={handleInteract}
       onTouchStart={handleInteract}
       aria-label="NEBU STUDIO"
@@ -99,7 +99,7 @@ const SumiReveal = () => {
             className="absolute top-0 left-0 h-full overflow-hidden pointer-events-none"
             initial={{ width: "0%" }}
             animate={{ width: phase >= 1 ? "100%" : "0%" }}
-            transition={{ duration: 1.35, ease: [0.16, 1, 0.3, 1] }}
+            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
             style={{
               // Soft trailing edge gives the organic ink feel
               WebkitMaskImage: phase < 4
