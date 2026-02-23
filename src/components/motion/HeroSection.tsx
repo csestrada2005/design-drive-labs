@@ -49,7 +49,13 @@ export const HeroSection = () => {
       if (bootDone.current) return;
       bootDone.current = true;
       setBootPhase("glitch");
-      setTimeout(() => setBootPhase("done"), 1800);
+      setTimeout(() => {
+        setBootPhase("done");
+        // Auto-scroll to BuildModes
+        setTimeout(() => {
+          document.getElementById("build")?.scrollIntoView({ behavior: "smooth" });
+        }, 300);
+      }, 1800);
     };
 
     // Use capturing phase to intercept before Lenis
@@ -71,45 +77,53 @@ export const HeroSection = () => {
   }, []);
 
   return (
-    <motion.section
-      ref={ref}
-      className="relative h-[100dvh] flex items-center justify-center overflow-hidden"
-      id="hero"
-      style={{ opacity, scale, y }}
-    >
-      <div
-        className="absolute inset-0"
-        style={{
-          backgroundImage: `url(${heroLogo})`,
-          backgroundSize: "60%",
-          backgroundRepeat: "no-repeat",
-          backgroundPosition: "center",
-        }}
-      />
+    <>
+      <motion.section
+        ref={ref}
+        className="relative h-[100dvh] flex items-center justify-center overflow-hidden"
+        id="hero"
+        style={{ opacity, scale, y }}
+      >
+        <div
+          className="absolute inset-0"
+          style={{
+            backgroundImage: `url(${heroLogo})`,
+            backgroundSize: "60%",
+            backgroundRepeat: "no-repeat",
+            backgroundPosition: "center",
+          }}
+        />
 
-      {/* Grid overlay */}
-      <div
-        className="absolute inset-0 opacity-[0.06]"
-        style={{
-          backgroundImage:
-            "linear-gradient(hsl(var(--foreground) / 0.4) 1px, transparent 1px), linear-gradient(90deg, hsl(var(--foreground) / 0.4) 1px, transparent 1px)",
-          backgroundSize: "60px 60px",
-        }}
-      />
+        {/* Grid overlay */}
+        <div
+          className="absolute inset-0 opacity-[0.06]"
+          style={{
+            backgroundImage:
+              "linear-gradient(hsl(var(--foreground) / 0.4) 1px, transparent 1px), linear-gradient(90deg, hsl(var(--foreground) / 0.4) 1px, transparent 1px)",
+            backgroundSize: "60px 60px",
+          }}
+        />
 
-      {/* Vignette */}
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          background:
-            "radial-gradient(ellipse 80% 80% at 50% 50%, transparent 40%, hsl(var(--background) / 0.7) 100%)",
-        }}
-      />
+        {/* Vignette */}
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background:
+              "radial-gradient(ellipse 80% 80% at 50% 50%, transparent 40%, hsl(var(--background) / 0.7) 100%)",
+          }}
+        />
+      </motion.section>
 
-      {/* Aggressive glitch/boot animation */}
+      {/* Full-screen glitch overlay — fixed so it covers everything */}
       <AnimatePresence>
         {bootPhase === "glitch" && (
-          <>
+          <motion.div
+            className="fixed inset-0 pointer-events-none"
+            style={{ zIndex: 9999 }}
+            initial={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+          >
             {/* Multiple horizontal glitch scan lines */}
             {[0, 1, 2, 3, 4, 5, 6, 7].map((i) => (
               <GlitchLine key={`gl-${i}`} delay={i * 0.06} y={`${10 + i * 11}%`} />
@@ -118,7 +132,7 @@ export const HeroSection = () => {
             {/* Full screen flash — white */}
             <motion.div
               key="flash-white"
-              className="absolute inset-0 pointer-events-none"
+              className="absolute inset-0"
               style={{ background: "hsl(0 0% 100%)", zIndex: 55 }}
               initial={{ opacity: 0 }}
               animate={{ opacity: [0, 0.9, 0, 0.4, 0] }}
@@ -128,7 +142,7 @@ export const HeroSection = () => {
             {/* Red flash overlay */}
             <motion.div
               key="flash-red"
-              className="absolute inset-0 pointer-events-none"
+              className="absolute inset-0"
               style={{
                 background: "radial-gradient(circle at 50% 50%, hsl(0 100% 50% / 0.3), transparent 70%)",
                 zIndex: 54,
@@ -141,7 +155,7 @@ export const HeroSection = () => {
             {/* CRT-style noise bars */}
             <motion.div
               key="noise-bars"
-              className="absolute inset-0 pointer-events-none"
+              className="absolute inset-0"
               style={{
                 zIndex: 53,
                 backgroundImage:
@@ -156,7 +170,7 @@ export const HeroSection = () => {
             {[1, 2, 3].map((i) => (
               <motion.div
                 key={`vblock-${i}`}
-                className="absolute pointer-events-none"
+                className="absolute"
                 style={{
                   left: `${15 + i * 22}%`,
                   top: 0,
@@ -178,15 +192,15 @@ export const HeroSection = () => {
             {/* Final black-to-clear wipe */}
             <motion.div
               key="wipe"
-              className="absolute inset-0 pointer-events-none"
+              className="absolute inset-0"
               style={{ background: "hsl(0 0% 0%)", zIndex: 50 }}
               initial={{ opacity: 0 }}
               animate={{ opacity: [0, 0.7, 0] }}
               transition={{ duration: 1.0, delay: 0.5, ease: [0.25, 1, 0.5, 1] }}
             />
-          </>
+          </motion.div>
         )}
       </AnimatePresence>
-    </motion.section>
+    </>
   );
 };

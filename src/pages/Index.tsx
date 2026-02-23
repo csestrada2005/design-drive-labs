@@ -43,44 +43,60 @@ const Index = () => {
         <HeroSection />
         <MarqueeTicker />
 
-        {/* Below fold — lazy with separators between every section */}
+        {/* Below fold — lazy with overlap stacking */}
         <Suspense fallback={<SectionSkeleton />}>
-          <SectionSeparator />
-          <BuildModes />
+          <div className="relative" style={{ zIndex: 10, background: "hsl(var(--background))" }}>
+            <SectionSeparator />
+            <BuildModes />
+          </div>
         </Suspense>
 
         <Suspense fallback={<SectionSkeleton />}>
-          <SectionSeparator />
-          <DesignLab />
+          <div className="relative -mt-12" style={{ zIndex: 20, background: "hsl(var(--background))" }}>
+            <SectionSeparator />
+            <DesignLab />
+          </div>
         </Suspense>
 
         <Suspense fallback={<SectionSkeleton />}>
-          <SectionSeparator />
-          <ProcessSection />
+          <div className="relative -mt-12" style={{ zIndex: 30, background: "hsl(var(--background))" }}>
+            <SectionSeparator />
+            <ProcessSection />
+          </div>
         </Suspense>
 
         <Suspense fallback={<SectionSkeleton />}>
-          <SectionSeparator />
-          <GrowthImpact />
+          <div className="relative -mt-12" style={{ zIndex: 40, background: "hsl(var(--background))" }}>
+            <SectionSeparator />
+            <GrowthImpact />
+          </div>
         </Suspense>
 
         <Suspense fallback={<SectionSkeleton />}>
-          <SectionSeparator />
-          <FeaturedWork />
+          <div className="relative -mt-12" style={{ zIndex: 50, background: "hsl(var(--background))" }}>
+            <SectionSeparator />
+            <FeaturedWork />
+          </div>
         </Suspense>
 
         <Suspense fallback={<SectionSkeleton />}>
-          <SectionSeparator />
-          <StandardsSection />
+          <div className="relative -mt-12" style={{ zIndex: 60, background: "hsl(var(--background))" }}>
+            <SectionSeparator />
+            <StandardsSection />
+          </div>
         </Suspense>
 
         <Suspense fallback={<SectionSkeleton />}>
-          <SectionSeparator />
-          <ChoosePathContact />
+          <div className="relative -mt-12" style={{ zIndex: 70, background: "hsl(var(--background))" }}>
+            <SectionSeparator />
+            <ChoosePathContact />
+          </div>
         </Suspense>
 
         <Suspense fallback={<SectionSkeleton />}>
-          <DramaticFooter />
+          <div className="relative -mt-12" style={{ zIndex: 80, background: "hsl(var(--background))" }}>
+            <DramaticFooter />
+          </div>
         </Suspense>
       </main>
     </div>
