@@ -31,7 +31,17 @@ const Index = () => {
   const cursorZoneRef = useRef<HTMLDivElement>(null);
 
   return (
-    <div className="min-h-screen text-foreground">
+    <div className="min-h-screen text-foreground relative">
+      {/* Persistent grid canvas across entire page */}
+      <div
+        className="fixed inset-0 pointer-events-none opacity-[0.06]"
+        style={{
+          backgroundImage:
+            "linear-gradient(hsl(var(--foreground) / 0.4) 1px, transparent 1px), linear-gradient(90deg, hsl(var(--foreground) / 0.4) 1px, transparent 1px)",
+          backgroundSize: "60px 60px",
+          zIndex: 0,
+        }}
+      />
       <SoundToggle />
       <CustomCursor containerRef={cursorZoneRef} />
       <CornerCrosses />
@@ -43,58 +53,66 @@ const Index = () => {
         <HeroSection />
         <MarqueeTicker />
 
-        {/* Below fold — lazy with overlap stacking */}
+        {/* Below fold — overlap stacking with -100vh margins */}
         <Suspense fallback={<SectionSkeleton />}>
-          <div className="relative" style={{ zIndex: 10, background: "hsl(var(--background))" }}>
+          <div className="relative bg-background" style={{ zIndex: 10, marginTop: "-100vh" }}>
+            <div className="h-[100vh]" /> {/* spacer to push content down naturally */}
             <SectionSeparator />
             <BuildModes />
           </div>
         </Suspense>
 
         <Suspense fallback={<SectionSkeleton />}>
-          <div className="relative -mt-12" style={{ zIndex: 20, background: "hsl(var(--background))" }}>
+          <div className="relative bg-background" style={{ zIndex: 20, marginTop: "-100vh" }}>
+            <div className="h-[100vh]" />
             <SectionSeparator />
             <DesignLab />
           </div>
         </Suspense>
 
         <Suspense fallback={<SectionSkeleton />}>
-          <div className="relative -mt-12" style={{ zIndex: 30, background: "hsl(var(--background))" }}>
+          <div className="relative bg-background" style={{ zIndex: 30, marginTop: "-100vh" }}>
+            <div className="h-[100vh]" />
             <SectionSeparator />
             <ProcessSection />
           </div>
         </Suspense>
 
         <Suspense fallback={<SectionSkeleton />}>
-          <div className="relative -mt-12" style={{ zIndex: 40, background: "hsl(var(--background))" }}>
+          <div className="relative bg-background" style={{ zIndex: 40, marginTop: "-100vh" }}>
+            <div className="h-[100vh]" />
             <SectionSeparator />
             <GrowthImpact />
           </div>
         </Suspense>
 
         <Suspense fallback={<SectionSkeleton />}>
-          <div className="relative -mt-12" style={{ zIndex: 50, background: "hsl(var(--background))" }}>
+          <div className="relative bg-background" style={{ zIndex: 50, marginTop: "-100vh" }}>
+            <div className="h-[100vh]" />
             <SectionSeparator />
             <FeaturedWork />
           </div>
         </Suspense>
 
         <Suspense fallback={<SectionSkeleton />}>
-          <div className="relative -mt-12" style={{ zIndex: 60, background: "hsl(var(--background))" }}>
+          <div className="relative bg-background" style={{ zIndex: 60, marginTop: "-100vh" }}>
+            <div className="h-[100vh]" />
             <SectionSeparator />
             <StandardsSection />
           </div>
         </Suspense>
 
         <Suspense fallback={<SectionSkeleton />}>
-          <div className="relative -mt-12" style={{ zIndex: 70, background: "hsl(var(--background))" }}>
+          <div className="relative bg-background" style={{ zIndex: 70, marginTop: "-100vh" }}>
+            <div className="h-[100vh]" />
             <SectionSeparator />
             <ChoosePathContact />
           </div>
         </Suspense>
 
         <Suspense fallback={<SectionSkeleton />}>
-          <div className="relative -mt-12" style={{ zIndex: 80, background: "hsl(var(--background))" }}>
+          <div className="relative bg-background" style={{ zIndex: 80, marginTop: "-100vh" }}>
+            <div className="h-[100vh]" />
             <DramaticFooter />
           </div>
         </Suspense>

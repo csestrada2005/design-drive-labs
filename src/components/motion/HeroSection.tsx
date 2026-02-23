@@ -1,6 +1,6 @@
 import { useRef, useState, useEffect } from "react";
 import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
-import heroLogo from "@/assets/hero-logo.jpeg";
+import heroLogoTransparent from "@/assets/hero-logo-transparent.png";
 
 /* ── Glitch line component ── */
 const GlitchLine = ({ delay, y }: { delay: number; y: string }) => (
@@ -84,25 +84,13 @@ export const HeroSection = () => {
         id="hero"
         style={{ opacity, scale, y }}
       >
-        <div
-          className="absolute inset-0"
-          style={{
-            backgroundImage: `url(${heroLogo})`,
-            backgroundSize: "60%",
-            backgroundRepeat: "no-repeat",
-            backgroundPosition: "center",
-          }}
+        {/* Logo element — transparent PNG centered */}
+        <img
+          src={heroLogoTransparent}
+          alt="Nebu Studio"
+          className="relative z-10 w-[40%] max-w-[500px] h-auto select-none pointer-events-none"
         />
 
-        {/* Grid overlay */}
-        <div
-          className="absolute inset-0 opacity-[0.06]"
-          style={{
-            backgroundImage:
-              "linear-gradient(hsl(var(--foreground) / 0.4) 1px, transparent 1px), linear-gradient(90deg, hsl(var(--foreground) / 0.4) 1px, transparent 1px)",
-            backgroundSize: "60px 60px",
-          }}
-        />
 
         {/* Vignette */}
         <div
