@@ -32,13 +32,13 @@ const Index = () => {
 
   return (
     <div className="min-h-screen text-foreground relative">
-      {/* Persistent grid canvas across entire page */}
+      {/* Persistent textured canvas across entire page */}
       <div
-        className="fixed inset-0 pointer-events-none opacity-[0.06]"
+        className="fixed inset-0 pointer-events-none"
         style={{
-          backgroundImage:
-            "linear-gradient(hsl(var(--foreground) / 0.4) 1px, transparent 1px), linear-gradient(90deg, hsl(var(--foreground) / 0.4) 1px, transparent 1px)",
-          backgroundSize: "60px 60px",
+          backgroundImage: "url('/images/canvas-bg.png')",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
           zIndex: 0,
         }}
       />
@@ -55,15 +55,15 @@ const Index = () => {
 
         {/* Below fold — overlap stacking with -100vh margins */}
         <Suspense fallback={<SectionSkeleton />}>
-          <div className="relative bg-background" style={{ zIndex: 10, marginTop: "-100vh" }}>
-            <div className="h-[100vh]" /> {/* spacer to push content down naturally */}
+          <div className="relative" style={{ zIndex: 10, marginTop: "-100vh", backgroundImage: "url('/images/canvas-bg.png')", backgroundSize: "cover", backgroundPosition: "center" }}>
+            <div className="h-[100vh]" />
             <SectionSeparator />
             <BuildModes />
           </div>
         </Suspense>
 
         <Suspense fallback={<SectionSkeleton />}>
-          <div className="relative bg-background" style={{ zIndex: 20, marginTop: "-100vh" }}>
+          <div className="relative" style={{ zIndex: 20, marginTop: "-100vh", backgroundImage: "url('/images/canvas-bg.png')", backgroundSize: "cover", backgroundPosition: "center" }}>
             <div className="h-[100vh]" />
             <SectionSeparator />
             <DesignLab />
@@ -71,7 +71,7 @@ const Index = () => {
         </Suspense>
 
         <Suspense fallback={<SectionSkeleton />}>
-          <div className="relative bg-background" style={{ zIndex: 30, marginTop: "-100vh" }}>
+          <div className="relative" style={{ zIndex: 30, marginTop: "-100vh", backgroundImage: "url('/images/canvas-bg.png')", backgroundSize: "cover", backgroundPosition: "center" }}>
             <div className="h-[100vh]" />
             <SectionSeparator />
             <ProcessSection />
@@ -79,7 +79,7 @@ const Index = () => {
         </Suspense>
 
         <Suspense fallback={<SectionSkeleton />}>
-          <div className="relative bg-background" style={{ zIndex: 40, marginTop: "-100vh" }}>
+          <div className="relative" style={{ zIndex: 40, marginTop: "-100vh", backgroundImage: "url('/images/canvas-bg.png')", backgroundSize: "cover", backgroundPosition: "center" }}>
             <div className="h-[100vh]" />
             <SectionSeparator />
             <GrowthImpact />
@@ -87,7 +87,7 @@ const Index = () => {
         </Suspense>
 
         <Suspense fallback={<SectionSkeleton />}>
-          <div className="relative bg-background" style={{ zIndex: 50, marginTop: "-100vh" }}>
+          <div className="relative" style={{ zIndex: 50, marginTop: "-100vh", backgroundImage: "url('/images/canvas-bg.png')", backgroundSize: "cover", backgroundPosition: "center" }}>
             <div className="h-[100vh]" />
             <SectionSeparator />
             <FeaturedWork />
@@ -95,7 +95,7 @@ const Index = () => {
         </Suspense>
 
         <Suspense fallback={<SectionSkeleton />}>
-          <div className="relative bg-background" style={{ zIndex: 60, marginTop: "-100vh" }}>
+          <div className="relative" style={{ zIndex: 60, marginTop: "-100vh", backgroundImage: "url('/images/canvas-bg.png')", backgroundSize: "cover", backgroundPosition: "center" }}>
             <div className="h-[100vh]" />
             <SectionSeparator />
             <StandardsSection />
@@ -103,7 +103,7 @@ const Index = () => {
         </Suspense>
 
         <Suspense fallback={<SectionSkeleton />}>
-          <div className="relative bg-background" style={{ zIndex: 70, marginTop: "-100vh" }}>
+          <div className="relative" style={{ zIndex: 70, marginTop: "-100vh", backgroundImage: "url('/images/canvas-bg.png')", backgroundSize: "cover", backgroundPosition: "center" }}>
             <div className="h-[100vh]" />
             <SectionSeparator />
             <ChoosePathContact />
@@ -111,7 +111,7 @@ const Index = () => {
         </Suspense>
 
         <Suspense fallback={<SectionSkeleton />}>
-          <div className="relative bg-background" style={{ zIndex: 80, marginTop: "-100vh" }}>
+          <div className="relative" style={{ zIndex: 80, marginTop: "-100vh", backgroundImage: "url('/images/canvas-bg.png')", backgroundSize: "cover", backgroundPosition: "center" }}>
             <div className="h-[100vh]" />
             <DramaticFooter />
           </div>

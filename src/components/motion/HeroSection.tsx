@@ -90,16 +90,6 @@ export const HeroSection = () => {
           alt="Nebu Studio"
           className="relative z-10 w-[40%] max-w-[500px] h-auto select-none pointer-events-none"
         />
-
-
-        {/* Vignette */}
-        <div
-          className="absolute inset-0 pointer-events-none"
-          style={{
-            background:
-              "radial-gradient(ellipse 80% 80% at 50% 50%, transparent 40%, hsl(var(--background) / 0.7) 100%)",
-          }}
-        />
       </motion.section>
 
       {/* Full-screen glitch overlay — fixed so it covers everything */}
