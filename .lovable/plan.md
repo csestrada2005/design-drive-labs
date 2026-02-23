@@ -1,48 +1,51 @@
 
 
-## Plan: Fix Hero Animation, Upward Overlap Feel, and Single Red Line
+## Plan: Fix Canvas Background, Hero Image, and Section Visibility
 
-### 1. Hero Glitch Animation — Full Screen + Auto-Scroll
+### Problem Summary
 
-**Problem**: The glitch animation elements are `absolute` inside the hero `<motion.section>` which has `overflow-hidden`. They only appear within the hero bounds.
+1. **Canvas background looks bad** -- it was saved from a screenshot, resulting in low resolution/compression artifacts.
+2. **Hero logo is not visible** -- the transparent PNG may be rendering but invisible against the background.
+3. **Sections only show half** -- the `-100vh` margin overlap stacking is clipping content because `section { contain: layout style; }` in CSS and the background-image on each wrapper may interfere.
 
-**Fix**:
-- Move the entire glitch/boot animation into a **`fixed inset-0 z-[9999]`** overlay that renders on top of the entire page (similar to how `HeroTransition` works).
-- After the glitch animation completes (~1.8s), programmatically smooth-scroll the user down to the `BuildModes` section (the "What we build" area). Add an `id="build"` to `BuildModes` if it doesn't have one, then call `document.getElementById("build")?.scrollIntoView({ behavior: "smooth" })`.
-- The animation still triggers once on first scroll/interaction and never re-triggers.
+---
+
+### 1. Replace Low-Quality Canvas Image with CSS-Generated Texture
+
+Instead of relying on a screenshot PNG, generate a paper/canvas texture using pure CSS. This ensures crisp rendering at any resolution.
+
+- Remove all `backgroundImage: "url('/images/canvas-bg.png')"` references from `Index.tsx` section wrappers.
+- Remove the fixed canvas overlay div in `Index.tsx`.
+- The site already has `owlBg` as a fixed background in `App.tsx` -- keep that as the base.
+- Add a CSS class `.canvas-texture` that uses a subtle repeating gradient to simulate the warm parchment/paper look (light beige with micro-noise pattern using layered gradients).
+- Apply this class to each section wrapper so they have an opaque canvas-like background that covers the section below during overlap.
+
+**Files**: `src/index.css`, `src/pages/Index.tsx`
+
+---
+
+### 2. Fix Hero Logo Visibility
+
+- Ensure the hero logo `<img>` has proper sizing and contrast against the canvas background.
+- Add a subtle drop shadow or ensure the image has enough contrast to be visible on the light canvas texture.
+- Verify the import path `@/assets/hero-logo-transparent.png` points to a valid file.
 
 **Files**: `src/components/motion/HeroSection.tsx`
 
 ---
 
-### 2. Upward Overlap Effect — Sections Slide Over Previous
+### 3. Fix Section Overlap Clipping
 
-**Problem**: Current `useScrollPaint` just fades/translates elements but doesn't create the visual illusion of sections overlapping upward.
-
-**Fix**:
-- Give each major section a **`position: relative`** with incrementing **`z-index`** (each section higher than the previous).
-- Add a solid background to each section so it visually covers the section above as the user scrolls.
-- Apply a subtle **negative top margin** (e.g., `-40px` to `-60px`) so sections slightly overlap the tail of the previous one, creating a "sliding over" sensation.
-- Adjust `useScrollPaint` to keep the strong upward entry (from below) but remove the exit-upward animation so sections stay put once visible — the next section sliding over them creates the "going up" feel naturally.
-
-**Files**: `src/hooks/useScrollPaint.ts`, `src/pages/Index.tsx` (wrapper divs with z-index + bg)
-
----
-
-### 3. Single Red Line — Persistent Width on Scroll
-
-**Problem**: Two lines exist; the line width follows `scrollYProgress` which goes 0 to 1 to 0, causing the line to disappear while still visible.
+The sections are only showing half because:
+- `section { contain: layout style; }` in `index.css` restricts rendering.
+- The `-100vh` margin + `h-[100vh]` spacer approach needs sections to have no containment restrictions.
 
 **Fix**:
-- Revert to a **single red line** (remove the second line and center glow).
-- Replace the symmetric `progress` curve with a **ratchet-style approach**:
-  - Track a `committedWidth` state using `useMotionValueEvent` on `scrollYProgress`.
-  - **Scrolling down**: the line grows from left to right, width increases and **stays** at its max reached value.
-  - **Scrolling up**: the line shrinks back from where it was (right to left), resuming from its last position.
-  - The line's width is driven by `scrollYProgress` mapped `[0, 1]` to `[0%, 100%]` but clamped so it only moves in the current scroll direction.
-- Reduce separator height from `h-28` to `h-16` for a tighter single-line feel.
+- Remove `section { contain: layout style; }` from `index.css` (or scope it to not affect the overlap wrappers).
+- Ensure each section wrapper div has `overflow: visible` (not hidden).
+- The wrapper divs already have incrementing z-index and backgrounds -- just need to ensure the content inside isn't being clipped.
 
-**Files**: `src/components/motion/SectionSeparator.tsx`
+**Files**: `src/index.css`, `src/pages/Index.tsx`
 
 ---
 
@@ -50,9 +53,7 @@
 
 | File | Change |
 |------|--------|
-| `HeroSection.tsx` | Move glitch overlay to `fixed inset-0 z-[9999]`, add auto-scroll to `#build` after animation |
-| `BuildModes.tsx` | Add `id="build"` to the section wrapper |
-| `useScrollPaint.ts` | Remove exit-upward animation; sections stay once visible |
-| `Index.tsx` | Wrap sections with incrementing z-index + bg + slight negative margin |
-| `SectionSeparator.tsx` | Single line, directional grow/shrink that persists width |
+| `src/index.css` | Add `.canvas-texture` CSS class with paper-like gradient; remove `contain: layout style` from `section` |
+| `src/pages/Index.tsx` | Remove all `canvas-bg.png` references; apply `.canvas-texture` class to section wrappers; keep overlap stacking logic |
+| `src/components/motion/HeroSection.tsx` | Ensure hero logo is visible with proper sizing/contrast |
 
