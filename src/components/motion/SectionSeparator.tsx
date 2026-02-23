@@ -49,9 +49,9 @@ export const SectionSeparator = () => {
   const widthStr = useTransform(fillProgress, (v) => `${Math.round(v * 100)}%`);
 
   return (
-    <div ref={ref} className="h-12 flex items-center overflow-hidden relative">
+    <div ref={ref} className="h-16 flex items-center overflow-hidden relative">
       <motion.div
-        className="h-[2px] rounded-full"
+        className="h-[6px] rounded-full"
         style={{
           width: widthStr,
           marginLeft: dir === "up" ? "auto" : undefined,
@@ -60,7 +60,7 @@ export const SectionSeparator = () => {
               ? "linear-gradient(90deg, hsl(0 100% 50%), hsl(0 100% 50% / 0.3))"
               : "linear-gradient(270deg, hsl(0 100% 50%), hsl(0 100% 50% / 0.3))",
           boxShadow:
-            "0 0 12px hsl(0 100% 50% / 0.5), 0 0 40px hsl(0 100% 50% / 0.15)",
+            "0 0 16px hsl(0 100% 50% / 0.6), 0 0 50px hsl(0 100% 50% / 0.2)",
         }}
       />
     </div>

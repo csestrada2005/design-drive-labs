@@ -71,7 +71,7 @@ export const HeroSection = () => {
   return (
     <motion.section
       ref={ref}
-      className="relative h-[100dvh] flex items-center justify-center overflow-hidden border-y-2 border-primary"
+      className="relative h-[100dvh] flex items-center justify-center overflow-hidden border-2 border-primary"
       id="hero"
       style={{}}
     >

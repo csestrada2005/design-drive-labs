@@ -77,7 +77,7 @@ export const BuildModes = () => {
   const isInView = useInView(sectionRef, { once: true, margin: "-100px" });
   const { scrollYProgress } = useScroll({
     target: sectionRef,
-    offset: ["start end", "start center"]
+    offset: ["start end", "end start"]
   });
   const lineScaleY = useTransform(scrollYProgress, [0, 1], [0, 1]);
 
