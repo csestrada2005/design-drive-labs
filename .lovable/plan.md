@@ -1,59 +1,24 @@
 
+## Fix: Bottom Navigation Bar Visibility
 
-## Plan: Fix Canvas Background, Hero Image, and Section Visibility
+### Problem
+The bottom nav bar uses `window.addEventListener("scroll", ...)` to detect scrolling, but **Lenis smooth scroll** (which wraps all scrolling in the app) can sometimes delay or skip native scroll events, causing `window.scrollY` to read as 0 and the bar to stay hidden (`opacity-0`, `pointer-events-none`).
 
-### Problem Summary
+### Solution
 
-1. **Canvas background looks bad** -- it was saved from a screenshot, resulting in low resolution/compression artifacts.
-2. **Hero logo is not visible** -- the transparent PNG may be rendering but invisible against the background.
-3. **Sections only show half** -- the `-100vh` margin overlap stacking is clipping content because `section { contain: layout style; }` in CSS and the background-image on each wrapper may interfere.
+1. **Make the bar visible by default** -- Remove the scroll-based show/hide logic entirely. The bar should always be visible as a fixed element at the bottom of the screen (matching the old "Refactor Tron palette" behavior where it was always present).
 
----
+2. **Increase z-index to `z-[70]`** -- Ensures it sits above the NebuOrb (`z-[60]`) and any other overlays.
 
-### 1. Replace Low-Quality Canvas Image with CSS-Generated Texture
+3. **Remove the `isVisible` state and scroll listener** -- No more conditional opacity/translate. The bar is simply always there once the component mounts.
 
-Instead of relying on a screenshot PNG, generate a paper/canvas texture using pure CSS. This ensures crisp rendering at any resolution.
+### Technical Details
 
-- Remove all `backgroundImage: "url('/images/canvas-bg.png')"` references from `Index.tsx` section wrappers.
-- Remove the fixed canvas overlay div in `Index.tsx`.
-- The site already has `owlBg` as a fixed background in `App.tsx` -- keep that as the base.
-- Add a CSS class `.canvas-texture` that uses a subtle repeating gradient to simulate the warm parchment/paper look (light beige with micro-noise pattern using layered gradients).
-- Apply this class to each section wrapper so they have an opaque canvas-like background that covers the section below during overlap.
+**File: `src/components/motion/BottomNav.tsx`**
 
-**Files**: `src/index.css`, `src/pages/Index.tsx`
+- Remove the `isVisible` state and the `useEffect` that listens for scroll
+- Remove the conditional classes `opacity-0 translate-y-8 pointer-events-none`
+- Change z-index from `z-[65]` to `z-[70]`
+- The nav element becomes simply: `fixed bottom-4 left-1/2 -translate-x-1/2 z-[70]`
 
----
-
-### 2. Fix Hero Logo Visibility
-
-- Ensure the hero logo `<img>` has proper sizing and contrast against the canvas background.
-- Add a subtle drop shadow or ensure the image has enough contrast to be visible on the light canvas texture.
-- Verify the import path `@/assets/hero-logo-transparent.png` points to a valid file.
-
-**Files**: `src/components/motion/HeroSection.tsx`
-
----
-
-### 3. Fix Section Overlap Clipping
-
-The sections are only showing half because:
-- `section { contain: layout style; }` in `index.css` restricts rendering.
-- The `-100vh` margin + `h-[100vh]` spacer approach needs sections to have no containment restrictions.
-
-**Fix**:
-- Remove `section { contain: layout style; }` from `index.css` (or scope it to not affect the overlap wrappers).
-- Ensure each section wrapper div has `overflow: visible` (not hidden).
-- The wrapper divs already have incrementing z-index and backgrounds -- just need to ensure the content inside isn't being clipped.
-
-**Files**: `src/index.css`, `src/pages/Index.tsx`
-
----
-
-### Technical Summary
-
-| File | Change |
-|------|--------|
-| `src/index.css` | Add `.canvas-texture` CSS class with paper-like gradient; remove `contain: layout style` from `section` |
-| `src/pages/Index.tsx` | Remove all `canvas-bg.png` references; apply `.canvas-texture` class to section wrappers; keep overlap stacking logic |
-| `src/components/motion/HeroSection.tsx` | Ensure hero logo is visible with proper sizing/contrast |
-
+This matches the previous versions where the bar was always visible at the bottom without any scroll-dependent visibility logic.

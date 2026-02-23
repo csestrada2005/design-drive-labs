@@ -31,9 +31,7 @@ const Index = () => {
   const cursorZoneRef = useRef<HTMLDivElement>(null);
 
   return (
-    <div className="min-h-screen text-foreground relative">
-      {/* Persistent canvas texture across entire page */}
-      <div className="fixed inset-0 pointer-events-none canvas-texture" style={{ zIndex: 0 }} />
+    <div className="min-h-screen text-foreground">
       <SoundToggle />
       <CustomCursor containerRef={cursorZoneRef} />
       <CornerCrosses />
@@ -45,68 +43,44 @@ const Index = () => {
         <HeroSection />
         <MarqueeTicker />
 
-        {/* Below fold — overlap stacking with -100vh margins */}
+        {/* Below fold — lazy with separators between every section */}
         <Suspense fallback={<SectionSkeleton />}>
-          <div className="relative canvas-texture" style={{ zIndex: 10, marginTop: "-100vh" }}>
-            <div className="h-[100vh]" />
-            <SectionSeparator />
-            <BuildModes />
-          </div>
+          <SectionSeparator />
+          <BuildModes />
         </Suspense>
 
         <Suspense fallback={<SectionSkeleton />}>
-          <div className="relative canvas-texture" style={{ zIndex: 20, marginTop: "-100vh" }}>
-            <div className="h-[100vh]" />
-            <SectionSeparator />
-            <DesignLab />
-          </div>
+          <SectionSeparator />
+          <DesignLab />
         </Suspense>
 
         <Suspense fallback={<SectionSkeleton />}>
-          <div className="relative canvas-texture" style={{ zIndex: 30, marginTop: "-100vh" }}>
-            <div className="h-[100vh]" />
-            <SectionSeparator />
-            <ProcessSection />
-          </div>
+          <SectionSeparator />
+          <ProcessSection />
         </Suspense>
 
         <Suspense fallback={<SectionSkeleton />}>
-          <div className="relative canvas-texture" style={{ zIndex: 40, marginTop: "-100vh" }}>
-            <div className="h-[100vh]" />
-            <SectionSeparator />
-            <GrowthImpact />
-          </div>
+          <SectionSeparator />
+          <GrowthImpact />
         </Suspense>
 
         <Suspense fallback={<SectionSkeleton />}>
-          <div className="relative canvas-texture" style={{ zIndex: 50, marginTop: "-100vh" }}>
-            <div className="h-[100vh]" />
-            <SectionSeparator />
-            <FeaturedWork />
-          </div>
+          <SectionSeparator />
+          <FeaturedWork />
         </Suspense>
 
         <Suspense fallback={<SectionSkeleton />}>
-          <div className="relative canvas-texture" style={{ zIndex: 60, marginTop: "-100vh" }}>
-            <div className="h-[100vh]" />
-            <SectionSeparator />
-            <StandardsSection />
-          </div>
+          <SectionSeparator />
+          <StandardsSection />
         </Suspense>
 
         <Suspense fallback={<SectionSkeleton />}>
-          <div className="relative canvas-texture" style={{ zIndex: 70, marginTop: "-100vh" }}>
-            <div className="h-[100vh]" />
-            <SectionSeparator />
-            <ChoosePathContact />
-          </div>
+          <SectionSeparator />
+          <ChoosePathContact />
         </Suspense>
 
         <Suspense fallback={<SectionSkeleton />}>
-          <div className="relative canvas-texture" style={{ zIndex: 80, marginTop: "-100vh" }}>
-            <div className="h-[100vh]" />
-            <DramaticFooter />
-          </div>
+          <DramaticFooter />
         </Suspense>
       </main>
     </div>

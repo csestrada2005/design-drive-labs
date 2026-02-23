@@ -85,7 +85,7 @@ export const BuildModes = () => {
     <section
       ref={sectionRef}
       className="py-24 sm:py-32 relative overflow-hidden"
-      id="build">
+      id="modes">
 
       <div className="container relative z-10">
         {/* Header */}
