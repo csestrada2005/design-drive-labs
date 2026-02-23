@@ -88,7 +88,7 @@ export const HeroSection = () => {
         <img
           src={heroLogoTransparent}
           alt="Nebu Studio"
-          className="relative z-10 w-[40%] max-w-[500px] h-auto select-none pointer-events-none"
+          className="relative z-10 w-[60%] max-w-[600px] h-auto select-none pointer-events-none drop-shadow-[0_4px_30px_rgba(0,0,0,0.3)]"
         />
       </motion.section>
 

@@ -91,8 +91,15 @@
     content-visibility: auto;
   }
 
-  section {
-    contain: layout style;
+  /* Canvas texture for section overlaps */
+  .canvas-texture {
+    background-color: #f5f0e8;
+    background-image:
+      radial-gradient(ellipse at 20% 50%, hsl(35 30% 88% / 0.6) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 20%, hsl(30 20% 85% / 0.5) 0%, transparent 50%),
+      radial-gradient(ellipse at 50% 80%, hsl(25 25% 82% / 0.4) 0%, transparent 50%),
+      repeating-linear-gradient(0deg, transparent, transparent 2px, hsl(30 15% 80% / 0.08) 2px, hsl(30 15% 80% / 0.08) 4px),
+      repeating-linear-gradient(90deg, transparent, transparent 3px, hsl(25 10% 75% / 0.05) 3px, hsl(25 10% 75% / 0.05) 6px);
   }
 
   ::selection {
