@@ -38,7 +38,7 @@ export const HeroSection = () => {
   const scale = useTransform(scrollYProgress, [0, 0.6], [1, 0.92]);
   const y = useTransform(scrollYProgress, [0, 0.6], [0, -60]);
 
-  // Aggressive boot animation — triggers once on first scroll
+  // Aggressive boot animation — triggers once on ANY input
   const [bootPhase, setBootPhase] = useState<"idle" | "glitch" | "done">("idle");
   const bootDone = useRef(false);
 
@@ -49,19 +49,24 @@ export const HeroSection = () => {
       if (bootDone.current) return;
       bootDone.current = true;
       setBootPhase("glitch");
-
-      // End after animation
       setTimeout(() => setBootPhase("done"), 1800);
     };
 
-    window.addEventListener("scroll", trigger, { passive: true, once: true });
-    window.addEventListener("wheel", trigger, { passive: true, once: true });
-    window.addEventListener("touchmove", trigger, { passive: true, once: true });
+    // Use capturing phase to intercept before Lenis
+    const opts = { passive: true, capture: true };
+    window.addEventListener("wheel", trigger, opts);
+    window.addEventListener("touchstart", trigger, opts);
+    window.addEventListener("keydown", trigger, opts);
+    // Also a fallback timeout — if user scrolled but Lenis ate the event
+    const scrollCheck = setInterval(() => {
+      if (window.scrollY > 5) trigger();
+    }, 100);
 
     return () => {
-      window.removeEventListener("scroll", trigger);
-      window.removeEventListener("wheel", trigger);
-      window.removeEventListener("touchmove", trigger);
+      window.removeEventListener("wheel", trigger, opts as EventListenerOptions);
+      window.removeEventListener("touchstart", trigger, opts as EventListenerOptions);
+      window.removeEventListener("keydown", trigger, opts as EventListenerOptions);
+      clearInterval(scrollCheck);
     };
   }, []);
 
@@ -105,35 +110,16 @@ export const HeroSection = () => {
       <AnimatePresence>
         {bootPhase === "glitch" && (
           <>
-            {/* Screen shake */}
-            <motion.div
-              key="shake-overlay"
-              className="absolute inset-0 pointer-events-none"
-              style={{ zIndex: 60 }}
-              animate={{
-                x: [0, -8, 6, -4, 3, -1, 0],
-                y: [0, 3, -5, 2, -1, 0],
-              }}
-              transition={{ duration: 0.4, ease: "easeOut" }}
-            />
-
             {/* Multiple horizontal glitch scan lines */}
             {[0, 1, 2, 3, 4, 5, 6, 7].map((i) => (
-              <GlitchLine
-                key={`gl-${i}`}
-                delay={i * 0.06}
-                y={`${10 + i * 11}%`}
-              />
+              <GlitchLine key={`gl-${i}`} delay={i * 0.06} y={`${10 + i * 11}%`} />
             ))}
 
             {/* Full screen flash — white */}
             <motion.div
               key="flash-white"
               className="absolute inset-0 pointer-events-none"
-              style={{
-                background: "hsl(0 0% 100%)",
-                zIndex: 55,
-              }}
+              style={{ background: "hsl(0 0% 100%)", zIndex: 55 }}
               initial={{ opacity: 0 }}
               animate={{ opacity: [0, 0.9, 0, 0.4, 0] }}
               transition={{ duration: 0.5, times: [0, 0.1, 0.2, 0.3, 0.5], ease: "easeOut" }}
@@ -185,11 +171,7 @@ export const HeroSection = () => {
                   opacity: [0, 0.8, 0.4, 0],
                   x: [0, i % 2 === 0 ? 15 : -15, 0],
                 }}
-                transition={{
-                  duration: 0.5,
-                  delay: 0.1 + i * 0.08,
-                  ease: "easeOut",
-                }}
+                transition={{ duration: 0.5, delay: 0.1 + i * 0.08, ease: "easeOut" }}
               />
             ))}
 
@@ -197,10 +179,7 @@ export const HeroSection = () => {
             <motion.div
               key="wipe"
               className="absolute inset-0 pointer-events-none"
-              style={{
-                background: "hsl(0 0% 0%)",
-                zIndex: 50,
-              }}
+              style={{ background: "hsl(0 0% 0%)", zIndex: 50 }}
               initial={{ opacity: 0 }}
               animate={{ opacity: [0, 0.7, 0] }}
               transition={{ duration: 1.0, delay: 0.5, ease: [0.25, 1, 0.5, 1] }}

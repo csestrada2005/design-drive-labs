@@ -43,35 +43,39 @@ const Index = () => {
         <HeroSection />
         <MarqueeTicker />
 
-        {/* Below fold — lazy with Suspense boundaries per section */}
+        {/* Below fold — lazy with separators between every section */}
         <Suspense fallback={<SectionSkeleton />}>
+          <SectionSeparator />
           <BuildModes />
         </Suspense>
 
         <Suspense fallback={<SectionSkeleton />}>
+          <SectionSeparator />
           <DesignLab />
         </Suspense>
 
         <Suspense fallback={<SectionSkeleton />}>
+          <SectionSeparator />
           <ProcessSection />
-          <SectionSeparator />
         </Suspense>
 
         <Suspense fallback={<SectionSkeleton />}>
+          <SectionSeparator />
           <GrowthImpact />
-          <SectionSeparator />
         </Suspense>
 
         <Suspense fallback={<SectionSkeleton />}>
+          <SectionSeparator />
           <FeaturedWork />
-          <SectionSeparator />
         </Suspense>
 
         <Suspense fallback={<SectionSkeleton />}>
+          <SectionSeparator />
           <StandardsSection />
         </Suspense>
 
         <Suspense fallback={<SectionSkeleton />}>
+          <SectionSeparator />
           <ChoosePathContact />
         </Suspense>
 
