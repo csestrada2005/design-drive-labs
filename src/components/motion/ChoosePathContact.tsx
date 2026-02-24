@@ -141,9 +141,9 @@ export const ChoosePathContact = () => {
           <h2 className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl mb-4 leading-[0.95]">
             CHOOSE YOUR PATH.
           </h2>
-          <p className="text-muted-foreground text-sm">
-            Tell us what you need. We respond within 24 hours.
-          </p>
+         <p className="text-foreground/80 text-sm">
+           Tell us what you need. We respond within 24 hours.
+         </p>
         </div>
 
         {/* Path selector */}

@@ -13,13 +13,13 @@ const steps = [
 /* ── Morphing geometric anchor ── */
 const morphConfigs = [
   // Audit: scattered, exploded pieces
-  { points: 8, rotation: 0, scale: 1, spread: 1.8, opacity: 0.4, wireframe: true },
+  { points: 8, rotation: 0, scale: 1, spread: 1.8, opacity: 0.9, wireframe: true },
   // UX: grid-like, structured
-  { points: 8, rotation: 45, scale: 0.9, spread: 0.6, opacity: 0.6, wireframe: true },
+  { points: 8, rotation: 45, scale: 0.9, spread: 0.6, opacity: 0.9, wireframe: true },
   // Design: bright, unified
-  { points: 6, rotation: 0, scale: 1.1, spread: 0.3, opacity: 0.9, wireframe: false },
+  { points: 6, rotation: 0, scale: 1.1, spread: 0.3, opacity: 1, wireframe: false },
   // Build: complex, interlocked
-  { points: 12, rotation: 30, scale: 1, spread: 0.5, opacity: 0.7, wireframe: true },
+  { points: 12, rotation: 30, scale: 1, spread: 0.5, opacity: 1, wireframe: true },
   // Launch: radiant, expanding
   { points: 6, rotation: 0, scale: 1.3, spread: 0.1, opacity: 1, wireframe: false },
 ];
@@ -166,21 +166,21 @@ export const ProcessSection = () => {
             <MorphAnchor activeIndex={activeIndex} />
           </div>
 
-          {/* Step info */}
+          {/* Step info — delayed until morph animation completes */}
           <motion.div
             key={activeIndex}
             className="text-center"
             initial={prefersReduced ? { opacity: 0 } : { opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+            transition={{ duration: 0.4, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
           >
             <span className="font-mono text-[11px] tracking-[0.3em] text-primary mb-3 block">
               {steps[activeIndex].number}
             </span>
-            <h3 className="font-display text-3xl sm:text-4xl md:text-5xl text-foreground leading-none mb-4">
+            <h3 className="font-display text-3xl sm:text-4xl md:text-5xl text-foreground leading-none mb-4 opacity-100">
               {steps[activeIndex].title}
             </h3>
-            <p className="text-muted-foreground text-sm sm:text-base max-w-md mx-auto leading-relaxed">
+            <p className="text-foreground/80 text-sm sm:text-base max-w-md mx-auto leading-relaxed">
               {steps[activeIndex].desc}
             </p>
           </motion.div>

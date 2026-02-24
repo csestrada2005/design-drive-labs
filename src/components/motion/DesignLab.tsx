@@ -317,7 +317,7 @@ const GhostCursor = () => {
         onMouseLeave={() => setIsOver(false)}
         onTouchMove={(e) => {e.preventDefault();handleMove(e.touches[0].clientX, e.touches[0].clientY);}}>
 
-        <p className="font-display text-2xl sm:text-3xl text-foreground/70 pointer-events-none select-none text-center">
+        <p className="font-display text-2xl sm:text-3xl text-foreground pointer-events-none select-none text-center">
           CURSOR<br />TRAILS
         </p>
 
@@ -539,8 +539,8 @@ const CardSwap = () => {
                   className="w-5 h-5 rounded-full"
                   style={{ background: `hsl(${card.hue} 70% 60% / 0.6)` }} />
                 <div>
-                  <p className="font-display text-[10px] tracking-[0.2em] text-foreground/90">{card.label}</p>
-                  <p className="text-[9px] text-foreground/40 mt-0.5 font-mono">{card.sub}</p>
+                  <p className="font-display text-[10px] tracking-[0.2em] text-foreground">{card.label}</p>
+                  <p className="text-[9px] text-foreground/70 mt-0.5 font-mono">{card.sub}</p>
                 </div>
               </motion.div>);
           })}

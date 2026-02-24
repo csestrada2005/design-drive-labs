@@ -91,7 +91,7 @@ export const StandardsSection = () => {
               </h2>
 
               <motion.p
-                className="text-muted-foreground text-sm leading-relaxed max-w-md"
+                className="text-foreground/80 text-sm leading-relaxed max-w-md"
                 initial={{ opacity: 0, y: 16 }}
                 animate={isInView ? { opacity: 1, y: 0 } : {}}
                 transition={{ duration: 0.6, delay: 0.7 }}>
@@ -131,7 +131,7 @@ export const StandardsSection = () => {
               </h3>
 
               {/* Description */}
-              <p className="text-muted-foreground text-sm leading-relaxed">{item.desc}</p>
+              <p className="text-foreground/70 text-sm leading-relaxed">{item.desc}</p>
 
               {/* Bottom accent line */}
               <motion.div

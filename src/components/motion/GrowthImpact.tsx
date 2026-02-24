@@ -286,7 +286,7 @@ export const GrowthImpact = () => {
             delay={0.05}
             wordDelay={0.1}
           />
-          <p className="text-muted-foreground text-sm max-w-lg">
+           <p className="text-foreground/80 text-sm max-w-lg">
             We don't make "pretty pages." We build systems that sell. These are research-backed statistics on how design impacts business.
           </p>
         </motion.div>
@@ -307,7 +307,7 @@ export const GrowthImpact = () => {
                     <CountUp end={m.value} suffix={m.suffix} prefix={m.prefix} />
                   </p>
                   <p className="text-foreground text-sm font-medium mb-1">{m.label}</p>
-                  <p className="text-muted-foreground text-[10px] tracking-wider">{m.sub}</p>
+                  <p className="text-foreground/70 text-[10px] tracking-wider">{m.sub}</p>
                   <motion.div
                     className="absolute -bottom-4 left-0 h-px"
                     style={{ background: "linear-gradient(90deg, hsl(0 100% 50% / 0.3), transparent)" }}
@@ -350,7 +350,7 @@ export const GrowthImpact = () => {
               Good Design Costs Money.{" "}
               <span className="text-primary">Bad Design Costs Revenue.</span>
             </h3>
-            <p className="text-muted-foreground text-sm max-w-lg leading-relaxed">
+           <p className="text-foreground/80 text-sm max-w-lg leading-relaxed">
               See what your revenue looks like now — and what it could look like with our design and technology systems working for you.
             </p>
           </motion.div>

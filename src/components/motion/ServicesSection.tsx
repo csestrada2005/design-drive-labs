@@ -212,9 +212,9 @@ export const ServicesSection = () => {
           <h2 className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl mb-4">
             WHAT WE <span className="text-primary">BUILD</span>
           </h2>
-          <p className="text-muted-foreground text-sm max-w-lg">
-            Three distinct engagement levels. Interact with the dial to explore.
-          </p>
+         <p className="text-foreground/80 text-sm max-w-lg">
+           Three distinct engagement levels. Interact with the dial to explore.
+         </p>
         </motion.div>
 
         {/* Dial + Content layout */}
@@ -255,9 +255,9 @@ export const ServicesSection = () => {
               {/* Feature list */}
               <ul className="space-y-4 mb-8">
                 {tier.features.map((feature, fi) => (
-                  <motion.li
+                   <motion.li
                     key={feature}
-                    className="flex items-start gap-3 text-sm text-foreground/80"
+                    className="flex items-start gap-3 text-sm text-foreground"
                     initial={{ opacity: 0, x: -10 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: fi * 0.08 + 0.15 }}
@@ -282,7 +282,7 @@ export const ServicesSection = () => {
                 <p className="text-[10px] font-mono tracking-[0.12em] uppercase text-muted-foreground mb-1">
                   Best for
                 </p>
-                <p className="text-sm text-foreground/70 leading-relaxed">
+                <p className="text-sm text-foreground leading-relaxed">
                   {tier.bestFor}
                 </p>
               </div>

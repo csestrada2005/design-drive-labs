@@ -53,7 +53,7 @@ const ModeRow = ({
         className="text-[11px] font-mono tracking-[0.15em] uppercase text-muted-foreground hidden sm:block text-right min-w-[160px]"
         variants={{ hovered: { opacity: 1, x: 0 } }}
         initial={{ opacity: 0, x: 20 }}
-        animate={isInView ? { opacity: 0.5 } : { opacity: 0 }}
+        animate={isInView ? { opacity: 1 } : { opacity: 0 }}
         transition={{ duration: 0.4 }}>
 
         {mode.sub}
@@ -113,7 +113,7 @@ export const BuildModes = () => {
             style={{ scaleY: lineScaleY }} />
 
 
-          <div className="pl-0">
+          <div className="pl-0 flex flex-col items-center">
             {modes.map((mode, i) =>
             <ModeRow key={mode.num} mode={mode} index={i} total={modes.length} />
             )}
