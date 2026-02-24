@@ -32,7 +32,7 @@ const StepSlide = ({
   const opacity = useTransform(
     scrollYProgress,
     isLast ? [start, fadeIn, end] : [start, fadeIn, holdEnd, end],
-    isLast ? [0, 1, 1] : [0, 1, 1, 0]
+    isLast ? [index === 0 ? 1 : 0, 1, 1] : [index === 0 ? 1 : 0, 1, 1, 0]
   );
 
   return (
@@ -61,7 +61,7 @@ export const ProcessSection = () => {
   });
 
   return (
-    <div ref={containerRef} style={{ height: `${(steps.length + 1) * 100}vh` }} id="process">
+    <div ref={containerRef} style={{ height: `${steps.length * 80}vh` }} id="process">
       <div className="sticky top-0 h-screen w-full overflow-hidden">
         {/* Always-visible title */}
         <div className="absolute top-12 left-0 right-0 flex justify-center z-10">
