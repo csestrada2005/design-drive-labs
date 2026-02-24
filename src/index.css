@@ -8,19 +8,19 @@
   :root {
     /* IMMERSIVE DARK ATMOSPHERIC SYSTEM */
     --background: 240 10% 4%;
-    --foreground: 0 0% 90%;
+    --foreground: 0 0% 0%;
 
     --card: 240 8% 6%;
-    --card-foreground: 0 0% 90%;
+    --card-foreground: 0 0% 0%;
 
     --popover: 240 8% 6%;
-    --popover-foreground: 0 0% 90%;
+    --popover-foreground: 0 0% 0%;
 
     --primary: 0 100% 50%;
     --primary-foreground: 0 0% 95%;
 
     --secondary: 240 6% 10%;
-    --secondary-foreground: 0 0% 85%;
+    --secondary-foreground: 0 0% 0%;
 
     --muted: 240 5% 14%;
     --muted-foreground: 0 0% 55%;
@@ -41,15 +41,15 @@
 
   .dark {
     --background: 240 10% 4%;
-    --foreground: 0 0% 90%;
+    --foreground: 0 0% 0%;
     --card: 240 8% 6%;
-    --card-foreground: 0 0% 90%;
+    --card-foreground: 0 0% 0%;
     --popover: 240 8% 6%;
-    --popover-foreground: 0 0% 90%;
+    --popover-foreground: 0 0% 0%;
     --primary: 0 100% 50%;
     --primary-foreground: 0 0% 95%;
     --secondary: 240 6% 10%;
-    --secondary-foreground: 0 0% 85%;
+    --secondary-foreground: 0 0% 0%;
     --muted: 240 5% 14%;
     --muted-foreground: 0 0% 55%;
     --accent: 0 100% 50%;
