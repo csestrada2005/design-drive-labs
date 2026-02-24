@@ -28,12 +28,12 @@ type Project = (typeof PROJECTS)[number];
 
 // Floating positions for each circle — spread across the section
 const POSITIONS = [
-  { top: "8%", left: "12%" },
-  { top: "5%", left: "55%" },
-  { top: "38%", left: "32%" },
-  { top: "35%", left: "72%" },
-  { top: "65%", left: "10%" },
-  { top: "62%", left: "58%" },
+  { top: "8%", left: "18%" },
+  { top: "5%", left: "62%" },
+  { top: "38%", left: "38%" },
+  { top: "35%", left: "76%" },
+  { top: "65%", left: "20%" },
+  { top: "62%", left: "65%" },
 ];
 
 // ── Floating Circle ──────────────────────────────────────────────────────────
@@ -140,18 +140,26 @@ const ExpandedView = ({
         onClick={onClose}
       />
 
-      {/* Expanding container: starts as circle, becomes rectangle */}
+      {/* Expanding container: circle morphs to rectangle */}
       <motion.div
         className="relative z-10 overflow-hidden"
         initial={{
           width: 160,
           height: 160,
           borderRadius: "50%",
+          opacity: 0.8,
         }}
         animate={{
-          width: "min(90vw, 900px)",
-          height: "auto",
-          borderRadius: "8px",
+          width: "min(90vw, 1000px)",
+          height: "min(80vh, 600px)",
+          borderRadius: "12px",
+          opacity: 1,
+        }}
+        exit={{
+          width: 160,
+          height: 160,
+          borderRadius: "50%",
+          opacity: 0,
         }}
         transition={{
           duration: 0.5,
@@ -174,10 +182,10 @@ const ExpandedView = ({
         <motion.img
           src={project.image}
           alt={project.title}
-          className="w-full h-auto object-contain"
+          className="w-full h-full object-cover"
           initial={{ opacity: 0, scale: 1.1 }}
           animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
+          transition={{ duration: 0.5, delay: 0.15 }}
         />
       </motion.div>
 
@@ -186,7 +194,8 @@ const ExpandedView = ({
         className="absolute bottom-8 font-display text-xl sm:text-2xl text-white/80 z-10"
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.5 }}
+        exit={{ opacity: 0, y: 10 }}
+        transition={{ delay: 0.45 }}
       >
         {project.title}
       </motion.p>
