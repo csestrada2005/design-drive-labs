@@ -1,26 +1,46 @@
 
 
-## Fix "How we work" Section: Scroll Range and Sensitivity
+## Fix "Our Work" Section: Center Bubbles + Fix Expand Animation
 
-### Problems Identified
+### Problems
 
-1. **Starts at step 2**: The first step begins at opacity 0 and requires scrolling to fade in, so by the time content becomes visible, the user has already scrolled past step 1.
-2. **Ends at step 3**: The container is 600vh tall (6 x 100vh), meaning each step gets ~120vh of scroll distance. Combined with issue #1, the visible scroll range only covers steps 2-3 before the user loses patience or the section ends visually.
-3. **Too much scroll needed**: Each step requires a full 120vh of scrolling to transition, making it feel sluggish.
+1. **Bubbles skewed left**: The `left` positions range from 10%-72%, leaving the right side empty. Need to shift everything rightward to visually center the cluster.
+2. **Expand animation broken**: `height: "auto"` cannot be animated by framer-motion -- it doesn't know how to interpolate from `160px` to `"auto"`. The circle-to-rectangle morph never visually happens.
 
 ### Solution
 
-**File: `src/components/motion/ProcessSection.tsx`**
+**File: `src/components/motion/FeaturedWork.tsx`**
 
-1. **Reduce container height** from `(steps.length + 1) * 100vh` (600vh) to `steps.length * 80vh` (400vh). This makes each step transition require less scrolling -- more responsive to user input.
+#### 1. Re-center bubble positions
 
-2. **Fix first step visibility**: Make step 1 start at full opacity (1) instead of fading from 0. This ensures the user immediately sees "01 - Audit and Strategy" when entering the section.
+Shift all `left` values rightward by ~8-10% so the cluster is visually centered within the full-width container:
 
-3. **Adjust segment math**: With 5 steps across 400vh, each step gets ~80vh of scroll, which is roughly one strong scroll gesture -- much more sensitive than the current 120vh.
+```text
+Before:                    After:
+left: 12%  -> 18%          left: 55% -> 62%
+left: 32%  -> 38%          left: 72% -> 76%
+left: 10%  -> 20%          left: 58% -> 65%
+```
+
+#### 2. Fix the expand animation (circle-to-rectangle morph)
+
+The core UX pattern is a **shared-element transition** (popularized by Material Design and Apple's App Store cards). The approach:
+
+- Replace `height: "auto"` with a concrete pixel value like `min(80vh, 600px)` so framer-motion can interpolate it
+- Show the image inside the container with `object-cover` filling the morphing shape
+- Use a two-phase animation:
+  - **Phase 1** (0-0.4s): Circle morphs to rectangle (`borderRadius: 50% -> 12px`, `width: 160 -> 90vw`, `height: 160 -> 80vh`)
+  - **Phase 2** (0.3-0.6s): Image crossfades from cover-crop to full contain view, close button and title fade in
+- Use `layout` prop on the container for smoother interpolation
+- Add `exit` animation that reverses the morph (rectangle shrinks back to circle)
+
+#### 3. Exit animation
+
+Add a reverse morph on close: rectangle contracts back to a circle and fades out, giving the interaction a satisfying bookend.
 
 ### Technical Details
 
-- `StepSlide` component: For `index === 0`, set initial opacity to 1 (visible on entry), transitioning out at the segment boundary.
-- Container height: Change from `${(steps.length + 1) * 100}vh` to `${steps.length * 80}vh`.
-- The `ProgressDot` math stays the same since it's based on relative progress (0-1 range).
-
+- Replace `height: "auto"` with `height: "min(80vh, 600px)"` in the `animate` prop -- this gives framer-motion a concrete target to interpolate
+- Add `exit` props to reverse the morph: `{ width: 160, height: 160, borderRadius: "50%", opacity: 0 }`
+- Update `POSITIONS` array with shifted `left` values
+- Keep the backdrop blur, ESC key handler, and scroll lock as-is
