@@ -276,7 +276,7 @@ export const LoadingScreen = ({ onComplete }: { onComplete: () => void }) => {
               <div className="relative select-none">
                 {/* Ink-bleed subtle glow behind digits */}
                 <div
-                  className="absolute inset-0 blur-3xl"
+                  className="absolute inset-0"
                   style={{
                     background: "hsl(0 80% 45% / 0.08)",
                     transform: "scale(1.4)",

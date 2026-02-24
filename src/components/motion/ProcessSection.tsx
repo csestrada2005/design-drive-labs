@@ -124,7 +124,6 @@ const MorphAnchor = ({ activeIndex }: { activeIndex: number }) => {
         transition={{ duration: 0.8 }}
         style={{
           background: "radial-gradient(circle, hsl(0 100% 50% / 0.12), transparent 70%)",
-          filter: "blur(30px)",
         }}
       />
     </div>
@@ -146,7 +145,7 @@ export const ProcessSection = () => {
     const targetIdx = Math.min(Math.floor(v * steps.length), steps.length - 1);
     const now = Date.now();
     // Only allow stepping one at a time with a minimum interval
-    if (targetIdx !== activeIndex && now - lastChangeTime.current > 350) {
+    if (targetIdx !== activeIndex && now - lastChangeTime.current > 700) {
       const direction = targetIdx > activeIndex ? 1 : -1;
       setActiveIndex((prev) => Math.max(0, Math.min(steps.length - 1, prev + direction)));
       lastChangeTime.current = now;
@@ -154,7 +153,7 @@ export const ProcessSection = () => {
   });
 
   return (
-    <div ref={containerRef} style={{ height: `${steps.length * 120}vh` }} id="process">
+    <div ref={containerRef} style={{ height: `${steps.length * 250}vh` }} id="process">
       <div className="sticky top-0 h-screen w-full overflow-hidden flex flex-col items-center justify-center">
         {/* Title */}
         <motion.h2

@@ -13,18 +13,12 @@ export const useVelocitySkew = (maxSkew = 4, maxBlur = 2) => {
   const rawBlur = useTransform(velocity, [-3000, -300, 0, 300, 3000], [maxBlur, 0.5, 0, 0.5, maxBlur]);
 
   const skewY = useSpring(rawSkew, { stiffness: 300, damping: 30 });
-  const blur = useSpring(rawBlur, { stiffness: 300, damping: 30 });
-
-  const filterStr = useTransform(blur, (b: number) =>
-    prefersReduced ? "none" : `blur(${b.toFixed(1)}px)`
-  );
 
   return {
     style: prefersReduced
       ? {}
       : {
           skewY: skewY as MotionValue<number>,
-          filter: filterStr as MotionValue<string>,
         },
   };
 };

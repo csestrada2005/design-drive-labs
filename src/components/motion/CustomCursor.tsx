@@ -61,7 +61,6 @@ export const CustomCursor = ({ containerRef }: CustomCursorProps) => {
           height: 180,
           background:
             "radial-gradient(circle, hsl(0 88% 40% / 0.13) 0%, hsl(0 88% 40% / 0.05) 45%, transparent 70%)",
-          filter: "blur(8px)",
         }}
       />
     </div>

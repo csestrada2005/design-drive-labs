@@ -83,8 +83,6 @@ export const TopMenu = () => {
             className="fixed inset-0 z-[100] flex flex-col"
             style={{
               background: "hsl(var(--background) / 0.97)",
-              backdropFilter: "blur(24px)",
-              WebkitBackdropFilter: "blur(24px)",
             }}
           >
             {/* Header */}

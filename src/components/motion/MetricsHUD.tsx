@@ -106,8 +106,6 @@ export const MetricsHUD = ({
                 exit="exit"
                 className="flex items-center gap-2 px-3 py-1.5 rounded-sm"
                 style={{
-                  backdropFilter: "blur(12px) saturate(1.2)",
-                  WebkitBackdropFilter: "blur(12px) saturate(1.2)",
                   background: "hsl(0 0% 100% / 0.07)",
                   boxShadow:
                     "0 1px 8px hsl(0 0% 0% / 0.12), inset 0 0 0 0.5px hsl(0 0% 100% / 0.12)",
@@ -162,8 +160,6 @@ export const MetricsHUD = ({
             }}
             className="flex items-center gap-1.5 px-2.5 py-1 rounded-sm"
             style={{
-              backdropFilter: "blur(12px) saturate(1.2)",
-              WebkitBackdropFilter: "blur(12px) saturate(1.2)",
               background: "hsl(0 0% 100% / 0.06)",
               boxShadow:
                 "0 1px 6px hsl(0 0% 0% / 0.1), inset 0 0 0 0.5px hsl(0 0% 100% / 0.1)",

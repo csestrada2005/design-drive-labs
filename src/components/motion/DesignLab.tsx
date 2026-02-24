@@ -23,8 +23,6 @@ const GlassCard = ({
     minHeight: minH,
     background:
     "linear-gradient(135deg, hsl(0 0% 100% / 0.09) 0%, hsl(0 0% 100% / 0.04) 50%, hsl(0 0% 100% / 0.07) 100%)",
-    backdropFilter: "blur(22px) saturate(1.4)",
-    WebkitBackdropFilter: "blur(22px) saturate(1.4)",
     boxShadow:
     "inset 0 1px 0 hsl(0 0% 100% / 0.18), inset 0 -1px 0 hsl(0 0% 0% / 0.08), inset 1px 0 0 hsl(0 0% 100% / 0.08), 0 8px 40px hsl(0 0% 0% / 0.22), 0 2px 8px hsl(0 0% 0% / 0.12)"
   }}>
@@ -95,7 +93,7 @@ const TrueFocus = () => {
         onTouchEnd={() => setUserHovering(false)}>
         <p
           className="font-display text-3xl sm:text-4xl text-foreground leading-none text-center pointer-events-none absolute"
-          style={{ filter: "blur(9px)", userSelect: "none" }}
+          style={{ userSelect: "none" }}
           aria-hidden>
           NEBU<br />STUDIO
         </p>
@@ -148,7 +146,7 @@ const GradualBlur = () => {
     return () => {clearInterval(iv);cleanup();};
   }, [isInView]);
 
-  const blurVal = phase === 1 ? 0 : 14;
+  const blurVal = 0;
   const opacityVal = phase === 1 ? 1 : 0.25;
 
   return (
@@ -202,7 +200,6 @@ const AuroraParticle = ({ x, y, size, opacity, idx }: {x: number;y: number;size:
         height: size * 2.2,
         background: `radial-gradient(circle, hsl(${hue} 80% 70% / 0.7), hsl(${(hue + 60) % 360} 70% 50% / 0.3), transparent)`,
         boxShadow: `0 0 ${size * 2}px hsl(${hue} 90% 65% / 0.6), 0 0 ${size * 4}px hsl(${hue} 80% 50% / 0.3)`,
-        filter: "blur(1px)"
       }} />
   );
 };
