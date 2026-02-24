@@ -1,46 +1,99 @@
 
 
-## Fix "Our Work" Section: Center Bubbles + Fix Expand Animation
+## Awwwards-Level "Our Work" Gallery Refactor
 
-### Problems
+### Overview
 
-1. **Bubbles skewed left**: The `left` positions range from 10%-72%, leaving the right side empty. Need to shift everything rightward to visually center the cluster.
-2. **Expand animation broken**: `height: "auto"` cannot be animated by framer-motion -- it doesn't know how to interpolate from `160px` to `"auto"`. The circle-to-rectangle morph never visually happens.
+A complete refactor of `FeaturedWork.tsx` to deliver a premium, award-worthy project gallery with buttery-smooth animations, magnetic interactions, and full accessibility.
 
-### Solution
+---
 
-**File: `src/components/motion/FeaturedWork.tsx`**
+### 1. Shared Element Transition via `layoutId`
 
-#### 1. Re-center bubble positions
+Strip out all manual `getBoundingClientRect` + offset calculation logic. Instead, use Framer Motion's `layoutId` prop to seamlessly morph between the circle thumbnail and the expanded modal.
 
-Shift all `left` values rightward by ~8-10% so the cluster is visually centered within the full-width container:
+**How it works:**
+- Each `FloatingCircle` renders a `<motion.div layoutId={project.id}>` wrapping the circular image.
+- When a project is selected, the circle unmounts and the `ExpandedView` renders a `<motion.div layoutId={project.id}>` at full size.
+- Framer Motion automatically calculates and animates position, size, and `borderRadius` between the two elements -- no manual math needed.
+- The `OriginRect` interface and all `getBoundingClientRect` code are deleted entirely.
 
-```text
-Before:                    After:
-left: 12%  -> 18%          left: 55% -> 62%
-left: 32%  -> 38%          left: 72% -> 76%
-left: 10%  -> 20%          left: 58% -> 65%
-```
+---
 
-#### 2. Fix the expand animation (circle-to-rectangle morph)
+### 2. Magnetic Hover Effect
 
-The core UX pattern is a **shared-element transition** (popularized by Material Design and Apple's App Store cards). The approach:
+Remove the infinite bobbing animation (`y: [0, -8, 0]`). Replace with a magnetic pull effect reusing the spring-based pattern from the existing `MagneticButton.tsx`:
 
-- Replace `height: "auto"` with a concrete pixel value like `min(80vh, 600px)` so framer-motion can interpolate it
-- Show the image inside the container with `object-cover` filling the morphing shape
-- Use a two-phase animation:
-  - **Phase 1** (0-0.4s): Circle morphs to rectangle (`borderRadius: 50% -> 12px`, `width: 160 -> 90vw`, `height: 160 -> 80vh`)
-  - **Phase 2** (0.3-0.6s): Image crossfades from cover-crop to full contain view, close button and title fade in
-- Use `layout` prop on the container for smoother interpolation
-- Add `exit` animation that reverses the morph (rectangle shrinks back to circle)
+- Each circle wrapper tracks `onMouseMove` and computes the cursor offset from the circle center.
+- The offset is fed into `useSpring` values for `x` and `y`, pulling the circle toward the cursor with `strength: 0.25`.
+- On `mouseLeave`, springs snap back to `(0, 0)`.
+- On hover, the entire circle container scales to `1.08` via `whileHover`.
 
-#### 3. Exit animation
+---
 
-Add a reverse morph on close: rectangle contracts back to a circle and fades out, giving the interaction a satisfying bookend.
+### 3. Responsive Collision-Free Layout
+
+Replace the hardcoded `POSITIONS` array with a CSS Grid layout:
+
+- Use a 3-column, 2-row grid (`grid-cols-3 grid-rows-2`) with generous gap.
+- Each cell contains a circle centered within it, with slight random-looking offsets via `translateX/Y` (percentage-based, not absolute pixels) to break the rigid grid feel while remaining collision-free.
+- On mobile (`< sm`), collapse to a 2-column, 3-row grid with smaller circles.
+- The offsets are static per-item (predefined small nudges like `translate-x-2`, `-translate-y-3`) -- not truly random, just enough to feel organic.
+
+---
+
+### 4. Accessibility
+
+- Convert clickable circle wrappers from `<motion.div>` to `<motion.button>` with `aria-label="View {project.title} project"`.
+- Full keyboard navigation: `Tab` to focus, `Enter`/`Space` to open.
+- Focus trap inside the expanded modal using a simple `useEffect` that listens for `Tab` and constrains focus to the close button.
+- On close, return focus to the originating button via a stored `ref`.
+
+---
+
+### 5. Visual Polish
+
+**Image transition during expansion:**
+- During the `layoutId` morph, the image uses `object-cover` so it fills the shape seamlessly as it transforms.
+- After the layout animation completes (detected via `onLayoutAnimationComplete`), crossfade to `object-contain` over ~300ms so the full image becomes visible without cropping.
+
+**Glassmorphism backdrop:**
+- Replace the flat `hsl(0 0% 4% / 0.92)` with: `background: rgba(0,0,0,0.6)`, `backdrop-filter: blur(40px) saturate(1.3)`.
+- Add a subtle radial gradient overlay for depth.
+
+**Close button:** Glassmorphic pill with blur background, fades in after the layout animation.
+
+**Title:** Fades in below the expanded image after the morph completes.
+
+---
 
 ### Technical Details
 
-- Replace `height: "auto"` with `height: "min(80vh, 600px)"` in the `animate` prop -- this gives framer-motion a concrete target to interpolate
-- Add `exit` props to reverse the morph: `{ width: 160, height: 160, borderRadius: "50%", opacity: 0 }`
-- Update `POSITIONS` array with shifted `left` values
-- Keep the backdrop blur, ESC key handler, and scroll lock as-is
+**File changed:** `src/components/motion/FeaturedWork.tsx` (full rewrite)
+
+**Key architecture:**
+
+```text
+FeaturedWork
+  +-- Section header ("Our Work.")
+  +-- Grid container (CSS grid, 3x2 / 2x3 mobile)
+  |     +-- MagneticCircle x6
+  |           +-- <motion.button>
+  |           +-- <motion.div layoutId={id}> (circle image) -- only when NOT active
+  +-- Portal -> AnimatePresence
+        +-- ExpandedView (when activeProject set)
+              +-- Glassmorphic backdrop
+              +-- <motion.div layoutId={id}> (expanded image)
+              +-- Close button (focus-trapped)
+              +-- Title label
+```
+
+**Dependencies:** No new packages. Uses existing `framer-motion`, `lucide-react`, `react-dom`.
+
+**What gets deleted:**
+- `OriginRect` interface
+- `POSITIONS` array
+- All `getBoundingClientRect` logic
+- Infinite bobbing animation
+- Manual scale/offset calculations in `ExpandedView`
+
