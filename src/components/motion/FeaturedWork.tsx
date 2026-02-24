@@ -1,14 +1,12 @@
 /**
- * FeaturedWork — "Selected Work" interactive gallery
+ * FeaturedWork — "Our Work" floating circle gallery
  *
- * 6 projects with static screenshot images.
- * "View" button opens a fullscreen image lightbox.
+ * 6 projects as floating circles. Click expands circle → rectangle showing full image.
  */
 
-import { useRef, useState, useEffect, forwardRef } from "react";
+import { useRef, useState, useEffect } from "react";
 import { motion, AnimatePresence, useInView } from "framer-motion";
-import { X, ArrowUpRight } from "lucide-react";
-import { useScrollPaint } from "@/hooks/useScrollPaint";
+import { X } from "lucide-react";
 
 import workPapachoa from "@/assets/work-papachoa.png";
 import workBazar from "@/assets/work-bazar.png";
@@ -17,76 +15,115 @@ import workRawpaw from "@/assets/work-rawpaw.png";
 import workSystem from "@/assets/work-system.png";
 import workArmahas from "@/assets/work-armahas.png";
 
-// ── Project data ─────────────────────────────────────────────────────────────
 const PROJECTS = [
-  {
-    id: "papachoa",
-    title: "Papachoa",
-    descriptor: "High-trust brand website",
-    tags: ["Website", "Landing"],
-    index: "01",
-    image: workPapachoa,
-  },
-  {
-    id: "bazar",
-    title: "Bazar Centenario",
-    descriptor: "Conversion-focused e-commerce",
-    tags: ["E-commerce", "Website"],
-    index: "02",
-    image: workBazar,
-  },
-  {
-    id: "jewelry",
-    title: "Joyería Centenario",
-    descriptor: "Luxury product showcase",
-    tags: ["E-commerce", "Landing"],
-    index: "03",
-    image: workJewelry,
-  },
-  {
-    id: "rawpaw",
-    title: "Raw Paw",
-    descriptor: "D2C brand storefront",
-    tags: ["Website", "E-commerce"],
-    index: "04",
-    image: workRawpaw,
-  },
-  {
-    id: "system",
-    title: "Custom System",
-    descriptor: "Internal platform & automation",
-    tags: ["System", "Dashboard"],
-    index: "05",
-    image: workSystem,
-  },
-  {
-    id: "armahas",
-    title: "Armahas",
-    descriptor: "Streetwear brand store",
-    tags: ["E-commerce", "Website"],
-    index: "06",
-    image: workArmahas,
-  },
+  { id: "papachoa", title: "Papachoa", image: workPapachoa },
+  { id: "bazar", title: "Bazar Centenario", image: workBazar },
+  { id: "jewelry", title: "Joyería Centenario", image: workJewelry },
+  { id: "rawpaw", title: "Raw Paw", image: workRawpaw },
+  { id: "system", title: "Custom System", image: workSystem },
+  { id: "armahas", title: "Armahas", image: workArmahas },
 ];
 
 type Project = (typeof PROJECTS)[number];
 
-// ── Fullscreen Image Lightbox ─────────────────────────────────────────────────
-const ImageLightbox = forwardRef<HTMLDivElement, {
+// Floating positions for each circle — spread across the section
+const POSITIONS = [
+  { top: "8%", left: "12%" },
+  { top: "5%", left: "55%" },
+  { top: "38%", left: "32%" },
+  { top: "35%", left: "72%" },
+  { top: "65%", left: "10%" },
+  { top: "62%", left: "58%" },
+];
+
+// ── Floating Circle ──────────────────────────────────────────────────────────
+const FloatingCircle = ({
+  project,
+  position,
+  index,
+  onOpen,
+}: {
   project: Project;
-  onClose: () => void;
-}>(({ project, onClose }, ref) => {
-  useEffect(() => {
-    const handler = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
-    };
-    window.addEventListener("keydown", handler);
-    return () => window.removeEventListener("keydown", handler);
-  }, [onClose]);
+  position: { top: string; left: string };
+  index: number;
+  onOpen: () => void;
+}) => {
+  const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref, { once: true, margin: "-40px" });
 
   return (
     <motion.div
       ref={ref}
+      className="absolute cursor-pointer group"
+      style={{ top: position.top, left: position.left }}
+      initial={{ opacity: 0, scale: 0.7 }}
+      animate={
+        isInView
+          ? { opacity: 1, scale: 1 }
+          : { opacity: 0, scale: 0.7 }
+      }
+      transition={{
+        duration: 0.6,
+        delay: index * 0.1,
+        ease: [0.25, 1, 0.5, 1],
+      }}
+      onClick={onOpen}
+    >
+      {/* Floating animation */}
+      <motion.div
+        animate={{
+          y: [0, -8, 0],
+        }}
+        transition={{
+          duration: 3 + index * 0.5,
+          repeat: Infinity,
+          ease: "easeInOut",
+        }}
+        className="flex flex-col items-center"
+      >
+        {/* Circle image */}
+        <div className="w-24 h-24 sm:w-32 sm:h-32 md:w-40 md:h-40 rounded-full overflow-hidden border-2 border-transparent group-hover:border-primary transition-all duration-300 relative">
+          <img
+            src={project.image}
+            alt={project.title}
+            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+          />
+          <div className="absolute inset-0 rounded-full bg-black/20 group-hover:bg-black/0 transition-colors duration-300" />
+        </div>
+
+        {/* Title below */}
+        <motion.span
+          className="mt-3 text-xs sm:text-sm font-display text-foreground/70 group-hover:text-primary transition-colors duration-300 text-center whitespace-nowrap"
+        >
+          {project.title}
+        </motion.span>
+      </motion.div>
+    </motion.div>
+  );
+};
+
+// ── Expanded View (circle → rectangle) ───────────────────────────────────────
+const ExpandedView = ({
+  project,
+  onClose,
+}: {
+  project: Project;
+  onClose: () => void;
+}) => {
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    window.addEventListener("keydown", handler);
+    return () => {
+      document.body.style.overflow = "";
+      window.removeEventListener("keydown", handler);
+    };
+  }, [onClose]);
+
+  return (
+    <motion.div
       className="fixed inset-0 z-[9999] flex items-center justify-center"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
@@ -103,198 +140,56 @@ const ImageLightbox = forwardRef<HTMLDivElement, {
         onClick={onClose}
       />
 
-      {/* Content */}
-      <div className="relative z-10 w-full max-w-5xl px-4 sm:px-8">
-        {/* Header */}
-        <div className="flex items-center justify-between mb-6">
-          <div>
-            <p className="text-[9px] font-mono tracking-[0.3em] uppercase text-white/40 mb-1">
-              {project.index} / Selected Work
-            </p>
-            <h3 className="font-display text-xl sm:text-2xl text-white tracking-tight">
-              {project.title}
-            </h3>
-          </div>
-          <button
-            onClick={onClose}
-            className="w-8 h-8 flex items-center justify-center rounded-sm transition-colors"
-            style={{ background: "hsl(0 0% 100% / 0.06)" }}
-          >
-            <X className="w-3.5 h-3.5 text-white/70" />
-          </button>
-        </div>
+      {/* Expanding container: starts as circle, becomes rectangle */}
+      <motion.div
+        className="relative z-10 overflow-hidden"
+        initial={{
+          width: 160,
+          height: 160,
+          borderRadius: "50%",
+        }}
+        animate={{
+          width: "min(90vw, 900px)",
+          height: "auto",
+          borderRadius: "8px",
+        }}
+        transition={{
+          duration: 0.5,
+          ease: [0.25, 1, 0.5, 1],
+        }}
+      >
+        {/* Close button */}
+        <motion.button
+          onClick={onClose}
+          className="absolute top-3 right-3 z-20 w-8 h-8 flex items-center justify-center rounded-full"
+          style={{ background: "hsl(0 0% 0% / 0.5)" }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.4 }}
+        >
+          <X className="w-4 h-4 text-white/80" />
+        </motion.button>
 
         {/* Image */}
-        <motion.div
-          className="rounded-sm overflow-hidden bg-white/5"
-          initial={{ scale: 0.95, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          transition={{ duration: 0.4, ease: [0.25, 1, 0.5, 1] }}
-        >
-          <img
-            src={project.image}
-            alt={project.title}
-            className="w-full h-auto object-contain max-h-[75vh]"
-          />
-        </motion.div>
-
-        <p className="text-[10px] font-mono text-white/30 tracking-wider mt-4 text-center">
-          {project.descriptor}
-        </p>
-      </div>
-    </motion.div>
-  );
-});
-
-ImageLightbox.displayName = "ImageLightbox";
-
-// ── Project Row ───────────────────────────────────────────────────────────────
-const ProjectRow = ({
-  project,
-  onOpen,
-  index,
-}: {
-  project: Project;
-  onOpen: () => void;
-  index: number;
-}) => {
-  const ref = useRef<HTMLDivElement>(null);
-  const isInView = useInView(ref, { once: true, margin: "-60px" });
-  const [hovered, setHovered] = useState(false);
-
-  return (
-    <motion.div
-      ref={ref}
-      className="group relative"
-      initial={{ opacity: 0, y: 24 }}
-      animate={isInView ? { opacity: 1, y: 0 } : {}}
-      transition={{
-        duration: 0.55,
-        delay: index * 0.08,
-        ease: [0.25, 1, 0.5, 1],
-      }}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-    >
-      <button
-        onClick={onOpen}
-        className="w-full text-left"
-        aria-label={`View ${project.title}`}
-      >
-        <div
-          className="flex items-center gap-6 sm:gap-10 py-6 sm:py-8 transition-all duration-300"
-          style={{ borderBottom: "1px solid hsl(0 0% 0% / 0.08)" }}
-        >
-          {/* Index */}
-          <motion.span
-            className="font-mono text-[10px] tracking-[0.25em] flex-shrink-0 w-7 hidden sm:block"
-            animate={{
-              color: hovered
-                ? "hsl(0 100% 50%)"
-                : "hsl(0 0% 0% / 0.25)",
-            }}
-            transition={{ duration: 0.2 }}
-          >
-            {project.index}
-          </motion.span>
-
-          {/* Preview thumbnail */}
-          <motion.div
-            className="relative flex-shrink-0 overflow-hidden rounded-sm"
-            animate={{
-              width: hovered ? 80 : 52,
-              height: hovered ? 56 : 36,
-            }}
-            transition={{ duration: 0.4, ease: [0.25, 1, 0.5, 1] }}
-          >
-            <img
-              src={project.image}
-              alt=""
-              className="w-full h-full object-cover"
-            />
-            <div
-              className="absolute inset-0 transition-opacity duration-300"
-              style={{
-                background: "hsl(0 0% 0% / 0.15)",
-                opacity: hovered ? 0 : 1,
-              }}
-            />
-          </motion.div>
-
-          {/* Title + descriptor */}
-          <div className="flex-1 min-w-0">
-            <motion.h3
-              className="font-display text-2xl sm:text-3xl md:text-4xl leading-none mb-1.5"
-              animate={{
-                color: hovered
-                  ? "hsl(0 0% 0%)"
-                  : "hsl(0 0% 0% / 0.85)",
-              }}
-              transition={{ duration: 0.2 }}
-            >
-              {project.title}
-            </motion.h3>
-            <p className="text-xs text-muted-foreground hidden sm:block">
-              {project.descriptor}
-            </p>
-          </div>
-
-          {/* Tags */}
-          <div className="hidden md:flex items-center gap-1.5 flex-shrink-0">
-            {project.tags.map((tag) => (
-              <span
-                key={tag}
-                className="px-2 py-0.5 text-[8px] font-mono tracking-[0.18em] uppercase"
-                style={{
-                  background: "hsl(0 0% 0% / 0.05)",
-                  color: "hsl(0 0% 0% / 0.45)",
-                }}
-              >
-                {tag}
-              </span>
-            ))}
-          </div>
-
-          {/* View arrow */}
-          <motion.div
-            className="flex-shrink-0 flex items-center gap-1.5"
-            animate={{
-              x: hovered ? 0 : 4,
-              opacity: hovered ? 1 : 0.4,
-            }}
-            transition={{ duration: 0.25 }}
-          >
-            <span className="text-[9px] font-mono tracking-[0.2em] uppercase hidden sm:block">
-              View
-            </span>
-            <motion.div
-              animate={{ rotate: hovered ? 0 : -10 }}
-              transition={{ duration: 0.25 }}
-            >
-              <ArrowUpRight
-                className="w-4 h-4"
-                style={{
-                  color: hovered
-                    ? "hsl(0 100% 50%)"
-                    : "currentColor",
-                }}
-              />
-            </motion.div>
-          </motion.div>
-        </div>
-
-        {/* Hover bottom bar */}
-        <div
-          className="absolute bottom-0 left-0 h-px w-full"
-          style={{
-            background: "hsl(0 100% 50%)",
-            transformOrigin: "left",
-            transform: hovered ? "scaleX(1)" : "scaleX(0)",
-            transition:
-              "transform 0.35s cubic-bezier(0.25, 1, 0.5, 1)",
-          }}
+        <motion.img
+          src={project.image}
+          alt={project.title}
+          className="w-full h-auto object-contain"
+          initial={{ opacity: 0, scale: 1.1 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
         />
-      </button>
+      </motion.div>
+
+      {/* Title */}
+      <motion.p
+        className="absolute bottom-8 font-display text-xl sm:text-2xl text-white/80 z-10"
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.5 }}
+      >
+        {project.title}
+      </motion.p>
     </motion.div>
   );
 };
@@ -303,19 +198,7 @@ const ProjectRow = ({
 export const FeaturedWork = () => {
   const ref = useRef<HTMLElement>(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
-  const headerPaint = useScrollPaint({ xDrift: 16 });
   const [activeProject, setActiveProject] = useState<Project | null>(null);
-
-  useEffect(() => {
-    if (activeProject) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, [activeProject]);
 
   return (
     <>
@@ -323,43 +206,39 @@ export const FeaturedWork = () => {
         ref={ref}
         className="py-24 sm:py-32 relative overflow-hidden"
         id="work"
+        style={{ minHeight: "100vh" }}
       >
         <div className="container relative z-10">
           {/* Header */}
           <motion.div
-            ref={headerPaint.ref}
-            style={headerPaint.style}
-            className="mb-14 sm:mb-20"
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
+            className="mb-8"
+            initial={{ opacity: 0, y: 20 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.6 }}
           >
-            <p className="text-[9px] font-mono tracking-[0.35em] uppercase text-primary mb-4">
-              ​
-            </p>
-            <h2 className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl mb-4 text-foreground">
-              WORK THAT <span className="text-primary">PERFORMS</span>
+            <h2 className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-foreground">
+              Our <span className="text-primary">Work.</span>
             </h2>
-            <p className="text-muted-foreground text-sm max-w-md leading-relaxed">
-              Our projects.
-            </p>
           </motion.div>
+        </div>
 
-          {/* Project list */}
-          <div>
-            {PROJECTS.map((project, i) => (
-              <ProjectRow
-                key={project.id}
-                project={project}
-                index={i}
-                onOpen={() => setActiveProject(project)}
-              />
-            ))}
-          </div>
+        {/* Floating circles area */}
+        <div className="relative w-full" style={{ height: "clamp(500px, 70vh, 800px)" }}>
+          {PROJECTS.map((project, i) => (
+            <FloatingCircle
+              key={project.id}
+              project={project}
+              position={POSITIONS[i]}
+              index={i}
+              onOpen={() => setActiveProject(project)}
+            />
+          ))}
+        </div>
 
-          {/* CTA */}
+        {/* CTA */}
+        <div className="container relative z-10">
           <motion.div
-            className="mt-16 sm:mt-20"
+            className="mt-8"
             initial={{ opacity: 0, y: 16 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.6, delay: 0.5 }}
@@ -377,10 +256,10 @@ export const FeaturedWork = () => {
         </div>
       </section>
 
-      {/* Lightbox overlay */}
+      {/* Expanded overlay */}
       <AnimatePresence>
         {activeProject && (
-          <ImageLightbox
+          <ExpandedView
             key={activeProject.id}
             project={activeProject}
             onClose={() => setActiveProject(null)}
