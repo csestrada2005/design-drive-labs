@@ -8,6 +8,7 @@ import { CustomCursor } from "@/components/motion/CustomCursor";
 import { CornerCrosses } from "@/components/motion/CornerCrosses";
 import { SectionNav } from "@/components/motion/SectionNav";
 import { HeroTransition } from "@/components/motion/HeroTransition";
+import { FilmGrain } from "@/components/motion/FilmGrain";
 
 // ── Below-fold sections (lazy loaded) ────────────────────────────────────────
 const BuildModes        = lazy(() => import("@/components/motion/BuildModes").then(m => ({ default: m.BuildModes })));
@@ -16,9 +17,10 @@ const ProcessSection    = lazy(() => import("@/components/motion/ProcessSection"
 const GrowthImpact      = lazy(() => import("@/components/motion/GrowthImpact").then(m => ({ default: m.GrowthImpact })));
 const FeaturedWork      = lazy(() => import("@/components/motion/FeaturedWork").then(m => ({ default: m.FeaturedWork })));
 const StandardsSection  = lazy(() => import("@/components/motion/StandardsSection").then(m => ({ default: m.StandardsSection })));
+const ServicesSection   = lazy(() => import("@/components/motion/ServicesSection").then(m => ({ default: m.ServicesSection })));
 const ChoosePathContact = lazy(() => import("@/components/motion/ChoosePathContact").then(m => ({ default: m.ChoosePathContact })));
 const DramaticFooter    = lazy(() => import("@/components/motion/DramaticFooter").then(m => ({ default: m.DramaticFooter })));
-const SectionSeparator  = lazy(() => import("@/components/motion/SectionSeparator").then(m => ({ default: m.SectionSeparator })));
+const SectionReveal     = lazy(() => import("@/components/motion/SectionReveal").then(m => ({ default: m.SectionReveal })));
 
 // Minimal skeleton while lazy chunks load
 const SectionSkeleton = () => (
@@ -31,51 +33,81 @@ const Index = () => {
   const cursorZoneRef = useRef<HTMLDivElement>(null);
 
   return (
-    <div className="min-h-screen text-foreground">
+    <div className="min-h-screen text-foreground relative">
+      {/* Global atmospheric grain overlay */}
+      <FilmGrain />
+
+      {/* Ambient radial gradient mesh — organic lighting */}
+      <div
+        className="fixed inset-0 pointer-events-none z-0"
+        aria-hidden="true"
+        style={{
+          background: `
+            radial-gradient(ellipse 60% 50% at 20% 20%, hsl(0 100% 50% / 0.03), transparent 70%),
+            radial-gradient(ellipse 50% 60% at 80% 70%, hsl(240 60% 40% / 0.03), transparent 70%),
+            radial-gradient(ellipse 70% 40% at 50% 50%, hsl(0 0% 100% / 0.01), transparent 60%)
+          `,
+        }}
+      />
+
       <SoundToggle />
       <CustomCursor containerRef={cursorZoneRef} />
       <CornerCrosses />
       <SectionNav />
       <HeroTransition />
 
-      <main ref={cursorZoneRef}>
+      <main ref={cursorZoneRef} className="relative z-[1]">
         {/* Above fold — eager */}
         <HeroSection />
         <MarqueeTicker />
 
-        {/* Below fold — lazy with separators between every section */}
+        {/* Below fold — fluid section reveals */}
         <Suspense fallback={<SectionSkeleton />}>
-          <BuildModes />
+          <SectionReveal>
+            <BuildModes />
+          </SectionReveal>
         </Suspense>
 
         <Suspense fallback={<SectionSkeleton />}>
-          <SectionSeparator />
-          <DesignLab />
+          <SectionReveal>
+            <ServicesSection />
+          </SectionReveal>
         </Suspense>
 
         <Suspense fallback={<SectionSkeleton />}>
-          <SectionSeparator />
-          <ProcessSection />
+          <SectionReveal>
+            <DesignLab />
+          </SectionReveal>
         </Suspense>
 
         <Suspense fallback={<SectionSkeleton />}>
-          <SectionSeparator />
-          <GrowthImpact />
+          <SectionReveal>
+            <ProcessSection />
+          </SectionReveal>
         </Suspense>
 
         <Suspense fallback={<SectionSkeleton />}>
-          <SectionSeparator />
-          <FeaturedWork />
+          <SectionReveal>
+            <GrowthImpact />
+          </SectionReveal>
         </Suspense>
 
         <Suspense fallback={<SectionSkeleton />}>
-          <SectionSeparator />
-          <StandardsSection />
+          <SectionReveal>
+            <FeaturedWork />
+          </SectionReveal>
         </Suspense>
 
         <Suspense fallback={<SectionSkeleton />}>
-          <SectionSeparator />
-          <ChoosePathContact />
+          <SectionReveal>
+            <StandardsSection />
+          </SectionReveal>
+        </Suspense>
+
+        <Suspense fallback={<SectionSkeleton />}>
+          <SectionReveal>
+            <ChoosePathContact />
+          </SectionReveal>
         </Suspense>
 
         <Suspense fallback={<SectionSkeleton />}>
