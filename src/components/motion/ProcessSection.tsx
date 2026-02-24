@@ -22,28 +22,26 @@ const StepSlide = ({
 }) => {
   const segmentSize = 1 / total;
   const start = index * segmentSize;
-  const fadeIn = start + segmentSize * 0.15;
-  const holdStart = start + segmentSize * 0.25;
-  const holdEnd = start + segmentSize * 0.75;
-  const fadeOut = start + segmentSize * 0.85;
-  const end = start + segmentSize;
+  const fadeIn = start + segmentSize * 0.2;
+  const holdEnd = start + segmentSize * 0.8;
+  const end = Math.min(start + segmentSize, 1);
 
   const isLast = index === total - 1;
 
   const opacity = useTransform(
     scrollYProgress,
     isLast
-      ? [start, fadeIn, holdStart, 1]
-      : [start, fadeIn, holdStart, holdEnd, fadeOut, end],
-    isLast ? [0, 1, 1, 1] : [0, 1, 1, 1, 0, 0]
+      ? [start, fadeIn, end]
+      : [start, fadeIn, holdEnd, end],
+    isLast ? [0, 1, 1] : [0, 1, 1, 0]
   );
 
   const y = useTransform(
     scrollYProgress,
     isLast
-      ? [start, fadeIn, holdStart, 1]
-      : [start, fadeIn, holdEnd, fadeOut],
-    isLast ? [40, 0, 0, 0] : [40, 0, 0, -30]
+      ? [start, fadeIn, end]
+      : [start, fadeIn, holdEnd, end],
+    isLast ? [40, 0, 0] : [40, 0, 0, -30]
   );
 
   return (
@@ -113,14 +111,17 @@ const ProgressDot = ({
   scrollYProgress: any;
   mid: number;
 }) => {
+  const lo = Math.max(0, mid - 0.1);
+  const hi = Math.min(1, mid + 0.1);
+
   const scale = useTransform(
     scrollYProgress,
-    [mid - 0.12, mid, mid + 0.12],
+    [lo, mid, hi],
     [0.6, 1.2, 0.6]
   );
   const opacity = useTransform(
     scrollYProgress,
-    [mid - 0.12, mid, mid + 0.12],
+    [lo, mid, hi],
     [0.25, 1, 0.25]
   );
 
