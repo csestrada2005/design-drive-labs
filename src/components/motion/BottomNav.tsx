@@ -70,8 +70,6 @@ export const BottomNav = () => {
           className="flex items-center gap-3 px-4 py-2.5 rounded-full"
           style={{
             background: "hsl(0 0% 8% / 0.92)",
-            backdropFilter: "blur(16px) saturate(1.4)",
-            WebkitBackdropFilter: "blur(16px) saturate(1.4)",
             boxShadow: "0 4px 24px hsl(0 0% 0% / 0.25)",
           }}
         >
@@ -185,8 +183,6 @@ export const BottomNav = () => {
             className="fixed inset-0 z-[10000] flex flex-col"
             style={{
               background: "hsl(var(--background) / 0.97)",
-              backdropFilter: "blur(24px)",
-              WebkitBackdropFilter: "blur(24px)",
             }}
           >
             {/* Header */}

@@ -55,7 +55,6 @@ const AmbientParticles = ({ hue }: { hue: number }) => (
           left: `${10 + i * 18}%`,
           top: `${20 + (i % 3) * 25}%`,
           background: `radial-gradient(circle, hsl(${hue} 80% 50% / 0.06), transparent 70%)`,
-          filter: "blur(40px)",
         }}
         animate={{
           x: [0, 20 * (i % 2 === 0 ? 1 : -1), 0],

@@ -216,7 +216,6 @@ export const LivingBackground = () => {
             width: "40%",
             background:
               "linear-gradient(105deg, transparent 20%, hsl(0 0% 100% / 0.06) 40%, hsl(0 0% 100% / 0.11) 50%, hsl(0 0% 100% / 0.06) 60%, transparent 80%)",
-            filter: "blur(2px)",
           }}
         />
       </div>

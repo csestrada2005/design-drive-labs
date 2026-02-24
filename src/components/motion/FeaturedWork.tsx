@@ -128,7 +128,6 @@ const ProjectCard = ({
           <div className="absolute top-3 right-3 w-8 h-8 rounded-full flex items-center justify-center opacity-0 translate-y-1 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-500"
             style={{
               background: "rgba(255,255,255,0.12)",
-              backdropFilter: "blur(8px)",
             }}
           >
             <ArrowRight className="w-3.5 h-3.5 text-white" />
@@ -213,7 +212,6 @@ const ExpandedView = ({
         className="absolute inset-0 cursor-pointer"
         style={{
           background: "rgba(0,0,0,0.6)",
-          backdropFilter: "blur(40px) saturate(1.3)",
         }}
         onClick={onClose}
         initial={{ opacity: 0 }}
@@ -242,7 +240,6 @@ const ExpandedView = ({
           className="absolute top-3 right-3 z-20 w-9 h-9 flex items-center justify-center rounded-full focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
           style={{
             background: "rgba(255,255,255,0.1)",
-            backdropFilter: "blur(12px)",
           }}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}

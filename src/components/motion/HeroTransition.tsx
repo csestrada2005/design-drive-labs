@@ -62,10 +62,9 @@ export const HeroTransition = () => {
           {/* Glass blur layer */}
           <motion.div
             className="absolute inset-0"
-            initial={{ backdropFilter: "blur(0px)", backgroundColor: "hsl(0 0% 0% / 0)" }}
-            animate={{ backdropFilter: "blur(14px)", backgroundColor: "hsl(0 0% 2% / 0.55)" }}
+            initial={{ backgroundColor: "hsl(0 0% 0% / 0)" }}
+            animate={{ backgroundColor: "hsl(0 0% 2% / 0.55)" }}
             exit={{
-              backdropFilter: "blur(0px)",
               backgroundColor: "hsl(0 0% 0% / 0)",
               transition: { duration: 0.35, ease: [0.4, 0, 0.2, 1] },
             }}

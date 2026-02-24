@@ -34,7 +34,7 @@ export const ChatWidget = () => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="fixed inset-0 z-[70] bg-background/60 backdrop-blur-sm"
+              className="fixed inset-0 z-[70] bg-background/60"
               onClick={() => setIsOpen(false)}
             />
 

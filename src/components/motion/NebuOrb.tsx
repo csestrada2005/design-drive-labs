@@ -89,7 +89,6 @@ export const NebuOrb = () => {
               className="fixed bottom-20 sm:bottom-20 right-5 z-[80] w-[300px] max-w-[calc(100vw-2.5rem)] overflow-hidden"
               style={{
                 background: "hsl(0 10% 5% / 0.95)",
-                backdropFilter: "blur(20px)",
                 border: "1px solid hsl(0 0% 100% / 0.1)",
                 borderRadius: 16,
                 boxShadow: "0 30px 70px -15px hsl(0 0% 0% / 0.7), 0 0 30px hsl(0 100% 50% / 0.08)",
