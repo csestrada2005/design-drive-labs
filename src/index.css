@@ -1,14 +1,14 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 
 @layer base {
   :root {
     /* IMMERSIVE DARK ATMOSPHERIC SYSTEM */
     --background: 240 10% 4%;
-    --foreground: 0 0% 90%;
+    --foreground: 0 0% 0%;
 
     --card: 240 8% 6%;
     --card-foreground: 0 0% 90%;
@@ -41,7 +41,7 @@
 
   .dark {
     --background: 240 10% 4%;
-    --foreground: 0 0% 90%;
+    --foreground: 0 0% 0%;
     --card: 240 8% 6%;
     --card-foreground: 0 0% 90%;
     --popover: 240 8% 6%;

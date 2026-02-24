@@ -31,17 +31,19 @@ const App = () => (
         <ReactLenis root options={lenisOptions}>
           <div
             id="bg-wrapper"
-            className="min-h-screen relative"
+            className="fixed inset-0 z-[-1] overflow-hidden"
             style={{
               backgroundImage: `url(${owlBg})`,
               backgroundSize: "cover",
               backgroundPosition: "center",
               backgroundRepeat: "no-repeat",
-              backgroundAttachment: "fixed",
             }}
           >
             <LivingBackground />
             <FilmGrain />
+          </div>
+
+          <div className="relative min-h-screen flex flex-col">
             <Toaster />
             <Sonner />
             <BrowserRouter>

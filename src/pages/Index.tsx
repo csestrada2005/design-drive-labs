@@ -8,7 +8,6 @@ import { CustomCursor } from "@/components/motion/CustomCursor";
 import { CornerCrosses } from "@/components/motion/CornerCrosses";
 import { SectionNav } from "@/components/motion/SectionNav";
 import { HeroTransition } from "@/components/motion/HeroTransition";
-import { FilmGrain } from "@/components/motion/FilmGrain";
 
 // ── Below-fold sections (lazy loaded) ────────────────────────────────────────
 const BuildModes        = lazy(() => import("@/components/motion/BuildModes").then(m => ({ default: m.BuildModes })));
@@ -34,9 +33,6 @@ const Index = () => {
 
   return (
     <div className="min-h-screen text-foreground relative">
-      {/* Global atmospheric grain overlay */}
-      <FilmGrain />
-
       {/* Ambient radial gradient mesh — organic lighting */}
       <div
         className="fixed inset-0 pointer-events-none z-0"
