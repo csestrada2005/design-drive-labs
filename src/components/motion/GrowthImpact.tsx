@@ -137,10 +137,10 @@ const ScrollBarChart = () => {
 
 /* ── Metrics — research-backed stats ── */
 const metrics = [
-{ label: "First Impressions", value: 75, suffix: "%", prefix: "", sub: "Influenced by web design quality (Stanford)" },
-{ label: "Higher Conversion", value: 40, suffix: "%", prefix: "+", sub: "With professional UX design (McKinsey)" },
-{ label: "More Time on Site", value: 30, suffix: "%", prefix: "+", sub: "With quality visual content (Adobe)" },
-{ label: "Brand Trust", value: 60, suffix: "%", prefix: "+", sub: "Stronger credibility with polished design (Google)" }];
+{ label: "First Impressions", value: 75, suffix: "%", prefix: "", sub: "Influenced by web design quality" },
+{ label: "Higher Conversion", value: 40, suffix: "%", prefix: "+", sub: "With professional UX design" },
+{ label: "More Time on Site", value: 30, suffix: "%", prefix: "+", sub: "With quality visual content" },
+{ label: "Brand Trust", value: 60, suffix: "%", prefix: "+", sub: "Stronger credibility with polished design" }];
 
 
 export const GrowthImpact = () => {
@@ -204,9 +204,6 @@ export const GrowthImpact = () => {
           </div>
         </motion.div>
 
-        <motion.p initial={{ opacity: 0 }} animate={isInView ? { opacity: 1 } : {}} transition={{ delay: 1.2 }} className="text-muted-foreground/60 text-[10px] tracking-wider mt-10 max-w-md">
-          * Statistics sourced from Stanford, McKinsey, Adobe and Google research. Actual results vary by industry, product and strategy.
-        </motion.p>
       </div>
     </section>);
 };
