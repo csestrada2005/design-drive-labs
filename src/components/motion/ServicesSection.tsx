@@ -1,24 +1,19 @@
-import { useRef, useState } from "react";
-import { motion, useInView } from "framer-motion";
+import { useRef, useState, useCallback } from "react";
+import { motion, useInView, useReducedMotion, AnimatePresence } from "framer-motion";
 import { Store, Cog, Rocket } from "lucide-react";
-import { Card, CardContent } from "@/components/ui/card";
-import { MetricsHUD } from "@/components/motion/MetricsHUD";
-import { useScrollPaint } from "@/hooks/useScrollPaint";
 
 const tiers = [
   {
-    tier: "01",
+    tier: 0,
     name: "Brand Storefront",
     category: "High-End Web",
     icon: Store,
     features: ["Premium Online Store", "Eye-Catching Animations", "Built to Rank on Google"],
     bestFor: "D2C Brands needing a premium face.",
-    accentColor: "hsl(350 100% 60%)",
-    accentGlow: "hsl(350 100% 60% / 0.12)",
-    popular: false,
+    hue: 350,
   },
   {
-    tier: "02",
+    tier: 1,
     name: "Business Engine",
     category: "Web + Systems",
     icon: Cog,
@@ -29,12 +24,10 @@ const tiers = [
       "Internal Dashboards & Portals",
     ],
     bestFor: "Operation-heavy businesses needing efficiency.",
-    accentColor: "hsl(0 100% 50%)",
-    accentGlow: "hsl(0 100% 50% / 0.12)",
-    popular: true,
+    hue: 0,
   },
   {
-    tier: "03",
+    tier: 2,
     name: "SaaS Architect",
     category: "Full Product",
     icon: Rocket,
@@ -45,105 +38,171 @@ const tiers = [
       "Full Product Development",
     ],
     bestFor: "Founders building the next big platform.",
-    accentColor: "hsl(15 100% 55%)",
-    accentGlow: "hsl(15 100% 55% / 0.12)",
-    popular: false,
+    hue: 15,
   },
 ];
 
-/* Hex grid background pattern */
-const HexGrid = () => (
+/* ── Organic floating particles background ── */
+const AmbientParticles = ({ hue }: { hue: number }) => (
   <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
-    <svg className="absolute inset-0 w-full h-full" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <pattern id="hex-pattern" x="0" y="0" width="60" height="52" patternUnits="userSpaceOnUse">
-          <polygon
-            points="30,2 55,15 55,37 30,50 5,37 5,15"
-            fill="none"
-            stroke="hsl(0 100% 50% / 0.06)"
-            strokeWidth="0.5"
-          />
-        </pattern>
-      </defs>
-      <rect width="100%" height="100%" fill="url(#hex-pattern)" />
-    </svg>
-    {/* Pulsing hex highlights */}
-    {[...Array(6)].map((_, i) => (
+    {[...Array(5)].map((_, i) => (
       <motion.div
         key={i}
-        className="absolute"
+        className="absolute rounded-full"
         style={{
-          left: `${15 + (i % 3) * 30}%`,
-          top: `${20 + Math.floor(i / 3) * 40}%`,
-          width: 60,
-          height: 52,
+          width: 120 + i * 60,
+          height: 120 + i * 60,
+          left: `${10 + i * 18}%`,
+          top: `${20 + (i % 3) * 25}%`,
+          background: `radial-gradient(circle, hsl(${hue} 80% 50% / 0.06), transparent 70%)`,
+          filter: "blur(40px)",
         }}
         animate={{
-          opacity: [0, 0.15, 0],
-          scale: [0.8, 1.2, 0.8],
+          x: [0, 20 * (i % 2 === 0 ? 1 : -1), 0],
+          y: [0, -15 + i * 5, 0],
         }}
         transition={{
-          duration: 3 + i * 0.5,
+          duration: 8 + i * 2,
           repeat: Infinity,
-          delay: i * 0.6,
           ease: "easeInOut",
         }}
-      >
-        <svg width="60" height="52" viewBox="0 0 60 52">
-          <polygon
-            points="30,2 55,15 55,37 30,50 5,37 5,15"
-            fill="hsl(0 100% 50% / 0.05)"
-            stroke="hsl(0 100% 50% / 0.15)"
-            strokeWidth="1"
-          />
-        </svg>
-      </motion.div>
+      />
     ))}
   </div>
 );
 
-const containerVariants = {
-  hidden: {},
-  visible: {
-    transition: {
-      staggerChildren: 0.2,
-    },
-  },
-};
+/* ── Interactive Dial Selector ── */
+const DialSelector = ({
+  active,
+  onSelect,
+}: {
+  active: number;
+  onSelect: (i: number) => void;
+}) => {
+  const size = 200;
+  const cx = size / 2;
+  const cy = size / 2;
+  const r = 72;
 
-const cardVariants = {
-  hidden: { opacity: 0, scale: 0.8 },
-  visible: {
-    opacity: 1,
-    scale: 1,
-    transition: {
-      type: "spring" as const,
-      stiffness: 200,
-      damping: 20,
-      mass: 0.8,
-    },
-  },
+  return (
+    <div className="relative flex items-center justify-center" style={{ width: size, height: size }}>
+      {/* Outer ring — SVG stroke */}
+      <svg
+        className="absolute inset-0"
+        viewBox={`0 0 ${size} ${size}`}
+        aria-hidden="true"
+      >
+        <circle
+          cx={cx}
+          cy={cy}
+          r={r}
+          fill="none"
+          stroke="hsl(var(--muted-foreground) / 0.15)"
+          strokeWidth="1"
+        />
+        {/* Active arc indicator */}
+        <motion.circle
+          cx={cx}
+          cy={cy}
+          r={r}
+          fill="none"
+          stroke="hsl(var(--primary))"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeDasharray={`${(2 * Math.PI * r) / 3} ${(2 * Math.PI * r * 2) / 3}`}
+          style={{ filter: "drop-shadow(0 0 6px hsl(0 100% 50% / 0.5))" }}
+          animate={{ rotate: active * 120 - 90 }}
+          transition={{ type: "spring", stiffness: 200, damping: 25 }}
+          transform-origin={`${cx} ${cy}`}
+        />
+      </svg>
+
+      {/* Tier buttons positioned on the ring */}
+      {tiers.map((tier, i) => {
+        const angle = (i * 120 - 90) * (Math.PI / 180);
+        const bx = cx + r * Math.cos(angle);
+        const by = cy + r * Math.sin(angle);
+        const Icon = tier.icon;
+        const isActive = active === i;
+
+        return (
+          <motion.button
+            key={i}
+            className="absolute flex items-center justify-center rounded-full"
+            style={{
+              left: bx - 20,
+              top: by - 20,
+              width: 40,
+              height: 40,
+              background: isActive
+                ? `hsl(${tier.hue} 100% 50% / 0.15)`
+                : "hsl(var(--secondary))",
+              border: `1px solid ${isActive ? `hsl(${tier.hue} 100% 50% / 0.5)` : "hsl(var(--border))"}`,
+              boxShadow: isActive
+                ? `0 0 20px hsl(${tier.hue} 100% 50% / 0.25)`
+                : "none",
+            }}
+            onClick={() => onSelect(i)}
+            whileHover={{ scale: 1.15 }}
+            whileTap={{ scale: 0.95 }}
+            animate={{ scale: isActive ? 1.1 : 1 }}
+            transition={{ type: "spring", stiffness: 300, damping: 20 }}
+            aria-label={`Select ${tier.name}`}
+          >
+            <Icon
+              className="w-4 h-4"
+              style={{ color: isActive ? `hsl(${tier.hue} 100% 55%)` : "hsl(var(--muted-foreground))" }}
+            />
+          </motion.button>
+        );
+      })}
+
+      {/* Center label */}
+      <div className="absolute flex flex-col items-center justify-center text-center">
+        <span className="font-mono text-[9px] tracking-[0.3em] uppercase text-primary/60">
+          Tier
+        </span>
+        <motion.span
+          className="font-display text-2xl text-foreground"
+          key={active}
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ type: "spring", stiffness: 300, damping: 20 }}
+        >
+          0{active + 1}
+        </motion.span>
+      </div>
+    </div>
+  );
 };
 
 export const ServicesSection = () => {
   const ref = useRef<HTMLElement>(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
-  const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
-  const headerPaint = useScrollPaint({ xDrift: 20 });
+  const prefersReduced = useReducedMotion();
+  const [active, setActive] = useState(1);
+  const tier = tiers[active];
 
   return (
     <section ref={ref} className="py-24 sm:py-32 relative overflow-hidden" id="services">
-      <MetricsHUD tags={["CRO", "SPEED"]} sectionId="services" position="top-right" />
-      <HexGrid />
-
-      <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
-        <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent scan-bar" />
-      </div>
+      {/* Ambient lighting that shifts with active tier */}
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={tier.hue}
+          className="absolute inset-0 pointer-events-none"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 1.2 }}
+          aria-hidden="true"
+        >
+          <AmbientParticles hue={tier.hue} />
+        </motion.div>
+      </AnimatePresence>
 
       <div className="container relative z-10">
+        {/* Header */}
         <motion.div
-          ref={headerPaint.ref}
-          style={headerPaint.style}
           className="mb-16"
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
@@ -154,105 +213,100 @@ export const ServicesSection = () => {
             WHAT WE <span className="text-primary">BUILD</span>
           </h2>
           <p className="text-muted-foreground text-sm max-w-lg">
-            Three distinct engagement levels. Choose the tier that matches your ambition.
+            Three distinct engagement levels. Interact with the dial to explore.
           </p>
         </motion.div>
 
-        <motion.div
-          className="grid md:grid-cols-3 gap-6 lg:gap-8"
-          variants={containerVariants}
-          initial="hidden"
-          animate={isInView ? "visible" : "hidden"}
-        >
-          {tiers.map((tier, i) => {
-            const Icon = tier.icon;
-            const isHovered = hoveredIdx === i;
+        {/* Dial + Content layout */}
+        <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
+          {/* Dial */}
+          <motion.div
+            initial={prefersReduced ? { opacity: 0 } : { opacity: 0, scale: 0.8 }}
+            animate={isInView ? { opacity: 1, scale: 1 } : {}}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="flex-shrink-0"
+          >
+            <DialSelector active={active} onSelect={setActive} />
+          </motion.div>
 
-            return (
-              <motion.div
-                key={tier.tier}
-                variants={cardVariants}
-                onMouseEnter={() => setHoveredIdx(i)}
-                onMouseLeave={() => setHoveredIdx(null)}
-                className="relative group"
-                data-cursor="expand"
-              >
-                {tier.popular && (
-                  <motion.div
-                    className="absolute -top-3 left-1/2 -translate-x-1/2 z-20 px-4 py-1 rounded-full text-[10px] font-mono tracking-[0.15em] uppercase font-medium"
-                    style={{
-                      background: `linear-gradient(90deg, ${tier.accentColor}, hsl(20 100% 55%))`,
-                      color: "hsl(0 10% 4%)",
-                      boxShadow: `0 0 20px ${tier.accentGlow}`,
-                    }}
-                    animate={{ boxShadow: [`0 0 20px ${tier.accentGlow}`, `0 0 30px ${tier.accentColor}40`, `0 0 20px ${tier.accentGlow}`] }}
-                    transition={{ duration: 3, repeat: Infinity }}
-                  >
-                    Most Popular
-                  </motion.div>
-                )}
-
-                <Card
-                  className="relative overflow-hidden border h-full transition-all duration-500"
-                  style={{
-                    background: "transparent",
-                    borderColor: isHovered ? `${tier.accentColor}60` : "hsl(0 100% 50% / 0.25)",
-                    clipPath: "polygon(12px 0%, calc(100% - 12px) 0%, 100% 12px, 100% calc(100% - 12px), calc(100% - 12px) 100%, 12px 100%, 0% calc(100% - 12px), 0% 12px)",
-                    boxShadow: isHovered ? `0 0 40px ${tier.accentGlow}` : "none",
-                  }}
+          {/* Active tier content */}
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={active}
+              className="flex-1 min-w-0"
+              initial={prefersReduced ? { opacity: 0 } : { opacity: 0, x: 30 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={prefersReduced ? { opacity: 0 } : { opacity: 0, x: -30 }}
+              transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+            >
+              <div className="flex items-center gap-3 mb-2">
+                <span
+                  className="text-[10px] font-mono tracking-[0.25em] uppercase"
+                  style={{ color: `hsl(${tier.hue} 100% 55% / 0.7)` }}
                 >
-                  <motion.div
-                    className="absolute top-0 left-0 right-0 h-px"
-                    style={{ background: `linear-gradient(90deg, transparent, ${tier.accentColor}${isHovered ? "60" : "20"}, transparent)` }}
-                  />
-                  <div className="absolute inset-0 opacity-[0.015]" style={{ backgroundImage: `linear-gradient(${tier.accentColor}40 1px, transparent 1px), linear-gradient(90deg, ${tier.accentColor}40 1px, transparent 1px)`, backgroundSize: "24px 24px" }} />
-                  <motion.div className="absolute inset-0 pointer-events-none" animate={{ opacity: isHovered ? 1 : 0 }} transition={{ duration: 0.4 }} style={{ background: `radial-gradient(ellipse 70% 40% at 50% 0%, ${tier.accentGlow}, transparent)` }} />
+                  {tier.category}
+                </span>
+              </div>
 
-                  <CardContent className="relative p-6 sm:p-8 flex flex-col h-full">
-                    <div className="flex items-center justify-between mb-6">
-                      <span className="text-[10px] font-mono tracking-[0.25em] uppercase" style={{ color: `${tier.accentColor}80` }}>Tier {tier.tier}</span>
-                      <div className="w-9 h-9 rounded-lg flex items-center justify-center transition-all duration-300" style={{ background: `${tier.accentColor}10`, border: `1px solid ${tier.accentColor}${isHovered ? "30" : "15"}` }}>
-                        <Icon className="w-4 h-4" style={{ color: tier.accentColor }} />
-                      </div>
-                    </div>
-                    <h3 className="font-display text-lg sm:text-xl mb-1 group-hover:text-primary transition-colors duration-300 relative overflow-hidden">
-                      {tier.name}
-                      <motion.span
-                        className="absolute inset-0 pointer-events-none"
-                        style={{
-                          background: `linear-gradient(105deg, transparent 40%, ${tier.accentColor}55 50%, rgba(255,255,255,0.15) 55%, transparent 65%)`,
-                          backgroundSize: "200% 100%",
-                        }}
-                        animate={{ backgroundPosition: ["200% 0", "-100% 0"] }}
-                        transition={{
-                          duration: 1.2,
-                          delay: i * 1.2 + 2,
-                          repeat: Infinity,
-                          repeatDelay: 4,
-                          ease: "easeInOut",
-                        }}
-                      />
-                    </h3>
-                    <p className="text-[11px] font-mono tracking-wider uppercase mb-5" style={{ color: `${tier.accentColor}80` }}>{tier.category}</p>
-                    <motion.div className="h-px mb-5" style={{ background: `linear-gradient(90deg, ${tier.accentColor}25, transparent)`, transformOrigin: "left" }} animate={{ scaleX: isHovered ? 1 : 0.4 }} transition={{ duration: 0.5 }} />
-                    <ul className="space-y-3 mb-6 flex-1">
-                      {tier.features.map((feature, fi) => (
-                        <motion.li key={feature} className="flex items-start gap-2.5 text-sm text-muted-foreground group-hover:text-foreground transition-colors" initial={{ opacity: 0, x: -10 }} animate={isInView ? { opacity: 1, x: 0 } : {}} transition={{ delay: i * 0.15 + fi * 0.06 + 0.3 }}>
-                          <div className="w-1 h-1 rounded-full flex-shrink-0 mt-2 group-hover:scale-150 transition-transform" style={{ background: `${tier.accentColor}60` }} />
-                          {feature}
-                        </motion.li>
-                      ))}
-                    </ul>
-                    <div className="pt-4 mt-auto" style={{ borderTop: `1px solid ${tier.accentColor}10` }}>
-                      <p className="text-[10px] font-mono tracking-[0.12em] uppercase text-muted-foreground/70 mb-1">Best for</p>
-                      <p className="text-xs text-foreground/80 leading-relaxed">{tier.bestFor}</p>
-                    </div>
-                  </CardContent>
-                </Card>
-              </motion.div>
-            );
-          })}
-        </motion.div>
+              <h3 className="font-display text-3xl sm:text-4xl md:text-5xl text-foreground mb-6">
+                {tier.name}
+              </h3>
+
+              {/* Feature list */}
+              <ul className="space-y-4 mb-8">
+                {tier.features.map((feature, fi) => (
+                  <motion.li
+                    key={feature}
+                    className="flex items-start gap-3 text-sm text-foreground/80"
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: fi * 0.08 + 0.15 }}
+                  >
+                    <div
+                      className="w-1.5 h-1.5 rounded-full flex-shrink-0 mt-1.5"
+                      style={{
+                        background: `hsl(${tier.hue} 100% 55%)`,
+                        boxShadow: `0 0 8px hsl(${tier.hue} 100% 50% / 0.4)`,
+                      }}
+                    />
+                    {feature}
+                  </motion.li>
+                ))}
+              </ul>
+
+              {/* Best for */}
+              <div
+                className="pt-4"
+                style={{ borderTop: "1px solid hsl(var(--border))" }}
+              >
+                <p className="text-[10px] font-mono tracking-[0.12em] uppercase text-muted-foreground mb-1">
+                  Best for
+                </p>
+                <p className="text-sm text-foreground/70 leading-relaxed">
+                  {tier.bestFor}
+                </p>
+              </div>
+            </motion.div>
+          </AnimatePresence>
+        </div>
+
+        {/* Tier quick-switch pills (mobile friendly) */}
+        <div className="flex justify-center gap-2 mt-12 lg:hidden">
+          {tiers.map((t, i) => (
+            <button
+              key={i}
+              onClick={() => setActive(i)}
+              className="px-4 py-2 text-xs font-mono tracking-wider uppercase rounded-full transition-all duration-300"
+              style={{
+                background: active === i ? `hsl(${t.hue} 100% 50% / 0.12)` : "transparent",
+                border: `1px solid ${active === i ? `hsl(${t.hue} 100% 50% / 0.4)` : "hsl(var(--border))"}`,
+                color: active === i ? `hsl(${t.hue} 100% 55%)` : "hsl(var(--muted-foreground))",
+              }}
+            >
+              0{i + 1}
+            </button>
+          ))}
+        </div>
       </div>
     </section>
   );

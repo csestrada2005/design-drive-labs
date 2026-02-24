@@ -6,59 +6,59 @@
 
 @layer base {
   :root {
-    /* AGGRESSIVE MINIMALIST SYSTEM */
-    --background: 0 0% 100%;
-    --foreground: 0 0% 0%;
+    /* IMMERSIVE DARK ATMOSPHERIC SYSTEM */
+    --background: 240 10% 4%;
+    --foreground: 0 0% 90%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 0 0% 0%;
+    --card: 240 8% 6%;
+    --card-foreground: 0 0% 90%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 0%;
+    --popover: 240 8% 6%;
+    --popover-foreground: 0 0% 90%;
 
     --primary: 0 100% 50%;
-    --primary-foreground: 0 0% 100%;
+    --primary-foreground: 0 0% 95%;
 
-    --secondary: 0 0% 96%;
-    --secondary-foreground: 0 0% 0%;
+    --secondary: 240 6% 10%;
+    --secondary-foreground: 0 0% 85%;
 
-    --muted: 0 0% 90%;
-    --muted-foreground: 0 0% 40%;
+    --muted: 240 5% 14%;
+    --muted-foreground: 0 0% 55%;
 
     --accent: 0 100% 50%;
-    --accent-foreground: 0 0% 100%;
+    --accent-foreground: 0 0% 95%;
     --accent-green: 120 60% 40%;
 
     --destructive: 0 100% 50%;
-    --destructive-foreground: 0 0% 100%;
+    --destructive-foreground: 0 0% 95%;
 
-    --border: 0 0% 0%;
-    --input: 0 0% 0%;
+    --border: 0 0% 100% / 0.08;
+    --input: 0 0% 100% / 0.08;
     --ring: 0 100% 50%;
 
     --radius: 0px;
   }
 
   .dark {
-    --background: 0 0% 100%;
-    --foreground: 0 0% 0%;
-    --card: 0 0% 100%;
-    --card-foreground: 0 0% 0%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 0%;
+    --background: 240 10% 4%;
+    --foreground: 0 0% 90%;
+    --card: 240 8% 6%;
+    --card-foreground: 0 0% 90%;
+    --popover: 240 8% 6%;
+    --popover-foreground: 0 0% 90%;
     --primary: 0 100% 50%;
-    --primary-foreground: 0 0% 100%;
-    --secondary: 0 0% 96%;
-    --secondary-foreground: 0 0% 0%;
-    --muted: 0 0% 90%;
-    --muted-foreground: 0 0% 40%;
+    --primary-foreground: 0 0% 95%;
+    --secondary: 240 6% 10%;
+    --secondary-foreground: 0 0% 85%;
+    --muted: 240 5% 14%;
+    --muted-foreground: 0 0% 55%;
     --accent: 0 100% 50%;
-    --accent-foreground: 0 0% 100%;
+    --accent-foreground: 0 0% 95%;
     --accent-green: 120 60% 40%;
     --destructive: 0 100% 50%;
-    --destructive-foreground: 0 0% 100%;
-    --border: 0 0% 0%;
-    --input: 0 0% 0%;
+    --destructive-foreground: 0 0% 95%;
+    --border: 0 0% 100% / 0.08;
+    --input: 0 0% 100% / 0.08;
     --ring: 0 100% 50%;
   }
 }
@@ -96,7 +96,7 @@
   }
 
   ::selection {
-    @apply bg-black text-white;
+    @apply bg-primary text-primary-foreground;
   }
 
   h1, h2, h3, h4 {
