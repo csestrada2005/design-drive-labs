@@ -20,33 +20,25 @@ const StepSlide = ({
   total: number;
   scrollYProgress: any;
 }) => {
-  // Reserve first 15% for the title, remaining 85% for steps
-  const stepsStart = 0.15;
-  const stepsRange = 1 - stepsStart;
-  const segmentSize = stepsRange / total;
-  const start = stepsStart + index * segmentSize;
-  const fadeIn = start + segmentSize * 0.2;
-  const holdEnd = start + segmentSize * 0.75;
+  const segmentSize = 1 / total;
+  const start = index * segmentSize;
+  const fadeIn = start + segmentSize * 0.15;
+  const holdEnd = start + segmentSize * 0.85;
   const end = Math.min(start + segmentSize, 1);
 
   const isLast = index === total - 1;
 
+  // No blur, no fade — snap between 0 and 1
   const opacity = useTransform(
     scrollYProgress,
     isLast ? [start, fadeIn, end] : [start, fadeIn, holdEnd, end],
     isLast ? [0, 1, 1] : [0, 1, 1, 0]
   );
 
-  const y = useTransform(
-    scrollYProgress,
-    isLast ? [start, fadeIn, end] : [start, fadeIn, holdEnd, end],
-    isLast ? [40, 0, 0] : [40, 0, 0, -30]
-  );
-
   return (
     <motion.div
       className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none px-6"
-      style={{ opacity, y }}
+      style={{ opacity }}
     >
       <span className="font-mono text-[11px] tracking-[0.3em] text-primary mb-4">
         {step.number}
@@ -68,22 +60,15 @@ export const ProcessSection = () => {
     offset: ["start start", "end end"],
   });
 
-  // Title fades in at start, fades out as steps begin
-  const titleOpacity = useTransform(scrollYProgress, [0, 0.05, 0.12, 0.18], [0, 1, 1, 0]);
-  const titleY = useTransform(scrollYProgress, [0, 0.05, 0.12, 0.18], [30, 0, 0, -20]);
-
   return (
     <div ref={containerRef} style={{ height: `${(steps.length + 1) * 100}vh` }} id="process">
       <div className="sticky top-0 h-screen w-full overflow-hidden">
-        {/* Big title — "How we work" */}
-        <motion.div
-          className="absolute inset-0 flex items-center justify-center pointer-events-none"
-          style={{ opacity: titleOpacity, y: titleY }}
-        >
-          <h2 className="font-display text-5xl sm:text-6xl md:text-7xl lg:text-8xl text-primary text-center leading-none">
+        {/* Always-visible title */}
+        <div className="absolute top-12 left-0 right-0 flex justify-center z-10">
+          <h2 className="font-display text-3xl sm:text-4xl md:text-5xl text-primary">
             How we work.
           </h2>
-        </motion.div>
+        </div>
 
         {/* Steps */}
         <div className="relative h-full">
@@ -101,10 +86,8 @@ export const ProcessSection = () => {
         {/* Progress dots */}
         <div className="absolute right-6 top-1/2 -translate-y-1/2 flex flex-col gap-3 z-10">
           {steps.map((step, i) => {
-            const stepsStart = 0.15;
-            const stepsRange = 1 - stepsStart;
-            const segmentSize = stepsRange / steps.length;
-            const mid = stepsStart + i * segmentSize + segmentSize * 0.5;
+            const segmentSize = 1 / steps.length;
+            const mid = i * segmentSize + segmentSize * 0.5;
             return (
               <ProgressDot key={step.id} scrollYProgress={scrollYProgress} mid={mid} />
             );
@@ -126,12 +109,12 @@ const ProgressDot = ({
   const hi = Math.min(1, mid + 0.08);
 
   const scale = useTransform(scrollYProgress, [lo, mid, hi], [0.6, 1.2, 0.6]);
-  const opacity = useTransform(scrollYProgress, [lo, mid, hi], [0.25, 1, 0.25]);
+  const dotOpacity = useTransform(scrollYProgress, [lo, mid, hi], [0.25, 1, 0.25]);
 
   return (
     <motion.div
       className="w-2 h-2 rounded-full bg-primary"
-      style={{ scale, opacity }}
+      style={{ scale, opacity: dotOpacity }}
     />
   );
 };
