@@ -227,11 +227,7 @@ const ExpandedView = ({
         <img
           src={project.image}
           alt={project.title}
-          className="w-full h-full transition-all duration-300"
-          style={{
-            objectFit: morphComplete ? "contain" : "cover",
-            backgroundColor: "rgba(0,0,0,0.4)",
-          }}
+          className="w-full h-full object-contain"
         />
       </motion.div>
 
