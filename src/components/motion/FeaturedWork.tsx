@@ -5,7 +5,7 @@
  * "View" button opens a fullscreen image lightbox.
  */
 
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, forwardRef } from "react";
 import { motion, AnimatePresence, useInView } from "framer-motion";
 import { X, ArrowUpRight } from "lucide-react";
 import { useScrollPaint } from "@/hooks/useScrollPaint";
@@ -72,13 +72,10 @@ const PROJECTS = [
 type Project = (typeof PROJECTS)[number];
 
 // ── Fullscreen Image Lightbox ─────────────────────────────────────────────────
-const ImageLightbox = ({
-  project,
-  onClose,
-}: {
+const ImageLightbox = forwardRef<HTMLDivElement, {
   project: Project;
   onClose: () => void;
-}) => {
+}>(({ project, onClose }, ref) => {
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
@@ -89,18 +86,19 @@ const ImageLightbox = ({
 
   return (
     <motion.div
-      className="fixed inset-0 z-[200] flex items-center justify-center"
+      ref={ref}
+      className="fixed inset-0 z-[9999] flex items-center justify-center"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.3 }}
     >
       {/* Backdrop */}
-      <motion.div
+      <div
         className="absolute inset-0 cursor-pointer"
         style={{
-          background: "hsl(0 0% 4% / 0.92)",
-          backdropFilter: "blur(4px)",
+          background: "hsl(0 0% 4% / 0.95)",
+          backdropFilter: "blur(8px)",
         }}
         onClick={onClose}
       />
@@ -128,7 +126,7 @@ const ImageLightbox = ({
 
         {/* Image */}
         <motion.div
-          className="rounded-sm overflow-hidden"
+          className="rounded-sm overflow-hidden bg-white/5"
           initial={{ scale: 0.95, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           transition={{ duration: 0.4, ease: [0.25, 1, 0.5, 1] }}
@@ -146,7 +144,9 @@ const ImageLightbox = ({
       </div>
     </motion.div>
   );
-};
+});
+
+ImageLightbox.displayName = "ImageLightbox";
 
 // ── Project Row ───────────────────────────────────────────────────────────────
 const ProjectRow = ({
