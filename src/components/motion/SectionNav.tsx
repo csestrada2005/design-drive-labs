@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useLenis } from "lenis/react";
+import { anchorScrollTo } from "@/lib/anchorScroll";
 
 const sections = [
 { id: "hero", label: "Home" },
@@ -13,6 +15,7 @@ const sections = [
 export const SectionNav = () => {
   const [active, setActive] = useState("hero");
   const [visible, setVisible] = useState(false);
+  const lenis = useLenis();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -35,8 +38,7 @@ export const SectionNav = () => {
   }, []);
 
   const scrollTo = (id: string) => {
-    const el = document.getElementById(id);
-    if (el) el.scrollIntoView({ behavior: "smooth" });
+    anchorScrollTo(id, lenis);
   };
 
   return (

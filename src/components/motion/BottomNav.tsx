@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Menu, X, ArrowRight } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useLenis } from "lenis/react";
+import { anchorScrollTo } from "@/lib/anchorScroll";
 
 const WA_NUMBER = "522213497090";
 const waMessages = {
@@ -43,15 +44,7 @@ export const BottomNav = () => {
 
   const scrollTo = (id: string) => {
     setIsMenuOpen(false);
-    setTimeout(() => {
-      const el = document.getElementById(id);
-      if (!el) return;
-      if (lenis) {
-        lenis.scrollTo(el, { offset: 0, duration: 1.2 });
-      } else {
-        el.scrollIntoView({ behavior: "smooth" });
-      }
-    }, 350);
+    anchorScrollTo(id, lenis, { delay: 350 });
   };
 
   const handleWaClick = () => {

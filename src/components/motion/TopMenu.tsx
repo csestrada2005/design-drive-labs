@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { Menu, X, ArrowRight } from "lucide-react";
+import { useLenis } from "lenis/react";
+import { anchorScrollTo } from "@/lib/anchorScroll";
 
 const menuLinks = [
   { label: "Home", id: "hero" },
@@ -18,6 +20,7 @@ export const TopMenu = () => {
   const [scrolled, setScrolled] = useState(false);
   const [activeId, setActiveId] = useState("hero");
   const prefersReducedMotion = useReducedMotion();
+  const lenis = useLenis();
 
   // Scrollspy: track which section is in view
   useEffect(() => {
@@ -46,10 +49,7 @@ export const TopMenu = () => {
 
   const scrollTo = (id: string) => {
     setOpen(false);
-    setTimeout(() => {
-      const el = document.getElementById(id);
-      if (el) el.scrollIntoView({ behavior: "smooth" });
-    }, 300);
+    anchorScrollTo(id, lenis, { delay: 300 });
   };
 
   return (
@@ -72,8 +72,8 @@ export const TopMenu = () => {
 
         <div className="flex items-center gap-2">
           {/* Header CTA — visible after scroll */}
-          <a
-            href="#contact"
+          <button
+            onClick={(e) => { e.preventDefault(); anchorScrollTo("contact", lenis); }}
             className="hidden sm:inline-flex items-center gap-1.5 px-5 py-2 rounded-full bg-primary text-primary-foreground text-xs font-semibold transition-all duration-300 hover:scale-105 active:scale-95"
             style={{
               boxShadow: "0 2px 12px hsl(0 100% 50% / 0.3)",
@@ -84,7 +84,7 @@ export const TopMenu = () => {
           >
             Book a Call
             <ArrowRight className="w-3.5 h-3.5" />
-          </a>
+          </button>
 
           {/* Hamburger */}
           <motion.button
