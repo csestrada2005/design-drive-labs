@@ -22,12 +22,42 @@ import workSystem from "@/assets/work-system.png";
 import workArmahas from "@/assets/work-armahas.png";
 
 const PROJECTS = [
-  { id: "papachoa", title: "Papachoa", image: workPapachoa, tag: "E-commerce", result: "+X% conversion" },
-  { id: "bazar", title: "Bazar Centenario", image: workBazar, tag: "Online Store", result: "+X% traffic" },
-  { id: "jewelry", title: "Joyería Centenario", image: workJewelry, tag: "Brand & Web", result: "+X% sales" },
-  { id: "rawpaw", title: "Raw Paw", image: workRawpaw, tag: "D2C Brand", result: "+X% engagement" },
-  { id: "system", title: "Custom System", image: workSystem, tag: "CRM / System", result: "Ops automated" },
-  { id: "armahas", title: "Armahas", image: workArmahas, tag: "Web Platform", result: "+X% leads" },
+  {
+    id: "papachoa", title: "Papachoa", image: workPapachoa,
+    tag: "E-commerce", context: "Restaurant chain scaling online orders.",
+    whatWeDid: "Custom storefront · checkout optimization · SEO",
+    outcome: "Improved order flow + page speed + organic reach",
+  },
+  {
+    id: "bazar", title: "Bazar Centenario", image: workBazar,
+    tag: "Online Store", context: "Multi-vendor marketplace going digital.",
+    whatWeDid: "Product catalog · payments · vendor dashboard",
+    outcome: "Streamlined ops + faster time-to-purchase",
+  },
+  {
+    id: "jewelry", title: "Joyería Centenario", image: workJewelry,
+    tag: "Brand & Web", context: "Luxury jewelry brand building online presence.",
+    whatWeDid: "Brand identity · premium web · product photography",
+    outcome: "Elevated brand perception + qualified lead flow",
+  },
+  {
+    id: "rawpaw", title: "Raw Paw", image: workRawpaw,
+    tag: "D2C Brand", context: "Pet food startup scaling paid traffic.",
+    whatWeDid: "Landing pages · conversion tracking · A/B testing",
+    outcome: "Higher ROAS + lower acquisition cost",
+  },
+  {
+    id: "system", title: "Custom System", image: workSystem,
+    tag: "CRM / System", context: "Service business replacing manual workflows.",
+    whatWeDid: "Custom CRM · automated messaging · internal portal",
+    outcome: "Ops automated + team efficiency doubled",
+  },
+  {
+    id: "armahas", title: "Armahas", image: workArmahas,
+    tag: "Web Platform", context: "Growing brand needing a lead-gen engine.",
+    whatWeDid: "Marketing site · lead capture · analytics",
+    outcome: "Increased inbound leads + clearer funnel",
+  },
 ];
 
 type Project = (typeof PROJECTS)[number];
@@ -133,8 +163,9 @@ const ProjectCard = ({
             <ArrowRight className="w-3.5 h-3.5 text-white" />
           </div>
 
-          {/* Title + mini case study at bottom */}
+          {/* Case study overlay */}
           <div className="absolute bottom-0 left-0 right-0 p-4">
+            {/* Tag + index */}
             <div className="flex items-center gap-2 mb-1.5">
               <span className="font-mono text-[10px] tracking-[0.2em] uppercase text-white/50">
                 {String(index + 1).padStart(2, "0")}
@@ -143,12 +174,31 @@ const ProjectCard = ({
                 {project.tag}
               </span>
             </div>
+
+            {/* Title */}
             <h3 className="font-display text-base sm:text-lg text-white group-hover:text-primary transition-colors duration-300">
               {project.title}
             </h3>
-            <p className="text-[11px] font-mono text-primary/80 mt-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-              {project.result}
+
+            {/* Context line */}
+            <p className="text-[11px] text-white/50 mt-1 leading-relaxed">
+              {project.context}
             </p>
+
+            {/* Expanded details on hover */}
+            <div className="max-h-0 group-hover:max-h-32 overflow-hidden transition-all duration-500 ease-out">
+              <div className="pt-2 space-y-1.5">
+                <p className="text-[10px] font-mono tracking-wider uppercase text-white/40">What we did</p>
+                <p className="text-[11px] text-white/70 leading-relaxed">{project.whatWeDid}</p>
+                <p className="text-[10px] font-mono tracking-wider uppercase text-white/40 pt-1">Outcome</p>
+                <p className="text-[11px] text-primary/80 leading-relaxed">{project.outcome}</p>
+              </div>
+            </div>
+
+            {/* CTA */}
+            <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-primary/70 mt-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+              See breakdown <ArrowRight className="w-3 h-3" />
+            </span>
           </div>
         </div>
       </motion.button>
