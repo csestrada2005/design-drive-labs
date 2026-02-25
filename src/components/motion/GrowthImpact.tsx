@@ -92,7 +92,7 @@ const TensionReveal = ({ children, label = "Hold to reveal" }: { children: React
             transition={{ duration: 0.3 }}
           >
             {/* SVG progress ring */}
-            <div className="relative w-24 h-24 flex items-center justify-center">
+            <div className="relative w-28 h-28 flex items-center justify-center border-2 border-primary/30 rounded-full p-1">
               <svg className="absolute inset-0 -rotate-90" viewBox="0 0 96 96">
                 <circle
                   cx="48" cy="48" r="44"
@@ -120,7 +120,7 @@ const TensionReveal = ({ children, label = "Hold to reveal" }: { children: React
                 {Math.round(progress)}%
               </motion.span>
             </div>
-            <p className="text-[10px] font-mono tracking-[0.2em] uppercase text-muted-foreground/60">
+            <p className="text-xs font-mono tracking-[0.2em] uppercase text-primary animate-pulse">
               {label}
             </p>
           </motion.div>
