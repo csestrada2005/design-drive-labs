@@ -226,6 +226,55 @@ export const HeroSection = () => {
           className="w-36 sm:w-48 md:w-60 lg:w-72 mb-6 sm:mb-8"
         />
         <SumiHeroReveal />
+
+        {/* Value proposition + CTA */}
+        <motion.p
+          className="mt-6 sm:mt-8 text-sm sm:text-base text-foreground/70 max-w-md text-center leading-relaxed"
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1.8, duration: 0.6 }}
+        >
+          Premium digital experiences that turn visitors into customers.
+        </motion.p>
+
+        <motion.div
+          className="mt-5 sm:mt-6 flex flex-col sm:flex-row items-center gap-3"
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 2.1, duration: 0.6 }}
+        >
+          <a
+            href="#contact"
+            className="group inline-flex items-center gap-2 px-7 py-3.5 rounded-full bg-primary text-primary-foreground font-semibold text-sm transition-all duration-300 hover:scale-105 active:scale-95"
+            style={{ boxShadow: "0 4px 20px -4px hsl(0 100% 50% / 0.4)" }}
+          >
+            Start a Project
+            <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+          </a>
+          <a
+            href="#work"
+            className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full border border-border text-foreground text-sm font-semibold hover:border-primary/50 transition-colors duration-300"
+          >
+            See Our Work
+          </a>
+        </motion.div>
+
+        {/* Trust badges */}
+        <motion.div
+          className="mt-8 sm:mt-10 flex items-center gap-6 text-[11px] sm:text-xs font-mono tracking-wider uppercase text-muted-foreground/60"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 2.5, duration: 0.8 }}
+        >
+          <span className="flex items-center gap-1.5">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+            Available now
+          </span>
+          <span className="hidden sm:inline">·</span>
+          <span className="hidden sm:flex items-center gap-1.5">+30 projects delivered</span>
+          <span className="hidden sm:inline">·</span>
+          <span className="hidden sm:flex items-center gap-1.5">24h response</span>
+        </motion.div>
       </div>
 
       {/* Static thick red line at bottom */}

@@ -22,12 +22,12 @@ import workSystem from "@/assets/work-system.png";
 import workArmahas from "@/assets/work-armahas.png";
 
 const PROJECTS = [
-  { id: "papachoa", title: "Papachoa", image: workPapachoa },
-  { id: "bazar", title: "Bazar Centenario", image: workBazar },
-  { id: "jewelry", title: "Joyería Centenario", image: workJewelry },
-  { id: "rawpaw", title: "Raw Paw", image: workRawpaw },
-  { id: "system", title: "Custom System", image: workSystem },
-  { id: "armahas", title: "Armahas", image: workArmahas },
+  { id: "papachoa", title: "Papachoa", image: workPapachoa, tag: "E-commerce", result: "+X% conversion" },
+  { id: "bazar", title: "Bazar Centenario", image: workBazar, tag: "Online Store", result: "+X% traffic" },
+  { id: "jewelry", title: "Joyería Centenario", image: workJewelry, tag: "Brand & Web", result: "+X% sales" },
+  { id: "rawpaw", title: "Raw Paw", image: workRawpaw, tag: "D2C Brand", result: "+X% engagement" },
+  { id: "system", title: "Custom System", image: workSystem, tag: "CRM / System", result: "Ops automated" },
+  { id: "armahas", title: "Armahas", image: workArmahas, tag: "Web Platform", result: "+X% leads" },
 ];
 
 type Project = (typeof PROJECTS)[number];
@@ -133,14 +133,22 @@ const ProjectCard = ({
             <ArrowRight className="w-3.5 h-3.5 text-white" />
           </div>
 
-          {/* Title at bottom */}
+          {/* Title + mini case study at bottom */}
           <div className="absolute bottom-0 left-0 right-0 p-4">
-            <span className="font-mono text-[10px] tracking-[0.2em] uppercase text-white/50 block mb-1">
-              {String(index + 1).padStart(2, "0")}
-            </span>
+            <div className="flex items-center gap-2 mb-1.5">
+              <span className="font-mono text-[10px] tracking-[0.2em] uppercase text-white/50">
+                {String(index + 1).padStart(2, "0")}
+              </span>
+              <span className="text-[9px] font-mono tracking-wider uppercase px-1.5 py-0.5 rounded-full bg-white/10 text-white/60">
+                {project.tag}
+              </span>
+            </div>
             <h3 className="font-display text-base sm:text-lg text-white group-hover:text-primary transition-colors duration-300">
               {project.title}
             </h3>
+            <p className="text-[11px] font-mono text-primary/80 mt-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+              {project.result}
+            </p>
           </div>
         </div>
       </motion.button>
