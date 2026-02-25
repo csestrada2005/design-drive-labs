@@ -9,7 +9,7 @@ const TESTIMONIALS = [
     company: "D2C Brand",
   },
   {
-    quote: "Our conversion rate jumped within weeks of launching. The ROI paid for itself.",
+    quote: "Improved conversion and performance from day one. The investment made sense fast.",
     name: "Client Name",
     role: "CEO",
     company: "SaaS Company",

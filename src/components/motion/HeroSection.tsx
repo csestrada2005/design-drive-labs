@@ -294,7 +294,7 @@ export const HeroSection = () => {
             Accepting projects
           </span>
           <span>·</span>
-          <span>+30 brands served</span>
+          <span>Projects delivered</span>
           <span className="hidden sm:inline">·</span>
           <span className="hidden sm:inline">24h response</span>
         </motion.div>
