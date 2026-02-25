@@ -261,25 +261,25 @@ export const HeroSection = () => {
 
         {/* CTAs */}
         <motion.div
-          className="mt-6 sm:mt-8 flex flex-col sm:flex-row items-center gap-3"
+          className="mt-8 flex flex-col sm:flex-row items-center gap-3"
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 2.2, duration: 0.6 }}
         >
-          <a
-            href="#contact"
-            className="group inline-flex items-center gap-2 px-7 py-3.5 rounded-full bg-primary text-primary-foreground font-semibold text-sm transition-all duration-300 hover:scale-105 active:scale-95"
-            style={{ boxShadow: "0 4px 20px -4px hsl(0 100% 50% / 0.4)" }}
-          >
-            Book a Strategy Call
-            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-          </a>
-          <a
-            href="#work"
-            className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full border border-border text-foreground text-sm font-semibold hover:border-primary/50 transition-colors duration-300"
-          >
-            View Work
-          </a>
+           <a
+             href="#contact"
+             className="group inline-flex items-center gap-2 px-8 py-4 rounded-full bg-primary text-primary-foreground font-semibold text-base sm:text-sm transition-all duration-300 hover:scale-105 active:scale-95 focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background min-h-[48px]"
+             style={{ boxShadow: "0 4px 20px -4px hsl(0 100% 50% / 0.4)" }}
+           >
+             Book a Strategy Call
+             <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+           </a>
+           <a
+             href="#work"
+             className="inline-flex items-center gap-2 px-8 py-4 rounded-full border border-border text-foreground text-base sm:text-sm font-semibold hover:border-primary/50 transition-colors duration-300 focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background min-h-[48px]"
+           >
+             View Work
+           </a>
         </motion.div>
 
         {/* Trust strip */}

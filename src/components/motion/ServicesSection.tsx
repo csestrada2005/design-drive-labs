@@ -1,6 +1,7 @@
 import { useRef, useState, useCallback } from "react";
 import { motion, useInView, useReducedMotion, AnimatePresence } from "framer-motion";
 import { Store, Cog, Rocket, ArrowRight } from "lucide-react";
+import { MicroCTA } from "@/components/motion/MicroCTA";
 
 const tiers = [
   {
@@ -188,7 +189,7 @@ const [active, setActive] = useState(0);
   const tier = tiers[active];
 
   return (
-    <section ref={ref} className="py-24 sm:py-32 relative overflow-hidden" id="services">
+    <section ref={ref} className="py-32 sm:py-40 relative overflow-hidden" id="services">
       {/* Anchor targets for deep-linking */}
       {tiers.map(t => (
         <div key={t.anchor} id={t.anchor} className="absolute" style={{ top: 0 }} aria-hidden="true" />
@@ -211,7 +212,7 @@ const [active, setActive] = useState(0);
       <div className="container relative z-10">
         {/* Header */}
         <motion.div
-          className="mb-16"
+          className="mb-20 sm:mb-24"
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
@@ -323,6 +324,11 @@ const [active, setActive] = useState(0);
               0{i + 1}
             </button>
           ))}
+        </div>
+
+        {/* Micro-CTA — next step nudge */}
+        <div className="mt-16 sm:mt-20 flex justify-center">
+          <MicroCTA variant="both" />
         </div>
       </div>
     </section>

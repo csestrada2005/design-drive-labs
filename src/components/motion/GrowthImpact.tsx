@@ -2,6 +2,7 @@ import { useRef, useEffect, useState, useCallback } from "react";
 import { motion, useInView, useScroll, useTransform, useReducedMotion, AnimatePresence } from "framer-motion";
 import { ROICalculator } from "@/components/tools/ROICalculator";
 import { KineticType } from "@/components/motion/KineticType";
+import { MicroCTA } from "@/components/motion/MicroCTA";
 
 
 /* ── Animated counter ── */
@@ -267,7 +268,7 @@ export const GrowthImpact = () => {
   const ref = useRef<HTMLElement>(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
   return (
-    <section ref={ref} className="py-24 sm:py-32 relative overflow-hidden" id="growth">
+    <section ref={ref} className="py-32 sm:py-40 relative overflow-hidden" id="growth">
       <div
         className="absolute top-0 right-0 w-1/2 h-full pointer-events-none"
         style={{ background: "radial-gradient(ellipse at 80% 40%, hsl(0 100% 50% / 0.04), transparent 60%)" }}
@@ -276,7 +277,7 @@ export const GrowthImpact = () => {
 
       <div className="container relative z-10">
         {/* Header */}
-        <div className="mb-16">
+        <div className="mb-20 sm:mb-24">
           <KineticType
             text="GROWTH IMPACT"
             as="h2"
@@ -351,11 +352,16 @@ export const GrowthImpact = () => {
               See what your revenue looks like now — and what it could look like with our design and technology systems working for you.
             </p>
            </div>
-          <div className="w-full max-w-4xl mx-auto">
-            <ROICalculator />
-          </div>
-        </motion.div>
-      </div>
-    </section>
+           <div className="w-full max-w-4xl mx-auto">
+             <ROICalculator />
+           </div>
+
+           {/* Micro-CTA */}
+           <div className="mt-16 sm:mt-20 flex justify-center">
+             <MicroCTA variant="primary" />
+           </div>
+         </motion.div>
+       </div>
+     </section>
   );
 };

@@ -13,6 +13,7 @@ import { useRef, useState, useEffect, useCallback } from "react";
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence, useSpring, useInView, useReducedMotion } from "framer-motion";
 import { X, ArrowRight } from "lucide-react";
+import { MicroCTA } from "@/components/motion/MicroCTA";
 
 import workPapachoa from "@/assets/work-papachoa.png";
 import workBazar from "@/assets/work-bazar.png";
@@ -346,13 +347,13 @@ export const FeaturedWork = () => {
     <>
       <section
         ref={sectionRef}
-        className="py-24 sm:py-32 relative overflow-hidden"
+        className="py-32 sm:py-40 relative overflow-hidden"
         id="work"
         style={{ minHeight: "100vh" }}
       >
         <div className="container relative z-10">
           <motion.div
-            className="mb-8"
+            className="mb-12 sm:mb-16"
             initial={{ opacity: 0, y: 20 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.6 }}
@@ -376,21 +377,24 @@ export const FeaturedWork = () => {
           </div>
         </div>
 
-        <div className="container relative z-10">
-          <motion.div
-            className="mt-8"
-            initial={{ opacity: 0, y: 16 }}
-            animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.6, delay: 0.5 }}
-          >
-            <p className="text-sm text-muted-foreground">
-              Want yours next?{" "}
-              <a href="#contact" className="font-display text-foreground hover:text-primary transition-colors duration-200 underline underline-offset-4">
-                Let's talk.
-              </a>
-            </p>
-          </motion.div>
-        </div>
+         <div className="container relative z-10">
+           <motion.div
+             className="mt-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6"
+             initial={{ opacity: 0, y: 16 }}
+             animate={isInView ? { opacity: 1, y: 0 } : {}}
+             transition={{ duration: 0.6, delay: 0.5 }}
+           >
+             <p className="text-sm text-muted-foreground">
+               Want yours next?{" "}
+               <a href="#contact" className="font-display text-foreground hover:text-primary transition-colors duration-200 underline underline-offset-4">
+                 Let's talk.
+               </a>
+             </p>
+
+             {/* Micro-CTA */}
+             <MicroCTA variant="primary" />
+           </motion.div>
+         </div>
       </section>
 
       {createPortal(

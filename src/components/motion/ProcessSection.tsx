@@ -1,6 +1,7 @@
 import { useRef } from "react";
 import { motion, useScroll, useTransform, useMotionValueEvent, useReducedMotion } from "framer-motion";
 import { useState } from "react";
+import { MicroCTA } from "@/components/motion/MicroCTA";
 
 const steps = [
   { id: "audit", number: "01", title: "Audit & Strategy", desc: "We dissect your market, audience, and competitors to build on real insight." },
@@ -189,8 +190,15 @@ export const ProcessSection = () => {
             <p className="text-foreground/80 text-sm sm:text-base max-w-md mx-auto leading-relaxed">
               {steps[activeIndex].desc}
             </p>
-          </motion.div>
-        </div>
+           </motion.div>
+
+           {/* Micro-CTA — visible on last step */}
+           {activeIndex === steps.length - 1 && (
+             <div className="mt-8">
+               <MicroCTA variant="primary" />
+             </div>
+           )}
+         </div>
 
         {/* Progress dots */}
         <div className="absolute right-6 top-1/2 -translate-y-1/2 flex flex-col gap-3 z-10">
