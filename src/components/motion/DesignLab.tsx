@@ -537,7 +537,7 @@ const CardSwap = () => {
                   style={{ background: `hsl(${card.hue} 70% 60% / 0.6)` }} />
                 <div>
                   <p className="font-display text-[10px] tracking-[0.2em] text-foreground">{card.label}</p>
-                  <p className="text-[9px] text-foreground/70 mt-0.5 font-mono">{card.sub}</p>
+                  <p className="text-[9px] text-foreground/85 mt-0.5 font-mono">{card.sub}</p>
                 </div>
               </motion.div>);
           })}

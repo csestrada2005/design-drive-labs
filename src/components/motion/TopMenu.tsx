@@ -158,7 +158,7 @@ export const TopMenu = () => {
                       {link.label}
                     </span>
                     <span className={`text-[10px] font-mono tracking-[0.2em] transition-colors duration-300 ${
-                      isActive ? "text-primary/70" : "text-muted-foreground/40 group-hover:text-primary/60"
+                      isActive ? "text-primary" : "text-muted-foreground group-hover:text-primary/80"
                     }`}>
                       {String(i + 1).padStart(2, "0")}
                     </span>

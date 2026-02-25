@@ -43,8 +43,8 @@ const TESTIMONIALS = [
            {TESTIMONIALS.map((t, i) => (
              <motion.blockquote
                key={i}
-               className="relative p-5 sm:p-6 rounded-xl border border-white/[0.06]"
-               style={{ background: "hsl(var(--background) / 0.5)" }}
+                className="relative p-5 sm:p-6 rounded-xl border border-white/[0.1]"
+                style={{ background: "hsl(var(--card))" }}
                initial={prefersReduced ? { opacity: 0 } : { opacity: 0, y: 18 }}
                animate={isInView ? { opacity: 1, y: 0 } : {}}
                transition={{ duration: 0.55, delay: i * 0.08, ease: [0.16, 1, 0.3, 1] }}
@@ -54,19 +54,19 @@ const TESTIMONIALS = [
                 "
               </span>
 
-              <p className="text-sm text-foreground/80 leading-relaxed mb-4 relative z-[1]">
+              <p className="text-sm text-foreground leading-relaxed mb-4 relative z-[1]">
                 "{t.quote}"
               </p>
 
               <footer className="flex items-center gap-3">
                 {/* Avatar placeholder */}
-                <div className="w-8 h-8 rounded-full bg-white/[0.06] flex items-center justify-center text-[10px] font-mono text-muted-foreground/50">
-                  {t.name.split(" ").map(w => w[0]).join("")}
-                </div>
-                <div>
-                  <p className="text-xs font-semibold text-foreground/70">{t.name}</p>
-                  <p className="text-xs sm:text-[10px] text-muted-foreground/50">
-                    {t.role}, {t.company}
+                 <div className="w-8 h-8 rounded-full bg-white/[0.08] flex items-center justify-center text-[10px] font-mono text-muted-foreground">
+                   {t.name.split(" ").map(w => w[0]).join("")}
+                 </div>
+                 <div>
+                   <p className="text-xs font-semibold text-foreground">{t.name}</p>
+                   <p className="text-xs sm:text-[10px] text-muted-foreground">
+                     {t.role}, {t.company}
                   </p>
                 </div>
               </footer>

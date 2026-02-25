@@ -66,7 +66,7 @@ export const EasterEgg = () => {
         </span>
       </motion.button>
 
-      <span className="text-[9px] tracking-[0.3em] uppercase text-muted-foreground/30">
+      <span className="text-[9px] tracking-[0.3em] uppercase text-muted-foreground">
         {revealed ? "" : "Press & Hold"}
       </span>
 
@@ -80,15 +80,15 @@ export const EasterEgg = () => {
             className="text-center max-w-xs"
           >
             <p className="text-primary text-xs tracking-[0.2em] uppercase mb-2">Hidden Message</p>
-            <p className="text-foreground/70 text-sm leading-relaxed">
+            <p className="text-foreground/90 text-sm leading-relaxed">
               Cada detalle importa. Si llegaste hasta aqui, sabemos que aprecias la artesania digital tanto como nosotros.
             </p>
-            <p className="text-muted-foreground/30 text-[10px] mt-3 tracking-wider">
+            <p className="text-muted-foreground text-[10px] mt-3 tracking-wider">
               — Nebu Studio
             </p>
             <button
               onClick={() => { setRevealed(false); setProgress(0); }}
-              className="mt-4 text-[9px] tracking-widest uppercase text-muted-foreground/30 hover:text-primary/50 transition-colors"
+              className="mt-4 text-[9px] tracking-widest uppercase text-muted-foreground hover:text-primary transition-colors"
             >
               Reset
             </button>

@@ -31,7 +31,7 @@ export const LogoBar = () => {
                animate={isInView ? { opacity: 1, y: 0 } : {}}
                transition={{ duration: 0.45, delay: i * 0.07, ease: [0.16, 1, 0.3, 1] }}
             >
-              <span className="text-xs sm:text-sm font-display tracking-wider text-muted-foreground/40 whitespace-nowrap">
+              <span className="text-xs sm:text-sm font-display tracking-wider text-muted-foreground whitespace-nowrap">
                 {name}
               </span>
             </motion.div>

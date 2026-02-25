@@ -238,7 +238,7 @@ export const HeroSection = () => {
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
-          background: "hsl(var(--background) / 0.55)",
+          background: "hsl(var(--background) / 0.7)",
         }}
       />
 
@@ -292,7 +292,7 @@ export const HeroSection = () => {
 
          {/* Micro-bullets */}
          <motion.ul
-           className="mt-6 flex flex-col sm:flex-row items-center gap-3 sm:gap-6 text-sm sm:text-sm text-foreground/70"
+           className="mt-6 flex flex-col sm:flex-row items-center gap-3 sm:gap-6 text-sm sm:text-sm text-foreground/85"
            initial={{ opacity: 0, y: 10 }}
            animate={{ opacity: 1, y: 0 }}
            transition={{ delay: 2.0, duration: 0.55, ease: [0.16, 1, 0.3, 1] }}

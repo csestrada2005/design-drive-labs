@@ -33,7 +33,7 @@ const ModeRow = ({
       whileHover="hovered">
 
       {/* Number */}
-      <span className="font-mono text-[11px] tracking-[0.25em] text-muted-foreground/40 w-8 flex-shrink-0 group-hover:text-primary transition-colors duration-300">
+      <span className="font-mono text-[11px] tracking-[0.25em] text-muted-foreground w-8 flex-shrink-0 group-hover:text-primary transition-colors duration-300">
         {mode.num}
       </span>
 

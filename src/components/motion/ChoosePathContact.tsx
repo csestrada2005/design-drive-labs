@@ -259,7 +259,7 @@ export const ChoosePathContact = () => {
                         <AlertCircle className="w-3 h-3" /> {errors.message}
                       </p>
                     ) : <span />}
-                    <span className="text-xs sm:text-[10px] text-muted-foreground/40 tabular-nums">
+                    <span className="text-xs sm:text-[10px] text-muted-foreground tabular-nums">
                       {form.message.length}/{LIMITS.message}
                     </span>
                   </div>

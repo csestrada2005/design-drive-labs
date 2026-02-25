@@ -161,8 +161,8 @@ export const SystemBlueprint = ({ compact = false }: Props) => {
 
           {!compact && (
             <div className="mt-2 text-center whitespace-nowrap">
-              <p className="text-[10px] font-mono tracking-wider text-foreground/60">{node.label}</p>
-              <p className="text-[8px] font-mono tracking-wider text-muted-foreground/40">{node.sublabel}</p>
+              <p className="text-[10px] font-mono tracking-wider text-foreground/80">{node.label}</p>
+              <p className="text-[8px] font-mono tracking-wider text-muted-foreground">{node.sublabel}</p>
             </div>
           )}
         </motion.div>
@@ -176,7 +176,7 @@ export const SystemBlueprint = ({ compact = false }: Props) => {
           transition={{ duration: 2.5, repeat: Infinity }}
         />
         {!compact && (
-          <span className="text-[8px] font-mono tracking-[0.2em] uppercase text-muted-foreground/30">
+          <span className="text-[8px] font-mono tracking-[0.2em] uppercase text-muted-foreground">
             All Systems Active
           </span>
         )}

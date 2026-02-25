@@ -205,7 +205,7 @@ export const BottomNav = () => {
                   style={{ borderColor: "hsl(0 0% 100% / 0.07)" }}
                 >
                   <span>{link.label}</span>
-                  <span className="text-[10px] font-mono tracking-[0.2em] text-muted-foreground/40 group-hover:text-primary/60 transition-colors">
+                  <span className="text-[10px] font-mono tracking-[0.2em] text-muted-foreground group-hover:text-primary/80 transition-colors">
                     {String(i + 1).padStart(2, "0")}
                   </span>
                 </motion.button>

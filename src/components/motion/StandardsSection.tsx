@@ -122,7 +122,7 @@ export const StandardsSection = () => {
               </h3>
 
               {/* Description */}
-              <p className="text-foreground/70 text-sm leading-relaxed">{item.desc}</p>
+              <p className="text-foreground/90 text-sm leading-relaxed">{item.desc}</p>
 
               {/* Bottom accent line */}
               <motion.div

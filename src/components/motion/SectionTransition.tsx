@@ -227,7 +227,7 @@ const DataOverlay = ({ onDone }: { onDone: () => void }) => {
 
       <div className="absolute inset-0 flex items-center justify-center z-10">
         <motion.span
-          className="font-mono text-[10px] tracking-[0.4em] uppercase text-foreground/70"
+          className="font-mono text-[10px] tracking-[0.4em] uppercase text-foreground/90"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.2 }}

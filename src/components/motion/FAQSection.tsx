@@ -58,7 +58,7 @@ const AccordionItem = ({ q, a, index }: { q: string; a: string; index: number })
         aria-expanded={open}
       >
         <span className="flex items-center gap-3 pr-4">
-          <span className="text-xs sm:text-[10px] font-mono text-muted-foreground/40 tabular-nums">
+          <span className="text-xs sm:text-[10px] font-mono text-muted-foreground tabular-nums">
             {String(index + 1).padStart(2, "0")}
           </span>
           <span className="text-sm sm:text-base font-medium text-foreground/90">{q}</span>

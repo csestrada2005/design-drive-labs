@@ -38,15 +38,12 @@ const Index = () => {
 
   return (
     <div className="min-h-screen text-foreground relative">
-      {/* Ambient radial gradient mesh — very subtle, no white haze */}
+      {/* Dark scrim over bg texture — ensures light text has contrast everywhere */}
       <div
         className="fixed inset-0 pointer-events-none z-0"
         aria-hidden="true"
         style={{
-          background: `
-            radial-gradient(ellipse 60% 50% at 20% 20%, hsl(0 100% 50% / 0.02), transparent 70%),
-            radial-gradient(ellipse 50% 60% at 80% 70%, hsl(240 60% 40% / 0.02), transparent 70%)
-          `,
+          background: "hsl(var(--background) / 0.88)",
         }}
       />
 

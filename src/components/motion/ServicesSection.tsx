@@ -164,7 +164,7 @@ const DialSelector = ({
 
       {/* Center label */}
       <div className="absolute flex flex-col items-center justify-center text-center">
-        <span className="font-mono text-[9px] tracking-[0.3em] uppercase text-primary/60">
+        <span className="font-mono text-[9px] tracking-[0.3em] uppercase text-primary">
           Tier
         </span>
         <motion.span
