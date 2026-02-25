@@ -84,7 +84,7 @@ const DemoTile = ({ demo }: { demo: DemoConfig }) => {
 
 /* ═══════════════════════════════════════
    DEMO 1 — GLASS SURFACE (Components)
-   Cursor-responsive light refraction panel
+   Apple VisionOS–style glass with specular highlights
 ═══════════════════════════════════════ */
 const GlassSurface = () => {
   const ref = useRef<HTMLDivElement>(null);
@@ -105,12 +105,23 @@ const GlassSurface = () => {
     []
   );
 
-  const mult = intensity === "high" ? 1.6 : 1;
-  const glareOpacity = reduced ? 0.05 : 0.12 * mult;
-  const shineSize = reduced ? 200 : 180 * mult;
+  const mult = intensity === "high" ? 1.8 : 1;
+  const specularOpacity = reduced ? 0.06 : 0.18 * mult;
+  const shineSize = reduced ? 200 : 160 * mult;
 
   return (
-    <GlassCard>
+    <div
+      className="relative overflow-hidden rounded-2xl"
+      style={{
+        background:
+          "linear-gradient(135deg, hsl(0 0% 100% / 0.06) 0%, hsl(0 0% 100% / 0.02) 40%, hsl(0 0% 100% / 0.04) 100%)",
+        backdropFilter: "blur(40px) saturate(1.4)",
+        WebkitBackdropFilter: "blur(40px) saturate(1.4)",
+        boxShadow:
+          "inset 0 0.5px 0 hsl(0 0% 100% / 0.25), inset 0 -0.5px 0 hsl(0 0% 0% / 0.1), 0 1px 3px hsl(0 0% 0% / 0.1), 0 8px 40px hsl(0 0% 0% / 0.25), 0 20px 60px hsl(0 0% 0% / 0.12)",
+        border: "0.5px solid hsl(0 0% 100% / 0.12)",
+      }}
+    >
       <div
         ref={ref}
         className="relative flex flex-col items-center justify-center p-6"
@@ -121,23 +132,43 @@ const GlassSurface = () => {
           handleMove(e.touches[0].clientX, e.touches[0].clientY);
         }}
       >
-        {/* Glare highlight */}
+        {/* Micro noise/grain to prevent banding */}
+        <div
+          aria-hidden
+          className="absolute inset-0 pointer-events-none opacity-[0.035] mix-blend-overlay"
+          style={{
+            backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E")`,
+            backgroundSize: "128px 128px",
+          }}
+        />
+
+        {/* Specular highlight — follows cursor */}
         {isInView && (
           <div
-            className="absolute inset-0 pointer-events-none transition-opacity duration-300"
+            className="absolute inset-0 pointer-events-none"
             style={{
-              background: `radial-gradient(circle ${shineSize}px at ${pos.x}% ${pos.y}%, hsl(0 0% 100% / ${glareOpacity}), transparent 70%)`,
+              background: `radial-gradient(circle ${shineSize}px at ${pos.x}% ${pos.y}%, hsl(0 0% 100% / ${specularOpacity}), hsl(0 0% 100% / ${specularOpacity * 0.3}) 40%, transparent 70%)`,
+              transition: reduced ? "none" : "background 0.15s ease-out",
             }}
           />
         )}
-        {/* Prismatic edge */}
+
+        {/* Edge refraction — subtle prismatic rim */}
+        {!reduced && (
+          <div
+            className="absolute inset-0 pointer-events-none rounded-2xl"
+            style={{
+              background: `conic-gradient(from ${(pos.x + pos.y) * 1.5}deg at ${pos.x}% ${pos.y}%, hsl(0 0% 100% / ${0.03 * mult}), hsl(200 80% 70% / ${0.025 * mult}), hsl(0 0% 100% / ${0.02 * mult}), hsl(280 70% 70% / ${0.025 * mult}), transparent)`,
+            }}
+          />
+        )}
+
+        {/* Inner top highlight — Apple-style rim light */}
         <div
-          className="absolute inset-0 pointer-events-none"
+          aria-hidden
+          className="absolute inset-x-0 top-0 h-px pointer-events-none"
           style={{
-            background: reduced
-              ? "none"
-              : `conic-gradient(from ${(pos.x + pos.y) * 1.8}deg at ${pos.x}% ${pos.y}%, hsl(0 100% 50% / ${0.04 * mult}), hsl(200 100% 60% / ${0.03 * mult}), hsl(120 80% 50% / ${0.03 * mult}), hsl(280 100% 60% / ${0.03 * mult}), transparent)`,
-            borderRadius: "inherit",
+            background: "linear-gradient(90deg, transparent 10%, hsl(0 0% 100% / 0.3) 50%, transparent 90%)",
           }}
         />
 
@@ -147,8 +178,10 @@ const GlassSurface = () => {
             className="w-20 h-20 mx-auto mb-4 rounded-2xl"
             style={{
               background:
-                "linear-gradient(135deg, hsl(0 0% 100% / 0.12), hsl(0 0% 100% / 0.04))",
-              boxShadow: "inset 0 1px 0 hsl(0 0% 100% / 0.2), 0 4px 16px hsl(0 0% 0% / 0.15)",
+                "linear-gradient(135deg, hsl(0 0% 100% / 0.14), hsl(0 0% 100% / 0.04))",
+              boxShadow:
+                "inset 0 0.5px 0 hsl(0 0% 100% / 0.25), inset 0 -0.5px 0 hsl(0 0% 0% / 0.08), 0 4px 16px hsl(0 0% 0% / 0.2)",
+              border: "0.5px solid hsl(0 0% 100% / 0.08)",
             }}
           />
           <p className="font-display text-lg tracking-[0.15em] text-foreground mb-1">GLASS PANEL</p>
@@ -173,7 +206,7 @@ const GlassSurface = () => {
           ))}
         </div>
       </div>
-    </GlassCard>
+    </div>
   );
 };
 
@@ -280,13 +313,14 @@ const GridScan = () => {
    DEMO 3 — IMAGE TRAIL (Animations)
    Cursor trail with thumbnail images
 ═══════════════════════════════════════ */
-const trailImages = [
-  "linear-gradient(135deg, hsl(0 80% 45%), hsl(20 90% 50%))",
-  "linear-gradient(135deg, hsl(200 80% 40%), hsl(220 90% 55%))",
-  "linear-gradient(135deg, hsl(270 70% 45%), hsl(300 80% 55%))",
-  "linear-gradient(135deg, hsl(140 60% 35%), hsl(160 70% 45%))",
-  "linear-gradient(135deg, hsl(40 80% 45%), hsl(50 90% 55%))",
-  "linear-gradient(135deg, hsl(330 70% 40%), hsl(350 80% 50%))",
+/* Random placeholder photos — lightweight, no color frames */
+const trailPhotos = [
+  "https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=120&h=160&fit=crop&q=60",
+  "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=120&h=160&fit=crop&q=60",
+  "https://images.unsplash.com/photo-1486325212027-8081e485255e?w=120&h=160&fit=crop&q=60",
+  "https://images.unsplash.com/photo-1518005020951-eccb494ad742?w=120&h=160&fit=crop&q=60",
+  "https://images.unsplash.com/photo-1449157291145-7efd050a4d0e?w=120&h=160&fit=crop&q=60",
+  "https://images.unsplash.com/photo-1472396961693-142e6e269027?w=120&h=160&fit=crop&q=60",
 ];
 
 interface Trail {
@@ -323,7 +357,7 @@ const ImageTrail = () => {
       lastPos.current = { x, y };
       const id = ++idRef.current;
       const currentImg = imgIdx.current;
-      imgIdx.current = (imgIdx.current + 1) % trailImages.length;
+      imgIdx.current = (imgIdx.current + 1) % trailPhotos.length;
       setTrails((t) => [...t.slice(-maxTrails), { id, x, y, imgIdx: currentImg }]);
       setTimeout(() => setTrails((t) => t.filter((p) => p.id !== id)), ttl);
     },
@@ -347,9 +381,9 @@ const ImageTrail = () => {
           {trails.map((t) => (
             <motion.div
               key={t.id}
-              className="absolute pointer-events-none rounded-lg"
-              initial={{ opacity: 0.9, scale: 1, rotate: Math.random() * 20 - 10 }}
-              animate={{ opacity: 0, scale: 0.5 }}
+              className="absolute pointer-events-none rounded-lg overflow-hidden"
+              initial={{ opacity: 0.9, scale: 1, rotate: Math.random() * 12 - 6 }}
+              animate={{ opacity: 0, scale: 0.6 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.7, ease: "easeOut" }}
               style={{
@@ -357,10 +391,17 @@ const ImageTrail = () => {
                 top: t.y - 36,
                 width: 56,
                 height: 72,
-                background: trailImages[t.imgIdx],
-                boxShadow: "0 4px 16px hsl(0 0% 0% / 0.3)",
+                boxShadow: "0 4px 20px hsl(0 0% 0% / 0.35)",
               }}
-            />
+            >
+              <img
+                src={trailPhotos[t.imgIdx]}
+                alt=""
+                className="w-full h-full object-cover"
+                loading="lazy"
+                decoding="async"
+              />
+            </motion.div>
           ))}
         </AnimatePresence>
 
@@ -510,15 +551,30 @@ const menuItems = ["Projects", "About", "Services", "Process", "Contact"];
 const StaggeredMenu = () => {
   const [open, setOpen] = useState(false);
   const reduced = useReducedMotion();
+  const menuRef = useRef<HTMLDivElement>(null);
+
+  // ESC to close
+  useEffect(() => {
+    if (!open) return;
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setOpen(false);
+    };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, [open]);
 
   return (
     <GlassCard>
       <div className="relative flex flex-col items-center justify-center p-6" style={{ minHeight: 220 }}>
-        {/* Toggle button */}
+        {/* Toggle button — repositioned when open */}
         <button
           onClick={() => setOpen(!open)}
-          className="relative z-20 w-11 h-11 rounded-xl flex items-center justify-center transition-all"
+          className="w-11 h-11 rounded-xl flex items-center justify-center transition-all"
           style={{
+            position: open ? "absolute" : "relative",
+            top: open ? 12 : undefined,
+            right: open ? 12 : undefined,
+            zIndex: 30,
             background: open ? "hsl(0 100% 50% / 0.15)" : "hsl(0 0% 100% / 0.08)",
             boxShadow: open
               ? "inset 0 0 0 1px hsl(0 100% 50% / 0.3)"
@@ -538,23 +594,28 @@ const StaggeredMenu = () => {
         <AnimatePresence>
           {open && (
             <motion.div
-              className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-3 rounded-2xl"
+              ref={menuRef}
+              className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-4 rounded-2xl"
               style={{
-                background: "hsl(0 0% 4% / 0.92)",
+                background: "hsl(0 0% 4% / 0.94)",
               }}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}
+              transition={{ duration: 0.25 }}
             >
               {menuItems.map((item, i) => (
                 <motion.button
                   key={item}
-                  className="text-foreground/80 hover:text-primary font-display text-lg tracking-[0.2em] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 rounded px-4 py-1"
-                  initial={reduced ? { opacity: 0 } : { opacity: 0, y: 20, filter: "blur(4px)" }}
+                  className="text-foreground/80 hover:text-primary font-display text-xl tracking-[0.2em] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 rounded px-4 py-1.5"
+                  initial={reduced ? { opacity: 0 } : { opacity: 0, y: 28, filter: "blur(6px)" }}
                   animate={reduced ? { opacity: 1 } : { opacity: 1, y: 0, filter: "blur(0px)" }}
-                  exit={reduced ? { opacity: 0 } : { opacity: 0, y: -10 }}
-                  transition={{ delay: i * 0.06, duration: 0.3, ease: [0.25, 1, 0.5, 1] }}
+                  exit={reduced ? { opacity: 0 } : { opacity: 0, y: -14, filter: "blur(3px)" }}
+                  transition={{
+                    delay: i * 0.09,
+                    duration: 0.4,
+                    ease: [0.22, 1, 0.36, 1],
+                  }}
                   onClick={() => setOpen(false)}
                   tabIndex={open ? 0 : -1}
                 >
@@ -591,6 +652,7 @@ const CardSwapDemo = () => {
   const isInView = useInView(ref, { margin: "-50px" });
   const reduced = useReducedMotion();
   const dragStartX = useRef(0);
+  const [dragX, setDragX] = useState(0);
 
   const next = () => setTop((t) => (t + 1) % swapCards.length);
   const prev = () => setTop((t) => (t - 1 + swapCards.length) % swapCards.length);
@@ -602,11 +664,17 @@ const CardSwapDemo = () => {
       <div
         ref={ref}
         className="relative flex items-center justify-center p-6"
-        style={{ minHeight: 220, perspective: 800 }}
+        style={{ minHeight: 220, perspective: 600, perspectiveOrigin: "50% 40%" }}
       >
-        <div className="relative" style={{ width: 200, height: 120 }}>
+        <div className="relative" style={{ width: 200, height: 120, transformStyle: "preserve-3d" }}>
           {swapCards.map((card, i) => {
             const order = getOrder(i);
+            // 3D tilt based on drag for top card
+            const tiltY = order === 0 && !reduced ? dragX * 0.15 : 0;
+            const tiltX = order === 0 && !reduced ? 2 : order * 3;
+            const dynamicShadowBlur = order === 0 ? 32 : 16;
+            const dynamicShadowSpread = order === 0 ? -4 : -8;
+
             return (
               <motion.div
                 key={i}
@@ -614,10 +682,14 @@ const CardSwapDemo = () => {
                 drag="x"
                 dragConstraints={{ left: 0, right: 0 }}
                 dragElastic={0.3}
+                onDrag={(_, info) => {
+                  if (order === 0) setDragX(info.offset.x);
+                }}
                 onDragStart={(_, info) => {
                   dragStartX.current = info.point.x;
                 }}
                 onDragEnd={(_, info) => {
+                  setDragX(0);
                   const dx = info.point.x - dragStartX.current;
                   if (Math.abs(dx) > 50) {
                     dx > 0 ? prev() : next();
@@ -628,27 +700,30 @@ const CardSwapDemo = () => {
                 }}
                 style={{
                   background: `linear-gradient(135deg, hsl(${card.hue} 35% 14%), hsl(${card.hue} 25% 10%))`,
-                  boxShadow:
-                    "inset 0 1px 0 hsl(0 0% 100% / 0.12), 0 6px 24px hsl(0 0% 0% / 0.2)",
+                  boxShadow: `inset 0 1px 0 hsl(0 0% 100% / 0.12), 0 ${4 + order * 2}px ${dynamicShadowBlur}px ${dynamicShadowSpread}px hsl(0 0% 0% / ${0.25 + order * 0.08})`,
                   zIndex: swapCards.length - order,
+                  transformStyle: "preserve-3d",
                 }}
                 animate={
                   reduced
                     ? { y: order * 8, opacity: order === 0 ? 1 : 0.4 }
                     : {
-                        y: order * 12,
-                        scale: 1 - order * 0.06,
-                        opacity: order === 2 ? 0.3 : order === 1 ? 0.6 : 1,
-                        rotateX: order * 2,
+                        y: order * 14,
+                        scale: 1 - order * 0.07,
+                        opacity: order === 2 ? 0.25 : order === 1 ? 0.55 : 1,
+                        rotateX: tiltX,
+                        rotateY: tiltY,
                       }
                 }
-                transition={{ type: "spring", stiffness: 220, damping: 24 }}
+                transition={{ type: "spring", stiffness: 200, damping: 22 }}
               >
                 {/* Shine */}
                 <div
                   className="absolute inset-0 pointer-events-none rounded-xl"
                   style={{
-                    background: "linear-gradient(115deg, hsl(0 0% 100% / 0.08) 0%, transparent 50%)",
+                    background: order === 0
+                      ? "linear-gradient(115deg, hsl(0 0% 100% / 0.1) 0%, transparent 45%)"
+                      : "linear-gradient(115deg, hsl(0 0% 100% / 0.05) 0%, transparent 50%)",
                   }}
                 />
                 <div className="relative z-10">
