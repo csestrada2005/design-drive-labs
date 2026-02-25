@@ -68,10 +68,11 @@
     @apply border-border;
   }
 
-  html {
+  html, body {
     scroll-behavior: smooth;
     -webkit-tap-highlight-color: transparent;
     -webkit-overflow-scrolling: touch;
+    overflow-x: hidden;
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -106,7 +107,7 @@
   }
 
   h1 {
-    font-size: clamp(2.5rem, 5vw + 1rem, 5rem);
+    font-size: clamp(2rem, 5vw + 1rem, 5rem);
   }
 
   p {

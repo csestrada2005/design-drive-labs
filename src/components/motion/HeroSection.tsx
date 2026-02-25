@@ -35,7 +35,7 @@ const MagneticCTA = ({ children }: { children: React.ReactNode }) => {
       onMouseLeave={handleLeave}
       style={{ x: springX, y: springY, boxShadow: "0 4px 20px -4px hsl(0 100% 50% / 0.4)" }}
       whileTap={{ scale: 0.95 }}
-      className="group inline-flex items-center gap-2 px-8 py-4 rounded-full bg-primary text-primary-foreground font-semibold text-base sm:text-sm transition-shadow duration-300 focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background min-h-[48px]"
+      className="group inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full bg-primary text-primary-foreground font-semibold text-base sm:text-sm transition-shadow duration-300 focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background min-h-[48px] w-full sm:w-auto"
     >
       {children}
     </motion.button>
@@ -88,38 +88,30 @@ const SumiHeroReveal = () => {
       onTouchStart={handleInteract}
       aria-label="NEBU STUDIO"
     >
-      <div className="flex justify-center overflow-hidden" style={{ lineHeight: 1 }}>
+      <div className="flex justify-center overflow-hidden px-1" style={{ lineHeight: 1 }}>
         <div
-          className="relative inline-block"
-          style={{ fontSize: "clamp(3.5rem, 12vw, 10rem)", lineHeight: 1.05 }}
+          className="relative inline-block w-full text-center"
+          style={{ fontSize: "clamp(2.4rem, 10vw, 10rem)", lineHeight: 1.05 }}
         >
           {/* Ghost base */}
           <span
-            className="font-display block whitespace-nowrap"
-            style={{ color: "hsl(var(--foreground) / 0.15)", letterSpacing: "-0.01em" }}
+            className="font-display block"
+            style={{ color: "hsl(var(--foreground) / 0.15)", letterSpacing: "-0.01em", wordSpacing: "0.05em" }}
             aria-hidden="true"
           >
-            NEBU <span>STUDIO</span>
+            NEBU{" "}<span>STUDIO</span>
           </span>
 
           {/* Ink-filled overlay */}
           <motion.div
-            className="absolute top-0 left-0 h-full overflow-hidden pointer-events-none"
-            initial={{ width: "0%" }}
-            animate={{ width: phase >= 1 ? "100%" : "0%" }}
+            className="absolute top-0 left-0 h-full w-full overflow-hidden pointer-events-none"
+            initial={{ clipPath: "inset(0 100% 0 0)" }}
+            animate={{ clipPath: phase >= 1 ? "inset(0 0% 0 0)" : "inset(0 100% 0 0)" }}
             transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-            style={{
-              WebkitMaskImage: phase < 4
-                ? "linear-gradient(to right, black 82%, rgba(0,0,0,0.4) 92%, transparent 100%)"
-                : "none",
-              maskImage: phase < 4
-                ? "linear-gradient(to right, black 82%, rgba(0,0,0,0.4) 92%, transparent 100%)"
-                : "none",
-            }}
           >
             <span
-              className="font-display block whitespace-nowrap"
-              style={{ letterSpacing: "-0.01em" }}
+              className="font-display block"
+              style={{ letterSpacing: "-0.01em", wordSpacing: "0.05em" }}
             >
               <span style={{ color: "hsl(var(--foreground) / 0.93)" }}>NEBU </span>
               <span className="text-primary">STUDIO</span>
@@ -276,7 +268,7 @@ export const HeroSection = () => {
       <HeroLaserOverlay heroRef={ref} />
 
       {/* Owl logo + Sumi reveal centered */}
-      <div data-hero-content className="relative z-10 w-full px-4 flex flex-col items-center">
+      <div data-hero-content className="relative z-10 w-full px-5 sm:px-6 flex flex-col items-center" style={{ paddingTop: 64 }}>
         <img
           src={nebuOwl}
           alt="Nebu Studio owl logo"
@@ -288,7 +280,7 @@ export const HeroSection = () => {
 
          {/* Subhead */}
          <motion.p
-           className="mt-8 text-sm sm:text-base md:text-lg text-foreground/80 max-w-xl text-center leading-relaxed"
+           className="mt-6 sm:mt-8 text-[15px] sm:text-base md:text-lg text-foreground/80 max-w-xl text-center leading-relaxed px-2"
            initial={{ opacity: 0, y: 14 }}
            animate={{ opacity: 1, y: 0 }}
            transition={{ delay: 1.8, duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
@@ -298,7 +290,7 @@ export const HeroSection = () => {
 
          {/* Micro-bullets */}
          <motion.ul
-           className="mt-6 flex flex-col sm:flex-row items-center gap-3 sm:gap-6 text-sm sm:text-sm text-foreground/85"
+           className="mt-5 sm:mt-6 flex flex-col sm:flex-row items-center gap-2.5 sm:gap-6 text-[15px] sm:text-sm text-foreground/85"
            initial={{ opacity: 0, y: 10 }}
            animate={{ opacity: 1, y: 0 }}
            transition={{ delay: 2.0, duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
@@ -319,7 +311,7 @@ export const HeroSection = () => {
 
         {/* CTAs */}
         <motion.div
-           className="mt-8 flex flex-col sm:flex-row items-center gap-3"
+           className="mt-6 sm:mt-8 flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full sm:w-auto sm:justify-center"
            initial={{ opacity: 0, y: 14 }}
            animate={{ opacity: 1, y: 0 }}
            transition={{ delay: 2.2, duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
@@ -330,7 +322,7 @@ export const HeroSection = () => {
             </MagneticCTA>
            <a
              href="#work"
-             className="inline-flex items-center gap-2 px-8 py-4 rounded-full border border-border text-foreground text-base sm:text-sm font-semibold hover:border-primary/50 transition-colors duration-300 focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background min-h-[48px]"
+             className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full border border-border text-foreground text-base sm:text-sm font-semibold hover:border-primary/50 transition-colors duration-300 focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background min-h-[48px] w-full sm:w-auto"
            >
              View Work
            </a>
