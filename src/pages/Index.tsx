@@ -7,7 +7,7 @@ import { HeroSection } from "@/components/motion/HeroSection";
 import { MarqueeTicker } from "@/components/motion/MarqueeTicker";
 import { SoundToggle } from "@/components/motion/SoundToggle";
 import { CustomCursor } from "@/components/motion/CustomCursor";
-import { CornerCrosses } from "@/components/motion/CornerCrosses";
+
 import { SectionNav } from "@/components/motion/SectionNav";
 import { StickyMobileCTA } from "@/components/motion/StickyMobileCTA";
 import { SectionLabelToast } from "@/components/motion/SectionLabelToast";
@@ -49,7 +49,7 @@ const Index = () => {
 
       <SoundToggle />
       <CustomCursor containerRef={cursorZoneRef} />
-      <CornerCrosses />
+      
       <SectionNav />
       <StickyMobileCTA />
       <SectionLabelToast />
