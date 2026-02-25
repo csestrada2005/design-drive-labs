@@ -7,7 +7,7 @@ import { SoundToggle } from "@/components/motion/SoundToggle";
 import { CustomCursor } from "@/components/motion/CustomCursor";
 import { CornerCrosses } from "@/components/motion/CornerCrosses";
 import { SectionNav } from "@/components/motion/SectionNav";
-import { HeroTransition } from "@/components/motion/HeroTransition";
+
 
 // ── Below-fold sections (lazy loaded) ────────────────────────────────────────
 
@@ -50,7 +50,7 @@ const Index = () => {
       <CustomCursor containerRef={cursorZoneRef} />
       <CornerCrosses />
       <SectionNav />
-      <HeroTransition />
+      
 
       <main ref={cursorZoneRef} className="relative z-[1]">
         {/* Above fold — eager */}
