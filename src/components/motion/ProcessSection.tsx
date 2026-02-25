@@ -1,6 +1,5 @@
-import { useRef } from "react";
+import { useRef, useState, useCallback } from "react";
 import { motion, useScroll, useTransform, useMotionValueEvent, useReducedMotion } from "framer-motion";
-import { useState } from "react";
 import { MicroCTA } from "@/components/motion/MicroCTA";
 
 const steps = [
@@ -140,17 +139,11 @@ export const ProcessSection = () => {
   });
 
   const [activeIndex, setActiveIndex] = useState(0);
-  const lastChangeTime = useRef(0);
 
   useMotionValueEvent(scrollYProgress, "change", (v) => {
-    const targetIdx = Math.min(Math.floor(v * steps.length), steps.length - 1);
-    const now = Date.now();
-    // Only allow stepping one at a time with a minimum interval
-    if (targetIdx !== activeIndex && now - lastChangeTime.current > 700) {
-      const direction = targetIdx > activeIndex ? 1 : -1;
-      setActiveIndex((prev) => Math.max(0, Math.min(steps.length - 1, prev + direction)));
-      lastChangeTime.current = now;
-    }
+    // Direct mapping: scroll progress → step index (no cooldown, no stale closure)
+    const idx = Math.min(Math.floor(v * steps.length), steps.length - 1);
+    setActiveIndex(idx);
   });
 
   return (
