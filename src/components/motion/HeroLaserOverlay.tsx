@@ -9,12 +9,77 @@ import { useRef, useEffect, useCallback } from "react";
  * - Lerp smoothing prevents jitter without adding perceptible lag
  * - All DOM updates via direct style manipulation — zero React state/re-renders
  * - Animates only transform, clip-path, opacity (compositor-friendly)
- * - Mobile: reduced glow, no box-shadow spread
- * - Reduced motion: simple opacity fade, no wipe
+ * - Spark particles emitted from laser edge — pooled DOM nodes, no GC
+ * - Mobile: reduced glow, fewer sparks
+ * - Reduced motion: simple opacity fade, no wipe/sparks
  */
 
 const LERP_FACTOR = 0.14;
 const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
+
+/* ── Spark particle pool (pure DOM, zero React) ── */
+const SPARK_POOL_SIZE = isMobile ? 8 : 16;
+const SPARK_LIFETIME = 600; // ms
+const SPARK_EMIT_INTERVAL = isMobile ? 120 : 60; // ms between emissions
+
+interface Spark {
+  el: HTMLDivElement;
+  alive: boolean;
+  birth: number;
+  x: number;   // % from left
+  vx: number;  // px/s
+  vy: number;  // px/s
+  size: number; // px
+}
+
+function createSparkPool(container: HTMLElement): Spark[] {
+  const pool: Spark[] = [];
+  for (let i = 0; i < SPARK_POOL_SIZE; i++) {
+    const el = document.createElement("div");
+    el.style.cssText =
+      "position:absolute;border-radius:50%;pointer-events:none;will-change:transform,opacity;opacity:0;background:hsl(var(--primary));";
+    container.appendChild(el);
+    pool.push({ el, alive: false, birth: 0, x: 0, vx: 0, vy: 0, size: 2 });
+  }
+  return pool;
+}
+
+function emitSpark(pool: Spark[], now: number) {
+  // Find a dead spark to reuse
+  const spark = pool.find((s) => !s.alive);
+  if (!spark) return;
+  spark.alive = true;
+  spark.birth = now;
+  spark.x = 5 + Math.random() * 90; // 5-95% horizontal
+  spark.vx = (Math.random() - 0.5) * 60; // px/s lateral drift
+  spark.vy = -(20 + Math.random() * 40); // px/s upward
+  spark.size = 1.5 + Math.random() * 2.5;
+  spark.el.style.width = `${spark.size}px`;
+  spark.el.style.height = `${spark.size}px`;
+}
+
+function updateSparks(pool: Spark[], now: number, laserY: number) {
+  for (const s of pool) {
+    if (!s.alive) continue;
+    const age = now - s.birth;
+    if (age > SPARK_LIFETIME) {
+      s.alive = false;
+      s.el.style.opacity = "0";
+      continue;
+    }
+    const t = age / SPARK_LIFETIME; // 0→1
+    const easeOut = 1 - t * t;
+    const dt = age / 1000;
+    const px = s.x; // stay in % for x base
+    const offsetX = s.vx * dt;
+    const offsetY = s.vy * dt * easeOut;
+    // opacity: bright start, fade out
+    const opacity = Math.max(0, (1 - t) * (0.6 + Math.random() * 0.15));
+    s.el.style.transform = `translate(${offsetX}px, ${laserY + offsetY}px) translateZ(0)`;
+    s.el.style.left = `${px}%`;
+    s.el.style.opacity = `${opacity}`;
+  }
+}
 
 export const HeroLaserOverlay = ({
   heroRef,
@@ -24,10 +89,14 @@ export const HeroLaserOverlay = ({
   const wipeRef = useRef<HTMLDivElement>(null);
   const laserRef = useRef<HTMLDivElement>(null);
   const rootRef = useRef<HTMLDivElement>(null);
+  const sparksContainerRef = useRef<HTMLDivElement>(null);
   const rafId = useRef(0);
   const isVisible = useRef(true);
   const currentProgress = useRef(0);
   const targetProgress = useRef(0);
+  const sparkPool = useRef<Spark[] | null>(null);
+  const lastEmitTime = useRef(0);
+  const lastProgress = useRef(0);
 
   const reducedMotion =
     typeof window !== "undefined" &&
@@ -54,12 +123,10 @@ export const HeroLaserOverlay = ({
     // Lerp for smoothness
     const prev = currentProgress.current;
     const next = prev + (raw - prev) * LERP_FACTOR;
-    // Snap to target if very close (avoid infinite lerp)
     const progress = Math.abs(raw - next) < 0.001 ? raw : next;
     currentProgress.current = progress;
 
     if (reducedMotion) {
-      // Simple opacity fade
       if (rootRef.current) {
         rootRef.current.style.opacity = `${progress * 0.85}`;
       }
@@ -71,14 +138,29 @@ export const HeroLaserOverlay = ({
       }
 
       // Laser edge position + visibility
+      const laserYpx = progress * heroH;
       if (laserRef.current) {
         const y = progress * 100;
         laserRef.current.style.transform = `translateY(${y}cqh) translateZ(0)`;
-        // Fade in quickly at start, fade out near end
         const fadeIn = Math.min(1, progress * 15);
         const fadeOut = progress > 0.92 ? Math.max(0, 1 - (progress - 0.92) / 0.08) : 1;
         laserRef.current.style.opacity = `${fadeIn * fadeOut}`;
       }
+
+      // Spark particles — only emit when scrolling (progress changing)
+      const now = performance.now();
+      if (sparkPool.current) {
+        const delta = Math.abs(progress - lastProgress.current);
+        // Only emit sparks when actively scrolling and laser is visible
+        if (delta > 0.001 && progress > 0.02 && progress < 0.95) {
+          if (now - lastEmitTime.current > SPARK_EMIT_INTERVAL) {
+            emitSpark(sparkPool.current, now);
+            lastEmitTime.current = now;
+          }
+        }
+        updateSparks(sparkPool.current, now, laserYpx);
+      }
+      lastProgress.current = progress;
     }
 
     if (isVisible.current) {
@@ -86,16 +168,20 @@ export const HeroLaserOverlay = ({
     }
   }, [heroRef, reducedMotion]);
 
-  // IntersectionObserver gates the rAF loop
+  // Initialize spark pool + IntersectionObserver
   useEffect(() => {
     const hero = heroRef.current;
     if (!hero) return;
+
+    // Create spark pool
+    if (!reducedMotion && sparksContainerRef.current && !sparkPool.current) {
+      sparkPool.current = createSparkPool(sparksContainerRef.current);
+    }
 
     const io = new IntersectionObserver(
       ([entry]) => {
         const wasVisible = isVisible.current;
         isVisible.current = entry.isIntersecting;
-        // Start loop when entering view
         if (entry.isIntersecting && !wasVisible) {
           rafId.current = requestAnimationFrame(tick);
         }
@@ -105,7 +191,6 @@ export const HeroLaserOverlay = ({
 
     io.observe(hero);
 
-    // Start immediately
     isVisible.current = true;
     rafId.current = requestAnimationFrame(tick);
 
@@ -114,7 +199,7 @@ export const HeroLaserOverlay = ({
       isVisible.current = false;
       cancelAnimationFrame(rafId.current);
     };
-  }, [heroRef, tick]);
+  }, [heroRef, tick, reducedMotion]);
 
   if (reducedMotion) {
     return (
@@ -147,6 +232,12 @@ export const HeroLaserOverlay = ({
           clipPath: "inset(0 0 100% 0)",
           willChange: "clip-path",
         }}
+      />
+
+      {/* Spark particles container */}
+      <div
+        ref={sparksContainerRef}
+        className="absolute inset-0 overflow-hidden"
       />
 
       {/* Laser edge — positioned at wipe boundary */}
