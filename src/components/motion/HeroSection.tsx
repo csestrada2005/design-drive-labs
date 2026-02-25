@@ -1,9 +1,43 @@
 import { useRef, useEffect, useState, useCallback } from "react";
-import { motion, useInView, AnimatePresence } from "framer-motion";
+import { motion, useInView, AnimatePresence, useReducedMotion, useMotionValue, useSpring } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import nebuOwl from "@/assets/nebu-owl.png";
 
 type Phase = 0 | 1 | 2 | 3 | 4;
+
+/* ── Magnetic CTA button ── */
+const MagneticCTA = ({ href, children }: { href: string; children: React.ReactNode }) => {
+  const ref = useRef<HTMLAnchorElement>(null);
+  const reduced = useReducedMotion();
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+  const springX = useSpring(x, { stiffness: 180, damping: 20 });
+  const springY = useSpring(y, { stiffness: 180, damping: 20 });
+
+  const handleMove = (e: React.MouseEvent) => {
+    if (reduced || !ref.current) return;
+    const rect = ref.current.getBoundingClientRect();
+    const dx = e.clientX - (rect.left + rect.width / 2);
+    const dy = e.clientY - (rect.top + rect.height / 2);
+    x.set(dx * 0.15);
+    y.set(dy * 0.15);
+  };
+  const handleLeave = () => { x.set(0); y.set(0); };
+
+  return (
+    <motion.a
+      ref={ref}
+      href={href}
+      onMouseMove={handleMove}
+      onMouseLeave={handleLeave}
+      style={{ x: springX, y: springY, boxShadow: "0 4px 20px -4px hsl(0 100% 50% / 0.4)" }}
+      whileTap={{ scale: 0.95 }}
+      className="group inline-flex items-center gap-2 px-8 py-4 rounded-full bg-primary text-primary-foreground font-semibold text-base sm:text-sm transition-shadow duration-300 focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background min-h-[48px]"
+    >
+      {children}
+    </motion.a>
+  );
+};
 
 const SumiHeroReveal = () => {
   const ref = useRef<HTMLDivElement>(null);
@@ -266,14 +300,10 @@ export const HeroSection = () => {
            animate={{ opacity: 1, y: 0 }}
            transition={{ delay: 2.2, duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
         >
-           <a
-             href="#contact"
-             className="group inline-flex items-center gap-2 px-8 py-4 rounded-full bg-primary text-primary-foreground font-semibold text-base sm:text-sm transition-all duration-300 hover:scale-105 active:scale-95 focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background min-h-[48px]"
-             style={{ boxShadow: "0 4px 20px -4px hsl(0 100% 50% / 0.4)" }}
-           >
-             Book a Strategy Call
-             <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-           </a>
+            <MagneticCTA href="#contact">
+              Book a Strategy Call
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            </MagneticCTA>
            <a
              href="#work"
              className="inline-flex items-center gap-2 px-8 py-4 rounded-full border border-border text-foreground text-base sm:text-sm font-semibold hover:border-primary/50 transition-colors duration-300 focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background min-h-[48px]"
