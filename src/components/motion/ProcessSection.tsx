@@ -1,5 +1,5 @@
 import { useRef, useState, useCallback } from "react";
-import { motion, useScroll, useTransform, useMotionValueEvent, useReducedMotion } from "framer-motion";
+import { motion, AnimatePresence, useScroll, useTransform, useMotionValueEvent, useReducedMotion } from "framer-motion";
 import { MicroCTA } from "@/components/motion/MicroCTA";
 
 const steps = [
@@ -166,24 +166,36 @@ export const ProcessSection = () => {
             <MorphAnchor activeIndex={activeIndex} />
           </div>
 
-          {/* Step info — delayed until morph animation completes */}
-          <motion.div
-            key={activeIndex}
-            className="text-center"
-            initial={prefersReduced ? { opacity: 0 } : { opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
-          >
-            <span className="font-mono text-xs sm:text-[11px] tracking-[0.3em] text-primary mb-3 block">
+          {/* Step info — no remount, just animate content changes */}
+          <div className="text-center min-h-[140px]">
+            <motion.span
+              key={`num-${activeIndex}`}
+              className="font-mono text-xs sm:text-[11px] tracking-[0.3em] text-primary mb-3 block"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.2 }}
+            >
               {steps[activeIndex].number}
-            </span>
-            <h3 className="font-display text-3xl sm:text-4xl md:text-5xl text-foreground leading-none mb-4 opacity-100">
+            </motion.span>
+            <motion.h3
+              key={`title-${activeIndex}`}
+              className="font-display text-3xl sm:text-4xl md:text-5xl text-foreground leading-none mb-4"
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+            >
               {steps[activeIndex].title}
-            </h3>
-            <p className="text-foreground/80 text-sm sm:text-base max-w-md mx-auto leading-relaxed">
+            </motion.h3>
+            <motion.p
+              key={`desc-${activeIndex}`}
+              className="text-foreground/80 text-sm sm:text-base max-w-md mx-auto leading-relaxed"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.3, delay: 0.05 }}
+            >
               {steps[activeIndex].desc}
-            </p>
-           </motion.div>
+            </motion.p>
+          </div>
 
            {/* Micro-CTA — visible on last step */}
            {activeIndex === steps.length - 1 && (
