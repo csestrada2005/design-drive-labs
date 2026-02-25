@@ -17,7 +17,7 @@ export const SectionReveal = ({ children }: { children: React.ReactNode }) => {
 
   // Circle clip expands from 0% to 150% (overshoot to ensure full reveal)
   const clipRadius = useTransform(scrollYProgress, [0, 1], ["0%", "150%"]);
-  const opacity = useTransform(scrollYProgress, [0, 0.15], [0, 1]);
+  const opacity = useTransform(scrollYProgress, [0, 0.08], [0, 1]);
 
   if (prefersReduced) {
     return (

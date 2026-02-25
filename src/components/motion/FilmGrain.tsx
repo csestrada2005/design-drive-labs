@@ -41,6 +41,7 @@ export const FilmGrain = () => {
     }
 
     const resize = () => {
+      // Match the bg-wrapper dimensions (viewport size since parent is fixed inset-0)
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
     };
@@ -75,7 +76,7 @@ export const FilmGrain = () => {
   return (
     <canvas
       ref={canvasRef}
-      className="pointer-events-none fixed inset-0 z-[9998] opacity-35"
+      className="pointer-events-none absolute inset-0 z-0 opacity-20"
       style={{ mixBlendMode: "overlay" }}
       aria-hidden="true"
     />

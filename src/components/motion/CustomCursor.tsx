@@ -49,7 +49,7 @@ export const CustomCursor = ({ containerRef }: CustomCursorProps) => {
   if (isTouchDevice || !visible) return null;
 
   return (
-    <div className="pointer-events-none fixed inset-0 z-[9999] hidden md:block">
+    <div className="pointer-events-none fixed inset-0 z-[49] hidden md:block">
       <motion.div
         className="fixed top-0 left-0 rounded-full"
         style={{
@@ -57,10 +57,10 @@ export const CustomCursor = ({ containerRef }: CustomCursorProps) => {
           y: glowY,
           translateX: "-50%",
           translateY: "-50%",
-          width: 180,
-          height: 180,
+          width: 160,
+          height: 160,
           background:
-            "radial-gradient(circle, hsl(0 88% 40% / 0.13) 0%, hsl(0 88% 40% / 0.05) 45%, transparent 70%)",
+            "radial-gradient(circle, hsl(0 88% 40% / 0.08) 0%, hsl(0 88% 40% / 0.03) 45%, transparent 70%)",
         }}
       />
     </div>

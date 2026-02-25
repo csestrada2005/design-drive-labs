@@ -193,11 +193,10 @@ export const LivingBackground = () => {
       <div
         ref={parallaxRef}
         aria-hidden="true"
-        className="pointer-events-none fixed inset-0 z-0"
+        className="pointer-events-none absolute inset-0 z-0"
         style={{
-          // Ambient radial highlight that drifts with cursor
           background:
-            "radial-gradient(ellipse 55% 40% at 50% 50%, hsl(0 0% 100% / 0.035), transparent 70%)",
+            "radial-gradient(ellipse 55% 40% at 50% 50%, hsl(0 0% 100% / 0.015), transparent 70%)",
           willChange: "transform",
         }}
       />
@@ -206,7 +205,7 @@ export const LivingBackground = () => {
       <div
         ref={ghostRef}
         aria-hidden="true"
-        className="pointer-events-none fixed inset-0 z-[1] overflow-hidden"
+        className="pointer-events-none absolute inset-0 z-[1] overflow-hidden"
         style={{ opacity: 0 }}
       >
         <div

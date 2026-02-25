@@ -234,6 +234,14 @@ export const HeroSection = () => {
       className="relative h-[100dvh] flex items-center justify-center overflow-hidden"
       id="hero"
     >
+      {/* Hero dark scrim — makes H1/CTA pop against textured bg */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          background: "hsl(var(--background) / 0.55)",
+        }}
+      />
+
       {/* Grid overlay — desktop only for perf */}
       <div
         className="absolute inset-0 opacity-[0.06] hidden sm:block"
@@ -249,7 +257,15 @@ export const HeroSection = () => {
         className="absolute inset-0 pointer-events-none"
         style={{
           background:
-            "radial-gradient(ellipse 80% 80% at 50% 50%, transparent 40%, hsl(var(--background) / 0.7) 100%)",
+            "radial-gradient(ellipse 80% 80% at 50% 50%, transparent 40%, hsl(var(--background) / 0.85) 100%)",
+        }}
+      />
+
+      {/* Bottom gradient fade — transition from hero to next section */}
+      <div
+        className="absolute bottom-0 left-0 right-0 h-40 pointer-events-none"
+        style={{
+          background: "linear-gradient(to bottom, transparent, hsl(var(--background) / 0.6))",
         }}
       />
 
@@ -266,7 +282,7 @@ export const HeroSection = () => {
 
          {/* Subhead */}
          <motion.p
-           className="mt-8 text-sm sm:text-base md:text-lg text-foreground/70 max-w-xl text-center leading-relaxed"
+           className="mt-8 text-sm sm:text-base md:text-lg text-foreground/80 max-w-xl text-center leading-relaxed"
            initial={{ opacity: 0, y: 14 }}
            animate={{ opacity: 1, y: 0 }}
            transition={{ delay: 1.8, duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
@@ -276,7 +292,7 @@ export const HeroSection = () => {
 
          {/* Micro-bullets */}
          <motion.ul
-           className="mt-6 flex flex-col sm:flex-row items-center gap-3 sm:gap-6 text-sm sm:text-sm text-foreground/55"
+           className="mt-6 flex flex-col sm:flex-row items-center gap-3 sm:gap-6 text-sm sm:text-sm text-foreground/70"
            initial={{ opacity: 0, y: 10 }}
            animate={{ opacity: 1, y: 0 }}
            transition={{ delay: 2.0, duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
@@ -316,7 +332,7 @@ export const HeroSection = () => {
 
         {/* Trust strip */}
         <motion.div
-          className="mt-12 flex flex-wrap justify-center items-center gap-4 sm:gap-6 text-xs sm:text-xs font-mono tracking-wider uppercase text-muted-foreground/60"
+          className="mt-12 flex flex-wrap justify-center items-center gap-4 sm:gap-6 text-xs sm:text-xs font-mono tracking-wider uppercase text-muted-foreground/80"
            initial={{ opacity: 0 }}
            animate={{ opacity: 1 }}
            transition={{ delay: 2.6, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
