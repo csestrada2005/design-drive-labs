@@ -2,6 +2,7 @@ import { useRef, useEffect, useState, useCallback } from "react";
 import { motion, useInView, AnimatePresence, useReducedMotion, useMotionValue, useSpring } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import nebuOwl from "@/assets/nebu-owl.png";
+import { HeroLaserOverlay } from "./HeroLaserOverlay";
 
 type Phase = 0 | 1 | 2 | 3 | 4;
 
@@ -269,8 +270,11 @@ export const HeroSection = () => {
         }}
       />
 
+      {/* Laser overlay — scroll-driven */}
+      <HeroLaserOverlay heroRef={ref} />
+
       {/* Owl logo + Sumi reveal centered */}
-      <div className="relative z-10 w-full px-4 flex flex-col items-center">
+      <div data-hero-content className="relative z-10 w-full px-4 flex flex-col items-center">
         <img
           src={nebuOwl}
           alt="Nebu Studio owl logo"
