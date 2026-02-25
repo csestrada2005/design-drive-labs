@@ -2,6 +2,7 @@ import { useRef, lazy, Suspense } from "react";
 
 // ── Critical above-fold (eager load) ────────────────────────────────────────
 import { HeroSection } from "@/components/motion/HeroSection";
+import { LogoBar } from "@/components/motion/LogoBar";
 import { MarqueeTicker } from "@/components/motion/MarqueeTicker";
 import { SoundToggle } from "@/components/motion/SoundToggle";
 import { CustomCursor } from "@/components/motion/CustomCursor";
@@ -21,6 +22,7 @@ const ServicesSection   = lazy(() => import("@/components/motion/ServicesSection
 const ChoosePathContact = lazy(() => import("@/components/motion/ChoosePathContact").then(m => ({ default: m.ChoosePathContact })));
 const DramaticFooter    = lazy(() => import("@/components/motion/DramaticFooter").then(m => ({ default: m.DramaticFooter })));
 const SectionReveal     = lazy(() => import("@/components/motion/SectionReveal").then(m => ({ default: m.SectionReveal })));
+const TestimonialCards  = lazy(() => import("@/components/motion/TestimonialCards").then(m => ({ default: m.TestimonialCards })));
 
 // Minimal skeleton while lazy chunks load
 const SectionSkeleton = () => (
@@ -56,6 +58,7 @@ const Index = () => {
       <main ref={cursorZoneRef} className="relative z-[1]">
         {/* Above fold — eager */}
         <HeroSection />
+        <LogoBar />
         <MarqueeTicker />
 
         {/* Below fold — fluid section reveals */}
@@ -81,6 +84,10 @@ const Index = () => {
           <SectionReveal>
             <GrowthImpact />
           </SectionReveal>
+        </Suspense>
+
+        <Suspense fallback={<SectionSkeleton />}>
+          <TestimonialCards />
         </Suspense>
 
         <Suspense fallback={<SectionSkeleton />}>
