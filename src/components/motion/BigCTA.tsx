@@ -3,6 +3,7 @@ import { motion, useInView } from "framer-motion";
 import { EasterEgg } from "@/components/motion/EasterEgg";
 import { MarqueeButton } from "@/components/motion/MarqueeButton";
 import { useScrollPaint } from "@/hooks/useScrollPaint";
+import { useServiceChooser } from "@/components/motion/ServiceChooserModal";
 
 const GradientMeshCanvas = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -49,6 +50,8 @@ export const BigCTA = () => {
   const isInView = useInView(ref, { once: true, margin: "-100px" });
   const headerPaint = useScrollPaint({ xDrift: 15 });
 
+  const { open: openServiceModal } = useServiceChooser();
+
   return (
     <section ref={ref} className="py-24 sm:py-32 relative overflow-hidden" id="cta">
       <GradientMeshCanvas />
@@ -68,7 +71,7 @@ export const BigCTA = () => {
             Tell us what you're building. We'll respond with a clear plan, timeline, and a proposal you can actually execute.
           </p>
           <div className="flex flex-wrap justify-center gap-3">
-            <MarqueeButton text="Make it Real" href="#contact" variant="primary" />
+            <MarqueeButton text="Make it Real" onClick={openServiceModal} variant="primary" />
             <MarqueeButton text="WhatsApp" href="https://wa.me/522213497090" variant="ghost" />
           </div>
 

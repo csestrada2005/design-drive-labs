@@ -3,6 +3,7 @@ import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { Menu, X, ArrowRight } from "lucide-react";
 import { useLenis } from "lenis/react";
 import { anchorScrollTo } from "@/lib/anchorScroll";
+import { useServiceChooser } from "@/components/motion/ServiceChooserModal";
 
 const menuLinks = [
   { label: "Home", id: "hero" },
@@ -21,6 +22,7 @@ export const TopMenu = () => {
   const [activeId, setActiveId] = useState("hero");
   const prefersReducedMotion = useReducedMotion();
   const lenis = useLenis();
+  const { open: openServiceModal } = useServiceChooser();
 
   // Scrollspy: track which section is in view
   useEffect(() => {
@@ -73,7 +75,7 @@ export const TopMenu = () => {
         <div className="flex items-center gap-2">
           {/* Header CTA — visible after scroll */}
           <button
-            onClick={(e) => { e.preventDefault(); anchorScrollTo("contact", lenis); }}
+            onClick={(e) => { e.preventDefault(); openServiceModal(); }}
             className="hidden sm:inline-flex items-center gap-1.5 px-5 py-2 rounded-full bg-primary text-primary-foreground text-xs font-semibold transition-all duration-300 hover:scale-105 active:scale-95"
             style={{
               boxShadow: "0 2px 12px hsl(0 100% 50% / 0.3)",
@@ -175,7 +177,7 @@ export const TopMenu = () => {
               transition={{ delay: 0.35 }}
             >
               <button
-                onClick={() => scrollTo("contact")}
+                onClick={() => { setOpen(false); openServiceModal(); }}
                 className="btn-primary w-full py-4 text-center text-sm"
               >
                 Book a Strategy Call

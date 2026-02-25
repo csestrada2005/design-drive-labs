@@ -3,13 +3,15 @@ import { motion, useInView, AnimatePresence, useReducedMotion, useMotionValue, u
 import { ArrowRight } from "lucide-react";
 import nebuOwl from "@/assets/nebu-owl.png";
 import { HeroLaserOverlay } from "./HeroLaserOverlay";
+import { useServiceChooser } from "@/components/motion/ServiceChooserModal";
 
 type Phase = 0 | 1 | 2 | 3 | 4;
 
 /* ── Magnetic CTA button ── */
-const MagneticCTA = ({ href, children }: { href: string; children: React.ReactNode }) => {
-  const ref = useRef<HTMLAnchorElement>(null);
+const MagneticCTA = ({ children }: { children: React.ReactNode }) => {
+  const ref = useRef<HTMLButtonElement>(null);
   const reduced = useReducedMotion();
+  const { open } = useServiceChooser();
   const x = useMotionValue(0);
   const y = useMotionValue(0);
   const springX = useSpring(x, { stiffness: 180, damping: 20 });
@@ -26,9 +28,9 @@ const MagneticCTA = ({ href, children }: { href: string; children: React.ReactNo
   const handleLeave = () => { x.set(0); y.set(0); };
 
   return (
-    <motion.a
+    <motion.button
       ref={ref}
-      href={href}
+      onClick={open}
       onMouseMove={handleMove}
       onMouseLeave={handleLeave}
       style={{ x: springX, y: springY, boxShadow: "0 4px 20px -4px hsl(0 100% 50% / 0.4)" }}
@@ -36,7 +38,7 @@ const MagneticCTA = ({ href, children }: { href: string; children: React.ReactNo
       className="group inline-flex items-center gap-2 px-8 py-4 rounded-full bg-primary text-primary-foreground font-semibold text-base sm:text-sm transition-shadow duration-300 focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background min-h-[48px]"
     >
       {children}
-    </motion.a>
+    </motion.button>
   );
 };
 
@@ -322,7 +324,7 @@ export const HeroSection = () => {
            animate={{ opacity: 1, y: 0 }}
            transition={{ delay: 2.2, duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
         >
-            <MagneticCTA href="#contact">
+            <MagneticCTA>
               Book a Strategy Call
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </MagneticCTA>

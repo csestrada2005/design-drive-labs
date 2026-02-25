@@ -10,6 +10,7 @@ import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import { FilmGrain } from "@/components/motion/FilmGrain";
 import { LivingBackground } from "@/components/motion/LivingBackground";
+import { ServiceChooserProvider } from "@/components/motion/ServiceChooserModal";
 
 import owlBg from "@/assets/owl-bg.png";
 
@@ -29,6 +30,7 @@ const App = () => (
     <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false}>
       <TooltipProvider>
         <ReactLenis root options={lenisOptions}>
+          <ServiceChooserProvider>
           <div
             id="bg-wrapper"
             className="fixed inset-0 z-[-1] overflow-hidden"
@@ -56,6 +58,7 @@ const App = () => (
             </BrowserRouter>
           </div>
           <TopMenu />
+          </ServiceChooserProvider>
         </ReactLenis>
       </TooltipProvider>
     </ThemeProvider>

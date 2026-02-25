@@ -1,6 +1,7 @@
 import { motion, useInView } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { useRef } from "react";
+import { useServiceChooser } from "@/components/motion/ServiceChooserModal";
 
 /**
  * MicroCTA — Discrete, consistent conversion nudge placed at the end of key sections.
@@ -19,6 +20,7 @@ interface MicroCTAProps {
 export const MicroCTA = ({ variant = "both", className = "" }: MicroCTAProps) => {
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, margin: "-40px" });
+  const { open: openServiceModal } = useServiceChooser();
 
   return (
     <motion.div
@@ -28,14 +30,14 @@ export const MicroCTA = ({ variant = "both", className = "" }: MicroCTAProps) =>
        animate={isInView ? { opacity: 1, y: 0 } : {}}
        transition={{ duration: 0.55, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
     >
-      <a
-        href="#contact"
+      <button
+        onClick={openServiceModal}
         className="group inline-flex items-center gap-2 px-6 py-3 rounded-full bg-primary text-primary-foreground font-semibold text-sm transition-all duration-300 hover:scale-[1.03] active:scale-95 focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background"
         style={{ boxShadow: "0 2px 16px -4px hsl(0 100% 50% / 0.35)" }}
       >
         Book a Strategy Call
         <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
-      </a>
+      </button>
 
       {variant === "both" && (
         <a

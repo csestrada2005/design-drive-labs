@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
+import { useServiceChooser } from "@/components/motion/ServiceChooserModal";
 
 /**
  * StickyMobileCTA — persistent bottom bar on mobile only (< sm breakpoint).
@@ -10,6 +11,7 @@ import { ArrowRight } from "lucide-react";
 export const StickyMobileCTA = () => {
   const [visible, setVisible] = useState(false);
   const prefersReducedMotion = useReducedMotion();
+  const { open: openServiceModal } = useServiceChooser();
 
   useEffect(() => {
     const check = () => {
@@ -54,18 +56,18 @@ export const StickyMobileCTA = () => {
           aria-label="Quick actions"
         >
            <div className="px-4 pb-1 flex gap-2">
-             <a
-               href="#contact"
-               className="flex-1 flex items-center justify-center gap-2 rounded-full bg-primary text-primary-foreground font-semibold text-sm active:scale-95 transition-transform focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background"
-               style={{
-                 height: 48,
-                 boxShadow: "0 2px 12px -2px hsl(0 100% 50% / 0.35)",
-               }}
-               aria-label="Book a Strategy Call — go to contact form"
-             >
-               Book a Strategy Call
-               <ArrowRight className="w-4 h-4" />
-            </a>
+             <button
+                onClick={openServiceModal}
+                className="flex-1 flex items-center justify-center gap-2 rounded-full bg-primary text-primary-foreground font-semibold text-sm active:scale-95 transition-transform focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+                style={{
+                  height: 48,
+                  boxShadow: "0 2px 12px -2px hsl(0 100% 50% / 0.35)",
+                }}
+                aria-label="Book a Strategy Call — choose a service"
+              >
+                Book a Strategy Call
+                <ArrowRight className="w-4 h-4" />
+             </button>
              <a
                href="#work"
                className="flex items-center justify-center px-5 rounded-full border border-border text-foreground text-sm font-semibold active:scale-95 transition-all hover:border-primary/50 focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background"
