@@ -97,7 +97,7 @@ const MorphAnchor = ({ activeIndex }: { activeIndex: number }) => {
               delay: i * 0.04,
             }}
             style={{
-              filter: !config.wireframe ? "drop-shadow(0 0 4px hsl(0 100% 50% / 0.5))" : "none",
+              filter: "none",
             }}
           />
         ))}
@@ -110,7 +110,7 @@ const MorphAnchor = ({ activeIndex }: { activeIndex: number }) => {
           fill="hsl(0 100% 50%)"
           animate={{ opacity: config.opacity * 0.6, r: config.wireframe ? 4 : 8 }}
           transition={{ duration: 0.5 }}
-          style={{ filter: "drop-shadow(0 0 12px hsl(0 100% 50% / 0.6))" }}
+          style={{ filter: "none" }}
         />
       </motion.svg>
 

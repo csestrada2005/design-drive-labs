@@ -2,7 +2,7 @@ import { useRef, useEffect, useState, useCallback } from "react";
 import { motion, useInView, useScroll, useTransform, useReducedMotion, AnimatePresence } from "framer-motion";
 import { ROICalculator } from "@/components/tools/ROICalculator";
 import { KineticType } from "@/components/motion/KineticType";
-import { useVelocitySkew } from "@/hooks/useVelocitySkew";
+
 
 /* ── Animated counter ── */
 const CountUp = ({ end, suffix = "", prefix = "" }: { end: number; suffix?: string; prefix?: string }) => {
@@ -109,7 +109,7 @@ const TensionReveal = ({ children, label = "Hold to reveal" }: { children: React
                   strokeDasharray={circumference}
                   strokeDashoffset={dashOffset}
                   style={{
-                    filter: holding ? "drop-shadow(0 0 6px hsl(0 100% 50% / 0.6))" : "none",
+                    filter: "none",
                   }}
                 />
               </svg>
@@ -266,8 +266,6 @@ const metrics = [
 export const GrowthImpact = () => {
   const ref = useRef<HTMLElement>(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
-  const velocitySkew = useVelocitySkew(3, 1.5);
-
   return (
     <section ref={ref} className="py-24 sm:py-32 relative overflow-hidden" id="growth">
       <div
@@ -277,8 +275,8 @@ export const GrowthImpact = () => {
       />
 
       <div className="container relative z-10">
-        {/* Header with velocity skew */}
-        <motion.div className="mb-16" style={velocitySkew.style}>
+        {/* Header */}
+        <div className="mb-16">
           <KineticType
             text="GROWTH IMPACT"
             as="h2"
@@ -289,7 +287,7 @@ export const GrowthImpact = () => {
            <p className="text-foreground/80 text-sm max-w-lg">
             We don't make "pretty pages." We build systems that sell. These are research-backed statistics on how design impacts business.
           </p>
-        </motion.div>
+         </div>
 
         {/* Core metric behind tension mechanic */}
         <div className="mb-20 flex justify-center">
@@ -344,8 +342,7 @@ export const GrowthImpact = () => {
           transition={{ duration: 0.7, delay: 0.6 }}
           className="mt-24 sm:mt-32"
         >
-          {/* Heading with velocity skew */}
-          <motion.div className="mb-10" style={velocitySkew.style}>
+          <div className="mb-10">
             <h3 className="font-display text-2xl sm:text-3xl md:text-4xl mb-3">
               Good Design Costs Money.{" "}
               <span className="text-primary">Bad Design Costs Revenue.</span>
@@ -353,7 +350,7 @@ export const GrowthImpact = () => {
            <p className="text-foreground/80 text-sm max-w-lg leading-relaxed">
               See what your revenue looks like now — and what it could look like with our design and technology systems working for you.
             </p>
-          </motion.div>
+           </div>
           <div className="w-full max-w-4xl mx-auto">
             <ROICalculator />
           </div>
