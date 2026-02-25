@@ -544,16 +544,14 @@ const MagnetDemo = () => {
 
 /* ═══════════════════════════════════════
    DEMO 5 — STAGGERED MENU (Components)
-   Menu overlay with stagger animation
+   Premium menu overlay with bold stagger + line decorations
 ═══════════════════════════════════════ */
 const menuItems = ["Projects", "About", "Services", "Process", "Contact"];
 
 const StaggeredMenu = () => {
   const [open, setOpen] = useState(false);
   const reduced = useReducedMotion();
-  const menuRef = useRef<HTMLDivElement>(null);
 
-  // ESC to close
   useEffect(() => {
     if (!open) return;
     const handler = (e: KeyboardEvent) => {
@@ -565,63 +563,123 @@ const StaggeredMenu = () => {
 
   return (
     <GlassCard>
-      <div className="relative flex flex-col items-center justify-center p-6" style={{ minHeight: 220 }}>
-        {/* Toggle button — repositioned when open */}
-        <button
-          onClick={() => setOpen(!open)}
-          className="w-11 h-11 rounded-xl flex items-center justify-center transition-all"
-          style={{
-            position: open ? "absolute" : "relative",
-            top: open ? 12 : undefined,
-            right: open ? 12 : undefined,
-            zIndex: 30,
-            background: open ? "hsl(0 100% 50% / 0.15)" : "hsl(0 0% 100% / 0.08)",
-            boxShadow: open
-              ? "inset 0 0 0 1px hsl(0 100% 50% / 0.3)"
-              : "inset 0 0 0 1px hsl(0 0% 100% / 0.1)",
-          }}
-          aria-label={open ? "Close menu" : "Open menu"}
-          aria-expanded={open}
-        >
-          {open ? (
-            <X size={16} className="text-primary" />
-          ) : (
-            <Menu size={16} className="text-foreground/60" />
-          )}
-        </button>
+      <div className="relative flex flex-col items-center justify-center p-6" style={{ minHeight: 240 }}>
+        {/* Open button — centered with pulse ring */}
+        {!open && (
+          <motion.button
+            onClick={() => setOpen(true)}
+            className="relative w-14 h-14 rounded-2xl flex items-center justify-center z-20"
+            style={{
+              background: "hsl(0 0% 100% / 0.06)",
+              boxShadow: "inset 0 0 0 1px hsl(0 0% 100% / 0.1)",
+            }}
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.92 }}
+            aria-label="Open menu"
+            aria-expanded={false}
+          >
+            <Menu size={20} className="text-foreground/60" />
+            {/* Pulse ring */}
+            <motion.div
+              className="absolute inset-0 rounded-2xl pointer-events-none"
+              style={{ border: "1px solid hsl(var(--primary) / 0.3)" }}
+              animate={reduced ? {} : { scale: [1, 1.4, 1.4], opacity: [0.6, 0, 0] }}
+              transition={{ duration: 2, repeat: Infinity, ease: "easeOut" }}
+            />
+          </motion.button>
+        )}
 
         {/* Menu overlay */}
         <AnimatePresence>
           {open && (
             <motion.div
-              ref={menuRef}
-              className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-4 rounded-2xl"
-              style={{
-                background: "hsl(0 0% 4% / 0.94)",
-              }}
+              className="absolute inset-0 z-10 flex flex-col items-start justify-center rounded-2xl overflow-hidden"
+              style={{ background: "hsl(0 0% 3% / 0.96)" }}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 0.25 }}
+              transition={{ duration: 0.3 }}
             >
-              {menuItems.map((item, i) => (
-                <motion.button
-                  key={item}
-                  className="text-foreground/80 hover:text-primary font-display text-xl tracking-[0.2em] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 rounded px-4 py-1.5"
-                  initial={reduced ? { opacity: 0 } : { opacity: 0, y: 28, filter: "blur(6px)" }}
-                  animate={reduced ? { opacity: 1 } : { opacity: 1, y: 0, filter: "blur(0px)" }}
-                  exit={reduced ? { opacity: 0 } : { opacity: 0, y: -14, filter: "blur(3px)" }}
-                  transition={{
-                    delay: i * 0.09,
-                    duration: 0.4,
-                    ease: [0.22, 1, 0.36, 1],
-                  }}
-                  onClick={() => setOpen(false)}
-                  tabIndex={open ? 0 : -1}
-                >
-                  {item}
-                </motion.button>
-              ))}
+              {/* Close button — top right, safe area */}
+              <motion.button
+                onClick={() => setOpen(false)}
+                className="absolute top-3 right-3 w-10 h-10 rounded-xl flex items-center justify-center z-30"
+                style={{
+                  background: "hsl(0 100% 50% / 0.12)",
+                  boxShadow: "inset 0 0 0 1px hsl(0 100% 50% / 0.25)",
+                }}
+                initial={{ opacity: 0, rotate: -90, scale: 0.5 }}
+                animate={{ opacity: 1, rotate: 0, scale: 1 }}
+                exit={{ opacity: 0, rotate: 90, scale: 0.5 }}
+                transition={{ delay: 0.15, duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+                whileHover={{ scale: 1.1, background: "hsl(0 100% 50% / 0.2)" }}
+                whileTap={{ scale: 0.9 }}
+                aria-label="Close menu"
+              >
+                <X size={14} className="text-primary" />
+              </motion.button>
+
+              {/* Decorative vertical line */}
+              <motion.div
+                className="absolute left-8 top-0 bottom-0 w-px pointer-events-none"
+                initial={{ scaleY: 0 }}
+                animate={{ scaleY: 1 }}
+                exit={{ scaleY: 0 }}
+                transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+                style={{ background: "hsl(0 0% 100% / 0.06)", transformOrigin: "top" }}
+              />
+
+              {/* Menu items */}
+              <div className="flex flex-col gap-1 pl-12 pr-16 w-full">
+                {menuItems.map((item, i) => (
+                  <motion.button
+                    key={item}
+                    className="group relative text-left py-2.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 rounded"
+                    initial={reduced ? { opacity: 0 } : { opacity: 0, x: -30, filter: "blur(8px)" }}
+                    animate={reduced ? { opacity: 1 } : { opacity: 1, x: 0, filter: "blur(0px)" }}
+                    exit={reduced ? { opacity: 0 } : { opacity: 0, x: 20, filter: "blur(4px)" }}
+                    transition={{
+                      delay: 0.08 + i * 0.1,
+                      duration: 0.45,
+                      ease: [0.22, 1, 0.36, 1],
+                    }}
+                    onClick={() => setOpen(false)}
+                    tabIndex={open ? 0 : -1}
+                  >
+                    {/* Item number */}
+                    <span className="absolute -left-6 top-1/2 -translate-y-1/2 text-[8px] font-mono text-foreground/15 tabular-nums">
+                      {String(i + 1).padStart(2, "0")}
+                    </span>
+                    {/* Dot indicator */}
+                    <motion.span
+                      className="absolute -left-3 top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full bg-primary"
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      transition={{ delay: 0.2 + i * 0.1, type: "spring", stiffness: 400, damping: 15 }}
+                    />
+                    <span className="font-display text-lg sm:text-xl tracking-[0.18em] text-foreground/70 group-hover:text-primary transition-colors duration-200">
+                      {item}
+                    </span>
+                    {/* Hover underline */}
+                    <motion.div
+                      className="absolute bottom-1 left-0 right-0 h-px bg-primary/30 origin-left"
+                      initial={{ scaleX: 0 }}
+                      whileHover={{ scaleX: 1 }}
+                      transition={{ duration: 0.25 }}
+                    />
+                  </motion.button>
+                ))}
+              </div>
+
+              {/* Bottom label */}
+              <motion.p
+                className="absolute bottom-3 left-0 right-0 text-center text-[9px] font-mono text-foreground/15 tracking-[0.3em]"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.6 }}
+              >
+                NAVIGATION DEMO
+              </motion.p>
             </motion.div>
           )}
         </AnimatePresence>
@@ -638,24 +696,36 @@ const StaggeredMenu = () => {
 
 /* ═══════════════════════════════════════
    DEMO 6 — CARD SWAP (Components)
-   Draggable/clickable card stack
+   Premium 3D card stack with rich animations
 ═══════════════════════════════════════ */
 const swapCards = [
-  { label: "STRATEGY", sub: "Research · Analysis · Direction", hue: 0 },
-  { label: "DESIGN", sub: "Visual · Motion · Identity", hue: 220 },
-  { label: "DEVELOP", sub: "Code · Deploy · Iterate", hue: 160 },
+  { label: "STRATEGY", sub: "Research · Analysis · Direction", hue: 0, emoji: "◆" },
+  { label: "DESIGN", sub: "Visual · Motion · Identity", hue: 220, emoji: "◇" },
+  { label: "DEVELOP", sub: "Code · Deploy · Iterate", hue: 160, emoji: "○" },
 ];
 
 const CardSwapDemo = () => {
   const [top, setTop] = useState(0);
+  const [isSwapping, setIsSwapping] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { margin: "-50px" });
   const reduced = useReducedMotion();
   const dragStartX = useRef(0);
   const [dragX, setDragX] = useState(0);
 
-  const next = () => setTop((t) => (t + 1) % swapCards.length);
-  const prev = () => setTop((t) => (t - 1 + swapCards.length) % swapCards.length);
+  const next = useCallback(() => {
+    if (isSwapping) return;
+    setIsSwapping(true);
+    setTop((t) => (t + 1) % swapCards.length);
+    setTimeout(() => setIsSwapping(false), 400);
+  }, [isSwapping]);
+
+  const prev = useCallback(() => {
+    if (isSwapping) return;
+    setIsSwapping(true);
+    setTop((t) => (t - 1 + swapCards.length) % swapCards.length);
+    setTimeout(() => setIsSwapping(false), 400);
+  }, [isSwapping]);
 
   const getOrder = (i: number) => ((i - top) % swapCards.length + swapCards.length) % swapCards.length;
 
@@ -664,26 +734,41 @@ const CardSwapDemo = () => {
       <div
         ref={ref}
         className="relative flex items-center justify-center p-6"
-        style={{ minHeight: 220, perspective: 600, perspectiveOrigin: "50% 40%" }}
+        style={{ minHeight: 240, perspective: 500, perspectiveOrigin: "50% 35%" }}
       >
-        <div className="relative" style={{ width: 200, height: 120, transformStyle: "preserve-3d" }}>
+        {/* Ambient glow behind cards */}
+        <motion.div
+          className="absolute pointer-events-none rounded-full"
+          style={{
+            width: 180,
+            height: 100,
+            left: "50%",
+            top: "45%",
+            x: "-50%",
+            y: "-50%",
+          }}
+          animate={{
+            background: `radial-gradient(ellipse, hsl(${swapCards[top].hue} 50% 30% / 0.12), transparent 70%)`,
+          }}
+          transition={{ duration: 0.6 }}
+        />
+
+        <div className="relative" style={{ width: 220, height: 130, transformStyle: "preserve-3d" }}>
           {swapCards.map((card, i) => {
             const order = getOrder(i);
-            // 3D tilt based on drag for top card
-            const tiltY = order === 0 && !reduced ? dragX * 0.15 : 0;
-            const tiltX = order === 0 && !reduced ? 2 : order * 3;
-            const dynamicShadowBlur = order === 0 ? 32 : 16;
-            const dynamicShadowSpread = order === 0 ? -4 : -8;
+            const isTop = order === 0;
+            const tiltY = isTop && !reduced ? dragX * 0.2 : 0;
+            const tiltX = isTop && !reduced ? 3 : order * 4;
 
             return (
               <motion.div
-                key={i}
-                className="absolute inset-0 flex flex-col justify-between p-5 rounded-xl cursor-grab active:cursor-grabbing select-none"
-                drag="x"
+                key={card.label}
+                className="absolute inset-0 flex flex-col justify-between p-5 rounded-2xl cursor-grab active:cursor-grabbing select-none overflow-hidden"
+                drag={isTop ? "x" : false}
                 dragConstraints={{ left: 0, right: 0 }}
-                dragElastic={0.3}
+                dragElastic={0.35}
                 onDrag={(_, info) => {
-                  if (order === 0) setDragX(info.offset.x);
+                  if (isTop) setDragX(info.offset.x);
                 }}
                 onDragStart={(_, info) => {
                   dragStartX.current = info.point.x;
@@ -691,48 +776,91 @@ const CardSwapDemo = () => {
                 onDragEnd={(_, info) => {
                   setDragX(0);
                   const dx = info.point.x - dragStartX.current;
-                  if (Math.abs(dx) > 50) {
+                  if (Math.abs(dx) > 40) {
                     dx > 0 ? prev() : next();
                   }
                 }}
                 onClick={() => {
-                  if (order === 0) next();
+                  if (isTop) next();
                 }}
                 style={{
-                  background: `linear-gradient(135deg, hsl(${card.hue} 35% 14%), hsl(${card.hue} 25% 10%))`,
-                  boxShadow: `inset 0 1px 0 hsl(0 0% 100% / 0.12), 0 ${4 + order * 2}px ${dynamicShadowBlur}px ${dynamicShadowSpread}px hsl(0 0% 0% / ${0.25 + order * 0.08})`,
+                  background: `linear-gradient(145deg, hsl(${card.hue} 30% 16%), hsl(${card.hue} 20% 9%))`,
+                  boxShadow: isTop
+                    ? `inset 0 1px 0 hsl(0 0% 100% / 0.15), 0 8px 40px -8px hsl(${card.hue} 40% 20% / 0.4), 0 2px 8px hsl(0 0% 0% / 0.2)`
+                    : `inset 0 1px 0 hsl(0 0% 100% / 0.08), 0 4px 16px hsl(0 0% 0% / 0.15)`,
                   zIndex: swapCards.length - order,
                   transformStyle: "preserve-3d",
+                  border: isTop ? "0.5px solid hsl(0 0% 100% / 0.1)" : "0.5px solid hsl(0 0% 100% / 0.04)",
                 }}
                 animate={
                   reduced
-                    ? { y: order * 8, opacity: order === 0 ? 1 : 0.4 }
+                    ? { y: order * 10, opacity: isTop ? 1 : 0.35 }
                     : {
-                        y: order * 14,
-                        scale: 1 - order * 0.07,
-                        opacity: order === 2 ? 0.25 : order === 1 ? 0.55 : 1,
+                        y: order * 16,
+                        scale: 1 - order * 0.08,
+                        opacity: order === 2 ? 0.2 : order === 1 ? 0.5 : 1,
                         rotateX: tiltX,
                         rotateY: tiltY,
                       }
                 }
-                transition={{ type: "spring", stiffness: 200, damping: 22 }}
+                transition={{ type: "spring", stiffness: 180, damping: 20 }}
               >
-                {/* Shine */}
+                {/* Animated shine sweep on top card */}
+                {isTop && !reduced && (
+                  <motion.div
+                    className="absolute inset-0 pointer-events-none rounded-2xl"
+                    initial={{ x: "-100%" }}
+                    animate={{ x: "200%" }}
+                    transition={{ duration: 1.5, delay: 0.2, ease: "easeInOut" }}
+                    key={top}
+                    style={{
+                      background: "linear-gradient(105deg, transparent 30%, hsl(0 0% 100% / 0.06) 45%, hsl(0 0% 100% / 0.12) 50%, hsl(0 0% 100% / 0.06) 55%, transparent 70%)",
+                      width: "60%",
+                    }}
+                  />
+                )}
+                {/* Static subtle shine */}
                 <div
-                  className="absolute inset-0 pointer-events-none rounded-xl"
+                  className="absolute inset-0 pointer-events-none rounded-2xl"
                   style={{
-                    background: order === 0
-                      ? "linear-gradient(115deg, hsl(0 0% 100% / 0.1) 0%, transparent 45%)"
-                      : "linear-gradient(115deg, hsl(0 0% 100% / 0.05) 0%, transparent 50%)",
+                    background: isTop
+                      ? "linear-gradient(115deg, hsl(0 0% 100% / 0.08) 0%, transparent 40%)"
+                      : "linear-gradient(115deg, hsl(0 0% 100% / 0.03) 0%, transparent 50%)",
                   }}
                 />
-                <div className="relative z-10">
-                  <p className="font-display text-xs tracking-[0.25em] text-foreground">{card.label}</p>
-                  <p className="text-[9px] text-foreground/40 mt-1 font-mono">{card.sub}</p>
+                <div className="relative z-10 flex items-start justify-between">
+                  <div>
+                    <p className="font-display text-sm tracking-[0.25em] text-foreground">{card.label}</p>
+                    <p className="text-[9px] text-foreground/35 mt-1.5 font-mono">{card.sub}</p>
+                  </div>
+                  <motion.span
+                    className="text-foreground/20 text-xs"
+                    animate={isTop && !reduced ? { rotate: [0, 180, 360] } : {}}
+                    transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
+                  >
+                    {card.emoji}
+                  </motion.span>
                 </div>
-                {order === 0 && (
-                  <div className="relative z-10 flex justify-end">
-                    <div className="w-1.5 h-1.5 rounded-full bg-primary" />
+                {isTop && (
+                  <div className="relative z-10 flex items-center justify-between">
+                    <div className="flex gap-1">
+                      {swapCards.map((_, idx) => (
+                        <motion.div
+                          key={idx}
+                          className="rounded-full"
+                          style={{
+                            width: idx === top ? 12 : 4,
+                            height: 4,
+                            background: idx === top ? "hsl(var(--primary))" : "hsl(0 0% 100% / 0.15)",
+                          }}
+                          layout
+                          transition={{ type: "spring", stiffness: 300, damping: 25 }}
+                        />
+                      ))}
+                    </div>
+                    <span className="text-[8px] font-mono text-foreground/20 tabular-nums">
+                      {String(top + 1).padStart(2, "0")}/{String(swapCards.length).padStart(2, "0")}
+                    </span>
                   </div>
                 )}
               </motion.div>
@@ -740,29 +868,38 @@ const CardSwapDemo = () => {
           })}
         </div>
 
-        {/* Prev/Next */}
-        <div className="absolute bottom-3 right-3 flex gap-1 z-10">
-          <button
+        {/* Prev/Next — improved buttons */}
+        <div className="absolute bottom-3 right-3 flex gap-1.5 z-10">
+          <motion.button
             onClick={prev}
-            className="w-7 h-7 rounded-md flex items-center justify-center transition-colors"
-            style={{ background: "hsl(0 0% 100% / 0.05)" }}
+            className="w-8 h-8 rounded-lg flex items-center justify-center"
+            style={{
+              background: "hsl(0 0% 100% / 0.05)",
+              border: "0.5px solid hsl(0 0% 100% / 0.08)",
+            }}
+            whileHover={{ background: "hsl(0 0% 100% / 0.1)", scale: 1.05 }}
+            whileTap={{ scale: 0.9 }}
             aria-label="Previous card"
           >
-            <ChevronLeft size={12} className="text-foreground/30" />
-          </button>
-          <button
+            <ChevronLeft size={14} className="text-foreground/40" />
+          </motion.button>
+          <motion.button
             onClick={next}
-            className="w-7 h-7 rounded-md flex items-center justify-center transition-colors"
-            style={{ background: "hsl(0 0% 100% / 0.05)" }}
+            className="w-8 h-8 rounded-lg flex items-center justify-center"
+            style={{
+              background: "hsl(0 0% 100% / 0.05)",
+              border: "0.5px solid hsl(0 0% 100% / 0.08)",
+            }}
+            whileHover={{ background: "hsl(0 0% 100% / 0.1)", scale: 1.05 }}
+            whileTap={{ scale: 0.9 }}
             aria-label="Next card"
           >
-            <ChevronRight size={12} className="text-foreground/30" />
-          </button>
+            <ChevronRight size={14} className="text-foreground/40" />
+          </motion.button>
         </div>
       </div>
     </GlassCard>
-  );
-};
+  );};
 
 /* ═══════════════════════════════════════
    DEMOS CONFIG
