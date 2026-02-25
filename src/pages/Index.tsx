@@ -1,4 +1,5 @@
 import { useRef, lazy, Suspense } from "react";
+import { LaserTransition } from "@/components/motion/LaserTransition";
 
 // ── Critical above-fold (eager load) ────────────────────────────────────────
 import { HeroSection } from "@/components/motion/HeroSection";
@@ -72,6 +73,9 @@ const Index = () => {
             <DesignLab />
           </SectionReveal>
         </Suspense>
+
+        {/* Laser sweep between Design Lab → How We Work */}
+        <LaserTransition />
 
         <Suspense fallback={<SectionSkeleton />}>
           <SectionReveal>
