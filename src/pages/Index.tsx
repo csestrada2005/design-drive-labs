@@ -23,6 +23,7 @@ const ChoosePathContact = lazy(() => import("@/components/motion/ChoosePathConta
 const DramaticFooter    = lazy(() => import("@/components/motion/DramaticFooter").then(m => ({ default: m.DramaticFooter })));
 const SectionReveal     = lazy(() => import("@/components/motion/SectionReveal").then(m => ({ default: m.SectionReveal })));
 const TestimonialCards  = lazy(() => import("@/components/motion/TestimonialCards").then(m => ({ default: m.TestimonialCards })));
+const FAQSection        = lazy(() => import("@/components/motion/FAQSection").then(m => ({ default: m.FAQSection })));
 
 // Minimal skeleton while lazy chunks load
 const SectionSkeleton = () => (
@@ -99,6 +100,12 @@ const Index = () => {
         <Suspense fallback={<SectionSkeleton />}>
           <SectionReveal>
             <StandardsSection />
+          </SectionReveal>
+        </Suspense>
+
+        <Suspense fallback={<SectionSkeleton />}>
+          <SectionReveal>
+            <FAQSection />
           </SectionReveal>
         </Suspense>
 
