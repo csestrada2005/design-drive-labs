@@ -1,5 +1,5 @@
 import { useRef, lazy, Suspense } from "react";
-import { LaserTransition } from "@/components/motion/LaserTransition";
+import { LaserWipeTransition } from "@/components/motion/LaserWipeTransition";
 
 // ── Critical above-fold (eager load) ────────────────────────────────────────
 import { HeroSection } from "@/components/motion/HeroSection";
@@ -58,7 +58,6 @@ const Index = () => {
       <main ref={cursorZoneRef} className="relative z-[1]">
         {/* Above fold — eager */}
         <HeroSection />
-        
         <MarqueeTicker />
 
         {/* Below fold — fluid section reveals */}
@@ -74,8 +73,8 @@ const Index = () => {
           </SectionReveal>
         </Suspense>
 
-        {/* Laser sweep between Design Lab → How We Work */}
-        <LaserTransition />
+        {/* Full-screen laser wipe: Design Lab → How We Work */}
+        <LaserWipeTransition />
 
         <Suspense fallback={<SectionSkeleton />}>
           <SectionReveal>
