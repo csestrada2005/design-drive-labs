@@ -24,7 +24,7 @@ export const StickyMobileCTA = () => {
         : Infinity;
 
       // Show after 25% scroll OR past hero (1vh), hide near contact
-      const pastThreshold = scrollPct >= 0.25 || scrollY > vh * 0.8;
+      const pastThreshold = scrollPct >= 0.15 || scrollY > vh * 0.6;
       const beforeContact = scrollY < contactTop - vh * 0.5;
 
       setVisible(pastThreshold && beforeContact);
@@ -53,27 +53,27 @@ export const StickyMobileCTA = () => {
           role="navigation"
           aria-label="Quick actions"
         >
-          <div className="px-3 pb-1 flex gap-2">
-            <a
-              href="#contact"
-              className="flex-1 flex items-center justify-center gap-1.5 rounded-full bg-primary text-primary-foreground font-semibold text-xs active:scale-95 transition-transform focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background"
-              style={{
-                height: 44,
-                boxShadow: "0 2px 12px -2px hsl(0 100% 50% / 0.35)",
-              }}
-              aria-label="Book a call — go to contact form"
-            >
-              Book a Call
-              <ArrowRight className="w-3.5 h-3.5" />
+           <div className="px-4 pb-1 flex gap-2">
+             <a
+               href="#contact"
+               className="flex-1 flex items-center justify-center gap-2 rounded-full bg-primary text-primary-foreground font-semibold text-sm active:scale-95 transition-transform focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+               style={{
+                 height: 48,
+                 boxShadow: "0 2px 12px -2px hsl(0 100% 50% / 0.35)",
+               }}
+               aria-label="Book a Strategy Call — go to contact form"
+             >
+               Book a Strategy Call
+               <ArrowRight className="w-4 h-4" />
             </a>
-            <a
-              href="#work"
-              className="flex items-center justify-center px-4 rounded-full border border-border text-foreground text-xs font-semibold active:scale-95 transition-all hover:border-primary/50 focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background"
-              style={{ height: 44 }}
-              aria-label="See our work — go to portfolio"
-            >
-              See Work
-            </a>
+             <a
+               href="#work"
+               className="flex items-center justify-center px-5 rounded-full border border-border text-foreground text-sm font-semibold active:scale-95 transition-all hover:border-primary/50 focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+               style={{ height: 48 }}
+               aria-label="See our work — go to portfolio"
+             >
+               Work
+             </a>
           </div>
         </motion.div>
       )}
