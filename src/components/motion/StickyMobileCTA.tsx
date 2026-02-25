@@ -46,33 +46,30 @@ export const StickyMobileCTA = () => {
           {...animProps}
           className="fixed bottom-0 left-0 right-0 z-40 sm:hidden"
           style={{
-            paddingBottom: "env(safe-area-inset-bottom, 0px)",
-            background: "linear-gradient(to top, hsl(var(--background)) 65%, hsl(var(--background) / 0))",
-            paddingTop: 16,
+            paddingBottom: "max(env(safe-area-inset-bottom, 0px), 8px)",
+            background: "linear-gradient(to top, hsl(var(--background)) 80%, hsl(var(--background) / 0))",
+            paddingTop: 8,
           }}
           role="navigation"
           aria-label="Quick actions"
         >
-          <div className="px-4 pb-3 flex gap-2">
-            {/* Primary CTA — min 44px tap target */}
+          <div className="px-3 pb-1 flex gap-2">
             <a
               href="#contact"
-              className="flex-1 flex items-center justify-center gap-2 rounded-full bg-primary text-primary-foreground font-semibold text-sm active:scale-95 transition-transform focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+              className="flex-1 flex items-center justify-center gap-1.5 rounded-full bg-primary text-primary-foreground font-semibold text-xs active:scale-95 transition-transform focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background"
               style={{
-                minHeight: 48,
-                boxShadow: "0 4px 20px -4px hsl(0 100% 50% / 0.4)",
+                height: 44,
+                boxShadow: "0 2px 12px -2px hsl(0 100% 50% / 0.35)",
               }}
               aria-label="Book a call — go to contact form"
             >
               Book a Call
-              <ArrowRight className="w-4 h-4" />
+              <ArrowRight className="w-3.5 h-3.5" />
             </a>
-
-            {/* Secondary CTA */}
             <a
               href="#work"
-              className="flex items-center justify-center px-5 rounded-full border border-border text-foreground text-sm font-semibold active:scale-95 transition-all hover:border-primary/50 focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background"
-              style={{ minHeight: 48 }}
+              className="flex items-center justify-center px-4 rounded-full border border-border text-foreground text-xs font-semibold active:scale-95 transition-all hover:border-primary/50 focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+              style={{ height: 44 }}
               aria-label="See our work — go to portfolio"
             >
               See Work

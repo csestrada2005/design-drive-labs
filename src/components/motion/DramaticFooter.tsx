@@ -283,7 +283,7 @@ export const DramaticFooter = () => {
   const isInView = useInView(ref, { once: true, margin: "-50px" });
 
   return (
-    <footer ref={ref} className="relative overflow-hidden pt-16 pb-10">
+    <footer ref={ref} className="relative overflow-hidden pt-16 pb-20 sm:pb-10">
       {/* Subtle film-grain for filmic feel */}
       <div
         className="absolute inset-0 opacity-[0.035] pointer-events-none"
