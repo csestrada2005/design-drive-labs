@@ -81,8 +81,6 @@ export const HeroLaserOverlay = ({
 
     overlay.style.opacity = "1";
     overlay.style.clipPath = `inset(${topPct}% 0 ${bottomPct}% 0)`;
-    overlay.style.top = "0";
-    overlay.style.height = "100%";
 
     // Overlay color — dark with slight primary tint
     const overlayOpacity = 0.6 + progress * 0.35;
@@ -127,7 +125,7 @@ export const HeroLaserOverlay = ({
       {/* Main overlay — covers hero */}
       <div
         ref={overlayRef}
-        className="absolute left-0 right-0"
+        className="absolute inset-0"
         style={{
           opacity: 0,
           willChange: "clip-path, opacity",
