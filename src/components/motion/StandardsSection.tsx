@@ -1,6 +1,5 @@
 import { useRef } from "react";
 import { motion, useInView, useReducedMotion } from "framer-motion";
-import { BlackSandReveal } from "@/components/motion/BlackSandReveal";
 import { KineticType } from "@/components/motion/KineticType";
 import { useGlassParallax } from "@/hooks/useGlassParallax";
 import { MetricsHUD } from "@/components/motion/MetricsHUD";
@@ -81,26 +80,18 @@ export const StandardsSection = () => {
       <div className="container relative z-10">
         {/* Header — TEXT-ONLY Black Sand Reveal */}
         <div className="mb-16 sm:mb-20 max-w-2xl">
-          <BlackSandReveal mode="text" delay={100}>
-            <div>
-              <p className="text-[10px] font-mono tracking-[0.3em] uppercase text-primary mb-4">
-
-              </p>
-              <h2 className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl mb-5 text-foreground">
-                MINIMUM GUARANTEED OUTPUT.
-              </h2>
-
-              <motion.p
-                className="text-foreground/80 text-sm leading-relaxed max-w-md"
-                initial={{ opacity: 0, y: 16 }}
-                animate={isInView ? { opacity: 1, y: 0 } : {}}
-                transition={{ duration: 0.6, delay: 0.7 }}>
-
-                The baseline features.
-              
-              </motion.p>
-            </div>
-          </BlackSandReveal>
+          <p className="text-[10px] font-mono tracking-[0.3em] uppercase text-primary mb-4">
+          </p>
+          <h2 className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl mb-5 text-foreground">
+            MINIMUM GUARANTEED OUTPUT.
+          </h2>
+          <motion.p
+            className="text-foreground/80 text-sm leading-relaxed max-w-md"
+            initial={{ opacity: 0, y: 16 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.6, delay: 0.7 }}>
+            The baseline features.
+          </motion.p>
         </div>
 
         {/* Grid */}

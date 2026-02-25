@@ -10,7 +10,7 @@ import { SectionNav } from "@/components/motion/SectionNav";
 import { HeroTransition } from "@/components/motion/HeroTransition";
 
 // ── Below-fold sections (lazy loaded) ────────────────────────────────────────
-const BuildModes        = lazy(() => import("@/components/motion/BuildModes").then(m => ({ default: m.BuildModes })));
+
 const DesignLab         = lazy(() => import("@/components/motion/DesignLab").then(m => ({ default: m.DesignLab })));
 const ProcessSection    = lazy(() => import("@/components/motion/ProcessSection").then(m => ({ default: m.ProcessSection })));
 const GrowthImpact      = lazy(() => import("@/components/motion/GrowthImpact").then(m => ({ default: m.GrowthImpact })));
@@ -60,12 +60,6 @@ const Index = () => {
         {/* Below fold — fluid section reveals */}
         <Suspense fallback={<SectionSkeleton />}>
           <SectionReveal>
-            <BuildModes />
-          </SectionReveal>
-        </Suspense>
-
-        <Suspense fallback={<SectionSkeleton />}>
-          <SectionReveal>
             <ServicesSection />
           </SectionReveal>
         </Suspense>
@@ -77,9 +71,7 @@ const Index = () => {
         </Suspense>
 
         <Suspense fallback={<SectionSkeleton />}>
-          <SectionReveal>
-            <ProcessSection />
-          </SectionReveal>
+          <ProcessSection />
         </Suspense>
 
         <Suspense fallback={<SectionSkeleton />}>
