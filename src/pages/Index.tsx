@@ -3,7 +3,7 @@ import { LaserTransition } from "@/components/motion/LaserTransition";
 
 // ── Critical above-fold (eager load) ────────────────────────────────────────
 import { HeroSection } from "@/components/motion/HeroSection";
-import { LogoBar } from "@/components/motion/LogoBar";
+
 import { MarqueeTicker } from "@/components/motion/MarqueeTicker";
 import { SoundToggle } from "@/components/motion/SoundToggle";
 import { CustomCursor } from "@/components/motion/CustomCursor";
@@ -58,7 +58,7 @@ const Index = () => {
       <main ref={cursorZoneRef} className="relative z-[1]">
         {/* Above fold — eager */}
         <HeroSection />
-        <LogoBar />
+        
         <MarqueeTicker />
 
         {/* Below fold — fluid section reveals */}
