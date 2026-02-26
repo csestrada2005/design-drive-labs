@@ -24,19 +24,19 @@ const PROJECTS = [
   {
     id: "bazar", title: "Bazar Centenario", image: workBazar,
     tag: "Online Store", context: "Multi-vendor marketplace going digital.",
-    whatWeDid: "Product catalog · payments · vendor dashboard",
+    whatWeDid: "Product Catalog · Vendor Dashboard · AI Simulator",
     outcome: "Streamlined ops + faster time-to-purchase",
   },
   {
     id: "jewelry", title: "Joyería Centenario", image: workJewelry,
     tag: "Brand & Web", context: "Luxury jewelry brand building online presence.",
-    whatWeDid: "Brand identity · premium web · product photography",
+    whatWeDid: "Premium Customized Website · Shopify Integration · AOV+ CRO+ Intended Design",
     outcome: "Elevated brand perception + qualified lead flow",
   },
   {
     id: "rawpaw", title: "Raw Paw", image: workRawpaw,
     tag: "D2C Brand", context: "Pet food startup scaling paid traffic.",
-    whatWeDid: "Landing pages · conversion tracking · A/B testing",
+    whatWeDid: "Premium Customized Website · AI Integrated Sales System · Customer Dashboard",
     outcome: "Higher ROAS + lower acquisition cost",
   },
   {
@@ -48,7 +48,7 @@ const PROJECTS = [
   {
     id: "armahas", title: "Armahas", image: workArmahas,
     tag: "Web Platform", context: "Growing brand needing a lead-gen engine.",
-    whatWeDid: "Marketing site · lead capture · analytics",
+    whatWeDid: "Brand Style Oriented Website · Admin Dashboard · Analytics",
     outcome: "Increased inbound leads + clearer funnel",
   },
 ];

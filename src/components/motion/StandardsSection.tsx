@@ -17,18 +17,8 @@ const standards = [
 },
 {
   id: "cro",
-  label: "CRO Foundations",
+  label: "AOV and CRO Foundations",
   desc: "Hierarchy, trust signals, and friction removal baked into every layout."
-},
-{
-  id: "analytics",
-  label: "Analytics Tracking",
-  desc: "Events, funnels, and heatmaps configured from day one."
-},
-{
-  id: "seo",
-  label: "SEO Baseline",
-  desc: "Semantic HTML, meta structure, schema markup, and crawlability."
 },
 {
   id: "handoff",

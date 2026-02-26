@@ -64,13 +64,8 @@ export const TopMenu = () => {
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.5, ease: [0.25, 1, 0.5, 1] }}
       >
-        {/* Logo */}
-        <motion.span
-          className="font-display text-xs sm:text-sm tracking-[0.15em] text-foreground/80"
-          style={{ opacity: scrolled ? 1 : 0, transition: "opacity 0.3s" }}
-        >
-          NEBU
-        </motion.span>
+        {/* Spacer (logo removed) */}
+        <div />
 
         <div className="flex items-center gap-2">
           {/* Header CTA — visible after scroll */}
