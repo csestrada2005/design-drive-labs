@@ -2,6 +2,7 @@ import { useRef, useState, useEffect, useCallback, useMemo } from "react";
 import { motion, useInView, AnimatePresence, useSpring } from "framer-motion";
 import { RotateCcw, Sparkles, Menu, X, ChevronLeft, ChevronRight, Grip, Layers, Zap } from "lucide-react";
 import { KineticType } from "@/components/motion/KineticType";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 /* ─── REDUCED MOTION HOOK ─── */
 const useReducedMotion = () => {
@@ -44,8 +45,8 @@ const GlassCard = ({ children, className = "" }: { children: React.ReactNode; cl
 type DemoType = "interactive" | "auto";
 interface DemoConfig {
   id: string;
-  title: string;
-  category: string;
+  titleKey: string;
+  categoryKey: string;
   type: DemoType;
   icon: React.ReactNode;
   component: React.ComponentType;
@@ -53,6 +54,7 @@ interface DemoConfig {
 
 const DemoTile = ({ demo }: { demo: DemoConfig }) => {
   const DemoComponent = demo.component;
+  const { t } = useLanguage();
   return (
     <div className="flex flex-col h-full">
       {/* Card header */}
@@ -60,9 +62,9 @@ const DemoTile = ({ demo }: { demo: DemoConfig }) => {
         <span className="text-foreground/40">{demo.icon}</span>
         <div className="flex-1 min-w-0">
           <span className="text-[11px] font-mono tracking-[0.2em] text-foreground font-medium block leading-tight">
-            {demo.title}
+            {t(demo.titleKey)}
           </span>
-          <span className="text-[9px] font-mono tracking-wider text-foreground/30">{demo.category}</span>
+          <span className="text-[9px] font-mono tracking-wider text-foreground/30">{t(demo.categoryKey)}</span>
         </div>
         <span
           className="text-[8px] font-mono tracking-[0.18em] px-2 py-0.5 rounded-full shrink-0"
@@ -71,7 +73,7 @@ const DemoTile = ({ demo }: { demo: DemoConfig }) => {
             color: demo.type === "interactive" ? "hsl(0 100% 50%)" : "hsl(0 0% 100% / 0.4)",
           }}
         >
-          {demo.type === "interactive" ? "INTERACTIVE" : "AUTO DEMO"}
+          {demo.type === "interactive" ? t("lab.interactive") : t("lab.autoDemo")}
         </span>
       </div>
       {/* Card body */}
@@ -79,6 +81,47 @@ const DemoTile = ({ demo }: { demo: DemoConfig }) => {
         <DemoComponent />
       </div>
     </div>
+  );
+};
+
+/* ── Small label components that use translations ── */
+const GlassLabel = () => {
+  const { t } = useLanguage();
+  return (
+    <>
+      <p className="font-display text-lg tracking-[0.15em] text-foreground mb-1">{t("lab.glassSurface")}</p>
+      <p className="text-[10px] font-mono text-foreground/30">{t("lab.glassSub")}</p>
+    </>
+  );
+};
+const GridScanLabel = ({ hovering }: { hovering: boolean }) => {
+  const { t } = useLanguage();
+  return (
+    <>
+      <p className="font-display text-lg tracking-[0.15em] text-foreground mb-1">{t("lab.gridScan")}</p>
+      <p className="text-[10px] font-mono text-foreground/30">{hovering ? t("lab.gridScanAccel") : t("lab.gridScanHover")}</p>
+    </>
+  );
+};
+const ImageTrailLabel = ({ enabled }: { enabled: boolean }) => {
+  const { t } = useLanguage();
+  return (
+    <>
+      <p className="font-display text-lg tracking-[0.15em] text-foreground mb-1">{t("lab.imageTrail")}</p>
+      <p className="text-[10px] font-mono text-foreground/30">{enabled ? t("lab.imageTrailSub") : t("lab.imageTrailOff")}</p>
+    </>
+  );
+};
+const MagnetLabel = () => {
+  const { t } = useLanguage();
+  return <span className="relative z-10">{t("lab.magnet")}</span>;
+};
+const MagnetSublabel = ({ reduced }: { reduced: boolean }) => {
+  const { t } = useLanguage();
+  return (
+    <p className="absolute bottom-3 left-0 right-0 text-center text-[10px] font-mono text-foreground/25">
+      {reduced ? t("lab.magnetTap") : t("lab.magnetSub")}
+    </p>
   );
 };
 
@@ -184,8 +227,7 @@ const GlassSurface = () => {
               border: "0.5px solid hsl(0 0% 100% / 0.08)",
             }}
           />
-          <p className="font-display text-lg tracking-[0.15em] text-foreground mb-1">GLASS PANEL</p>
-          <p className="text-[10px] font-mono text-foreground/30">Move cursor to refract light</p>
+          <GlassLabel />
         </div>
 
         {/* Intensity toggle */}
@@ -282,10 +324,7 @@ const GridScan = () => {
         )}
 
         <div className="relative z-10 text-center">
-          <p className="font-display text-lg tracking-[0.15em] text-foreground mb-1">GRID SCAN</p>
-          <p className="text-[10px] font-mono text-foreground/30">
-            {hovering ? "ACCELERATING…" : "Hover to accelerate"}
-          </p>
+          <GridScanLabel hovering={hovering} />
         </div>
 
         {/* Speed control */}
@@ -406,10 +445,7 @@ const ImageTrail = () => {
         </AnimatePresence>
 
         <div className="relative z-10 text-center">
-          <p className="font-display text-lg tracking-[0.15em] text-foreground mb-1">IMAGE TRAIL</p>
-          <p className="text-[10px] font-mono text-foreground/30">
-            {enabled ? "Move cursor to spawn" : "Trail disabled"}
-          </p>
+          <ImageTrailLabel enabled={enabled} />
         </div>
 
         {/* Controls */}
@@ -530,13 +566,11 @@ const MagnetDemo = () => {
             whileTap={{ scale: 0.95 }}
             animate={hovering && !reduced ? { boxShadow: "inset 0 1px 0 hsl(0 0% 100% / 0.2), 0 4px 20px hsl(0 100% 50% / 0.15), 0 0 40px hsl(0 100% 50% / 0.08)" } : {}}
           >
-            <span className="relative z-10">MAGNETIC</span>
+            <MagnetLabel />
           </motion.button>
         </motion.div>
 
-        <p className="absolute bottom-3 left-0 right-0 text-center text-[10px] font-mono text-foreground/25">
-          {reduced ? "Tap the button" : "Move cursor near the button"}
-        </p>
+        <MagnetSublabel reduced={reduced} />
       </div>
     </GlassCard>
   );
@@ -546,11 +580,12 @@ const MagnetDemo = () => {
    DEMO 5 — STAGGERED MENU (Components)
    Premium menu overlay with bold stagger + line decorations
 ═══════════════════════════════════════ */
-const menuItems = ["Projects", "About", "Services", "Process", "Contact"];
+const menuItemKeys = ["lab.menu.projects", "lab.menu.about", "lab.menu.services", "lab.menu.process", "lab.menu.contact"];
 
 const StaggeredMenu = () => {
   const [open, setOpen] = useState(false);
   const reduced = useReducedMotion();
+  const { t } = useLanguage();
 
   useEffect(() => {
     if (!open) return;
@@ -631,9 +666,9 @@ const StaggeredMenu = () => {
 
               {/* Menu items */}
               <div className="flex flex-col gap-1 pl-12 pr-16 w-full">
-                {menuItems.map((item, i) => (
+                {menuItemKeys.map((key, i) => (
                   <motion.button
-                    key={item}
+                    key={key}
                     className="group relative text-left py-2.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 rounded"
                     initial={reduced ? { opacity: 0 } : { opacity: 0, x: -30, filter: "blur(8px)" }}
                     animate={reduced ? { opacity: 1 } : { opacity: 1, x: 0, filter: "blur(0px)" }}
@@ -658,7 +693,7 @@ const StaggeredMenu = () => {
                       transition={{ delay: 0.2 + i * 0.1, type: "spring", stiffness: 400, damping: 15 }}
                     />
                     <span className="font-display text-lg sm:text-xl tracking-[0.18em] text-foreground/70 group-hover:text-primary transition-colors duration-200">
-                      {item}
+                      {t(key)}
                     </span>
                     {/* Hover underline */}
                     <motion.div
@@ -678,7 +713,7 @@ const StaggeredMenu = () => {
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.6 }}
               >
-                NAVIGATION DEMO
+                {t("lab.navDemo")}
               </motion.p>
             </motion.div>
           )}
@@ -686,7 +721,7 @@ const StaggeredMenu = () => {
 
         {!open && (
           <p className="absolute bottom-3 text-[10px] font-mono text-foreground/25 text-center">
-            Tap to open staggered menu
+            {t("lab.staggerSub")}
           </p>
         )}
       </div>
@@ -698,13 +733,14 @@ const StaggeredMenu = () => {
    DEMO 6 — CARD SWAP (Components)
    Premium 3D card stack with rich animations
 ═══════════════════════════════════════ */
-const swapCards = [
-  { label: "STRATEGY", sub: "Research · Analysis · Direction", hue: 0, emoji: "◆" },
-  { label: "DESIGN", sub: "Visual · Motion · Identity", hue: 220, emoji: "◇" },
-  { label: "DEVELOP", sub: "Code · Deploy · Iterate", hue: 160, emoji: "○" },
+const swapCardKeys = [
+  { labelKey: "lab.swap.strategy", subKey: "lab.swap.strategySub", hue: 0, emoji: "◆" },
+  { labelKey: "lab.swap.design", subKey: "lab.swap.designSub", hue: 220, emoji: "◇" },
+  { labelKey: "lab.swap.develop", subKey: "lab.swap.developSub", hue: 160, emoji: "○" },
 ];
 
 const CardSwapDemo = () => {
+  const { t } = useLanguage();
   const [top, setTop] = useState(0);
   const [isSwapping, setIsSwapping] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
@@ -716,18 +752,18 @@ const CardSwapDemo = () => {
   const next = useCallback(() => {
     if (isSwapping) return;
     setIsSwapping(true);
-    setTop((t) => (t + 1) % swapCards.length);
+    setTop((t) => (t + 1) % swapCardKeys.length);
     setTimeout(() => setIsSwapping(false), 400);
   }, [isSwapping]);
 
   const prev = useCallback(() => {
     if (isSwapping) return;
     setIsSwapping(true);
-    setTop((t) => (t - 1 + swapCards.length) % swapCards.length);
+    setTop((t) => (t - 1 + swapCardKeys.length) % swapCardKeys.length);
     setTimeout(() => setIsSwapping(false), 400);
   }, [isSwapping]);
 
-  const getOrder = (i: number) => ((i - top) % swapCards.length + swapCards.length) % swapCards.length;
+  const getOrder = (i: number) => ((i - top) % swapCardKeys.length + swapCardKeys.length) % swapCardKeys.length;
 
   return (
     <GlassCard>
@@ -748,13 +784,13 @@ const CardSwapDemo = () => {
             y: "-50%",
           }}
           animate={{
-            background: `radial-gradient(ellipse, hsl(${swapCards[top].hue} 50% 30% / 0.12), transparent 70%)`,
+            background: `radial-gradient(ellipse, hsl(${swapCardKeys[top].hue} 50% 30% / 0.12), transparent 70%)`,
           }}
           transition={{ duration: 0.6 }}
         />
 
         <div className="relative" style={{ width: 220, height: 130, transformStyle: "preserve-3d" }}>
-          {swapCards.map((card, i) => {
+          {swapCardKeys.map((card, i) => {
             const order = getOrder(i);
             const isTop = order === 0;
             const tiltY = isTop && !reduced ? dragX * 0.2 : 0;
@@ -762,7 +798,7 @@ const CardSwapDemo = () => {
 
             return (
               <motion.div
-                key={card.label}
+                key={card.labelKey}
                 className="absolute inset-0 flex flex-col justify-between p-5 rounded-2xl cursor-grab active:cursor-grabbing select-none overflow-hidden"
                 drag={isTop ? "x" : false}
                 dragConstraints={{ left: 0, right: 0 }}
@@ -788,7 +824,7 @@ const CardSwapDemo = () => {
                   boxShadow: isTop
                     ? `inset 0 1px 0 hsl(0 0% 100% / 0.15), 0 8px 40px -8px hsl(${card.hue} 40% 20% / 0.4), 0 2px 8px hsl(0 0% 0% / 0.2)`
                     : `inset 0 1px 0 hsl(0 0% 100% / 0.08), 0 4px 16px hsl(0 0% 0% / 0.15)`,
-                  zIndex: swapCards.length - order,
+                  zIndex: swapCardKeys.length - order,
                   transformStyle: "preserve-3d",
                   border: isTop ? "0.5px solid hsl(0 0% 100% / 0.1)" : "0.5px solid hsl(0 0% 100% / 0.04)",
                 }}
@@ -830,8 +866,8 @@ const CardSwapDemo = () => {
                 />
                 <div className="relative z-10 flex items-start justify-between">
                   <div>
-                    <p className="font-display text-sm tracking-[0.25em] text-foreground">{card.label}</p>
-                    <p className="text-[9px] text-foreground/35 mt-1.5 font-mono">{card.sub}</p>
+                    <p className="font-display text-sm tracking-[0.25em] text-foreground">{t(card.labelKey)}</p>
+                    <p className="text-[9px] text-foreground/35 mt-1.5 font-mono">{t(card.subKey)}</p>
                   </div>
                   <motion.span
                     className="text-foreground/20 text-xs"
@@ -844,7 +880,7 @@ const CardSwapDemo = () => {
                 {isTop && (
                   <div className="relative z-10 flex items-center justify-between">
                     <div className="flex gap-1">
-                      {swapCards.map((_, idx) => (
+                      {swapCardKeys.map((_, idx) => (
                         <motion.div
                           key={idx}
                           className="rounded-full"
@@ -859,7 +895,7 @@ const CardSwapDemo = () => {
                       ))}
                     </div>
                     <span className="text-[8px] font-mono text-foreground/20 tabular-nums">
-                      {String(top + 1).padStart(2, "0")}/{String(swapCards.length).padStart(2, "0")}
+                      {String(top + 1).padStart(2, "0")}/{String(swapCardKeys.length).padStart(2, "0")}
                     </span>
                   </div>
                 )}
@@ -905,75 +941,32 @@ const CardSwapDemo = () => {
    DEMOS CONFIG
 ═══════════════════════════════════════ */
 const demos: DemoConfig[] = [
-  {
-    id: "glass",
-    title: "GLASS SURFACE",
-    category: "Components",
-    type: "interactive",
-    icon: <Sparkles size={12} />,
-    component: GlassSurface,
-  },
-  {
-    id: "grid",
-    title: "GRID SCAN",
-    category: "Backgrounds",
-    type: "interactive",
-    icon: <Grip size={12} />,
-    component: GridScan,
-  },
-  {
-    id: "trail",
-    title: "IMAGE TRAIL",
-    category: "Animations",
-    type: "interactive",
-    icon: <Zap size={12} />,
-    component: ImageTrail,
-  },
-  {
-    id: "magnet",
-    title: "MAGNET",
-    category: "Animations",
-    type: "interactive",
-    icon: <Zap size={12} />,
-    component: MagnetDemo,
-  },
-  {
-    id: "stagger",
-    title: "STAGGERED MENU",
-    category: "Components",
-    type: "interactive",
-    icon: <Menu size={12} />,
-    component: StaggeredMenu,
-  },
-  {
-    id: "swap",
-    title: "CARD SWAP",
-    category: "Components",
-    type: "interactive",
-    icon: <Layers size={12} />,
-    component: CardSwapDemo,
-  },
+  { id: "glass", titleKey: "lab.demo.glass.title", categoryKey: "lab.demo.glass.cat", type: "interactive", icon: <Sparkles size={12} />, component: GlassSurface },
+  { id: "grid", titleKey: "lab.demo.grid.title", categoryKey: "lab.demo.grid.cat", type: "interactive", icon: <Grip size={12} />, component: GridScan },
+  { id: "trail", titleKey: "lab.demo.trail.title", categoryKey: "lab.demo.trail.cat", type: "interactive", icon: <Zap size={12} />, component: ImageTrail },
+  { id: "magnet", titleKey: "lab.demo.magnet.title", categoryKey: "lab.demo.magnet.cat", type: "interactive", icon: <Zap size={12} />, component: MagnetDemo },
+  { id: "stagger", titleKey: "lab.demo.stagger.title", categoryKey: "lab.demo.stagger.cat", type: "interactive", icon: <Menu size={12} />, component: StaggeredMenu },
+  { id: "swap", titleKey: "lab.demo.swap.title", categoryKey: "lab.demo.swap.cat", type: "interactive", icon: <Layers size={12} />, component: CardSwapDemo },
 ];
 
 /* ═══════════════════════════════════════
    MAIN SECTION
 ═══════════════════════════════════════ */
 export const DesignLab = () => {
+  const { t } = useLanguage();
   return (
     <section className="relative" id="lab">
       <div className="relative z-10 mx-auto px-5 sm:px-8" style={{ maxWidth: 1280 }}>
-        {/* Padding: desktop 80px, mobile 48px */}
         <div className="py-12 sm:py-16 md:py-20">
-          {/* Heading */}
           <div className="mb-14 sm:mb-18 md:mb-20">
             <KineticType
-              text="DESIGN LAB"
+              text={t("lab.title")}
               className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl mb-4 text-foreground"
               delay={0.15}
               wordDelay={0.12}
             />
             <p className="text-foreground/40 text-sm max-w-md leading-relaxed font-mono tracking-wide">
-              Interactive UI components that enhance and personalize your web applications.
+              {t("lab.subtitle")}
             </p>
           </div>
 

@@ -59,7 +59,6 @@ const TensionReveal = ({ children, label = "Hold to reveal" }: { children: React
     clearInterval(intervalRef.current);
     setHolding(false);
     if (!revealed) {
-      // Drain back
       const drain = setInterval(() => {
         setProgress((p) => {
           if (p <= 0) { clearInterval(drain); return 0; }
@@ -93,32 +92,16 @@ const TensionReveal = ({ children, label = "Hold to reveal" }: { children: React
             exit={{ opacity: 0, scale: 0.9 }}
             transition={{ duration: 0.3 }}
           >
-            {/* SVG progress ring */}
             <div className="relative w-28 h-28 flex items-center justify-center border-2 border-primary/30 rounded-full p-1">
               <svg className="absolute inset-0 -rotate-90" viewBox="0 0 96 96">
-                <circle
-                  cx="48" cy="48" r="44"
-                  fill="none"
-                  stroke="hsl(var(--muted-foreground) / 0.15)"
-                  strokeWidth="2"
-                />
+                <circle cx="48" cy="48" r="44" fill="none" stroke="hsl(var(--muted-foreground) / 0.15)" strokeWidth="2" />
                 <motion.circle
-                  cx="48" cy="48" r="44"
-                  fill="none"
-                  stroke="hsl(var(--primary))"
-                  strokeWidth="2.5"
-                  strokeLinecap="round"
-                  strokeDasharray={circumference}
-                  strokeDashoffset={dashOffset}
-                  style={{
-                    filter: "none",
-                  }}
+                  cx="48" cy="48" r="44" fill="none" stroke="hsl(var(--primary))" strokeWidth="2.5" strokeLinecap="round"
+                  strokeDasharray={circumference} strokeDashoffset={dashOffset}
+                  style={{ filter: "none" }}
                 />
               </svg>
-              <motion.span
-                className="text-xs font-mono tracking-wider text-muted-foreground"
-                animate={{ scale: holding ? 0.9 : 1 }}
-              >
+              <motion.span className="text-xs font-mono tracking-wider text-muted-foreground" animate={{ scale: holding ? 0.9 : 1 }}>
                 {Math.round(progress)}%
               </motion.span>
             </div>
@@ -143,6 +126,7 @@ const TensionReveal = ({ children, label = "Hold to reveal" }: { children: React
 
 /* ── Scroll-driven Line chart (SVG) ── */
 const ScrollLineChart = () => {
+  const { t } = useLanguage();
   const points = [2.1, 2.8, 3.2, 4.1, 4.5, 5.8, 6.2, 7.1, 7.8, 8.5, 9.2, 10.4];
   const width = 400;
   const height = 160;
@@ -167,8 +151,8 @@ const ScrollLineChart = () => {
   return (
     <div ref={containerRef} className="relative">
        <p className="text-xs sm:text-[10px] tracking-widest uppercase text-muted-foreground mb-3">
-        Conversion Rate Over Time (%)
-      </p>
+        {t("growth.chartLine")}
+       </p>
       <svg viewBox={`0 0 ${width} ${height}`} className="w-full max-w-md">
         {[0, 3, 6, 9, 12].map((v) => {
           const y = height - padY - (v / maxVal) * (height - padY * 2);
@@ -203,13 +187,16 @@ const ScrollLineChart = () => {
 
 /* ── Scroll-driven Bar chart (SVG) ── */
 const ScrollBarChart = () => {
+  const { t } = useLanguage();
   const data = [
-    { label: "Before", value: 1.9 },
-    { label: "Month 1", value: 3.2 },
-    { label: "Month 3", value: 5.1 },
-    { label: "Month 6", value: 7.6 },
-    { label: "Month 12", value: 10.1 },
+    { labelKey: "growth.chartBefore", value: 1.9 },
+    { label: "Month 1", labelEs: "Mes 1", value: 3.2 },
+    { label: "Month 3", labelEs: "Mes 3", value: 5.1 },
+    { label: "Month 6", labelEs: "Mes 6", value: 7.6 },
+    { label: "Month 12", labelEs: "Mes 12", value: 10.1 },
   ];
+
+  const { language } = useLanguage();
 
   const width = 400;
   const height = 160;
@@ -229,7 +216,7 @@ const ScrollBarChart = () => {
   return (
     <div ref={containerRef} className="relative">
       <p className="text-xs sm:text-[10px] tracking-widest uppercase text-muted-foreground mb-3">
-        Lead-to-Customer Rate (%)
+        {t("growth.chartBar")}
       </p>
       <svg viewBox={`0 0 ${width} ${height}`} className="w-full max-w-md">
         {data.map((d, i) => {
@@ -239,10 +226,11 @@ const ScrollBarChart = () => {
           const barProgress = useTransform(scrollYProgress, [i * 0.15, 0.3 + i * 0.15], [0, 1]);
           const animatedHeight = useTransform(barProgress, [0, 1], [0, barH]);
           const animatedY = useTransform(barProgress, [0, 1], [height - padY, y]);
+          const displayLabel = d.labelKey ? t(d.labelKey) : (language === "es" && d.labelEs ? d.labelEs : d.label);
           return (
             <g key={i}>
               <motion.rect x={x} width={barWidth} rx={4} fill="hsl(0 100% 50%)" style={{ height: animatedHeight, y: animatedY }} onMouseEnter={() => setHoveredIdx(i)} onMouseLeave={() => setHoveredIdx(null)} className="cursor-pointer" />
-              <text x={x + barWidth / 2} y={height - 8} fill="hsl(var(--muted-foreground))" fontSize="8" textAnchor="middle">{d.label}</text>
+              <text x={x + barWidth / 2} y={height - 8} fill="hsl(var(--muted-foreground))" fontSize="8" textAnchor="middle">{displayLabel}</text>
               {hoveredIdx === i && (
                 <g>
                   <rect x={x + barWidth / 2 - 18} y={y - 22} width="36" height="18" rx="5" fill="hsl(var(--card))" stroke="hsl(0 100% 50% / 0.3)" strokeWidth="0.5" />
@@ -257,18 +245,18 @@ const ScrollBarChart = () => {
   );
 };
 
-/* ── Metrics ── */
-const metrics = [
-  { label: "First Impressions", value: 75, suffix: "%", prefix: "", sub: "Influenced by web design quality" },
-  { label: "Higher Conversion", value: 40, suffix: "%", prefix: "+", sub: "With professional UX design" },
-  { label: "More Time on Site", value: 30, suffix: "%", prefix: "+", sub: "With quality visual content" },
-  { label: "Brand Trust", value: 60, suffix: "%", prefix: "+", sub: "Stronger credibility with polished design" },
-];
-
 export const GrowthImpact = () => {
   const ref = useRef<HTMLElement>(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
   const { t } = useLanguage();
+
+  const metrics = [
+    { labelKey: "growth.m1.label", value: 75, suffix: "%", prefix: "", subKey: "growth.m1.sub" },
+    { labelKey: "growth.m2.label", value: 40, suffix: "%", prefix: "+", subKey: "growth.m2.sub" },
+    { labelKey: "growth.m3.label", value: 30, suffix: "%", prefix: "+", subKey: "growth.m3.sub" },
+    { labelKey: "growth.m4.label", value: 60, suffix: "%", prefix: "+", subKey: "growth.m4.sub" },
+  ];
+
   return (
     <section ref={ref} className="py-32 sm:py-40 relative overflow-hidden" id="growth">
       <div
@@ -278,10 +266,9 @@ export const GrowthImpact = () => {
       />
 
       <div className="container relative z-10">
-        {/* Header */}
         <div className="mb-20 sm:mb-24">
           <KineticType
-            text="GROWTH IMPACT"
+            text={t("growth.title")}
             as="h2"
             className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl mb-4 text-foreground"
             delay={0.05}
@@ -292,13 +279,12 @@ export const GrowthImpact = () => {
            </p>
           </div>
 
-        {/* Core metric behind tension mechanic */}
         <div className="mb-20 flex justify-center">
-          <TensionReveal label="Hold to reveal the data">
+          <TensionReveal label={t("growth.holdReveal")}>
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-10">
               {metrics.map((m, i) => (
                  <motion.div
-                   key={m.label}
+                   key={m.labelKey}
                    initial={{ opacity: 0, y: 18 }}
                    animate={{ opacity: 1, y: 0 }}
                    transition={{ duration: 0.55, delay: i * 0.08, ease: [0.16, 1, 0.3, 1] }}
@@ -307,8 +293,8 @@ export const GrowthImpact = () => {
                   <p className="font-display text-3xl sm:text-4xl md:text-5xl text-primary mb-2">
                     <CountUp end={m.value} suffix={m.suffix} prefix={m.prefix} />
                   </p>
-                  <p className="text-foreground text-sm font-medium mb-1">{m.label}</p>
-                  <p className="text-xs sm:text-[10px] tracking-wider">{m.sub}</p>
+                  <p className="text-foreground text-sm font-medium mb-1">{t(m.labelKey)}</p>
+                  <p className="text-xs sm:text-[10px] tracking-wider">{t(m.subKey)}</p>
                   <motion.div
                     className="absolute -bottom-4 left-0 h-px"
                     style={{ background: "linear-gradient(90deg, hsl(0 100% 50% / 0.3), transparent)" }}
@@ -358,7 +344,6 @@ export const GrowthImpact = () => {
              <ROICalculator />
            </div>
 
-           {/* Micro-CTA */}
            <div className="mt-16 sm:mt-20 flex justify-center">
              <MicroCTA variant="primary" />
            </div>

@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const formatCurrency = (n: number) =>
   "$" + n.toLocaleString("en-US", { maximumFractionDigits: 0 });
@@ -40,6 +41,7 @@ export const ROICalculator = () => {
   const [currentRevenue, setCurrentRevenue] = useState(0);
   const [projectedRevenue, setProjectedRevenue] = useState(0);
   const started = useRef(false);
+  const { t } = useLanguage();
 
   useEffect(() => {
     if (started.current) return;
@@ -78,7 +80,7 @@ export const ROICalculator = () => {
       <div className="relative grid sm:grid-cols-2 gap-8">
         <div>
           <p className="text-[10px] font-mono tracking-[0.15em] uppercase text-muted-foreground/80 mb-2">
-            Current Revenue
+            {t("growth.roiCurrent")}
           </p>
           <AnimatedValue
             value={currentRevenue}
@@ -97,7 +99,7 @@ export const ROICalculator = () => {
 
         <div>
           <p className="text-[10px] font-mono tracking-[0.15em] uppercase text-muted-foreground/80 mb-2">
-            Projected Value With Us
+            {t("growth.roiProjected")}
           </p>
           <AnimatedValue
             value={projectedRevenue}
@@ -147,7 +149,7 @@ export const ROICalculator = () => {
             transition={{ duration: 2, repeat: Infinity }}
           />
           <p className="text-[10px] font-mono tracking-[0.15em] uppercase text-[hsl(20_100%_55%)]/70">
-            Revenue grows faster with strategic design & technology
+            {t("growth.roiNote")}
           </p>
         </div>
       </motion.div>
