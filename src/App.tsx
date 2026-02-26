@@ -13,6 +13,7 @@ import { FilmGrain } from "@/components/motion/FilmGrain";
 import { LivingBackground } from "@/components/motion/LivingBackground";
 import { ServiceChooserProvider } from "@/components/motion/ServiceChooserModal";
 import { IntroOverlay } from "@/components/motion/IntroOverlay";
+import { LanguageProvider } from "@/contexts/LanguageContext";
 
 import owlBg from "@/assets/owl-bg.png";
 
@@ -36,6 +37,7 @@ const App = () => {
       <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false}>
         <TooltipProvider>
           <ReactLenis root options={lenisOptions}>
+            <LanguageProvider>
             <ServiceChooserProvider>
               {/* Intro overlay — covers everything until preload done */}
               {!introDone && <IntroOverlay onComplete={handleIntroComplete} />}
@@ -73,6 +75,7 @@ const App = () => {
               </div>
               <TopMenu />
             </ServiceChooserProvider>
+            </LanguageProvider>
           </ReactLenis>
         </TooltipProvider>
       </ThemeProvider>

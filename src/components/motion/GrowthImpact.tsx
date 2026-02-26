@@ -3,6 +3,7 @@ import { motion, useInView, useScroll, useTransform, useReducedMotion, AnimatePr
 import { ROICalculator } from "@/components/tools/ROICalculator";
 import { KineticType } from "@/components/motion/KineticType";
 import { MicroCTA } from "@/components/motion/MicroCTA";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 
 /* ── Animated counter ── */
@@ -267,6 +268,7 @@ const metrics = [
 export const GrowthImpact = () => {
   const ref = useRef<HTMLElement>(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
+  const { t } = useLanguage();
   return (
     <section ref={ref} className="py-32 sm:py-40 relative overflow-hidden" id="growth">
       <div
@@ -286,9 +288,9 @@ export const GrowthImpact = () => {
             wordDelay={0.1}
           />
            <p className="text-foreground/80 text-sm max-w-lg">
-            We don't make "pretty pages." We build systems that sell. These are research-backed statistics on how design impacts business.
-          </p>
-         </div>
+            {t("growth.subtitle")}
+           </p>
+          </div>
 
         {/* Core metric behind tension mechanic */}
         <div className="mb-20 flex justify-center">
@@ -344,13 +346,13 @@ export const GrowthImpact = () => {
           className="mt-24 sm:mt-32"
         >
           <div className="mb-10">
-            <h3 className="font-display text-2xl sm:text-3xl md:text-4xl mb-3">
-              Good Design Costs Money.{" "}
-              <span className="text-primary">Bad Design Costs Revenue.</span>
-            </h3>
-           <p className="text-foreground/80 text-sm max-w-lg leading-relaxed">
-              See what your revenue looks like now — and what it could look like with our design and technology systems working for you.
-            </p>
+             <h3 className="font-display text-2xl sm:text-3xl md:text-4xl mb-3">
+               {t("growth.roiTitle")}{" "}
+               <span className="text-primary">{t("growth.roiAccent")}</span>
+             </h3>
+            <p className="text-foreground/80 text-sm max-w-lg leading-relaxed">
+               {t("growth.roiDesc")}
+             </p>
            </div>
            <div className="w-full max-w-4xl mx-auto">
              <ROICalculator />

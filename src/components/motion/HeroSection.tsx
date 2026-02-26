@@ -4,6 +4,7 @@ import { ArrowRight } from "lucide-react";
 import nebuOwl from "@/assets/nebu-owl.png";
 import { HeroLaserOverlay } from "./HeroLaserOverlay";
 import { useServiceChooser } from "@/components/motion/ServiceChooserModal";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 type Phase = 0 | 1 | 2 | 3 | 4;
 
@@ -222,6 +223,7 @@ const SumiHeroReveal = () => {
 
 export const HeroSection = () => {
   const ref = useRef<HTMLElement>(null);
+  const { t } = useLanguage();
 
   return (
     <section
@@ -285,7 +287,7 @@ export const HeroSection = () => {
            animate={{ opacity: 1, y: 0 }}
            transition={{ delay: 1.8, duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
          >
-           We design and engineer websites &amp; systems for brands that sell — built to convert, rank, and scale.
+           {t("hero.subhead")}
          </motion.p>
 
          {/* Micro-bullets */}
@@ -297,15 +299,15 @@ export const HeroSection = () => {
         >
           <li className="flex items-center gap-1.5">
             <span className="w-1 h-1 rounded-full bg-primary" />
-            Higher conversion rates
+            {t("hero.bullet1")}
           </li>
           <li className="flex items-center gap-1.5">
             <span className="w-1 h-1 rounded-full bg-primary" />
-            SEO-first architecture
+            {t("hero.bullet2")}
           </li>
           <li className="flex items-center gap-1.5">
             <span className="w-1 h-1 rounded-full bg-primary" />
-            Ops that run themselves
+            {t("hero.bullet3")}
           </li>
         </motion.ul>
 
@@ -317,14 +319,14 @@ export const HeroSection = () => {
            transition={{ delay: 2.2, duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
         >
             <MagneticCTA>
-              Book a Strategy Call
+              {t("cta.bookStrategy")}
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </MagneticCTA>
            <a
              href="#work"
              className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full border border-border text-foreground text-base sm:text-sm font-semibold hover:border-primary/50 transition-colors duration-300 focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background min-h-[48px] w-full sm:w-auto"
            >
-             View Work
+             {t("hero.viewWork")}
            </a>
         </motion.div>
 
@@ -337,12 +339,12 @@ export const HeroSection = () => {
         >
           <span className="flex items-center gap-1.5">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-            Accepting projects
+            {t("hero.accepting")}
           </span>
           <span>·</span>
-          <span>Projects delivered</span>
+          <span>{t("hero.delivered")}</span>
           <span className="hidden sm:inline">·</span>
-          <span className="hidden sm:inline">24h response</span>
+          <span className="hidden sm:inline">{t("hero.response")}</span>
         </motion.div>
       </div>
 
