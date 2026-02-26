@@ -2,6 +2,7 @@ import { useRef, useState, useCallback } from "react";
 import { motion, useInView, useReducedMotion, AnimatePresence } from "framer-motion";
 import { Store, Cog, Rocket, ArrowRight } from "lucide-react";
 import { MicroCTA } from "@/components/motion/MicroCTA";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const tiers = [
   {
@@ -185,7 +186,8 @@ export const ServicesSection = () => {
   const ref = useRef<HTMLElement>(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
   const prefersReduced = useReducedMotion();
-const [active, setActive] = useState(0);
+  const [active, setActive] = useState(0);
+  const { t } = useLanguage();
   const tier = tiers[active];
 
   return (
@@ -219,10 +221,10 @@ const [active, setActive] = useState(0);
            transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
         >
           <h2 className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl mb-4">
-            WHAT WE <span className="text-primary">BUILD</span>
+            {t("services.title")} <span className="text-primary">{t("services.titleAccent")}</span>
           </h2>
          <p className="text-foreground/80 text-sm max-w-lg">
-           Three distinct engagement levels. Interact with the dial to explore.
+           {t("services.subtitle")}
          </p>
         </motion.div>
 
@@ -288,8 +290,8 @@ const [active, setActive] = useState(0);
                 className="pt-4"
                 style={{ borderTop: "1px solid hsl(var(--border))" }}
               >
-                <p className="text-xs sm:text-[10px] font-mono tracking-[0.12em] uppercase text-muted-foreground mb-1">
-                  Best for
+                 <p className="text-xs sm:text-[10px] font-mono tracking-[0.12em] uppercase text-muted-foreground mb-1">
+                   {t("services.bestFor")}
                 </p>
                 <p className="text-sm text-foreground leading-relaxed">
                   {tier.bestFor}
@@ -300,7 +302,7 @@ const [active, setActive] = useState(0);
                   href="#contact"
                   className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-primary hover:text-primary/80 transition-colors group/cta"
                 >
-                  Explore
+                  {t("services.explore")}
                   <ArrowRight className="w-4 h-4 group-hover/cta:translate-x-1 transition-transform" />
                 </a>
               </div>

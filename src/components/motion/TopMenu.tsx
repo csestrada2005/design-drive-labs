@@ -1,20 +1,10 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
-import { Menu, X, ArrowRight } from "lucide-react";
+import { Menu, X, ArrowRight, Globe } from "lucide-react";
 import { useLenis } from "lenis/react";
 import { anchorScrollTo } from "@/lib/anchorScroll";
 import { useServiceChooser } from "@/components/motion/ServiceChooserModal";
-
-const menuLinks = [
-  { label: "Home", id: "hero" },
-  { label: "What We Build", id: "modes" },
-  { label: "Design Lab", id: "lab" },
-  { label: "How We Work", id: "process" },
-  { label: "Results", id: "growth" },
-  { label: "Our Projects", id: "work" },
-  { label: "Standards", id: "standards" },
-  { label: "Contact", id: "contact" },
-];
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export const TopMenu = () => {
   const [open, setOpen] = useState(false);
@@ -23,8 +13,19 @@ export const TopMenu = () => {
   const prefersReducedMotion = useReducedMotion();
   const lenis = useLenis();
   const { open: openServiceModal } = useServiceChooser();
+  const { t, language, toggleLanguage } = useLanguage();
 
-  // Scrollspy: track which section is in view
+  const menuLinks = [
+    { label: t("nav.home"), id: "hero" },
+    { label: t("nav.whatWeBuild"), id: "modes" },
+    { label: t("nav.designLab"), id: "lab" },
+    { label: t("nav.howWeWork"), id: "process" },
+    { label: t("nav.results"), id: "growth" },
+    { label: t("nav.ourProjects"), id: "work" },
+    { label: t("nav.standards"), id: "standards" },
+    { label: t("nav.contact"), id: "contact" },
+  ];
+
   useEffect(() => {
     const onScroll = () => {
       setScrolled(window.scrollY > 40);
@@ -42,7 +43,7 @@ export const TopMenu = () => {
     window.addEventListener("scroll", onScroll, { passive: true });
     onScroll();
     return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+  }, [language]);
 
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "";
@@ -56,7 +57,6 @@ export const TopMenu = () => {
 
   return (
     <>
-      {/* Header bar — fixed top with CTA */}
       <motion.header
         className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-4 sm:px-6"
         style={{ height: 56 }}
@@ -64,11 +64,28 @@ export const TopMenu = () => {
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.5, ease: [0.25, 1, 0.5, 1] }}
       >
-        {/* Spacer (logo removed) */}
         <div />
 
         <div className="flex items-center gap-2">
-          {/* Header CTA — visible after scroll */}
+          {/* Language toggle */}
+          <motion.button
+            onClick={toggleLanguage}
+            className="w-11 h-11 flex items-center justify-center rounded-full text-xs font-mono tracking-wider"
+            style={{
+              background: "hsl(0 0% 0% / 0.6)",
+              boxShadow: "0 2px 12px hsl(0 0% 0% / 0.3)",
+              border: "0.5px solid hsl(0 0% 100% / 0.08)",
+            }}
+            whileHover={{ scale: 1.08 }}
+            whileTap={{ scale: 0.95 }}
+            aria-label={`Switch to ${language === "en" ? "Spanish" : "English"}`}
+          >
+            <span className="text-white/80 font-semibold text-[11px]">
+              {language === "en" ? "ES" : "EN"}
+            </span>
+          </motion.button>
+
+          {/* Header CTA */}
           <button
             onClick={(e) => { e.preventDefault(); openServiceModal(); }}
             className="hidden sm:inline-flex items-center gap-1.5 px-5 py-2 rounded-full bg-primary text-primary-foreground text-xs font-semibold transition-all duration-300 hover:scale-105 active:scale-95"
@@ -79,7 +96,7 @@ export const TopMenu = () => {
               transition: "opacity 0.3s",
             }}
           >
-            Book a Call
+            {t("nav.bookCall")}
             <ArrowRight className="w-3.5 h-3.5" />
           </button>
 
@@ -100,7 +117,6 @@ export const TopMenu = () => {
         </div>
       </motion.header>
 
-      {/* Fullscreen overlay */}
       <AnimatePresence>
         {open && (
           <motion.div
@@ -109,25 +125,37 @@ export const TopMenu = () => {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.35 }}
             className="fixed inset-0 z-[100] flex flex-col"
-            style={{
-              background: "hsl(var(--background) / 0.97)",
-            }}
+            style={{ background: "hsl(var(--background) / 0.97)" }}
           >
-            {/* Header */}
             <div className="flex items-center justify-between px-5 sm:px-8" style={{ height: 56 }}>
               <span className="font-display text-sm tracking-[0.15em] text-foreground">
                 NEBU STUDIO
               </span>
-              <button
-                onClick={() => setOpen(false)}
-                className="w-9 h-9 flex items-center justify-center rounded-full hover:bg-primary/10 transition-colors"
-                aria-label="Close menu"
-              >
-                <X className="w-[18px] h-[18px] text-foreground" />
-              </button>
+              <div className="flex items-center gap-2">
+                {/* Language toggle in overlay */}
+                <button
+                  onClick={toggleLanguage}
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-mono tracking-wider transition-colors"
+                  style={{
+                    background: "hsl(0 0% 100% / 0.06)",
+                    border: "0.5px solid hsl(0 0% 100% / 0.1)",
+                    color: "hsl(var(--foreground) / 0.7)",
+                  }}
+                  aria-label={`Switch to ${language === "en" ? "Spanish" : "English"}`}
+                >
+                  <Globe className="w-3 h-3" />
+                  {language === "en" ? "ES" : "EN"}
+                </button>
+                <button
+                  onClick={() => setOpen(false)}
+                  className="w-9 h-9 flex items-center justify-center rounded-full hover:bg-primary/10 transition-colors"
+                  aria-label="Close menu"
+                >
+                  <X className="w-[18px] h-[18px] text-foreground" />
+                </button>
+              </div>
             </div>
 
-            {/* Links */}
             <nav className="flex-1 flex flex-col justify-center px-8 sm:px-12 gap-0">
               {menuLinks.map((link, i) => {
                 const isActive = activeId === link.id;
@@ -144,7 +172,6 @@ export const TopMenu = () => {
                     style={{ borderColor: "hsl(0 0% 100% / 0.07)" }}
                   >
                     <span className="flex items-center gap-4">
-                      {/* Active dot indicator */}
                       <span
                         className={`inline-block w-2.5 h-2.5 rounded-full transition-all duration-300 ${
                           isActive
@@ -164,7 +191,6 @@ export const TopMenu = () => {
               })}
             </nav>
 
-            {/* Bottom CTA */}
             <motion.div
               className="px-8 sm:px-12 pb-8 safe-bottom"
               initial={{ opacity: 0, y: 16 }}
@@ -175,7 +201,7 @@ export const TopMenu = () => {
                 onClick={() => { setOpen(false); openServiceModal(); }}
                 className="btn-primary w-full py-4 text-center text-sm"
               >
-                Book a Strategy Call
+                {t("nav.bookStrategyCall")}
                 <ArrowRight className="w-4 h-4" />
               </button>
             </motion.div>

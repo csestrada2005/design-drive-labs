@@ -2,16 +2,13 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { useServiceChooser } from "@/components/motion/ServiceChooserModal";
+import { useLanguage } from "@/contexts/LanguageContext";
 
-/**
- * StickyMobileCTA — persistent bottom bar on mobile only (< sm breakpoint).
- * Appears after 25% scroll OR past the hero. Hides near the contact section.
- * Tap targets ≥ 44px. Respects safe-area and reduced-motion.
- */
 export const StickyMobileCTA = () => {
   const [visible, setVisible] = useState(false);
   const prefersReducedMotion = useReducedMotion();
   const { open: openServiceModal } = useServiceChooser();
+  const { t } = useLanguage();
 
   useEffect(() => {
     const check = () => {
@@ -25,7 +22,6 @@ export const StickyMobileCTA = () => {
         ? contactEl.getBoundingClientRect().top + scrollY
         : Infinity;
 
-      // Show after 25% scroll OR past hero (1vh), hide near contact
       const pastThreshold = scrollPct >= 0.15 || scrollY > vh * 0.6;
       const beforeContact = scrollY < contactTop - vh * 0.5;
 
@@ -63,18 +59,18 @@ export const StickyMobileCTA = () => {
                   height: 48,
                   boxShadow: "0 2px 12px -2px hsl(0 100% 50% / 0.35)",
                 }}
-                aria-label="Book a Strategy Call — choose a service"
+                aria-label={t("cta.bookStrategy")}
               >
-                Book a Strategy Call
+                {t("cta.bookStrategy")}
                 <ArrowRight className="w-4 h-4" />
              </button>
              <a
                href="#work"
                className="flex items-center justify-center px-5 rounded-full border border-border text-foreground text-sm font-semibold active:scale-95 transition-all hover:border-primary/50 focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background"
                style={{ height: 48 }}
-               aria-label="See our work — go to portfolio"
+               aria-label={t("sticky.work")}
              >
-               Work
+               {t("sticky.work")}
              </a>
           </div>
         </motion.div>

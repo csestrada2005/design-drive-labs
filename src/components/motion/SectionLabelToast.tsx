@@ -1,17 +1,13 @@
 import { useEffect, useState, useRef } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
-
-/**
- * SectionLabelToast — shows a minimal floating label for ~1.4s
- * when the user scrolls into a key section. Passive, no layout impact.
- */
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const TRACKED_SECTIONS = [
-  { id: "modes", label: "WHAT WE BUILD" },
-  { id: "process", label: "HOW WE WORK" },
-  { id: "growth", label: "GROWTH IMPACT" },
-  { id: "work", label: "OUR PROJECTS" },
-  { id: "contact", label: "LET'S TALK" },
+  { id: "modes", key: "toast.whatWeBuild" },
+  { id: "process", key: "toast.howWeWork" },
+  { id: "growth", key: "toast.growthImpact" },
+  { id: "work", key: "toast.ourProjects" },
+  { id: "contact", key: "toast.letsTalk" },
 ];
 
 export const SectionLabelToast = () => {
@@ -19,6 +15,7 @@ export const SectionLabelToast = () => {
   const cooldown = useRef(false);
   const lastId = useRef<string | null>(null);
   const reduced = useReducedMotion();
+  const { t } = useLanguage();
 
   useEffect(() => {
     const onScroll = () => {
@@ -35,7 +32,7 @@ export const SectionLabelToast = () => {
         if (viewportMid >= top && viewportMid <= top + 250 && lastId.current !== sec.id) {
           lastId.current = sec.id;
           cooldown.current = true;
-          setLabel(sec.label);
+          setLabel(t(sec.key));
 
           setTimeout(() => setLabel(null), 1400);
           setTimeout(() => { cooldown.current = false; }, 2000);
@@ -46,7 +43,7 @@ export const SectionLabelToast = () => {
 
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+  }, [t]);
 
   if (reduced) return null;
 
