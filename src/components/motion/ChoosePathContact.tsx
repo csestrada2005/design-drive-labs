@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Send, Check, AlertCircle, ArrowRight } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { useServiceChooser } from "@/components/motion/ServiceChooserModal";
 
 // ── Input limits ──────────────────────────────────────────────────────────────
 const LIMITS = { name: 100, email: 254, message: 2000 } as const;
@@ -50,6 +51,7 @@ export const ChoosePathContact = () => {
   const ref = useRef<HTMLElement>(null);
   const { toast } = useToast();
 
+  const { open: openServiceModal } = useServiceChooser();
   const [selected, setSelected] = useState<string | null>(null);
   const [form, setForm] = useState({ name: "", email: "", message: "" });
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -59,11 +61,8 @@ export const ChoosePathContact = () => {
   const selectedPath = paths.find((p) => p.id === selected);
 
   const handleSelect = useCallback((id: string) => {
-    const path = paths.find((p) => p.id === id);
-    setSelected(id);
-    if (path) setForm((f) => ({ ...f, message: path.prefill }));
-    setErrors({});
-  }, []);
+    openServiceModal();
+  }, [openServiceModal]);
 
   const setField = useCallback(
     (field: keyof typeof form, value: string) => {

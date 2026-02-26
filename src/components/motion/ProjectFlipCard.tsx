@@ -109,7 +109,7 @@ const CardFront = ({ project, index }: { project: Project; index: number }) => (
     <img
       src={project.image}
       alt={project.title}
-      className="w-full h-full object-cover"
+      className="w-full h-full object-contain bg-black/40"
       loading="lazy"
     />
     {/* Subtle gradient for title legibility */}

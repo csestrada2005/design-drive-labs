@@ -199,7 +199,7 @@ export const ProcessSection = () => {
 
            {/* Micro-CTA — visible on last step */}
            {activeIndex === steps.length - 1 && (
-             <div className="mt-8">
+             <div className="mt-4 sm:mt-8 mb-4 sm:mb-0">
                <MicroCTA variant="primary" />
              </div>
            )}

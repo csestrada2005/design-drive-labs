@@ -61,10 +61,15 @@ const ServiceChooserModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: ()
       if (e.key === "Escape") onClose();
     };
     window.addEventListener("keydown", handler);
+    // Disable scrolling on the entire page including Lenis
     document.body.style.overflow = "hidden";
+    document.documentElement.style.overflow = "hidden";
+    document.body.style.touchAction = "none";
     return () => {
       window.removeEventListener("keydown", handler);
       document.body.style.overflow = "";
+      document.documentElement.style.overflow = "";
+      document.body.style.touchAction = "";
     };
   }, [isOpen, onClose]);
 
@@ -85,12 +90,14 @@ const ServiceChooserModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: ()
         <motion.div
           ref={overlayRef}
           className="fixed inset-0 z-[200] flex items-end sm:items-center justify-center"
-          style={{ background: "hsl(0 0% 0% / 0.6)", backdropFilter: "blur(8px)", WebkitBackdropFilter: "blur(8px)" }}
+          style={{ background: "hsl(0 0% 0% / 0.6)", backdropFilter: "blur(8px)", WebkitBackdropFilter: "blur(8px)", overscrollBehavior: "contain" }}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.25 }}
           onClick={handleOverlayClick}
+          onWheel={(e) => e.stopPropagation()}
+          onTouchMove={(e) => e.stopPropagation()}
           role="dialog"
           aria-modal="true"
           aria-label="Choose a service"
