@@ -44,7 +44,7 @@ const translations: Record<string, { en: string; es: string }> = {
   "services.bestFor": { en: "Best for", es: "Ideal para" },
   "services.explore": { en: "Explore", es: "Explorar" },
 
-  "services.ecommerce": { en: "Online Stores", es: "Tiendas Online" },
+  "services.ecommerce": { en: "E-commerce Websites", es: "Sitios E-commerce" },
   "services.ecommerce.cat": { en: "Premium Web", es: "Web Premium" },
   "services.ecommerce.bestFor": {
     en: "Brands selling directly to customers who want to sell more online.",
@@ -63,7 +63,7 @@ const translations: Record<string, { en: string; es: string }> = {
     es: "Animaciones profesionales que hacen que tu marca genere confianza",
   },
 
-  "services.marketing": { en: "Marketing Websites", es: "Sitios Web de Marketing" },
+  "services.marketing": { en: "Fully Packed Websites", es: "Sitios Web Completos" },
   "services.marketing.cat": { en: "Web + Growth", es: "Web + Crecimiento" },
   "services.marketing.bestFor": {
     en: "Businesses that want to turn website visitors into real leads.",
