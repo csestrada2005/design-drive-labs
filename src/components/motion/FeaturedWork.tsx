@@ -111,7 +111,7 @@ export const FeaturedWork = () => {
       </div>
 
       <div className="container relative z-10">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 md:gap-10 py-8 sm:py-12">
+        <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-8 md:gap-10 py-8 sm:py-12">
           {localizedProjects.map((project, i) => (
             <ProjectFlipCard key={project.id} project={project} index={i} />
           ))}

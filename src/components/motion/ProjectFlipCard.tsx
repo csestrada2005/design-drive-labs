@@ -31,7 +31,7 @@ export const ProjectFlipCard = ({ project, index }: ProjectFlipCardProps) => {
     return (
       <motion.div
         ref={containerRef}
-        className="relative aspect-[4/5] sm:aspect-[4/3] rounded-xl overflow-hidden cursor-pointer focus-within:ring-2 focus-within:ring-primary focus-within:ring-offset-2 focus-within:ring-offset-background"
+        className="relative aspect-square sm:aspect-[4/3] rounded-xl overflow-hidden cursor-pointer focus-within:ring-2 focus-within:ring-primary focus-within:ring-offset-2 focus-within:ring-offset-background"
         initial={{ opacity: 0 }}
         animate={isInView ? { opacity: 1 } : {}}
         transition={{ duration: 0.3, delay: index * 0.06 }}
@@ -60,7 +60,7 @@ export const ProjectFlipCard = ({ project, index }: ProjectFlipCardProps) => {
   return (
     <motion.div
       ref={containerRef}
-      className="relative aspect-[4/5] sm:aspect-[4/3] cursor-pointer"
+      className="relative aspect-square sm:aspect-[4/3] cursor-pointer"
       style={{ perspective: 1200 }}
       initial={{ opacity: 0, y: 18 }}
       animate={isInView ? { opacity: 1, y: 0 } : {}}
@@ -137,46 +137,46 @@ const CardBack = ({ project, onBack }: { project: Project; onBack: () => void })
 
   return (
     <div
-      className="relative w-full h-full flex flex-col p-4 sm:p-6 overflow-y-auto"
+      className="relative w-full h-full flex flex-col p-3 sm:p-6 overflow-y-auto"
       style={{
         background: "hsl(var(--card))",
         borderRadius: "0.75rem",
         border: "1px solid hsl(0 0% 100% / 0.08)",
       }}
     >
-      <div className="flex items-center justify-between mb-4">
-        <span className="text-[10px] font-mono tracking-[0.2em] uppercase text-primary">
+      <div className="flex items-center justify-between mb-2 sm:mb-4">
+        <span className="text-[9px] sm:text-[10px] font-mono tracking-[0.2em] uppercase text-primary">
           {project.tag}
         </span>
         <button
           onClick={(e) => { e.stopPropagation(); onBack(); }}
-          className="sm:hidden flex items-center gap-1 text-[11px] text-muted-foreground active:scale-95 transition-transform min-h-[44px] min-w-[44px] justify-center"
+          className="sm:hidden flex items-center gap-1 text-[10px] text-muted-foreground active:scale-95 transition-transform min-h-[36px] min-w-[36px] justify-center"
           aria-label={t("work.back")}
         >
           <RotateCcw className="w-3 h-3" />
-          {t("work.back")}
         </button>
       </div>
 
-      <h3 className="font-display text-xl sm:text-2xl text-foreground leading-tight mb-4">
+      <h3 className="font-display text-base sm:text-2xl text-foreground leading-tight mb-2 sm:mb-4">
         {project.title}
       </h3>
 
-      <div className="mb-3">
-        <p className="text-[10px] font-mono tracking-[0.2em] uppercase text-muted-foreground mb-1.5">
+      <div>
+        <p className="text-[9px] sm:text-[10px] font-mono tracking-[0.2em] uppercase text-muted-foreground mb-1 sm:mb-1.5">
           {t("work.whatWeDid")}
         </p>
-        <ul className="space-y-1">
+        <ul className="space-y-0.5 sm:space-y-1">
           {project.whatWeDid.split(" · ").map((item) => (
-            <li key={item} className="flex items-start gap-2 text-sm text-foreground/90 leading-relaxed">
-              <span className="w-1 h-1 rounded-full bg-primary mt-2 shrink-0" />
+            <li key={item} className="flex items-start gap-1.5 sm:gap-2 text-xs sm:text-sm text-foreground/90 leading-snug sm:leading-relaxed">
+              <span className="w-1 h-1 rounded-full bg-primary mt-1.5 shrink-0" />
               {item}
             </li>
           ))}
         </ul>
       </div>
 
-      <div>
+      {/* Outcome only on desktop */}
+      <div className="hidden sm:block mt-3">
         <p className="text-[10px] font-mono tracking-[0.2em] uppercase text-muted-foreground mb-1.5">
           {t("work.outcome")}
         </p>
