@@ -65,7 +65,7 @@ const SumiReveal = () => {
       aria-label="NEBU STUDIO"
     >
       <div className="flex justify-center overflow-hidden" style={{ lineHeight: 1 }}>
-        <div className="relative inline-block" style={{ fontSize: "clamp(3.2rem, 10.5vw, 8.5rem)", lineHeight: 1.05 }}>
+        <div className="relative inline-block" style={{ fontSize: "clamp(2.2rem, 9vw, 8.5rem)", lineHeight: 1.05 }}>
           <span className="font-display block whitespace-nowrap" style={{ color: "hsl(var(--foreground) / 0.28)", letterSpacing: "-0.01em" }} aria-hidden="true">
             NEBU STUDIO
           </span>
