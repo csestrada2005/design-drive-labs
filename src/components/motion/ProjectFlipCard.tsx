@@ -31,7 +31,7 @@ export const ProjectFlipCard = ({ project, index }: ProjectFlipCardProps) => {
     return (
       <motion.div
         ref={containerRef}
-        className="relative aspect-[4/3] sm:aspect-[4/3] min-h-[320px] rounded-xl overflow-hidden cursor-pointer focus-within:ring-2 focus-within:ring-primary focus-within:ring-offset-2 focus-within:ring-offset-background"
+        className="relative aspect-[3/4] sm:aspect-[4/3] min-h-0 rounded-xl overflow-hidden cursor-pointer focus-within:ring-2 focus-within:ring-primary focus-within:ring-offset-2 focus-within:ring-offset-background"
         initial={{ opacity: 0 }}
         animate={isInView ? { opacity: 1 } : {}}
         transition={{ duration: 0.3, delay: index * 0.06 }}
@@ -60,7 +60,7 @@ export const ProjectFlipCard = ({ project, index }: ProjectFlipCardProps) => {
   return (
     <motion.div
       ref={containerRef}
-      className="relative aspect-[4/3] sm:aspect-[4/3] min-h-[320px] cursor-pointer"
+      className="relative aspect-[3/4] sm:aspect-[4/3] min-h-0 cursor-pointer"
       style={{ perspective: 1200 }}
       initial={{ opacity: 0, y: 18 }}
       animate={isInView ? { opacity: 1, y: 0 } : {}}
