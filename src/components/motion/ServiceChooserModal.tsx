@@ -70,8 +70,21 @@ const ServiceChooserModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: ()
     document.body.style.overflow = "hidden";
     document.documentElement.style.overflow = "hidden";
     document.body.style.touchAction = "none";
+
+    // Block wheel/touch at the window level so Lenis can't scroll the page
+    const blockWheel = (e: WheelEvent) => e.preventDefault();
+    const blockTouch = (e: TouchEvent) => {
+      // Allow scrolling inside the list, block everything else
+      if (listRef.current && listRef.current.contains(e.target as Node)) return;
+      e.preventDefault();
+    };
+    window.addEventListener("wheel", blockWheel, { passive: false });
+    window.addEventListener("touchmove", blockTouch, { passive: false });
+
     return () => {
       window.removeEventListener("keydown", handler);
+      window.removeEventListener("wheel", blockWheel);
+      window.removeEventListener("touchmove", blockTouch);
       document.body.style.overflow = "";
       document.documentElement.style.overflow = "";
       document.body.style.touchAction = "";
@@ -149,7 +162,7 @@ const ServiceChooserModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: ()
             <div
               ref={listRef}
               className="px-4 sm:px-5 pb-6 overflow-y-auto"
-              style={{ maxHeight: "calc(85dvh - 120px)" }}
+              style={{ maxHeight: "calc(85dvh - 120px)", overscrollBehavior: "contain", touchAction: "pan-y", WebkitOverflowScrolling: "touch" }}
             >
               <div className="flex flex-col gap-1.5">
                 {SERVICE_KEYS.map((key, i) => (
