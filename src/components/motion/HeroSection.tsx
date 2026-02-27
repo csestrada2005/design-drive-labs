@@ -1,7 +1,7 @@
 import { useRef, useEffect, useState, useCallback } from "react";
 import { motion, useInView, AnimatePresence, useReducedMotion, useMotionValue, useSpring } from "framer-motion";
 import { ArrowRight } from "lucide-react";
-import nebuOwl from "@/assets/nebu-owl.png";
+import heroOwl from "@/assets/hero-owl.png";
 import { HeroLaserOverlay } from "./HeroLaserOverlay";
 import { useServiceChooser } from "@/components/motion/ServiceChooserModal";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -272,7 +272,7 @@ export const HeroSection = () => {
       {/* Owl logo + Sumi reveal centered */}
       <div data-hero-content className="relative z-10 w-full px-5 sm:px-6 flex flex-col items-center" style={{ paddingTop: 64 }}>
         <img
-          src={nebuOwl}
+          src={heroOwl}
           alt="Nebu Studio owl logo"
           width={288}
           height={288}
